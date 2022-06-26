@@ -1,0 +1,23 @@
+Package: waywiser
+Type: Package
+Title: Yardstick Extensions for Measuring Spatial Structure in Model Residuals
+Version: 0.1.0
+Authors@R: c(
+    person("Michael", "Mahoney", , "mike.mahoney.218@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2402-304X")),
+           person("RStudio", role = c("cph", "fnd")))
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: Predictive models of spatial data may have spatially structured
+    errors, with "hot spots" of higher than expected error clustered 
+    geographically due to spatial structure in the underlying data. These 
+    functions provide methods for measuring the spatial structure of model
+    errors for models, and are particularly useful for models fit using the
+    'tidymodels' framework.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    rlang,
+    sfdep,
+    yardstick
+RoxygenNote: 7.2.0
