@@ -1,48 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/404.html</loc>
   </url>
   <url>
-    <loc>/CODE_OF_CONDUCT.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>/CONTRIBUTING.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/CONTRIBUTING.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/SUPPORT.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/SUPPORT.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/index.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/global_moran_i.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/global_moran_i.html</loc>
   </url>
   <url>
-    <loc>/reference/hello.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/local_moran_i.html</loc>
   </url>
   <url>
-    <loc>/reference/local_moran_i.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/reexports.html</loc>
   </url>
   <url>
-    <loc>/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>/reference/waywiser-package.html</loc>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/waywiser-package.html</loc>
   </url>
 </urlset>
