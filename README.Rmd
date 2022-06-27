@@ -11,6 +11,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+library(ggplot2)
+theme_set(theme_minimal())
 ```
 
 # waywiser
@@ -20,7 +22,139 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The goal of waywiser is to make it easier to assess spatial autocorrelation in model residuals when fitting models in the tidymodels framework. It is highly experimental and not guaranteed to work.
+"Waywiser" is an old-timey name for a [surveyor's wheel](https://en.wikipedia.org/wiki/Surveyor%27s_wheel), a device that makes measuring long distances easier than with measurement tools like a ruler or yardstick. The waywiser R package makes measuring model performance on spatial data easier, extending the [yardstick](https://yardstick.tidymodels.org/) R package to incorporate measures of spatial autocorrelation provided by [sfdep](https://sfdep.josiahparry.com/).
+
+Please note that this package is highly experimental. The user-facing API is likely to change without deprecation warnings up until the first CRAN release.
+
+## Example
+
+waywiser doesn't quite work with `fit_resamples()` yet, so this example is more complex than it needs to be.
+
+That said, let's walk through how we can use waywiser to find local indicators of spatial autocorrelation for a very simple model, looking at how tree canopy coverage impacts temperature in Boston, Massachusetts.
+
+We're going to use a bunch of packages for this process:
+
+```{r}
+# waywiser itself, of course:
+library(waywiser)
+
+# For spatial cross-validation and our data set:
+library(spatialsample)
+
+# For model fitting:
+library(tidymodels)
+
+# General data-wrangling:
+library(dplyr)
+library(tidyr)
+library(sf)
+
+# Visualization:
+library(ggplot2)
+```
+
+We'll be working with the `boston_canopy` data from the spatialsample package, fitting a linear model to associate tree canopy coverage with mean temperature. We'll turn on sf's ability to download coordinate reference systems over the internet, and then cut the data into five different cross-validation folds based on spatial proximity:
+
+```{r}
+sf_proj_network(TRUE)
+sf_add_proj_units()
+
+set.seed(1234)
+folds <- spatial_clustering_cv(boston_canopy, v = 5)
+```
+
+Our next step is to actually fit a model to these resamples! We're going to use an extremely simple linear regression, fit using tools from the tidymodels packages [workflows](https://workflows.tidymodels.org/) and [parsnip](https://parsnip.tidymodels.org/):
+
+```{r}
+model_fit <- workflow() %>% 
+  add_model(linear_reg()) %>% 
+  add_formula(mean_temp ~ canopy_area_2019) %>% 
+  fit_resamples(folds, control = control_resamples(save_pred = TRUE))
+
+model_fit
+```
+
+As we can see, our data contains a lot of nested tibbles. We only care about our actual assessment-set predictions and the corresponding true values, however. We can get rid of all the other columns and unpack the nested columns using some tools from dplyr and tidyr:
+
+```{r}
+model_predictions <- model_fit %>%
+  transmute(assessment = purrr::map(splits, assessment),
+            predictions = .predictions) %>% 
+  unnest(cols = c(assessment, predictions), names_repair = "minimal") %>% 
+  # "mean_temp" exists in both tables, so we'll get rid of the second one here:
+  select(-22)
+
+model_predictions
+```
+
+
+Alright, one last bit of set-up.
+
+waywiser builds on top of the [sfdep](https://sfdep.josiahparry.com/) package, itself an extension for the [spdep](https://r-spatial.github.io/spdep/index.html) spatial dependence library. These packages expect you to have objects representing the neighbors of your data set and the spatial weights between observations. 
+
+As a result, right now waywiser also expects you to already have those objects pre-created and to pass them as arguments to model metric functions. We'll find the neighbors in our data using the `st_contiguity` function, and then calculate spatial weights via `st_weights`:
+
+```{r}
+nb <- st_contiguity(boston_canopy)
+wt <- st_weights(nb)
+```
+
+We're finally ready to actually use functions from waywiser to assess our model! Let's take a look at the local Moran's I for each of our hexagons, identifying local clusters and outliers to indicate areas where our model might not be properly accounting for the spatial structure of our data.
+
+We can use the `ww_local_moran_i()` function to calculate the statistic for each observation in our data:
+
+```{r}
+ww_local_moran_i(
+  model_predictions,
+  mean_temp,
+  .pred,
+  nb,
+  wt
+)
+```
+
+Or, if we want to add Moran's I as a column to our data frame, we can use `ww_local_moran_i_vec()` inside a call to `mutate()`:
+
+```{r}
+model_predictions <- model_predictions %>% 
+  mutate(local_moran_i = ww_local_moran_i_vec(mean_temp, .pred, nb, wt))
+
+model_predictions
+```
+
+This makes it easier to visualize the outputs from these functions. For instance, we can use `geom_sf()` in ggplot2 to see where our residuals are more clustered than expected:
+
+```{r}
+model_predictions |>
+  mutate(
+    cut_points = case_when(
+      local_moran_i <= -1 ~ "(-Inf, -1]",
+      local_moran_i <= -0.5 ~ "(-1, -0.5]",
+      local_moran_i <= 0 ~ "(-0.5, 0]",
+      local_moran_i <= 0.5 ~ "(0, 0.5]",
+      local_moran_i <= 1 ~ "(0.5, 1]",
+      local_moran_i > 1 ~ "(1, Inf)",
+    ),
+    cut_points = factor(
+      cut_points,
+      rev(
+        c(
+          "(-Inf, -1]", 
+          "(-1, -0.5]", 
+          "(-0.5, 0]", 
+          "(0, 0.5]", 
+          "(0.5, 1]", 
+          "(1, Inf)")
+      )
+    )
+  ) %>% 
+  st_as_sf() %>% 
+  ggplot(aes(fill = cut_points)) +
+  geom_sf() + 
+  scale_fill_brewer(palette = "BrBG")
+```
+
+This makes it easy to see what areas are poorly represented by our model, which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we're working with.
 
 ## Installation
 

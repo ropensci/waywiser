@@ -16,6 +16,8 @@ ww_local_moran_i <- function(data, ...) {
   UseMethod("ww_local_moran_i")
 }
 
+ww_local_moran_i <- new_numeric_metric(ww_local_moran_i, direction = "zero")
+
 #' @rdname local_moran_i
 #' @export
 ww_local_moran_i.data.frame <- function(data,
@@ -28,6 +30,16 @@ ww_local_moran_i.data.frame <- function(data,
                                         na_rm = TRUE,
                                         seed = .Random.seed,
                                         ...) {
+
+  if (rlang::is_function(nb)) {
+    nb <- do.call(nb, data)
+  }
+  if (rlang::is_function(wt)) {
+    wt <- do.call(wt, data)
+  }
+  if (is.null(wt)) {
+    wt <- sfdep::st_weights(nb)
+  }
 
   metric_summarizer(
     metric_nm = "local_moran_i",
@@ -46,8 +58,6 @@ ww_local_moran_i.data.frame <- function(data,
     ...
   )
 }
-
-ww_local_moran_i <- new_numeric_metric(ww_local_moran_i, direction = "zero")
 
 #' @rdname local_moran_i
 #' @export

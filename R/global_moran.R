@@ -25,6 +25,16 @@ ww_global_moran_i <- new_numeric_metric(ww_global_moran_i, direction = "zero")
 #' @export
 ww_global_moran_i.data.frame <- function(data, truth, estimate, nb, wt, na_rm = TRUE, ...) {
 
+  if (rlang::is_function(nb)) {
+    nb <- do.call(nb, data)
+  }
+  if (rlang::is_function(wt)) {
+    wt <- do.call(wt, data)
+  }
+  if (is.null(wt)) {
+    wt <- sfdep::st_weights(nb)
+  }
+
   metric_summarizer(
     metric_nm = "global_moran_i",
     metric_fn = ww_global_moran_i_vec,
@@ -77,6 +87,16 @@ ww_global_moran_pvalue <- new_numeric_metric(ww_global_moran_pvalue, "minimize")
 #' @rdname local_moran_i
 #' @export
 ww_global_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", randomization = TRUE, na_rm = TRUE, ...) {
+
+  if (rlang::is_function(nb)) {
+    nb <- do.call(nb, data)
+  }
+  if (rlang::is_function(wt)) {
+    wt <- do.call(wt, data)
+  }
+  if (is.null(wt)) {
+    wt <- sfdep::st_weights(nb)
+  }
 
   metric_summarizer(
     metric_nm = "global_moran_pvalue",
