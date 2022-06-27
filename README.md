@@ -23,129 +23,54 @@ Please note that this package is highly experimental. The user-facing
 API is likely to change without deprecation warnings up until the first
 CRAN release.
 
+## Installation
+
+You can install the development version of waywiser from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("mikemahoney218/waywiser")
+```
+
 ## Example
 
-waywiser doesn’t quite work with `fit_resamples()` yet, so this example
-is more complex than it needs to be.
-
-That said, let’s walk through how we can use waywiser to find local
-indicators of spatial autocorrelation for a very simple model, looking
-at how tree canopy coverage impacts temperature in Boston,
-Massachusetts.
-
-We’re going to use a bunch of packages for this process:
+Let’s walk through how we can use waywiser to find local indicators of
+spatial autocorrelation for a very simple model, looking at how tree
+canopy coverage impacts temperature in Boston, Massachusetts. First
+things first, let’s load a few libraries:
 
 ``` r
 # waywiser itself, of course:
 library(waywiser)
-
-# For spatial cross-validation and our data set:
+# For our data set:
 library(spatialsample)
-
-# For model fitting:
-library(tidymodels)
-#> ── Attaching packages ───────────────────────────────── tidymodels 0.2.0.9000 ──
-#> ✔ broom        0.8.0          ✔ rsample      1.0.0.9000
-#> ✔ dials        1.0.0          ✔ tibble       3.1.7     
-#> ✔ dplyr        1.0.9          ✔ tidyr        1.2.0     
-#> ✔ infer        1.0.2          ✔ tune         0.2.0.9002
-#> ✔ modeldata    0.1.1          ✔ workflows    0.2.6.9001
-#> ✔ parsnip      0.2.1.9003     ✔ workflowsets 0.2.1     
-#> ✔ purrr        0.3.4          ✔ yardstick    1.0.0.9000
-#> ✔ recipes      0.2.0
-#> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-#> ✖ purrr::discard() masks scales::discard()
-#> ✖ dplyr::filter()  masks stats::filter()
-#> ✖ dplyr::lag()     masks stats::lag()
-#> ✖ recipes::step()  masks stats::step()
-#> • Learn how to get started at https://www.tidymodels.org/start/
-
-# General data-wrangling:
+# For the %>% pipe and mutate:
 library(dplyr)
-library(tidyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+# For dealing with spatial data:
 library(sf)
 #> Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
-
-# Visualization:
-library(ggplot2)
 ```
 
 We’ll be working with the `boston_canopy` data from the spatialsample
 package, fitting a linear model to associate tree canopy coverage with
-mean temperature. We’ll turn on sf’s ability to download coordinate
-reference systems over the internet, and then cut the data into five
-different cross-validation folds based on spatial proximity:
+mean temperature. Let’s turn on sf’s ability to download coordinate
+reference systems over the internet, just in case we don’t have the CRS
+for that data yet:
 
 ``` r
 sf_proj_network(TRUE)
 #> [1] "https://cdn.proj.org"
 sf_add_proj_units()
-
-set.seed(1234)
-folds <- spatial_clustering_cv(boston_canopy, v = 5)
 ```
-
-Our next step is to actually fit a model to these resamples! We’re going
-to use an extremely simple linear regression, fit using tools from the
-tidymodels packages [workflows](https://workflows.tidymodels.org/) and
-[parsnip](https://parsnip.tidymodels.org/):
-
-``` r
-model_fit <- workflow() %>% 
-  add_model(linear_reg()) %>% 
-  add_formula(mean_temp ~ canopy_area_2019) %>% 
-  fit_resamples(folds, control = control_resamples(save_pred = TRUE))
-
-model_fit
-#> # Resampling results
-#> # 5-fold spatial cross-validation 
-#> # A tibble: 5 × 5
-#>   splits            id    .metrics         .notes           .predictions      
-#>   <list>            <chr> <list>           <list>           <list>            
-#> 1 <split [600/82]>  Fold1 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [82 × 4]> 
-#> 2 <split [589/93]>  Fold2 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [93 × 4]> 
-#> 3 <split [524/158]> Fold3 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [158 × 4]>
-#> 4 <split [497/185]> Fold4 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [185 × 4]>
-#> 5 <split [518/164]> Fold5 <tibble [2 × 4]> <tibble [0 × 3]> <tibble [164 × 4]>
-```
-
-As we can see, our data contains a lot of nested tibbles. We only care
-about our actual assessment-set predictions and the corresponding true
-values, however. We can get rid of all the other columns and unpack the
-nested columns using some tools from dplyr and tidyr:
-
-``` r
-model_predictions <- model_fit %>%
-  transmute(assessment = purrr::map(splits, assessment),
-            predictions = .predictions) %>% 
-  unnest(cols = c(assessment, predictions), names_repair = "minimal") %>% 
-  # "mean_temp" exists in both tables, so we'll get rid of the second one here:
-  select(-22)
-
-model_predictions
-#> # A tibble: 682 × 22
-#>    grid_id land_area canopy_gain canopy_loss canopy_no_change canopy_area_2014
-#>    <chr>       <dbl>       <dbl>       <dbl>            <dbl>            <dbl>
-#>  1 H-10     2691490.      73098.      80362.          345823.          426185.
-#>  2 M-9      2690727.      52443.      53467.          304239.          357706.
-#>  3 I-10     2691491.      77370.     129464.          434683.          564147.
-#>  4 G-15      298658.      10742.      10502.          118964.          129466.
-#>  5 H-13     2691492.      90971.     103740.          717828.          821569.
-#>  6 G-12     2690726.     109754.      89181.          957357.         1046538.
-#>  7 Q-10      156688.       9237.       3094.           57327.           60421.
-#>  8 D-10      340049.      17981.       5737.          100755.          106492.
-#>  9 M-10     2578879.      27026.      41240.          161115.          202355.
-#> 10 J-9      2690726.      66740.      34839.          242211.          277050.
-#> # … with 672 more rows, and 16 more variables: canopy_area_2019 <dbl>,
-#> #   change_canopy_area <dbl>, change_canopy_percentage <dbl>,
-#> #   canopy_percentage_2014 <dbl>, canopy_percentage_2019 <dbl>,
-#> #   change_canopy_absolute <dbl>, mean_temp_morning <dbl>,
-#> #   mean_temp_evening <dbl>, mean_temp <dbl>, mean_heat_index_morning <dbl>,
-#> #   mean_heat_index_evening <dbl>, mean_heat_index <dbl>,
-#> #   geometry <MULTIPOLYGON [US_survey_foot]>, .pred <dbl>, .row <int>, …
-```
-
-Alright, one last bit of set-up.
 
 waywiser builds on top of the [sfdep](https://sfdep.josiahparry.com/)
 package, itself an extension for the
@@ -156,91 +81,60 @@ neighbors of your data set and the spatial weights between observations.
 As a result, right now waywiser also expects you to already have those
 objects pre-created and to pass them as arguments to model metric
 functions. We’ll find the neighbors in our data using the
-`st_contiguity` function, and then calculate spatial weights via
-`st_weights`:
+`st_contiguity()` function, and then calculate spatial weights via
+`st_weights()`:
 
 ``` r
 nb <- st_contiguity(boston_canopy)
 wt <- st_weights(nb)
 ```
 
-We’re finally ready to actually use functions from waywiser to assess
-our model! Let’s take a look at the local Moran’s I for each of our
-hexagons, identifying local clusters and outliers to indicate areas
-where our model might not be properly accounting for the spatial
-structure of our data.
+With our spatial relationships defined, we can now fit a model and
+calculate spatial dependency in our model residuals!
 
-We can use the `ww_local_moran_i()` function to calculate the statistic
-for each observation in our data:
+We’ll fit a simple linear model relating canopy coverage to daily
+temperatures, and then generate predictions from that model. We can use
+`ww_local_moran_i()` to calculate the local spatial autocorrelation of
+our residuals at each data point:
 
 ``` r
-ww_local_moran_i(
-  model_predictions,
-  mean_temp,
-  .pred,
-  nb,
-  wt
-)
-#> # A tibble: 682 × 3
-#>    .metric       .estimator .estimate
-#>    <chr>         <chr>          <dbl>
-#>  1 local_moran_i standard     0.0655 
-#>  2 local_moran_i standard     0.155  
-#>  3 local_moran_i standard    -1.24   
-#>  4 local_moran_i standard     0.0869 
-#>  5 local_moran_i standard     0.0147 
-#>  6 local_moran_i standard     0.00799
-#>  7 local_moran_i standard     0.0967 
-#>  8 local_moran_i standard     0.0596 
-#>  9 local_moran_i standard     0.136  
-#> 10 local_moran_i standard     0.0969 
+boston_canopy %>%
+  mutate(pred = predict(lm(mean_temp ~ canopy_gain, .))) %>% 
+  ww_local_moran_i(mean_temp, pred, nb, wt)
+#> # A tibble: 682 × 4
+#>    .metric       .estimator .estimate                                   geometry
+#>    <chr>         <chr>          <dbl>            <MULTIPOLYGON [US_survey_foot]>
+#>  1 local_moran_i standard     0.172   (((745307.9 2921698, 745307.9 2921699, 74…
+#>  2 local_moran_i standard     0.149   (((745307.9 2921698, 745307.9 2921699, 74…
+#>  3 local_moran_i standard    16.4     (((745307.9 2921698, 745307.9 2921699, 74…
+#>  4 local_moran_i standard     0.0434  (((745307.9 2921698, 745307.9 2921699, 74…
+#>  5 local_moran_i standard     0.270   (((745307.9 2921698, 745307.9 2921699, 74…
+#>  6 local_moran_i standard     0.00428 (((745307.9 2921698, 745307.9 2921699, 74…
+#>  7 local_moran_i standard     0.247   (((745307.9 2921698, 745307.9 2921699, 74…
+#>  8 local_moran_i standard     0.00144 (((745307.9 2921698, 745307.9 2921699, 74…
+#>  9 local_moran_i standard     0.0619  (((745307.9 2921698, 745307.9 2921699, 74…
+#> 10 local_moran_i standard    -0.00195 (((745307.9 2921698, 745307.9 2921699, 74…
 #> # … with 672 more rows
 ```
 
-Or, if we want to add Moran’s I as a column to our data frame, we can
-use `ww_local_moran_i_vec()` inside a call to `mutate()`:
+Or if we use `ww_local_moran_i_vec`, we can add a column to our original
+data frame with our statistic, which makes plotting using our original
+geometries easier:
 
 ``` r
-model_predictions <- model_predictions %>% 
-  mutate(local_moran_i = ww_local_moran_i_vec(mean_temp, .pred, nb, wt))
+library(ggplot2)
 
-model_predictions
-#> # A tibble: 682 × 23
-#>    grid_id land_area canopy_gain canopy_loss canopy_no_change canopy_area_2014
-#>    <chr>       <dbl>       <dbl>       <dbl>            <dbl>            <dbl>
-#>  1 H-10     2691490.      73098.      80362.          345823.          426185.
-#>  2 M-9      2690727.      52443.      53467.          304239.          357706.
-#>  3 I-10     2691491.      77370.     129464.          434683.          564147.
-#>  4 G-15      298658.      10742.      10502.          118964.          129466.
-#>  5 H-13     2691492.      90971.     103740.          717828.          821569.
-#>  6 G-12     2690726.     109754.      89181.          957357.         1046538.
-#>  7 Q-10      156688.       9237.       3094.           57327.           60421.
-#>  8 D-10      340049.      17981.       5737.          100755.          106492.
-#>  9 M-10     2578879.      27026.      41240.          161115.          202355.
-#> 10 J-9      2690726.      66740.      34839.          242211.          277050.
-#> # … with 672 more rows, and 17 more variables: canopy_area_2019 <dbl>,
-#> #   change_canopy_area <dbl>, change_canopy_percentage <dbl>,
-#> #   canopy_percentage_2014 <dbl>, canopy_percentage_2019 <dbl>,
-#> #   change_canopy_absolute <dbl>, mean_temp_morning <dbl>,
-#> #   mean_temp_evening <dbl>, mean_temp <dbl>, mean_heat_index_morning <dbl>,
-#> #   mean_heat_index_evening <dbl>, mean_heat_index <dbl>,
-#> #   geometry <MULTIPOLYGON [US_survey_foot]>, .pred <dbl>, .row <int>, …
-```
-
-This makes it easier to visualize the outputs from these functions. For
-instance, we can use `geom_sf()` in ggplot2 to see where our residuals
-are more clustered than expected:
-
-``` r
-model_predictions |>
+boston_canopy %>%
+  mutate(pred = predict(lm(mean_temp ~ canopy_gain, .)),
+         .estimate = ww_local_moran_i_vec(mean_temp, pred, nb, wt)) %>% 
   mutate(
     cut_points = case_when(
-      local_moran_i <= -1 ~ "(-Inf, -1]",
-      local_moran_i <= -0.5 ~ "(-1, -0.5]",
-      local_moran_i <= 0 ~ "(-0.5, 0]",
-      local_moran_i <= 0.5 ~ "(0, 0.5]",
-      local_moran_i <= 1 ~ "(0.5, 1]",
-      local_moran_i > 1 ~ "(1, Inf)",
+      .estimate <= -1 ~ "(-Inf, -1]",
+      .estimate <= -0.5 ~ "(-1, -0.5]",
+      .estimate <= 0 ~ "(-0.5, 0]",
+      .estimate <= 0.5 ~ "(0, 0.5]",
+      .estimate <= 1 ~ "(0.5, 1]",
+      .estimate > 1 ~ "(1, Inf)",
     ),
     cut_points = factor(
       cut_points,
@@ -261,18 +155,26 @@ model_predictions |>
   scale_fill_brewer(palette = "BrBG")
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 This makes it easy to see what areas are poorly represented by our
 model, which might lead us to identify ways to improve our model or help
 us identify caveats and limitations of the models we’re working with.
 
-## Installation
+## Contributing
 
-You can install the development version of waywiser from
-[GitHub](https://github.com/) with:
+This project is released with a [Contributor Code of
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
 
-``` r
-# install.packages("devtools")
-devtools::install_github("mikemahoney218/waywiser")
-```
+-   For questions and discussions about tidymodels packages, modeling,
+    and machine learning, please [post on RStudio
+    Community](https://community.rstudio.com/new-topic?category_id=15&tags=tidymodels,question).
+
+-   If you think you have encountered a bug, please [submit an
+    issue](https://github.com/tidymodels/rules/issues).
+
+-   Either way, learn how to create and share a
+    [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+    (a minimal, reproducible example), to clearly communicate about your
+    code.
