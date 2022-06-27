@@ -16,6 +16,11 @@ Description: Predictive models of spatial data may have spatially
     structure of model errors for models, and are particularly useful for
     models fit using the 'tidymodels' framework.
 License: MIT + file LICENSE
+URL: https://github.com/mikemahoney218/waywiser,
+    https://mikemahoney218.github.io/waywiser/
+BugReports: https://github.com/mikemahoney218/waywiser/issues
+Depends: 
+    R (>= 3.5)
 Imports: 
     rlang,
     sfdep,
@@ -29,6 +34,11 @@ Suggests:
     testthat,
     tidymodels,
     tidyr
+Config/Needs/website: 
+    tidyverse/tidytemplate
+Config/testthat/edition: 3
+Config/testthat/parallel: true
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0

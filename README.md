@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# waywiser
+# waywiser <a href="https://mikemahoney218.github.io/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 
@@ -58,7 +58,7 @@ library(tidymodels)
 #> ✖ dplyr::filter()  masks stats::filter()
 #> ✖ dplyr::lag()     masks stats::lag()
 #> ✖ recipes::step()  masks stats::step()
-#> • Use suppressPackageStartupMessages() to eliminate package startup messages
+#> • Learn how to get started at https://www.tidymodels.org/start/
 
 # General data-wrangling:
 library(dplyr)

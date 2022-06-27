@@ -72,7 +72,7 @@ For ww_global_moran_i_vec(), a single numeric value (or NA).
 }
 \description{
 Calculate the global Moran's I statistic for model residuals.
-`ww_global_moran_i()` returns the statistic itself, while
-`ww_global_moran_pvalue()` returns the associated p value.
-`ww_global_moran()` returns both.
+\code{ww_global_moran_i()} returns the statistic itself, while
+\code{ww_global_moran_pvalue()} returns the associated p value.
+\code{ww_global_moran()} returns both.
 }

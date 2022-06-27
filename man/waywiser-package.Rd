@@ -6,7 +6,18 @@
 \alias{waywiser-package}
 \title{waywiser: Yardstick Extensions for Measuring Spatial Structure in Model Residuals}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Predictive models of spatial data may have spatially structured errors, with "hot spots" of higher than expected error clustered geographically due to spatial structure in the underlying data. These functions provide methods for measuring the spatial structure of model errors for models, and are particularly useful for models fit using the 'tidymodels' framework.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/mikemahoney218/waywiser}
+  \item \url{https://mikemahoney218.github.io/waywiser/}
+  \item Report bugs at \url{https://github.com/mikemahoney218/waywiser/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Michael Mahoney \email{mike.mahoney.218@gmail.com} (\href{https://orcid.org/0000-0003-2402-304X}{ORCID})

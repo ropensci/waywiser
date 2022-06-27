@@ -81,9 +81,9 @@ values should be stripped before the computation proceeds.}
 Defaults to the current seed.}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
+A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
-For ww_local_moran_i_vec(), a numeric vector of `length(truth)` (or NA).
+For ww_local_moran_i_vec(), a numeric vector of \code{length(truth)} (or NA).
 }
 \description{
 Calculate the local Moran's I statistic for model residuals.
