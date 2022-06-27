@@ -91,167 +91,80 @@
 <p>“Waywiser” is an old-timey name for a <a href="https://en.wikipedia.org/wiki/Surveyor%27s_wheel" class="external-link">surveyor’s wheel</a>, a device that makes measuring long distances easier than with measurement tools like a ruler or yardstick. The waywiser R package makes measuring model performance on spatial data easier, extending the <a href="https://yardstick.tidymodels.org/" class="external-link">yardstick</a> R package to incorporate measures of spatial autocorrelation provided by <a href="https://sfdep.josiahparry.com/" class="external-link">sfdep</a>.</p>
 <p>Please note that this package is highly experimental. The user-facing API is likely to change without deprecation warnings up until the first CRAN release.</p>
 <div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version of waywiser from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mikemahoney218/waywiser"</span><span class="op">)</span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>waywiser doesn’t quite work with <code>fit_resamples()</code> yet, so this example is more complex than it needs to be.</p>
-<p>That said, let’s walk through how we can use waywiser to find local indicators of spatial autocorrelation for a very simple model, looking at how tree canopy coverage impacts temperature in Boston, Massachusetts.</p>
-<p>We’re going to use a bunch of packages for this process:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<p>Let’s walk through how we can use waywiser to find local indicators of spatial autocorrelation for a very simple model, looking at how tree canopy coverage impacts temperature in Boston, Massachusetts. First things first, let’s load a few libraries:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># waywiser itself, of course:</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mikemahoney218/waywiser" class="external-link">waywiser</a></span><span class="op">)</span>
-
-<span class="co"># For spatial cross-validation and our data set:</span>
+<span class="co"># For our data set:</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/spatialsample" class="external-link">spatialsample</a></span><span class="op">)</span>
-
-<span class="co"># For model fitting:</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a></span><span class="op">)</span>
-<span class="co">#&gt; ── Attaching packages ───────────────────────────────── tidymodels 0.2.0.9000 ──</span>
-<span class="co">#&gt; ✔ broom        0.8.0          ✔ rsample      1.0.0.9000</span>
-<span class="co">#&gt; ✔ dials        1.0.0          ✔ tibble       3.1.7     </span>
-<span class="co">#&gt; ✔ dplyr        1.0.9          ✔ tidyr        1.2.0     </span>
-<span class="co">#&gt; ✔ infer        1.0.2          ✔ tune         0.2.0.9002</span>
-<span class="co">#&gt; ✔ modeldata    0.1.1          ✔ workflows    0.2.6.9001</span>
-<span class="co">#&gt; ✔ parsnip      0.2.1.9003     ✔ workflowsets 0.2.1     </span>
-<span class="co">#&gt; ✔ purrr        0.3.4          ✔ yardstick    1.0.0.9000</span>
-<span class="co">#&gt; ✔ recipes      0.2.0</span>
-<span class="co">#&gt; ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──</span>
-<span class="co">#&gt; ✖ purrr::discard() masks scales::discard()</span>
-<span class="co">#&gt; ✖ dplyr::filter()  masks stats::filter()</span>
-<span class="co">#&gt; ✖ dplyr::lag()     masks stats::lag()</span>
-<span class="co">#&gt; ✖ recipes::step()  masks stats::step()</span>
-<span class="co">#&gt; • Learn how to get started at https://www.tidymodels.org/start/</span>
-
-<span class="co"># General data-wrangling:</span>
+<span class="co"># For the %&gt;% pipe and mutate:</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+<span class="co"># For dealing with spatial data:</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE</span>
-
-<span class="co"># Visualization:</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></code></pre></div>
-<p>We’ll be working with the <code>boston_canopy</code> data from the spatialsample package, fitting a linear model to associate tree canopy coverage with mean temperature. We’ll turn on sf’s ability to download coordinate reference systems over the internet, and then cut the data into five different cross-validation folds based on spatial proximity:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE</span></code></pre></div>
+<p>We’ll be working with the <code>boston_canopy</code> data from the spatialsample package, fitting a linear model to associate tree canopy coverage with mean temperature. Let’s turn on sf’s ability to download coordinate reference systems over the internet, just in case we don’t have the CRS for that data yet:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/proj_tools.html" class="external-link">sf_proj_network</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] "https://cdn.proj.org"</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf_project.html" class="external-link">sf_add_proj_units</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
-<span class="va">folds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_clustering_cv.html" class="external-link">spatial_clustering_cv</a></span><span class="op">(</span><span class="va">boston_canopy</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
-<p>Our next step is to actually fit a model to these resamples! We’re going to use an extremely simple linear regression, fit using tools from the tidymodels packages <a href="https://workflows.tidymodels.org/" class="external-link">workflows</a> and <a href="https://parsnip.tidymodels.org/" class="external-link">parsnip</a>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model_fit</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">add_model</span><span class="op">(</span><span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">add_formula</span><span class="op">(</span><span class="va">mean_temp</span> <span class="op">~</span> <span class="va">canopy_area_2019</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">fit_resamples</span><span class="op">(</span><span class="va">folds</span>, control <span class="op">=</span> <span class="fu">control_resamples</span><span class="op">(</span>save_pred <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">model_fit</span>
-<span class="co">#&gt; # Resampling results</span>
-<span class="co">#&gt; # 5-fold spatial cross-validation </span>
-<span class="co">#&gt; # A tibble: 5 × 5</span>
-<span class="co">#&gt;   splits            id    .metrics         .notes           .predictions      </span>
-<span class="co">#&gt;   &lt;list&gt;            &lt;chr&gt; &lt;list&gt;           &lt;list&gt;           &lt;list&gt;            </span>
-<span class="co">#&gt; 1 &lt;split [600/82]&gt;  Fold1 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [82 × 4]&gt; </span>
-<span class="co">#&gt; 2 &lt;split [589/93]&gt;  Fold2 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [93 × 4]&gt; </span>
-<span class="co">#&gt; 3 &lt;split [524/158]&gt; Fold3 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [158 × 4]&gt;</span>
-<span class="co">#&gt; 4 &lt;split [497/185]&gt; Fold4 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [185 × 4]&gt;</span>
-<span class="co">#&gt; 5 &lt;split [518/164]&gt; Fold5 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [164 × 4]&gt;</span></code></pre></div>
-<p>As we can see, our data contains a lot of nested tibbles. We only care about our actual assessment-set predictions and the corresponding true values, however. We can get rid of all the other columns and unpack the nested columns using some tools from dplyr and tidyr:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model_predictions</span> <span class="op">&lt;-</span> <span class="va">model_fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">transmute</a></span><span class="op">(</span>assessment <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">splits</span>, <span class="va">assessment</span><span class="op">)</span>,
-            predictions <span class="op">=</span> <span class="va">.predictions</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">assessment</span>, <span class="va">predictions</span><span class="op">)</span>, names_repair <span class="op">=</span> <span class="st">"minimal"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="co"># "mean_temp" exists in both tables, so we'll get rid of the second one here:</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fl">22</span><span class="op">)</span>
-
-<span class="va">model_predictions</span>
-<span class="co">#&gt; # A tibble: 682 × 22</span>
-<span class="co">#&gt;    grid_id land_area canopy_gain canopy_loss canopy_no_change canopy_area_2014</span>
-<span class="co">#&gt;    &lt;chr&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 H-10     2691490.      73098.      80362.          345823.          426185.</span>
-<span class="co">#&gt;  2 M-9      2690727.      52443.      53467.          304239.          357706.</span>
-<span class="co">#&gt;  3 I-10     2691491.      77370.     129464.          434683.          564147.</span>
-<span class="co">#&gt;  4 G-15      298658.      10742.      10502.          118964.          129466.</span>
-<span class="co">#&gt;  5 H-13     2691492.      90971.     103740.          717828.          821569.</span>
-<span class="co">#&gt;  6 G-12     2690726.     109754.      89181.          957357.         1046538.</span>
-<span class="co">#&gt;  7 Q-10      156688.       9237.       3094.           57327.           60421.</span>
-<span class="co">#&gt;  8 D-10      340049.      17981.       5737.          100755.          106492.</span>
-<span class="co">#&gt;  9 M-10     2578879.      27026.      41240.          161115.          202355.</span>
-<span class="co">#&gt; 10 J-9      2690726.      66740.      34839.          242211.          277050.</span>
-<span class="co">#&gt; # … with 672 more rows, and 16 more variables: canopy_area_2019 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   change_canopy_area &lt;dbl&gt;, change_canopy_percentage &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   canopy_percentage_2014 &lt;dbl&gt;, canopy_percentage_2019 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   change_canopy_absolute &lt;dbl&gt;, mean_temp_morning &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   mean_temp_evening &lt;dbl&gt;, mean_temp &lt;dbl&gt;, mean_heat_index_morning &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   mean_heat_index_evening &lt;dbl&gt;, mean_heat_index &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   geometry &lt;MULTIPOLYGON [US_survey_foot]&gt;, .pred &lt;dbl&gt;, .row &lt;int&gt;, …</span></code></pre></div>
-<p>Alright, one last bit of set-up.</p>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf_project.html" class="external-link">sf_add_proj_units</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>waywiser builds on top of the <a href="https://sfdep.josiahparry.com/" class="external-link">sfdep</a> package, itself an extension for the <a href="https://r-spatial.github.io/spdep/index.html" class="external-link">spdep</a> spatial dependence library. These packages expect you to have objects representing the neighbors of your data set and the spatial weights between observations.</p>
-<p>As a result, right now waywiser also expects you to already have those objects pre-created and to pass them as arguments to model metric functions. We’ll find the neighbors in our data using the <code>st_contiguity</code> function, and then calculate spatial weights via <code>st_weights</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>As a result, right now waywiser also expects you to already have those objects pre-created and to pass them as arguments to model metric functions. We’ll find the neighbors in our data using the <code><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity()</a></code> function, and then calculate spatial weights via <code><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights()</a></code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity</a></span><span class="op">(</span><span class="va">boston_canopy</span><span class="op">)</span>
 <span class="va">wt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights</a></span><span class="op">(</span><span class="va">nb</span><span class="op">)</span></code></pre></div>
-<p>We’re finally ready to actually use functions from waywiser to assess our model! Let’s take a look at the local Moran’s I for each of our hexagons, identifying local clusters and outliers to indicate areas where our model might not be properly accounting for the spatial structure of our data.</p>
-<p>We can use the <code><a href="reference/local_moran_i.html">ww_local_moran_i()</a></code> function to calculate the statistic for each observation in our data:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i</a></span><span class="op">(</span>
-  <span class="va">model_predictions</span>,
-  <span class="va">mean_temp</span>,
-  <span class="va">.pred</span>,
-  <span class="va">nb</span>,
-  <span class="va">wt</span>
-<span class="op">)</span>
-<span class="co">#&gt; # A tibble: 682 × 3</span>
-<span class="co">#&gt;    .metric       .estimator .estimate</span>
-<span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 local_moran_i standard     0.0655 </span>
-<span class="co">#&gt;  2 local_moran_i standard     0.155  </span>
-<span class="co">#&gt;  3 local_moran_i standard    -1.24   </span>
-<span class="co">#&gt;  4 local_moran_i standard     0.0869 </span>
-<span class="co">#&gt;  5 local_moran_i standard     0.0147 </span>
-<span class="co">#&gt;  6 local_moran_i standard     0.00799</span>
-<span class="co">#&gt;  7 local_moran_i standard     0.0967 </span>
-<span class="co">#&gt;  8 local_moran_i standard     0.0596 </span>
-<span class="co">#&gt;  9 local_moran_i standard     0.136  </span>
-<span class="co">#&gt; 10 local_moran_i standard     0.0969 </span>
+<p>With our spatial relationships defined, we can now fit a model and calculate spatial dependency in our model residuals!</p>
+<p>We’ll fit a simple linear model relating canopy coverage to daily temperatures, and then generate predictions from that model. We can use <code><a href="reference/local_moran_i.html">ww_local_moran_i()</a></code> to calculate the local spatial autocorrelation of our residuals at each data point:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">boston_canopy</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mean_temp</span> <span class="op">~</span> <span class="va">canopy_gain</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i</a></span><span class="op">(</span><span class="va">mean_temp</span>, <span class="va">pred</span>, <span class="va">nb</span>, <span class="va">wt</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 682 × 4</span>
+<span class="co">#&gt;    .metric       .estimator .estimate                                   geometry</span>
+<span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt;            &lt;MULTIPOLYGON [US_survey_foot]&gt;</span>
+<span class="co">#&gt;  1 local_moran_i standard     0.172   (((745307.9 2921698, 745307.9 2921699, 74…</span>
+<span class="co">#&gt;  2 local_moran_i standard     0.149   (((745307.9 2921698, 745307.9 2921699, 74…</span>
+<span class="co">#&gt;  3 local_moran_i standard    16.4     (((745307.9 2921698, 745307.9 2921699, 74…</span>
+<span class="co">#&gt;  4 local_moran_i standard     0.0434  (((745307.9 2921698, 745307.9 2921699, 74…</span>
+<span class="co">#&gt;  5 local_moran_i standard     0.270   (((745307.9 2921698, 745307.9 2921699, 74…</span>
+<span class="co">#&gt;  6 local_moran_i standard     0.00428 (((745307.9 2921698, 745307.9 2921699, 74…</span>
+<span class="co">#&gt;  7 local_moran_i standard     0.247   (((745307.9 2921698, 745307.9 2921699, 74…</span>
+<span class="co">#&gt;  8 local_moran_i standard     0.00144 (((745307.9 2921698, 745307.9 2921699, 74…</span>
+<span class="co">#&gt;  9 local_moran_i standard     0.0619  (((745307.9 2921698, 745307.9 2921699, 74…</span>
+<span class="co">#&gt; 10 local_moran_i standard    -0.00195 (((745307.9 2921698, 745307.9 2921699, 74…</span>
 <span class="co">#&gt; # … with 672 more rows</span></code></pre></div>
-<p>Or, if we want to add Moran’s I as a column to our data frame, we can use <code><a href="reference/local_moran_i.html">ww_local_moran_i_vec()</a></code> inside a call to <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model_predictions</span> <span class="op">&lt;-</span> <span class="va">model_predictions</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>local_moran_i <span class="op">=</span> <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i_vec</a></span><span class="op">(</span><span class="va">mean_temp</span>, <span class="va">.pred</span>, <span class="va">nb</span>, <span class="va">wt</span><span class="op">)</span><span class="op">)</span>
+<p>Or if we use <code>ww_local_moran_i_vec</code>, we can add a column to our original data frame with our statistic, which makes plotting using our original geometries easier:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
-<span class="va">model_predictions</span>
-<span class="co">#&gt; # A tibble: 682 × 23</span>
-<span class="co">#&gt;    grid_id land_area canopy_gain canopy_loss canopy_no_change canopy_area_2014</span>
-<span class="co">#&gt;    &lt;chr&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 H-10     2691490.      73098.      80362.          345823.          426185.</span>
-<span class="co">#&gt;  2 M-9      2690727.      52443.      53467.          304239.          357706.</span>
-<span class="co">#&gt;  3 I-10     2691491.      77370.     129464.          434683.          564147.</span>
-<span class="co">#&gt;  4 G-15      298658.      10742.      10502.          118964.          129466.</span>
-<span class="co">#&gt;  5 H-13     2691492.      90971.     103740.          717828.          821569.</span>
-<span class="co">#&gt;  6 G-12     2690726.     109754.      89181.          957357.         1046538.</span>
-<span class="co">#&gt;  7 Q-10      156688.       9237.       3094.           57327.           60421.</span>
-<span class="co">#&gt;  8 D-10      340049.      17981.       5737.          100755.          106492.</span>
-<span class="co">#&gt;  9 M-10     2578879.      27026.      41240.          161115.          202355.</span>
-<span class="co">#&gt; 10 J-9      2690726.      66740.      34839.          242211.          277050.</span>
-<span class="co">#&gt; # … with 672 more rows, and 17 more variables: canopy_area_2019 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   change_canopy_area &lt;dbl&gt;, change_canopy_percentage &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   canopy_percentage_2014 &lt;dbl&gt;, canopy_percentage_2019 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   change_canopy_absolute &lt;dbl&gt;, mean_temp_morning &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   mean_temp_evening &lt;dbl&gt;, mean_temp &lt;dbl&gt;, mean_heat_index_morning &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   mean_heat_index_evening &lt;dbl&gt;, mean_heat_index &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   geometry &lt;MULTIPOLYGON [US_survey_foot]&gt;, .pred &lt;dbl&gt;, .row &lt;int&gt;, …</span></code></pre></div>
-<p>This makes it easier to visualize the outputs from these functions. For instance, we can use <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf()</a></code> in ggplot2 to see where our residuals are more clustered than expected:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model_predictions</span> |&gt;
+<span class="va">boston_canopy</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mean_temp</span> <span class="op">~</span> <span class="va">canopy_gain</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span>,
+         .estimate <span class="op">=</span> <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i_vec</a></span><span class="op">(</span><span class="va">mean_temp</span>, <span class="va">pred</span>, <span class="va">nb</span>, <span class="va">wt</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
     cut_points <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span>
-      <span class="va">local_moran_i</span> <span class="op">&lt;=</span> <span class="op">-</span><span class="fl">1</span> <span class="op">~</span> <span class="st">"(-Inf, -1]"</span>,
-      <span class="va">local_moran_i</span> <span class="op">&lt;=</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">~</span> <span class="st">"(-1, -0.5]"</span>,
-      <span class="va">local_moran_i</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"(-0.5, 0]"</span>,
-      <span class="va">local_moran_i</span> <span class="op">&lt;=</span> <span class="fl">0.5</span> <span class="op">~</span> <span class="st">"(0, 0.5]"</span>,
-      <span class="va">local_moran_i</span> <span class="op">&lt;=</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"(0.5, 1]"</span>,
-      <span class="va">local_moran_i</span> <span class="op">&gt;</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"(1, Inf)"</span>,
+      <span class="va">.estimate</span> <span class="op">&lt;=</span> <span class="op">-</span><span class="fl">1</span> <span class="op">~</span> <span class="st">"(-Inf, -1]"</span>,
+      <span class="va">.estimate</span> <span class="op">&lt;=</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">~</span> <span class="st">"(-1, -0.5]"</span>,
+      <span class="va">.estimate</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"(-0.5, 0]"</span>,
+      <span class="va">.estimate</span> <span class="op">&lt;=</span> <span class="fl">0.5</span> <span class="op">~</span> <span class="st">"(0, 0.5]"</span>,
+      <span class="va">.estimate</span> <span class="op">&lt;=</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"(0.5, 1]"</span>,
+      <span class="va">.estimate</span> <span class="op">&gt;</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"(1, Inf)"</span>,
     <span class="op">)</span>,
     cut_points <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span>
       <span class="va">cut_points</span>,
@@ -270,16 +183,18 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">cut_points</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"BrBG"</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
 <p>This makes it easy to see what areas are poorly represented by our model, which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we’re working with.</p>
 </div>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
 </h2>
-<p>You can install the development version of waywiser from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mikemahoney218/waywiser"</span><span class="op">)</span></code></pre></div>
+<p>This project is released with a <a href="https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<ul>
+<li><p>For questions and discussions about tidymodels packages, modeling, and machine learning, please <a href="https://community.rstudio.com/new-topic?category_id=15&amp;tags=tidymodels,question" class="external-link">post on RStudio Community</a>.</p></li>
+<li><p>If you think you have encountered a bug, please <a href="https://github.com/tidymodels/rules/issues" class="external-link">submit an issue</a>.</p></li>
+<li><p>Either way, learn how to create and share a <a href="https://reprex.tidyverse.org/articles/articles/learn-reprex.html" class="external-link">reprex</a> (a minimal, reproducible example), to clearly communicate about your code.</p></li>
+</ul>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
