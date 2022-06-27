@@ -7,6 +7,7 @@
 #'
 #' @inheritParams yardstick::rmse
 #' @inheritParams sfdep::global_moran
+#' @inheritParams sfdep::global_moran_test
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate.
@@ -21,7 +22,6 @@ ww_global_moran_i <- function(data, ...) {
 
 ww_global_moran_i <- new_numeric_metric(ww_global_moran_i, direction = "zero")
 
-#' @rdname local_moran_i
 #' @export
 ww_global_moran_i.data.frame <- function(data, truth, estimate, nb, wt, na_rm = TRUE, ...) {
 
@@ -84,7 +84,6 @@ ww_global_moran_pvalue <- function(data, ...) {
 
 ww_global_moran_pvalue <- new_numeric_metric(ww_global_moran_pvalue, "minimize")
 
-#' @rdname local_moran_i
 #' @export
 ww_global_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", randomization = TRUE, na_rm = TRUE, ...) {
 

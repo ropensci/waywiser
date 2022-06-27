@@ -1,0 +1,28 @@
+url: https://mikemahoney218.github.io/waywiser/
+
+template:
+  package: tidytemplate
+  bootstrap: 5
+  bslib:
+    danger: "#CA225E"
+    primary: "#CA225E"
+
+authors:
+  Michael Mahoney:
+    href: "https://www.mm218.dev/"
+
+development:
+  mode: auto
+
+figures:
+  fig.width: 8
+  fig.height: ~
+
+reference:
+  - title: Autocorrelation Metrics
+    contents:
+      - contains("global_moran")
+      - contains("local_moran")
+  - title: Utilities
+    contents:
+      - reexports

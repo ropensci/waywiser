@@ -4,6 +4,8 @@
 #'
 #' @inheritParams yardstick::rmse
 #' @inheritParams sfdep::local_moran
+#' @param seed A random seed to use for all metric calculations.
+#'  Defaults to the current seed.
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
@@ -18,7 +20,6 @@ ww_local_moran_i <- function(data, ...) {
 
 ww_local_moran_i <- new_numeric_metric(ww_local_moran_i, direction = "zero")
 
-#' @rdname local_moran_i
 #' @export
 ww_local_moran_i.data.frame <- function(data,
                                         truth,
@@ -110,7 +111,6 @@ ww_local_moran_pvalue <- function(data, ...) {
 
 ww_local_moran_pvalue <- new_numeric_metric(ww_local_moran_pvalue, "minimize")
 
-#' @rdname local_moran_i
 #' @export
 ww_local_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "two.sided", nsim = 499, na_rm = TRUE, seed = .Random.seed, ...) {
 
@@ -174,7 +174,7 @@ ww_local_moran <- function(data,
                            nb,
                            wt,
                            alternative = "greater",
-                           randomization = TRUE,
+                           nsim = 499,
                            na_rm = TRUE,
                            seed = .Random.seed,
                            ...) {
@@ -186,7 +186,7 @@ ww_local_moran <- function(data,
     nb = nb,
     wt = wt,
     alternative = alternative,
-    randomization = randomization,
+    nsim = nsim,
     na_rm = na_rm,
     seed = seed,
     ...

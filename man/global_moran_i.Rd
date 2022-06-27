@@ -60,6 +60,10 @@ unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
 \item{na_rm}{A \code{logical} value indicating whether \code{NA}
 values should be stripped before the computation proceeds.}
+
+\item{alternative}{default \code{"two.sided"}. Should be one of \code{"greater"}, \code{"less"}, or \code{"two.sided"} to specify the alternative hypothesis.}
+
+\item{randomization}{default \code{TRUE}. Calculate variance based on randomization. If \code{FALSE}, under the assumption of normality.}
 }
 \value{
 A tibble with columns .metric, .estimator, and .estimate.
