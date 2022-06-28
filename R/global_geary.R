@@ -1,18 +1,18 @@
 #' Global Moran's I statistic
 #'
 #' Calculate the global Moran's I statistic for model residuals.
-#' `ww_global_moran_i()` returns the statistic itself, while
-#' `ww_global_moran_pvalue()` returns the associated p value.
-#' `ww_global_moran()` returns both.
+#' `ww_global_geary_c()` returns the statistic itself, while
+#' `ww_global_geary_pvalue()` returns the associated p value.
+#' `ww_global_geary()` returns both.
 #'
 #' @inheritParams yardstick::rmse
-#' @inheritParams sfdep::global_moran
-#' @inheritParams sfdep::global_moran_test
+#' @inheritParams sfdep::global_c
+#' @inheritParams sfdep::global_c_perm
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups times the number of metrics.
-#' For ww_global_moran_i_vec(), a single numeric value (or NA).
+#' For ww_global_geary_c_vec(), a single numeric value (or NA).
 #'
 #' @examples
 #' data(guerry, package = "sfdep")
@@ -24,19 +24,19 @@
 #' ctg <- st_contiguity(guerry)
 #' wts <- st_weights(ctg)
 #'
-#' ww_global_moran_i(guerry_modeled, crime_pers, predictions, ctg, wts)
-#' ww_global_moran(guerry_modeled, crime_pers, predictions, ctg, wts)
+#' ww_global_geary_c(guerry_modeled, crime_pers, predictions, ctg, wts)
+#' ww_global_geary(guerry_modeled, crime_pers, predictions, ctg, wts)
 #'
-#' @rdname global_moran_i
+#' @rdname global_geary_c
 #' @export
-ww_global_moran_i <- function(data, ...) {
-  UseMethod("ww_global_moran_i")
+ww_global_geary_c <- function(data, ...) {
+  UseMethod("ww_global_geary_c")
 }
 
-ww_global_moran_i <- new_numeric_metric(ww_global_moran_i, direction = "zero")
+ww_global_geary_c <- new_numeric_metric(ww_global_geary_c, direction = "zero")
 
 #' @export
-ww_global_moran_i.data.frame <- function(data, truth, estimate, nb, wt, na_rm = TRUE, ...) {
+ww_global_geary_c.data.frame <- function(data, truth, estimate, nb, wt, allow_zero = TRUE, na_rm = TRUE, ...) {
 
   if (rlang::is_function(nb)) {
     nb <- do.call(nb, data)
@@ -49,8 +49,8 @@ ww_global_moran_i.data.frame <- function(data, truth, estimate, nb, wt, na_rm = 
   }
 
   metric_summarizer(
-    metric_nm = "global_moran_i",
-    metric_fn = ww_global_moran_i_vec,
+    metric_nm = "global_geary_c",
+    metric_fn = ww_global_geary_c_vec,
     data = data,
     truth = !! enquo(truth),
     estimate = !! enquo(estimate),
@@ -63,24 +63,24 @@ ww_global_moran_i.data.frame <- function(data, truth, estimate, nb, wt, na_rm = 
   )
 }
 
-#' @rdname global_moran_i
+#' @rdname global_geary_c
 #' @export
-ww_global_moran_i_vec <- function(truth, estimate, nb, wt, na_rm = TRUE, ...) {
+ww_global_geary_c_vec <- function(truth, estimate, nb, wt, allow_zero = TRUE, na_rm = TRUE, ...) {
 
-  ww_global_moran_i_impl <- function(truth, estimate, ...) {
+  ww_global_geary_c_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    sfdep::global_moran(
+    sfdep::global_c(
       x = resid,
       nb = nb,
       wt = wt,
-      na_ok = na_rm,
+      allow_zero = TRUE,
       ...
-    )$I
+    )$C
   }
 
   metric_vec_template(
-    metric_impl = ww_global_moran_i_impl,
+    metric_impl = ww_global_geary_c_impl,
     truth = truth,
     estimate = estimate,
     na_rm = na_rm,
@@ -89,16 +89,16 @@ ww_global_moran_i_vec <- function(truth, estimate, nb, wt, na_rm = TRUE, ...) {
   )
 }
 
-#' @rdname global_moran_i
+#' @rdname global_geary_c
 #' @export
-ww_global_moran_pvalue <- function(data, ...) {
-  UseMethod("ww_global_moran_pvalue")
+ww_global_geary_pvalue <- function(data, ...) {
+  UseMethod("ww_global_geary_pvalue")
 }
 
-ww_global_moran_pvalue <- new_numeric_metric(ww_global_moran_pvalue, "minimize")
+ww_global_geary_pvalue <- new_numeric_metric(ww_global_geary_pvalue, "minimize")
 
 #' @export
-ww_global_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", randomization = TRUE, na_rm = TRUE, ...) {
+ww_global_geary_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", nsim = 499, allow_zero = NULL, na_rm = TRUE, ...) {
 
   if (rlang::is_function(nb)) {
     nb <- do.call(nb, data)
@@ -111,8 +111,8 @@ ww_global_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alt
   }
 
   metric_summarizer(
-    metric_nm = "global_moran_pvalue",
-    metric_fn = ww_global_moran_pvalue_vec,
+    metric_nm = "global_geary_pvalue",
+    metric_fn = ww_global_geary_pvalue_vec,
     data = data,
     truth = !! enquo(truth),
     estimate = !! enquo(estimate),
@@ -121,31 +121,33 @@ ww_global_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alt
       nb = nb,
       wt = wt,
       alternative = alternative,
-      randomization = randomization
+      nsim = nsim,
+      allow_zero = allow_zero
     ),
     ...
   )
 }
 
-#' @rdname global_moran_i
+#' @rdname global_geary_c
 #' @export
-ww_global_moran_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "greater", randomization = TRUE, na_rm = TRUE, ...) {
+ww_global_geary_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "greater", nsim = 499, allow_zero = NULL, na_rm = TRUE, ...) {
 
-  ww_global_moran_pvalue_impl <- function(truth, estimate, ...) {
+  ww_global_geary_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    sfdep::global_moran_test(
+    sfdep::global_c_perm(
       x = resid,
       nb = nb,
       wt = wt,
       alternative = alternative,
-      randomization = randomization,
+      nsim = nsim,
+      allow_zero = allow_zero,
       ...
     )$p.value
   }
 
   metric_vec_template(
-    metric_impl = ww_global_moran_pvalue_impl,
+    metric_impl = ww_global_geary_pvalue_impl,
     truth = truth,
     estimate = estimate,
     na_rm = na_rm,
@@ -154,18 +156,19 @@ ww_global_moran_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "g
   )
 }
 
-#' @rdname global_moran_i
+#' @rdname global_geary_c
 #' @export
-ww_global_moran <- function(data,
+ww_global_geary <- function(data,
                             truth,
                             estimate,
                             nb,
                             wt,
                             alternative = "greater",
-                            randomization = TRUE,
+                            nsim = 499,
+                            allow_zero = NULL,
                             na_rm = TRUE,
                             ...) {
-  metrics <- metric_set(ww_global_moran_i, ww_global_moran_pvalue)
+  metrics <- metric_set(ww_global_geary_c, ww_global_geary_pvalue)
   metrics(
     data,
     truth = !! enquo(truth),
@@ -173,7 +176,8 @@ ww_global_moran <- function(data,
     nb = nb,
     wt = wt,
     alternative = alternative,
-    randomization = randomization,
+    nsim = nsim,
+    allow_zero = allow_zero,
     na_rm = na_rm,
     ...
   )

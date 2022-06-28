@@ -3,14 +3,14 @@
 #' Calculate the local Moran's I statistic for model residuals.
 #'
 #' @inheritParams yardstick::rmse
-#' @inheritParams sfdep::local_moran
+#' @inheritParams sfdep::local_c_perm
 #' @param seed A random seed to use for all metric calculations.
 #'  Defaults to the current seed.
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
-#' For ww_local_moran_i_vec(), a numeric vector of `length(truth)` (or NA).
+#' For ww_local_geary_c_vec(), a numeric vector of `length(truth)` (or NA).
 #'
 #' @examples
 #' data(guerry, package = "sfdep")
@@ -22,19 +22,19 @@
 #' ctg <- st_contiguity(guerry)
 #' wts <- st_weights(ctg)
 #'
-#' ww_local_moran_i(guerry_modeled, crime_pers, predictions, ctg, wts)
-#' ww_local_moran(guerry_modeled, crime_pers, predictions, ctg, wts)
+#' ww_local_geary_c(guerry_modeled, crime_pers, predictions, ctg, wts)
+#' ww_local_geary(guerry_modeled, crime_pers, predictions, ctg, wts)
 #'
-#' @rdname local_moran_i
+#' @rdname local_geary_c
 #' @export
-ww_local_moran_i <- function(data, ...) {
-  UseMethod("ww_local_moran_i")
+ww_local_geary_c <- function(data, ...) {
+  UseMethod("ww_local_geary_c")
 }
 
-ww_local_moran_i <- new_numeric_metric(ww_local_moran_i, direction = "zero")
+ww_local_geary_c <- new_numeric_metric(ww_local_geary_c, direction = "zero")
 
 #' @export
-ww_local_moran_i.data.frame <- function(data,
+ww_local_geary_c.data.frame <- function(data,
                                         truth,
                                         estimate,
                                         nb,
@@ -56,8 +56,8 @@ ww_local_moran_i.data.frame <- function(data,
   }
 
   metric_summarizer(
-    metric_nm = "local_moran_i",
-    metric_fn = ww_local_moran_i_vec,
+    metric_nm = "local_geary_c",
+    metric_fn = ww_local_geary_c_vec,
     data = data,
     truth = !! enquo(truth),
     estimate = !! enquo(estimate),
@@ -73,41 +73,29 @@ ww_local_moran_i.data.frame <- function(data,
   )
 }
 
-#' @rdname local_moran_i
+#' @rdname local_geary_c
 #' @export
-ww_local_moran_i_vec <- function(truth,
+ww_local_geary_c_vec <- function(truth,
                                  estimate,
                                  nb,
                                  wt,
-                                 alternative = "greater",
-                                 nsim = 499,
                                  na_rm = TRUE,
-                                 seed = .Random.seed,
                                  ...) {
 
-  ww_local_moran_i_impl <- function(truth, estimate, ...) {
+  ww_local_geary_c_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    old_seed <- .Random.seed
-    set.seed(seed)
-
-    out <- sfdep::local_moran(
+    sfdep::local_c(
       x = resid,
       nb = nb,
       wt = wt,
-      alternative = alternative,
-      nsim = nsim,
       ...
-    )$ii
-
-    set.seed(old_seed)
-
-    out
+    )
 
   }
 
   metric_vec_template(
-    metric_impl = ww_local_moran_i_impl,
+    metric_impl = ww_local_geary_c_impl,
     truth = truth,
     estimate = estimate,
     na_rm = na_rm,
@@ -116,20 +104,20 @@ ww_local_moran_i_vec <- function(truth,
   )
 }
 
-#' @rdname local_moran_i
+#' @rdname local_geary_c
 #' @export
-ww_local_moran_pvalue <- function(data, ...) {
-  UseMethod("ww_local_moran_pvalue")
+ww_local_geary_pvalue <- function(data, ...) {
+  UseMethod("ww_local_geary_pvalue")
 }
 
-ww_local_moran_pvalue <- new_numeric_metric(ww_local_moran_pvalue, "minimize")
+ww_local_geary_pvalue <- new_numeric_metric(ww_local_geary_pvalue, "minimize")
 
 #' @export
-ww_local_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", nsim = 499, na_rm = TRUE, seed = .Random.seed, ...) {
+ww_local_geary_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", nsim = 499, na_rm = TRUE, seed = .Random.seed, ...) {
 
   metric_summarizer(
-    metric_nm = "local_moran_pvalue",
-    metric_fn = ww_local_moran_pvalue_vec,
+    metric_nm = "local_geary_pvalue",
+    metric_fn = ww_local_geary_pvalue_vec,
     data = data,
     truth = !! enquo(truth),
     estimate = !! enquo(estimate),
@@ -144,24 +132,24 @@ ww_local_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alte
   )
 }
 
-#' @rdname local_moran_i
+#' @rdname local_geary_c
 #' @export
-ww_local_moran_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "greater", nsim = 499, na_rm = TRUE, seed = .Random.seed, ...) {
+ww_local_geary_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "greater", nsim = 499, na_rm = TRUE, seed = .Random.seed, ...) {
 
-  ww_local_moran_pvalue_impl <- function(truth, estimate, ...) {
+  ww_local_geary_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
     old_seed <- .Random.seed
     set.seed(seed)
 
-    out <- sfdep::local_moran(
+    out <- sfdep::local_c_perm(
       x = resid,
       nb = nb,
       wt = wt,
       alternative = alternative,
       nsim = nsim,
       ...
-    )$p_ii
+    )$p_ci
 
     set.seed(old_seed)
 
@@ -170,7 +158,7 @@ ww_local_moran_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "gr
   }
 
   metric_vec_template(
-    metric_impl = ww_local_moran_pvalue_impl,
+    metric_impl = ww_local_geary_pvalue_impl,
     truth = truth,
     estimate = estimate,
     na_rm = na_rm,
@@ -179,9 +167,9 @@ ww_local_moran_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "gr
   )
 }
 
-#' @rdname local_moran_i
+#' @rdname local_geary_c
 #' @export
-ww_local_moran <- function(data,
+ww_local_geary <- function(data,
                            truth,
                            estimate,
                            nb,
@@ -191,7 +179,7 @@ ww_local_moran <- function(data,
                            na_rm = TRUE,
                            seed = .Random.seed,
                            ...) {
-  metrics <- metric_set(ww_local_moran_i, ww_local_moran_pvalue)
+  metrics <- metric_set(ww_local_geary_c, ww_local_geary_pvalue)
   metrics(
     data,
     truth = !! enquo(truth),
