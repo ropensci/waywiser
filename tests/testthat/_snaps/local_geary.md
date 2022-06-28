@@ -1,64 +1,67 @@
 # Local Geary statistics are stable
 
     Code
-      (df_local_c <- ww_local_geary_c(guerry_modeled, crime_pers, predictions, ctg,
-        wts))
+      df_local_c <- ww_local_geary_c(guerry_modeled, crime_pers, predictions, ctg,
+        wts)
+      df_local_c[1:3]
     Output
-      # A tibble: 85 x 4
-         .metric       .estimator .estimate                                   geometry
-         <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
-       1 local_geary_c standard       0.981 (((381847 1762775, 381116 1763059, 379972~
-       2 local_geary_c standard       0.836 (((381847 1762775, 381116 1763059, 379972~
-       3 local_geary_c standard       0.707 (((381847 1762775, 381116 1763059, 379972~
-       4 local_geary_c standard       0.108 (((381847 1762775, 381116 1763059, 379972~
-       5 local_geary_c standard       0.264 (((381847 1762775, 381116 1763059, 379972~
-       6 local_geary_c standard       1.36  (((381847 1762775, 381116 1763059, 379972~
-       7 local_geary_c standard       3.64  (((381847 1762775, 381116 1763059, 379972~
-       8 local_geary_c standard       1.57  (((381847 1762775, 381116 1763059, 379972~
-       9 local_geary_c standard       0.867 (((381847 1762775, 381116 1763059, 379972~
-      10 local_geary_c standard       0.737 (((381847 1762775, 381116 1763059, 379972~
+      # A tibble: 85 x 3
+         .metric       .estimator .estimate
+         <chr>         <chr>          <dbl>
+       1 local_geary_c standard       0.981
+       2 local_geary_c standard       0.836
+       3 local_geary_c standard       0.707
+       4 local_geary_c standard       0.108
+       5 local_geary_c standard       0.264
+       6 local_geary_c standard       1.36 
+       7 local_geary_c standard       3.64 
+       8 local_geary_c standard       1.57 
+       9 local_geary_c standard       0.867
+      10 local_geary_c standard       0.737
       # ... with 75 more rows
 
 ---
 
     Code
-      (df_local_c_p <- ww_local_geary_pvalue(guerry_modeled, crime_pers, predictions,
-        ctg, wts))
+      df_local_c_p <- ww_local_geary_pvalue(guerry_modeled, crime_pers, predictions,
+        ctg, wts)
+      df_local_c_p[1:3]
     Output
-      # A tibble: 85 x 4
-         .metric            .estimator .estimate                              geometry
-         <chr>              <chr>          <dbl>                        <MULTIPOLYGON>
-       1 local_geary_pvalue standard       0.885 (((381847 1762775, 381116 1763059, 3~
-       2 local_geary_pvalue standard       0.865 (((381847 1762775, 381116 1763059, 3~
-       3 local_geary_pvalue standard       0.928 (((381847 1762775, 381116 1763059, 3~
-       4 local_geary_pvalue standard       0.937 (((381847 1762775, 381116 1763059, 3~
-       5 local_geary_pvalue standard       0.832 (((381847 1762775, 381116 1763059, 3~
-       6 local_geary_pvalue standard       0.933 (((381847 1762775, 381116 1763059, 3~
-       7 local_geary_pvalue standard       0.801 (((381847 1762775, 381116 1763059, 3~
-       8 local_geary_pvalue standard       0.890 (((381847 1762775, 381116 1763059, 3~
-       9 local_geary_pvalue standard       0.602 (((381847 1762775, 381116 1763059, 3~
-      10 local_geary_pvalue standard       0.779 (((381847 1762775, 381116 1763059, 3~
+      # A tibble: 85 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_geary_pvalue standard       0.885
+       2 local_geary_pvalue standard       0.865
+       3 local_geary_pvalue standard       0.928
+       4 local_geary_pvalue standard       0.937
+       5 local_geary_pvalue standard       0.832
+       6 local_geary_pvalue standard       0.933
+       7 local_geary_pvalue standard       0.801
+       8 local_geary_pvalue standard       0.890
+       9 local_geary_pvalue standard       0.602
+      10 local_geary_pvalue standard       0.779
       # ... with 75 more rows
 
 ---
 
     Code
-      (df_local_c_both <- ww_local_geary(guerry_modeled, crime_pers, predictions, ctg,
-        wts))
+      df_local_c_both <- ww_local_geary(guerry_modeled, crime_pers, predictions, ctg,
+        wts)
+      df_local_c_both[1:3]
     Output
-      # A tibble: 170 x 4
-         .metric       .estimator .estimate                                   geometry
-         <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
-       1 local_geary_c standard       0.981 (((381847 1762775, 381116 1763059, 379972~
-       2 local_geary_c standard       0.836 (((381847 1762775, 381116 1763059, 379972~
-       3 local_geary_c standard       0.707 (((381847 1762775, 381116 1763059, 379972~
-       4 local_geary_c standard       0.108 (((381847 1762775, 381116 1763059, 379972~
-       5 local_geary_c standard       0.264 (((381847 1762775, 381116 1763059, 379972~
-       6 local_geary_c standard       1.36  (((381847 1762775, 381116 1763059, 379972~
-       7 local_geary_c standard       3.64  (((381847 1762775, 381116 1763059, 379972~
-       8 local_geary_c standard       1.57  (((381847 1762775, 381116 1763059, 379972~
-       9 local_geary_c standard       0.867 (((381847 1762775, 381116 1763059, 379972~
-      10 local_geary_c standard       0.737 (((381847 1762775, 381116 1763059, 379972~
+      # A tibble: 170 x 3
+         .metric       .estimator .estimate
+         <chr>         <chr>          <dbl>
+       1 local_geary_c standard       0.981
+       2 local_geary_c standard       0.836
+       3 local_geary_c standard       0.707
+       4 local_geary_c standard       0.108
+       5 local_geary_c standard       0.264
+       6 local_geary_c standard       1.36 
+       7 local_geary_c standard       3.64 
+       8 local_geary_c standard       1.57 
+       9 local_geary_c standard       0.867
+      10 local_geary_c standard       0.737
       # ... with 160 more rows
 
 ---

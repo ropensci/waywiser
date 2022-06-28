@@ -13,17 +13,26 @@ test_that("Local Geary statistics are stable", {
 
   set.seed(123)
   expect_snapshot(
-    (df_local_c <- ww_local_geary_c(guerry_modeled, crime_pers, predictions, ctg, wts))
+    {
+      df_local_c <- ww_local_geary_c(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_c[1:3]
+    }
   )
 
   set.seed(123)
   expect_snapshot(
-    (df_local_c_p <- ww_local_geary_pvalue(guerry_modeled, crime_pers, predictions, ctg, wts))
+    {
+      df_local_c_p <- ww_local_geary_pvalue(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_c_p[1:3]
+    }
   )
 
   set.seed(123)
   expect_snapshot(
-    (df_local_c_both <- ww_local_geary(guerry_modeled, crime_pers, predictions, ctg, wts))
+    {
+      df_local_c_both <- ww_local_geary(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_c_both[1:3]
+    }
   )
 
   set.seed(123)

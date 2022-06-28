@@ -13,32 +13,50 @@ test_that("Getis-Ord statistics are stable", {
 
   set.seed(123)
   expect_snapshot(
-    (df_local_g <- ww_local_getis_ord_g(guerry_modeled, crime_pers, predictions, ctg, wts))
+    {
+      df_local_g <- ww_local_getis_ord_g(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_g[1:3]
+    }
   )
 
   set.seed(123)
   expect_snapshot(
-    (df_local_g_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, crime_pers, predictions, ctg, wts))
+    {
+      df_local_g_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_g_p[1:3]
+    }
   )
 
   set.seed(123)
   expect_snapshot(
-    (df_local_g_both <- ww_local_g(guerry_modeled, crime_pers, predictions, ctg, wts))
+    {
+      df_local_g_both <- ww_local_g(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_g_both[1:3]
+    }
   )
 
   set.seed(123)
   expect_snapshot(
-    (df_local_gstar <- ww_local_getis_ord_g_star(guerry_modeled, crime_pers, predictions, ctg, wts))
+    {
+      df_local_gstar <- ww_local_getis_ord_g_star(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_gstar[1:3]
+    }
   )
 
   set.seed(123)
   expect_snapshot(
-    (df_local_gstar_p <- ww_local_getis_ord_g_star_pvalue(guerry_modeled, crime_pers, predictions, ctg, wts))
+    {
+      df_local_gstar_p <- ww_local_getis_ord_g_star_pvalue(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_gstar_p[1:3]
+    }
   )
 
   set.seed(123)
   expect_snapshot(
-    (df_local_gstar_both <- ww_local_g_star(guerry_modeled, crime_pers, predictions, ctg, wts))
+    {
+      df_local_gstar_both <- ww_local_g_star(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_gstar_both[1:3]
+    }
   )
 
   set.seed(123)

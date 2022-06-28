@@ -1,134 +1,142 @@
 # Getis-Ord statistics are stable
 
     Code
-      (df_local_g <- ww_local_getis_ord_g(guerry_modeled, crime_pers, predictions,
-        ctg, wts))
+      df_local_g <- ww_local_getis_ord_g(guerry_modeled, crime_pers, predictions, ctg,
+        wts)
+      df_local_g[1:3]
     Output
-      # A tibble: 85 x 4
-         .metric           .estimator .estimate                               geometry
-         <chr>             <chr>          <dbl>                         <MULTIPOLYGON>
-       1 local_getis_ord_g standard      -0.353 (((381847 1762775, 381116 1763059, 37~
-       2 local_getis_ord_g standard      -1.11  (((381847 1762775, 381116 1763059, 37~
-       3 local_getis_ord_g standard      -0.929 (((381847 1762775, 381116 1763059, 37~
-       4 local_getis_ord_g standard      -0.794 (((381847 1762775, 381116 1763059, 37~
-       5 local_getis_ord_g standard      -2.22  (((381847 1762775, 381116 1763059, 37~
-       6 local_getis_ord_g standard      -0.403 (((381847 1762775, 381116 1763059, 37~
-       7 local_getis_ord_g standard      -0.152 (((381847 1762775, 381116 1763059, 37~
-       8 local_getis_ord_g standard      -0.455 (((381847 1762775, 381116 1763059, 37~
-       9 local_getis_ord_g standard      16.4   (((381847 1762775, 381116 1763059, 37~
-      10 local_getis_ord_g standard      -1.97  (((381847 1762775, 381116 1763059, 37~
+      # A tibble: 85 x 3
+         .metric           .estimator .estimate
+         <chr>             <chr>          <dbl>
+       1 local_getis_ord_g standard      -0.353
+       2 local_getis_ord_g standard      -1.11 
+       3 local_getis_ord_g standard      -0.929
+       4 local_getis_ord_g standard      -0.794
+       5 local_getis_ord_g standard      -2.22 
+       6 local_getis_ord_g standard      -0.403
+       7 local_getis_ord_g standard      -0.152
+       8 local_getis_ord_g standard      -0.455
+       9 local_getis_ord_g standard      16.4  
+      10 local_getis_ord_g standard      -1.97 
       # ... with 75 more rows
 
 ---
 
     Code
-      (df_local_g_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, crime_pers,
-        predictions, ctg, wts))
+      df_local_g_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, crime_pers,
+        predictions, ctg, wts)
+      df_local_g_p[1:3]
     Output
-      # A tibble: 85 x 4
-         .metric                  .estimator .estimate                        geometry
-         <chr>                    <chr>          <dbl>                  <MULTIPOLYGON>
-       1 local_getis_ord_g_pvalue standard     0.339   (((381847 1762775, 381116 1763~
-       2 local_getis_ord_g_pvalue standard     0.0175  (((381847 1762775, 381116 1763~
-       3 local_getis_ord_g_pvalue standard     0.0470  (((381847 1762775, 381116 1763~
-       4 local_getis_ord_g_pvalue standard     0.136   (((381847 1762775, 381116 1763~
-       5 local_getis_ord_g_pvalue standard     0.253   (((381847 1762775, 381116 1763~
-       6 local_getis_ord_g_pvalue standard     0.0943  (((381847 1762775, 381116 1763~
-       7 local_getis_ord_g_pvalue standard     0.541   (((381847 1762775, 381116 1763~
-       8 local_getis_ord_g_pvalue standard     0.132   (((381847 1762775, 381116 1763~
-       9 local_getis_ord_g_pvalue standard     0.361   (((381847 1762775, 381116 1763~
-      10 local_getis_ord_g_pvalue standard     0.00787 (((381847 1762775, 381116 1763~
+      # A tibble: 85 x 3
+         .metric                  .estimator .estimate
+         <chr>                    <chr>          <dbl>
+       1 local_getis_ord_g_pvalue standard     0.339  
+       2 local_getis_ord_g_pvalue standard     0.0175 
+       3 local_getis_ord_g_pvalue standard     0.0470 
+       4 local_getis_ord_g_pvalue standard     0.136  
+       5 local_getis_ord_g_pvalue standard     0.253  
+       6 local_getis_ord_g_pvalue standard     0.0943 
+       7 local_getis_ord_g_pvalue standard     0.541  
+       8 local_getis_ord_g_pvalue standard     0.132  
+       9 local_getis_ord_g_pvalue standard     0.361  
+      10 local_getis_ord_g_pvalue standard     0.00787
       # ... with 75 more rows
 
 ---
 
     Code
-      (df_local_g_both <- ww_local_g(guerry_modeled, crime_pers, predictions, ctg,
-        wts))
+      df_local_g_both <- ww_local_g(guerry_modeled, crime_pers, predictions, ctg, wts)
+      df_local_g_both[1:3]
     Output
-      # A tibble: 170 x 4
-         .metric           .estimator .estimate                               geometry
-         <chr>             <chr>          <dbl>                         <MULTIPOLYGON>
-       1 local_getis_ord_g standard      -0.353 (((381847 1762775, 381116 1763059, 37~
-       2 local_getis_ord_g standard      -1.11  (((381847 1762775, 381116 1763059, 37~
-       3 local_getis_ord_g standard      -0.929 (((381847 1762775, 381116 1763059, 37~
-       4 local_getis_ord_g standard      -0.794 (((381847 1762775, 381116 1763059, 37~
-       5 local_getis_ord_g standard      -2.22  (((381847 1762775, 381116 1763059, 37~
-       6 local_getis_ord_g standard      -0.403 (((381847 1762775, 381116 1763059, 37~
-       7 local_getis_ord_g standard      -0.152 (((381847 1762775, 381116 1763059, 37~
-       8 local_getis_ord_g standard      -0.455 (((381847 1762775, 381116 1763059, 37~
-       9 local_getis_ord_g standard      16.4   (((381847 1762775, 381116 1763059, 37~
-      10 local_getis_ord_g standard      -1.97  (((381847 1762775, 381116 1763059, 37~
+      # A tibble: 170 x 3
+         .metric           .estimator .estimate
+         <chr>             <chr>          <dbl>
+       1 local_getis_ord_g standard      -0.353
+       2 local_getis_ord_g standard      -1.11 
+       3 local_getis_ord_g standard      -0.929
+       4 local_getis_ord_g standard      -0.794
+       5 local_getis_ord_g standard      -2.22 
+       6 local_getis_ord_g standard      -0.403
+       7 local_getis_ord_g standard      -0.152
+       8 local_getis_ord_g standard      -0.455
+       9 local_getis_ord_g standard      16.4  
+      10 local_getis_ord_g standard      -1.97 
       # ... with 160 more rows
 
 ---
 
     Code
-      (df_local_gstar <- ww_local_getis_ord_g_star(guerry_modeled, crime_pers,
-        predictions, ctg, wts))
+      df_local_gstar <- ww_local_getis_ord_g_star(guerry_modeled, crime_pers,
+        predictions, ctg, wts)
     Message <cliMessage>
       ! attr `self.include` is `TRUE`. Reporting Gi*.
+    Code
+      df_local_gstar[1:3]
     Output
-      # A tibble: 85 x 4
-         .metric                .estimator .estimate                          geometry
-         <chr>                  <chr>          <dbl>                    <MULTIPOLYGON>
-       1 local_getis_ord_g_star standard    -1.68e14 (((381847 1762775, 381116 176305~
-       2 local_getis_ord_g_star standard    -2.74e14 (((381847 1762775, 381116 176305~
-       3 local_getis_ord_g_star standard    -2.42e14 (((381847 1762775, 381116 176305~
-       4 local_getis_ord_g_star standard     2.28e14 (((381847 1762775, 381116 176305~
-       5 local_getis_ord_g_star standard     1.67e14 (((381847 1762775, 381116 176305~
-       6 local_getis_ord_g_star standard     1.99e14 (((381847 1762775, 381116 176305~
-       7 local_getis_ord_g_star standard    -2.21e14 (((381847 1762775, 381116 176305~
-       8 local_getis_ord_g_star standard     3.24e14 (((381847 1762775, 381116 176305~
-       9 local_getis_ord_g_star standard    -9.93e13 (((381847 1762775, 381116 176305~
-      10 local_getis_ord_g_star standard     3.09e14 (((381847 1762775, 381116 176305~
+      # A tibble: 85 x 3
+         .metric                .estimator .estimate
+         <chr>                  <chr>          <dbl>
+       1 local_getis_ord_g_star standard    -1.68e14
+       2 local_getis_ord_g_star standard    -2.74e14
+       3 local_getis_ord_g_star standard    -2.42e14
+       4 local_getis_ord_g_star standard     2.28e14
+       5 local_getis_ord_g_star standard     1.67e14
+       6 local_getis_ord_g_star standard     1.99e14
+       7 local_getis_ord_g_star standard    -2.21e14
+       8 local_getis_ord_g_star standard     3.24e14
+       9 local_getis_ord_g_star standard    -9.93e13
+      10 local_getis_ord_g_star standard     3.09e14
       # ... with 75 more rows
 
 ---
 
     Code
-      (df_local_gstar_p <- ww_local_getis_ord_g_star_pvalue(guerry_modeled,
-        crime_pers, predictions, ctg, wts))
+      df_local_gstar_p <- ww_local_getis_ord_g_star_pvalue(guerry_modeled, crime_pers,
+        predictions, ctg, wts)
     Message <cliMessage>
       ! attr `self.include` is `TRUE`. Reporting Gi*.
+    Code
+      df_local_gstar_p[1:3]
     Output
-      # A tibble: 85 x 4
-         .metric                       .estimator .estimate                   geometry
-         <chr>                         <chr>          <dbl>             <MULTIPOLYGON>
-       1 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
-       2 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
-       3 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
-       4 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
-       5 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
-       6 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
-       7 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
-       8 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
-       9 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
-      10 local_getis_ord_g_star_pvalue standard           0 (((381847 1762775, 381116~
+      # A tibble: 85 x 3
+         .metric                       .estimator .estimate
+         <chr>                         <chr>          <dbl>
+       1 local_getis_ord_g_star_pvalue standard           0
+       2 local_getis_ord_g_star_pvalue standard           0
+       3 local_getis_ord_g_star_pvalue standard           0
+       4 local_getis_ord_g_star_pvalue standard           0
+       5 local_getis_ord_g_star_pvalue standard           0
+       6 local_getis_ord_g_star_pvalue standard           0
+       7 local_getis_ord_g_star_pvalue standard           0
+       8 local_getis_ord_g_star_pvalue standard           0
+       9 local_getis_ord_g_star_pvalue standard           0
+      10 local_getis_ord_g_star_pvalue standard           0
       # ... with 75 more rows
 
 ---
 
     Code
-      (df_local_gstar_both <- ww_local_g_star(guerry_modeled, crime_pers, predictions,
-        ctg, wts))
+      df_local_gstar_both <- ww_local_g_star(guerry_modeled, crime_pers, predictions,
+        ctg, wts)
     Message <cliMessage>
       ! attr `self.include` is `TRUE`. Reporting Gi*.
       ! attr `self.include` is `TRUE`. Reporting Gi*.
+    Code
+      df_local_gstar_both[1:3]
     Output
-      # A tibble: 170 x 4
-         .metric                .estimator .estimate                          geometry
-         <chr>                  <chr>          <dbl>                    <MULTIPOLYGON>
-       1 local_getis_ord_g_star standard    -1.68e14 (((381847 1762775, 381116 176305~
-       2 local_getis_ord_g_star standard    -2.74e14 (((381847 1762775, 381116 176305~
-       3 local_getis_ord_g_star standard    -2.42e14 (((381847 1762775, 381116 176305~
-       4 local_getis_ord_g_star standard     2.28e14 (((381847 1762775, 381116 176305~
-       5 local_getis_ord_g_star standard     1.67e14 (((381847 1762775, 381116 176305~
-       6 local_getis_ord_g_star standard     1.99e14 (((381847 1762775, 381116 176305~
-       7 local_getis_ord_g_star standard    -2.21e14 (((381847 1762775, 381116 176305~
-       8 local_getis_ord_g_star standard     3.24e14 (((381847 1762775, 381116 176305~
-       9 local_getis_ord_g_star standard    -9.93e13 (((381847 1762775, 381116 176305~
-      10 local_getis_ord_g_star standard     3.09e14 (((381847 1762775, 381116 176305~
+      # A tibble: 170 x 3
+         .metric                .estimator .estimate
+         <chr>                  <chr>          <dbl>
+       1 local_getis_ord_g_star standard    -1.68e14
+       2 local_getis_ord_g_star standard    -2.74e14
+       3 local_getis_ord_g_star standard    -2.42e14
+       4 local_getis_ord_g_star standard     2.28e14
+       5 local_getis_ord_g_star standard     1.67e14
+       6 local_getis_ord_g_star standard     1.99e14
+       7 local_getis_ord_g_star standard    -2.21e14
+       8 local_getis_ord_g_star standard     3.24e14
+       9 local_getis_ord_g_star standard    -9.93e13
+      10 local_getis_ord_g_star standard     3.09e14
       # ... with 160 more rows
 
 ---

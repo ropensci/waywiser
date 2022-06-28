@@ -1,64 +1,67 @@
 # Local Moran statistics are stable
 
     Code
-      (df_local_i <- ww_local_moran_i(guerry_modeled, crime_pers, predictions, ctg,
-        wts))
+      df_local_i <- ww_local_moran_i(guerry_modeled, crime_pers, predictions, ctg,
+        wts)
+      df_local_i[1:3]
     Output
-      # A tibble: 85 x 4
-         .metric       .estimator .estimate                                   geometry
-         <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
-       1 local_moran_i standard      0.530  (((381847 1762775, 381116 1763059, 379972~
-       2 local_moran_i standard      0.858  (((381847 1762775, 381116 1763059, 379972~
-       3 local_moran_i standard      0.759  (((381847 1762775, 381116 1763059, 379972~
-       4 local_moran_i standard      0.732  (((381847 1762775, 381116 1763059, 379972~
-       5 local_moran_i standard      0.207  (((381847 1762775, 381116 1763059, 379972~
-       6 local_moran_i standard      0.860  (((381847 1762775, 381116 1763059, 379972~
-       7 local_moran_i standard      0.692  (((381847 1762775, 381116 1763059, 379972~
-       8 local_moran_i standard      1.69   (((381847 1762775, 381116 1763059, 379972~
-       9 local_moran_i standard     -0.0109 (((381847 1762775, 381116 1763059, 379972~
-      10 local_moran_i standard      0.710  (((381847 1762775, 381116 1763059, 379972~
+      # A tibble: 85 x 3
+         .metric       .estimator .estimate
+         <chr>         <chr>          <dbl>
+       1 local_moran_i standard      0.530 
+       2 local_moran_i standard      0.858 
+       3 local_moran_i standard      0.759 
+       4 local_moran_i standard      0.732 
+       5 local_moran_i standard      0.207 
+       6 local_moran_i standard      0.860 
+       7 local_moran_i standard      0.692 
+       8 local_moran_i standard      1.69  
+       9 local_moran_i standard     -0.0109
+      10 local_moran_i standard      0.710 
       # ... with 75 more rows
 
 ---
 
     Code
-      (df_local_i_p <- ww_local_moran_pvalue(guerry_modeled, crime_pers, predictions,
-        ctg, wts))
+      df_local_i_p <- ww_local_moran_pvalue(guerry_modeled, crime_pers, predictions,
+        ctg, wts)
+      df_local_i_p[1:3]
     Output
-      # A tibble: 85 x 4
-         .metric            .estimator .estimate                              geometry
-         <chr>              <chr>          <dbl>                        <MULTIPOLYGON>
-       1 local_moran_pvalue standard     0.194   (((381847 1762775, 381116 1763059, 3~
-       2 local_moran_pvalue standard     0.0109  (((381847 1762775, 381116 1763059, 3~
-       3 local_moran_pvalue standard     0.0123  (((381847 1762775, 381116 1763059, 3~
-       4 local_moran_pvalue standard     0.0600  (((381847 1762775, 381116 1763059, 3~
-       5 local_moran_pvalue standard     0.120   (((381847 1762775, 381116 1763059, 3~
-       6 local_moran_pvalue standard     0.0463  (((381847 1762775, 381116 1763059, 3~
-       7 local_moran_pvalue standard     0.243   (((381847 1762775, 381116 1763059, 3~
-       8 local_moran_pvalue standard     0.0641  (((381847 1762775, 381116 1763059, 3~
-       9 local_moran_pvalue standard     0.821   (((381847 1762775, 381116 1763059, 3~
-      10 local_moran_pvalue standard     0.00317 (((381847 1762775, 381116 1763059, 3~
+      # A tibble: 85 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_moran_pvalue standard     0.194  
+       2 local_moran_pvalue standard     0.0109 
+       3 local_moran_pvalue standard     0.0123 
+       4 local_moran_pvalue standard     0.0600 
+       5 local_moran_pvalue standard     0.120  
+       6 local_moran_pvalue standard     0.0463 
+       7 local_moran_pvalue standard     0.243  
+       8 local_moran_pvalue standard     0.0641 
+       9 local_moran_pvalue standard     0.821  
+      10 local_moran_pvalue standard     0.00317
       # ... with 75 more rows
 
 ---
 
     Code
-      (df_local_i_both <- ww_local_moran(guerry_modeled, crime_pers, predictions, ctg,
-        wts))
+      df_local_i_both <- ww_local_moran(guerry_modeled, crime_pers, predictions, ctg,
+        wts)
+      df_local_i_both[1:3]
     Output
-      # A tibble: 170 x 4
-         .metric       .estimator .estimate                                   geometry
-         <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
-       1 local_moran_i standard      0.530  (((381847 1762775, 381116 1763059, 379972~
-       2 local_moran_i standard      0.858  (((381847 1762775, 381116 1763059, 379972~
-       3 local_moran_i standard      0.759  (((381847 1762775, 381116 1763059, 379972~
-       4 local_moran_i standard      0.732  (((381847 1762775, 381116 1763059, 379972~
-       5 local_moran_i standard      0.207  (((381847 1762775, 381116 1763059, 379972~
-       6 local_moran_i standard      0.860  (((381847 1762775, 381116 1763059, 379972~
-       7 local_moran_i standard      0.692  (((381847 1762775, 381116 1763059, 379972~
-       8 local_moran_i standard      1.69   (((381847 1762775, 381116 1763059, 379972~
-       9 local_moran_i standard     -0.0109 (((381847 1762775, 381116 1763059, 379972~
-      10 local_moran_i standard      0.710  (((381847 1762775, 381116 1763059, 379972~
+      # A tibble: 170 x 3
+         .metric       .estimator .estimate
+         <chr>         <chr>          <dbl>
+       1 local_moran_i standard      0.530 
+       2 local_moran_i standard      0.858 
+       3 local_moran_i standard      0.759 
+       4 local_moran_i standard      0.732 
+       5 local_moran_i standard      0.207 
+       6 local_moran_i standard      0.860 
+       7 local_moran_i standard      0.692 
+       8 local_moran_i standard      1.69  
+       9 local_moran_i standard     -0.0109
+      10 local_moran_i standard      0.710 
       # ... with 160 more rows
 
 ---

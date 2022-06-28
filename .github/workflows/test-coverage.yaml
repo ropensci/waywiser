@@ -26,14 +26,6 @@ jobs:
           extra-packages: any::covr
           needs: coverage
 
-      - name: Install Linux dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-          sudo apt-get update
-          sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev
-          Rscript -e 'install.packages(c("sf", "sp", "raster", "terra", "sfdep"), repos = "https://cloud.r-project.org")'
-
       - name: Test coverage
         run: covr::codecov(quiet = FALSE)
         shell: Rscript {0}
