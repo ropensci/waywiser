@@ -105,8 +105,6 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># waywiser itself, of course:</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mikemahoney218/waywiser" class="external-link">waywiser</a></span><span class="op">)</span></span>
-<span><span class="co"># For our data set:</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/spatialsample" class="external-link">spatialsample</a></span><span class="op">)</span></span>
 <span><span class="co"># For the %&gt;% pipe and mutate:</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -116,47 +114,42 @@
 <span><span class="co">#&gt;     filter, lag</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span><span class="co"># For dealing with spatial data:</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE</span></span></code></pre></div>
-<p>We’ll be working with the <code>boston_canopy</code> data from the spatialsample package, fitting a linear model to associate tree canopy coverage with mean temperature. Let’s turn on sf’s ability to download coordinate reference systems over the internet, just in case we don’t have the CRS for that data yet:</p>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<p>We’ll be working with the <code>guerry</code> data from the sfdep package, fitting a linear model to associate crimes against persons with literacy. Let’s load the data now:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/proj_tools.html" class="external-link">sf_proj_network</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "https://cdn.proj.org"</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf_project.html" class="external-link">sf_add_proj_units</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">guerry</span>, package <span class="op">=</span> <span class="st">"sfdep"</span><span class="op">)</span></span></code></pre></div>
 <p>waywiser builds on top of the <a href="https://sfdep.josiahparry.com/" class="external-link">sfdep</a> package, itself an extension for the <a href="https://r-spatial.github.io/spdep/index.html" class="external-link">spdep</a> spatial dependence library. These packages expect you to have objects representing the neighbors of your data set and the spatial weights between observations.</p>
 <p>As a result, right now waywiser also expects you to already have those objects pre-created and to pass them as arguments to model metric functions. We’ll find the neighbors in our data using the <code><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity()</a></code> function, and then calculate spatial weights via <code><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity</a></span><span class="op">(</span><span class="va">boston_canopy</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span></span>
 <span><span class="va">wt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights</a></span><span class="op">(</span><span class="va">nb</span><span class="op">)</span></span></code></pre></div>
 <p>With our spatial relationships defined, we can now fit a model and calculate spatial dependency in our model residuals!</p>
-<p>We’ll fit a simple linear model relating canopy coverage to daily temperatures, and then generate predictions from that model. We can use <code><a href="reference/local_moran_i.html">ww_local_moran_i()</a></code> to calculate the local spatial autocorrelation of our residuals at each data point:</p>
+<p>We’ll fit a simple linear model relating crimes against persons with literacy, and then generate predictions from that model. We can use <code><a href="reference/local_moran_i.html">ww_local_moran_i()</a></code> to calculate the local spatial autocorrelation of our residuals at each data point:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">boston_canopy</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mean_temp</span> <span class="op">~</span> <span class="va">canopy_gain</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i</a></span><span class="op">(</span><span class="va">mean_temp</span>, <span class="va">pred</span>, <span class="va">nb</span>, <span class="va">wt</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 682 × 4</span></span>
+<code class="sourceCode R"><span><span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">crime_pers</span> <span class="op">~</span> <span class="va">literacy</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i</a></span><span class="op">(</span><span class="va">crime_pers</span>, <span class="va">pred</span>, <span class="va">nb</span>, <span class="va">wt</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 85 × 4</span></span>
 <span><span class="co">#&gt;    .metric       .estimator .estimate                                   geometry</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt;            &lt;MULTIPOLYGON [US_survey_foot]&gt;</span></span>
-<span><span class="co">#&gt;  1 local_moran_i standard     0.172   (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt;  2 local_moran_i standard     0.149   (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt;  3 local_moran_i standard    16.4     (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt;  4 local_moran_i standard     0.0434  (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt;  5 local_moran_i standard     0.270   (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt;  6 local_moran_i standard     0.00428 (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt;  7 local_moran_i standard     0.247   (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt;  8 local_moran_i standard     0.00144 (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt;  9 local_moran_i standard     0.0619  (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt; 10 local_moran_i standard    -0.00195 (((745307.9 2921698, 745307.9 2921699, 74…</span></span>
-<span><span class="co">#&gt; # … with 672 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt;                             &lt;MULTIPOLYGON&gt;</span></span>
+<span><span class="co">#&gt;  1 local_moran_i standard      0.530  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  2 local_moran_i standard      0.858  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  3 local_moran_i standard      0.759  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  4 local_moran_i standard      0.732  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  5 local_moran_i standard      0.207  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  6 local_moran_i standard      0.860  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  7 local_moran_i standard      0.692  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  8 local_moran_i standard      1.69   (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  9 local_moran_i standard     -0.0109 (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt; 10 local_moran_i standard      0.710  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt; # … with 75 more rows</span></span></code></pre></div>
 <p>Or if we use <code>ww_local_moran_i_vec</code>, we can add a column to our original data frame with our statistic, which makes plotting using our original geometries easier:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">boston_canopy</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mean_temp</span> <span class="op">~</span> <span class="va">canopy_gain</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>         .estimate <span class="op">=</span> <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i_vec</a></span><span class="op">(</span><span class="va">mean_temp</span>, <span class="va">pred</span>, <span class="va">nb</span>, <span class="va">wt</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">crime_pers</span> <span class="op">~</span> <span class="va">literacy</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         .estimate <span class="op">=</span> <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i_vec</a></span><span class="op">(</span><span class="va">crime_pers</span>, <span class="va">pred</span>, <span class="va">nb</span>, <span class="va">wt</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    cut_points <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">.estimate</span> <span class="op">&lt;=</span> <span class="op">-</span><span class="fl">1</span> <span class="op">~</span> <span class="st">"(-Inf, -1]"</span>,</span>
@@ -179,11 +172,11 @@
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">cut_points</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">.estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"BrBG"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient2</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"#018571"</span>, mid <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"#A6611A"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-2022_06_28-guerry-1.png" width="100%"></p>
 <p>This makes it easy to see what areas are poorly represented by our model, which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we’re working with.</p>
 </div>
 <div class="section level2">
