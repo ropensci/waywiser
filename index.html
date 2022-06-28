@@ -158,25 +158,18 @@
 <span>      <span class="va">.estimate</span> <span class="op">&lt;=</span> <span class="fl">0.5</span> <span class="op">~</span> <span class="st">"(0, 0.5]"</span>,</span>
 <span>      <span class="va">.estimate</span> <span class="op">&lt;=</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"(0.5, 1]"</span>,</span>
 <span>      <span class="va">.estimate</span> <span class="op">&gt;</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"(1, Inf)"</span>,</span>
-<span>    <span class="op">)</span>,</span>
-<span>    cut_points <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
-<span>      <span class="va">cut_points</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>          <span class="st">"(-Inf, -1]"</span>, </span>
-<span>          <span class="st">"(-1, -0.5]"</span>, </span>
-<span>          <span class="st">"(-0.5, 0]"</span>, </span>
-<span>          <span class="st">"(0, 0.5]"</span>, </span>
-<span>          <span class="st">"(0.5, 1]"</span>, </span>
-<span>          <span class="st">"(1, Inf)"</span><span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">.estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient2</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"#018571"</span>, mid <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"#A6611A"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-2022_06_28-guerry-1.png" width="100%"></p>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient2</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Moran's I"</span>, </span>
+<span>    low <span class="op">=</span> <span class="st">"#018571"</span>, </span>
+<span>    mid <span class="op">=</span> <span class="st">"white"</span>, </span>
+<span>    high <span class="op">=</span> <span class="st">"#A6611A"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-2022_06_28(2)-guerry-1.png" width="100%"></p>
 <p>This makes it easy to see what areas are poorly represented by our model, which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we’re working with.</p>
 </div>
 <div class="section level2">
