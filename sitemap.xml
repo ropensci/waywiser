@@ -28,10 +28,19 @@
     <loc>https://mikemahoney218.github.io/waywiser/news/index.html</loc>
   </url>
   <url>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/global_geary_c.html</loc>
+  </url>
+  <url>
     <loc>https://mikemahoney218.github.io/waywiser/reference/global_moran_i.html</loc>
   </url>
   <url>
     <loc>https://mikemahoney218.github.io/waywiser/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/local_geary_c.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/local_getis_ord_g.html</loc>
   </url>
   <url>
     <loc>https://mikemahoney218.github.io/waywiser/reference/local_moran_i.html</loc>

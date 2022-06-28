@@ -51,46 +51,46 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ww_local_moran_i</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">ww_local_moran_i_vec</span><span class="op">(</span>
-  <span class="va">truth</span>,
-  <span class="va">estimate</span>,
-  <span class="va">nb</span>,
-  <span class="va">wt</span>,
-  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,
-  nsim <span class="op">=</span> <span class="fl">499</span>,
-  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  seed <span class="op">=</span> <span class="va">.Random.seed</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">ww_local_moran_pvalue</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">ww_local_moran_pvalue_vec</span><span class="op">(</span>
-  <span class="va">truth</span>,
-  <span class="va">estimate</span>,
-  <span class="va">nb</span>,
-  <span class="va">wt</span>,
-  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,
-  nsim <span class="op">=</span> <span class="fl">499</span>,
-  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  seed <span class="op">=</span> <span class="va">.Random.seed</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">ww_local_moran</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">truth</span>,
-  <span class="va">estimate</span>,
-  <span class="va">nb</span>,
-  <span class="va">wt</span>,
-  alternative <span class="op">=</span> <span class="st">"greater"</span>,
-  nsim <span class="op">=</span> <span class="fl">499</span>,
-  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  seed <span class="op">=</span> <span class="va">.Random.seed</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ww_local_moran_i</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ww_local_moran_i_vec</span><span class="op">(</span></span>
+<span>  <span class="va">truth</span>,</span>
+<span>  <span class="va">estimate</span>,</span>
+<span>  <span class="va">nb</span>,</span>
+<span>  <span class="va">wt</span>,</span>
+<span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
+<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">.Random.seed</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ww_local_moran_pvalue</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ww_local_moran_pvalue_vec</span><span class="op">(</span></span>
+<span>  <span class="va">truth</span>,</span>
+<span>  <span class="va">estimate</span>,</span>
+<span>  <span class="va">nb</span>,</span>
+<span>  <span class="va">wt</span>,</span>
+<span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
+<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">.Random.seed</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ww_local_moran</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">truth</span>,</span>
+<span>  <span class="va">estimate</span>,</span>
+<span>  <span class="va">nb</span>,</span>
+<span>  <span class="va">wt</span>,</span>
+<span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
+<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">.Random.seed</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -154,6 +154,50 @@ For grouped data frames, the number of rows returned will be the same as the num
 For ww_local_moran_i_vec(), a numeric vector of <code>length(truth)</code> (or NA).</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">guerry</span>, package <span class="op">=</span> <span class="st">"sfdep"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">guerry_modeled</span> <span class="op">&lt;-</span> <span class="va">guerry</span></span></span>
+<span class="r-in"><span><span class="va">guerry_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">crime_pers</span> <span class="op">~</span> <span class="va">literacy</span>, <span class="va">guerry_modeled</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">guerry_modeled</span><span class="op">$</span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">guerry_lm</span>, <span class="va">guerry_modeled</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ctg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights</a></span><span class="op">(</span><span class="va">ctg</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">ww_local_moran_i</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 85 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .metric       .estimator .estimate                             geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_moran_i standard      0.530  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_moran_i standard      0.858  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_moran_i standard      0.759  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_moran_i standard      0.732  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_moran_i standard      0.207  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_moran_i standard      0.860  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_moran_i standard      0.692  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_moran_i standard      1.69   (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_moran_i standard     -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">9</span> (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_moran_i standard      0.710  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 75 more rows</span></span>
+<span class="r-in"><span><span class="fu">ww_local_moran</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 170 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .metric       .estimator .estimate                             geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_moran_i standard      0.530  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_moran_i standard      0.858  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_moran_i standard      0.759  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_moran_i standard      0.732  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_moran_i standard      0.207  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_moran_i standard      0.860  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_moran_i standard      0.692  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_moran_i standard      1.69   (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_moran_i standard     -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">9</span> (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_moran_i standard      0.710  (((931664 1785222, 930836 1785736, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 160 more rows</span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
