@@ -2,7 +2,7 @@ pandoc: 2.14.2
 pkgdown: 2.0.5
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-06-28T13:38Z
+last_built: 2022-06-28T13:55Z
 urls:
   reference: https://mikemahoney218.github.io/waywiser/reference
   article: https://mikemahoney218.github.io/waywiser/articles
