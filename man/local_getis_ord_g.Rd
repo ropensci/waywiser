@@ -23,7 +23,7 @@ ww_local_getis_ord_g_vec(
   alternative = "two.sided",
   nsim = 499,
   na_rm = TRUE,
-  seed = .Random.seed,
+  seed = NULL,
   ...
 )
 
@@ -37,7 +37,7 @@ ww_local_getis_ord_g_pvalue_vec(
   alternative = "two.sided",
   nsim = 499,
   na_rm = TRUE,
-  seed = .Random.seed,
+  seed = NULL,
   ...
 )
 
@@ -47,10 +47,10 @@ ww_local_g(
   estimate,
   nb,
   wt,
-  alternative = "greater",
+  alternative = "two.sided",
   nsim = 499,
   na_rm = TRUE,
-  seed = .Random.seed,
+  seed = NULL,
   ...
 )
 
@@ -64,7 +64,7 @@ ww_local_getis_ord_g_star_vec(
   alternative = "two.sided",
   nsim = 499,
   na_rm = TRUE,
-  seed = .Random.seed,
+  seed = NULL,
   ...
 )
 
@@ -78,7 +78,7 @@ ww_local_getis_ord_g_star_pvalue_vec(
   alternative = "two.sided",
   nsim = 499,
   na_rm = TRUE,
-  seed = .Random.seed,
+  seed = NULL,
   ...
 )
 
@@ -88,10 +88,10 @@ ww_local_g_star(
   estimate,
   nb,
   wt,
-  alternative = "greater",
+  alternative = "two.sided",
   nsim = 499,
   na_rm = TRUE,
-  seed = .Random.seed,
+  seed = NULL,
   ...
 )
 }
