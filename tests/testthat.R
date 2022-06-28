@@ -9,9 +9,4 @@
 library(testthat)
 library(waywiser)
 
-sf::sf_extSoftVersion()
-if (identical(Sys.getenv("NOT_CRAN"), "true")) {
-  sf::sf_proj_network(TRUE)
-}
-
 test_check("waywiser")

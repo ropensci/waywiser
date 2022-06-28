@@ -1,13 +1,13 @@
 test_that("Getis-Ord statistics are stable", {
 
-  data(guerry, package = "sfdep")
+  data(guerry_nb, package = "sfdep")
 
-  guerry_modeled <- guerry
+  guerry_modeled <- guerry_nb
   guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
-  ctg <- st_contiguity(guerry)
-  wts <- st_weights(ctg)
+  ctg <- guerry_modeled$nb
+  wts <- guerry_modeled$wt
 
   resid <- guerry_modeled$crime_pers - guerry_modeled$predictions
 

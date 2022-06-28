@@ -23,6 +23,9 @@ reference:
     contents:
       - contains("global_moran")
       - contains("local_moran")
+      - contains("global_geary")
+      - contains("local_geary")
+      - contains("local_getis")
   - title: Utilities
     contents:
       - reexports
