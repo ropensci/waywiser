@@ -47,8 +47,6 @@ things first, let’s load a few libraries:
 ``` r
 # waywiser itself, of course:
 library(waywiser)
-# For our data set:
-library(spatialsample)
 # For the %>% pipe and mutate:
 library(dplyr)
 #> 
@@ -59,21 +57,14 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
-# For dealing with spatial data:
-library(sf)
-#> Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
 ```
 
-We’ll be working with the `boston_canopy` data from the spatialsample
-package, fitting a linear model to associate tree canopy coverage with
-mean temperature. Let’s turn on sf’s ability to download coordinate
-reference systems over the internet, just in case we don’t have the CRS
-for that data yet:
+We’ll be working with the `guerry` data from the sfdep package, fitting
+a linear model to associate crimes against persons with literacy. Let’s
+load the data now:
 
 ``` r
-sf_proj_network(TRUE)
-#> [1] "https://cdn.proj.org"
-sf_add_proj_units()
+data(guerry, package = "sfdep")
 ```
 
 waywiser builds on top of the [sfdep](https://sfdep.josiahparry.com/)
@@ -89,36 +80,36 @@ functions. We’ll find the neighbors in our data using the
 `st_weights()`:
 
 ``` r
-nb <- st_contiguity(boston_canopy)
+nb <- st_contiguity(guerry)
 wt <- st_weights(nb)
 ```
 
 With our spatial relationships defined, we can now fit a model and
 calculate spatial dependency in our model residuals!
 
-We’ll fit a simple linear model relating canopy coverage to daily
-temperatures, and then generate predictions from that model. We can use
+We’ll fit a simple linear model relating crimes against persons with
+literacy, and then generate predictions from that model. We can use
 `ww_local_moran_i()` to calculate the local spatial autocorrelation of
 our residuals at each data point:
 
 ``` r
-boston_canopy %>%
-  mutate(pred = predict(lm(mean_temp ~ canopy_gain, .))) %>% 
-  ww_local_moran_i(mean_temp, pred, nb, wt)
-#> # A tibble: 682 × 4
+guerry %>%
+  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
+  ww_local_moran_i(crime_pers, pred, nb, wt)
+#> # A tibble: 85 × 4
 #>    .metric       .estimator .estimate                                   geometry
-#>    <chr>         <chr>          <dbl>            <MULTIPOLYGON [US_survey_foot]>
-#>  1 local_moran_i standard     0.172   (((745307.9 2921698, 745307.9 2921699, 74…
-#>  2 local_moran_i standard     0.149   (((745307.9 2921698, 745307.9 2921699, 74…
-#>  3 local_moran_i standard    16.4     (((745307.9 2921698, 745307.9 2921699, 74…
-#>  4 local_moran_i standard     0.0434  (((745307.9 2921698, 745307.9 2921699, 74…
-#>  5 local_moran_i standard     0.270   (((745307.9 2921698, 745307.9 2921699, 74…
-#>  6 local_moran_i standard     0.00428 (((745307.9 2921698, 745307.9 2921699, 74…
-#>  7 local_moran_i standard     0.247   (((745307.9 2921698, 745307.9 2921699, 74…
-#>  8 local_moran_i standard     0.00144 (((745307.9 2921698, 745307.9 2921699, 74…
-#>  9 local_moran_i standard     0.0619  (((745307.9 2921698, 745307.9 2921699, 74…
-#> 10 local_moran_i standard    -0.00195 (((745307.9 2921698, 745307.9 2921699, 74…
-#> # … with 672 more rows
+#>    <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
+#>  1 local_moran_i standard      0.530  (((381847 1762775, 381116 1763059, 379972…
+#>  2 local_moran_i standard      0.858  (((381847 1762775, 381116 1763059, 379972…
+#>  3 local_moran_i standard      0.759  (((381847 1762775, 381116 1763059, 379972…
+#>  4 local_moran_i standard      0.732  (((381847 1762775, 381116 1763059, 379972…
+#>  5 local_moran_i standard      0.207  (((381847 1762775, 381116 1763059, 379972…
+#>  6 local_moran_i standard      0.860  (((381847 1762775, 381116 1763059, 379972…
+#>  7 local_moran_i standard      0.692  (((381847 1762775, 381116 1763059, 379972…
+#>  8 local_moran_i standard      1.69   (((381847 1762775, 381116 1763059, 379972…
+#>  9 local_moran_i standard     -0.0109 (((381847 1762775, 381116 1763059, 379972…
+#> 10 local_moran_i standard      0.710  (((381847 1762775, 381116 1763059, 379972…
+#> # … with 75 more rows
 ```
 
 Or if we use `ww_local_moran_i_vec`, we can add a column to our original
@@ -128,9 +119,9 @@ geometries easier:
 ``` r
 library(ggplot2)
 
-boston_canopy %>%
-  mutate(pred = predict(lm(mean_temp ~ canopy_gain, .)),
-         .estimate = ww_local_moran_i_vec(mean_temp, pred, nb, wt)) %>% 
+guerry %>%
+  mutate(pred = predict(lm(crime_pers ~ literacy, .)),
+         .estimate = ww_local_moran_i_vec(crime_pers, pred, nb, wt)) %>% 
   mutate(
     cut_points = case_when(
       .estimate <= -1 ~ "(-Inf, -1]",
@@ -153,13 +144,13 @@ boston_canopy %>%
       )
     )
   ) %>% 
-  st_as_sf() %>% 
-  ggplot(aes(fill = cut_points)) +
+  sf::st_as_sf() %>% 
+  ggplot(aes(fill = .estimate)) +
   geom_sf() + 
-  scale_fill_brewer(palette = "BrBG")
+  scale_fill_gradient2(low = "#018571", mid = "white", high = "#A6611A")
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-2022_06_28-guerry-1.png" width="100%" />
 
 This makes it easy to see what areas are poorly represented by our
 model, which might lead us to identify ways to improve our model or help

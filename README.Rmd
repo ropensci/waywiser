@@ -44,19 +44,14 @@ Let's walk through how we can use waywiser to find local indicators of spatial a
 ```{r}
 # waywiser itself, of course:
 library(waywiser)
-# For our data set:
-library(spatialsample)
 # For the %>% pipe and mutate:
 library(dplyr)
-# For dealing with spatial data:
-library(sf)
 ```
 
-We'll be working with the `boston_canopy` data from the spatialsample package, fitting a linear model to associate tree canopy coverage with mean temperature. Let's turn on sf's ability to download coordinate reference systems over the internet, just in case we don't have the CRS for that data yet:
+We'll be working with the `guerry` data from the sfdep package, fitting a linear model to associate crimes against persons with literacy. Let's load the data now:
 
 ```{r}
-sf_proj_network(TRUE)
-sf_add_proj_units()
+data(guerry, package = "sfdep")
 ```
 
 waywiser builds on top of the [sfdep](https://sfdep.josiahparry.com/) package, itself an extension for the [spdep](https://r-spatial.github.io/spdep/index.html) spatial dependence library. These packages expect you to have objects representing the neighbors of your data set and the spatial weights between observations. 
@@ -64,28 +59,28 @@ waywiser builds on top of the [sfdep](https://sfdep.josiahparry.com/) package, i
 As a result, right now waywiser also expects you to already have those objects pre-created and to pass them as arguments to model metric functions. We'll find the neighbors in our data using the `st_contiguity()` function, and then calculate spatial weights via `st_weights()`:
 
 ```{r}
-nb <- st_contiguity(boston_canopy)
+nb <- st_contiguity(guerry)
 wt <- st_weights(nb)
 ```
 
 With our spatial relationships defined, we can now fit a model and calculate spatial dependency in our model residuals! 
 
-We'll fit a simple linear model relating canopy coverage to daily temperatures, and then generate predictions from that model. We can use `ww_local_moran_i()` to calculate the local spatial autocorrelation of our residuals at each data point:
+We'll fit a simple linear model relating crimes against persons with literacy, and then generate predictions from that model. We can use `ww_local_moran_i()` to calculate the local spatial autocorrelation of our residuals at each data point:
 
 ```{r}
-boston_canopy %>%
-  mutate(pred = predict(lm(mean_temp ~ canopy_gain, .))) %>% 
-  ww_local_moran_i(mean_temp, pred, nb, wt)
+guerry %>%
+  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
+  ww_local_moran_i(crime_pers, pred, nb, wt)
 ```
 
 Or if we use `ww_local_moran_i_vec`, we can add a column to our original data frame with our statistic, which makes plotting using our original geometries easier:
 
-```{r}
+```{r 2022_06_28-guerry}
 library(ggplot2)
 
-boston_canopy %>%
-  mutate(pred = predict(lm(mean_temp ~ canopy_gain, .)),
-         .estimate = ww_local_moran_i_vec(mean_temp, pred, nb, wt)) %>% 
+guerry %>%
+  mutate(pred = predict(lm(crime_pers ~ literacy, .)),
+         .estimate = ww_local_moran_i_vec(crime_pers, pred, nb, wt)) %>% 
   mutate(
     cut_points = case_when(
       .estimate <= -1 ~ "(-Inf, -1]",
@@ -108,10 +103,10 @@ boston_canopy %>%
       )
     )
   ) %>% 
-  st_as_sf() %>% 
-  ggplot(aes(fill = cut_points)) +
+  sf::st_as_sf() %>% 
+  ggplot(aes(fill = .estimate)) +
   geom_sf() + 
-  scale_fill_brewer(palette = "BrBG")
+  scale_fill_gradient2(low = "#018571", mid = "white", high = "#A6611A")
 ```
 
 This makes it easy to see what areas are poorly represented by our model, which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we're working with.
