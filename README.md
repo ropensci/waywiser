@@ -130,27 +130,20 @@ guerry %>%
       .estimate <= 0.5 ~ "(0, 0.5]",
       .estimate <= 1 ~ "(0.5, 1]",
       .estimate > 1 ~ "(1, Inf)",
-    ),
-    cut_points = factor(
-      cut_points,
-      rev(
-        c(
-          "(-Inf, -1]", 
-          "(-1, -0.5]", 
-          "(-0.5, 0]", 
-          "(0, 0.5]", 
-          "(0.5, 1]", 
-          "(1, Inf)")
-      )
     )
   ) %>% 
   sf::st_as_sf() %>% 
   ggplot(aes(fill = .estimate)) +
   geom_sf() + 
-  scale_fill_gradient2(low = "#018571", mid = "white", high = "#A6611A")
+  scale_fill_gradient2(
+    "Moran's I", 
+    low = "#018571", 
+    mid = "white", 
+    high = "#A6611A"
+  )
 ```
 
-<img src="man/figures/README-2022_06_28-guerry-1.png" width="100%" />
+<img src="man/figures/README-2022_06_28(2)-guerry-1.png" width="100%" />
 
 This makes it easy to see what areas are poorly represented by our
 model, which might lead us to identify ways to improve our model or help
