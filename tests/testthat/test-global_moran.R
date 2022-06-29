@@ -1,5 +1,7 @@
 test_that("Global Moran statistics are stable", {
 
+  skip_if_not(rlang::is_installed("sfdep"))
+
   data(guerry, package = "sfdep")
 
   guerry_modeled <- guerry
