@@ -22,13 +22,13 @@ Depends:
     R (>= 3.5)
 Imports: 
     rlang,
+    sf,
     spdep,
     yardstick
 Suggests: 
     covr,
     dplyr,
     ggplot2,
-    sf,
     sfdep,
     testthat (>= 3.0.0),
     tidymodels,

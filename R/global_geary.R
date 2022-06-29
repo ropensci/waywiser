@@ -23,7 +23,6 @@
 #' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
 #' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 #'
-#' ww_global_geary_c(guerry_modeled, crime_pers, predictions)
 #' ww_global_geary(guerry_modeled, crime_pers, predictions)
 #'
 #' @rdname global_geary_c

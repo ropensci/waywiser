@@ -29,7 +29,7 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
     rlang::warn(
       c(
         "Non-point or polygon geometry specified, calculating neighbors using sf::st_centroid()",
-        "i" = "To avoid this, provide neighbors explicitly to `nb`",
+        "i" = "To avoid this, provide neighbors explicitly",
         "i" = "Or provide a neighbor-creating function"
       ),
       call = call
@@ -78,7 +78,7 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
 ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
 
   knn <- spdep::knearneigh(data, k, ...)
-  knn <- spdep::knn2nb(knn, sym)
+  spdep::knn2nb(knn, sym = sym)
 
 }
 
@@ -129,7 +129,7 @@ ww_build_weights <- function(x, wt = NULL, include_self = FALSE, ...) {
 
   if (!inherits(wt, "listw")) {
     rlang::abort(
-      "Couldn't figure out how to build an `nb` object from the provided arguments",
+      "Couldn't figure out how to build a `listw` object from the provided arguments",
       call = rlang::caller_env()
     )
   }
