@@ -62,15 +62,22 @@ ww_global_moran() returns both."><meta property="og:image" content="https://mike
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ww_global_moran_i</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_global_moran_i_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, <span class="va">nb</span>, <span class="va">wt</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_global_moran_i_vec</span><span class="op">(</span></span>
+<span>  <span class="va">truth</span>,</span>
+<span>  <span class="va">estimate</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
+<span>  randomization <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ww_global_moran_pvalue</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ww_global_moran_pvalue_vec</span><span class="op">(</span></span>
 <span>  <span class="va">truth</span>,</span>
 <span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
 <span>  randomization <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -81,8 +88,7 @@ ww_global_moran() returns both."><meta property="og:image" content="https://mike
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">truth</span>,</span>
 <span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
 <span>  randomization <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -98,7 +104,7 @@ and <code>estimate</code> arguments.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Not currently used.</p></dd>
+<dd><p>Additional arguments passed to <code><a href="https://r-spatial.github.io/spdep/reference/moran.test.html" class="external-link">spdep::moran.test()</a></code>.</p></dd>
 
 
 <dt>truth</dt>
@@ -116,25 +122,21 @@ specified different ways but the primary method is to use an
 unquoted variable name. For <code>_vec()</code> functions, a <code>numeric</code> vector.</p></dd>
 
 
-<dt>nb</dt>
-<dd><p>a neighbor list object for example as created by <code><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity()</a></code>.</p></dd>
-
-
 <dt>wt</dt>
-<dd><p>a weights list as created by <code><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights()</a></code>.</p></dd>
+<dd><p>A "listw" object, for instance as created with <code><a href="ww_build_weights.html">ww_build_weights()</a></code></p></dd>
+
+
+<dt>alternative</dt>
+<dd><p>a character string specifying the alternative hypothesis, must be one of greater (default), less or two.sided.</p></dd>
+
+
+<dt>randomization</dt>
+<dd><p>variance of I calculated under the assumption of randomisation, if FALSE normality</p></dd>
 
 
 <dt>na_rm</dt>
 <dd><p>A <code>logical</code> value indicating whether <code>NA</code>
 values should be stripped before the computation proceeds.</p></dd>
-
-
-<dt>alternative</dt>
-<dd><p>default <code>"two.sided"</code>. Should be one of <code>"greater"</code>, <code>"less"</code>, or <code>"two.sided"</code> to specify the alternative hypothesis.</p></dd>
-
-
-<dt>randomization</dt>
-<dd><p>default <code>TRUE</code>. Calculate variance based on randomization. If <code>FALSE</code>, under the assumption of normality.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -154,21 +156,17 @@ For ww_global_moran_i_vec(), a single numeric value (or NA).</p>
 <span class="r-in"><span><span class="va">guerry_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">crime_pers</span> <span class="op">~</span> <span class="va">literacy</span>, <span class="va">guerry_modeled</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">guerry_modeled</span><span class="op">$</span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">guerry_lm</span>, <span class="va">guerry_modeled</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ctg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">wts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights</a></span><span class="op">(</span><span class="va">ctg</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">ww_global_moran_i</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ww_global_moran_i</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .metric        .estimator .estimate                             geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> global_moran_i standard       0.412 (((931664 1785222, 930836 1785736, …</span>
-<span class="r-in"><span><span class="fu">ww_global_moran</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ww_global_moran</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .metric             .estimator .estimate                        geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> global_moran_i      standard    4.12<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> (((931664 1785222, 930836 1785…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> global_moran_pvalue standard    7.23<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> (((931664 1785222, 930836 1785…</span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

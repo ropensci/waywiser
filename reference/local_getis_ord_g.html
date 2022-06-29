@@ -56,81 +56,37 @@
 <span><span class="fu">ww_local_getis_ord_g_vec</span><span class="op">(</span></span>
 <span>  <span class="va">truth</span>,</span>
 <span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
 <span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
 <span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  include_self <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_local_getis_ord_g_pvalue</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_local_getis_ord_pvalue</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_local_getis_ord_g_pvalue_vec</span><span class="op">(</span></span>
+<span><span class="fu">ww_local_getis_ord_pvalue_vec</span><span class="op">(</span></span>
 <span>  <span class="va">truth</span>,</span>
 <span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
 <span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
 <span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  include_self <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_local_g</span><span class="op">(</span></span>
+<span><span class="fu">ww_local_getis_ord</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">truth</span>,</span>
 <span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
 <span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
 <span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ww_local_getis_ord_g_star</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ww_local_getis_ord_g_star_vec</span><span class="op">(</span></span>
-<span>  <span class="va">truth</span>,</span>
-<span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
-<span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
-<span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
-<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ww_local_getis_ord_g_star_pvalue</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ww_local_getis_ord_g_star_pvalue_vec</span><span class="op">(</span></span>
-<span>  <span class="va">truth</span>,</span>
-<span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
-<span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
-<span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
-<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ww_local_g_star</span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
-<span>  <span class="va">truth</span>,</span>
-<span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
-<span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
-<span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
-<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  include_self <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -142,7 +98,7 @@ and <code>estimate</code> arguments.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Not currently used.</p></dd>
+<dd><p>Arguments passed to <code><a href="https://r-spatial.github.io/spdep/reference/localG.html" class="external-link">spdep::localG_perm()</a></code></p></dd>
 
 
 <dt>truth</dt>
@@ -160,20 +116,16 @@ specified different ways but the primary method is to use an
 unquoted variable name. For <code>_vec()</code> functions, a <code>numeric</code> vector.</p></dd>
 
 
-<dt>nb</dt>
-<dd><p>a neighbor list object for example as created by <code><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity()</a></code>.</p></dd>
-
-
 <dt>wt</dt>
-<dd><p>a weights list as created by <code><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights()</a></code>.</p></dd>
+<dd><p>A "listw" object, for instance as created with <code><a href="ww_build_weights.html">ww_build_weights()</a></code></p></dd>
 
 
 <dt>alternative</dt>
-<dd><p>default <code>"two.sided"</code>. Should be one of <code>"greater"</code>, <code>"less"</code>, or <code>"two.sided"</code> to specify the alternative hypothesis.</p></dd>
+<dd><p>a character string specifying the alternative hypothesis, must be one of <code>"two.sided"</code> (default), <code>"greater"</code> or <code>"less"</code>.</p></dd>
 
 
 <dt>nsim</dt>
-<dd><p>The number of simulations to run.</p></dd>
+<dd><p>default 499, number of conditonal permutation simulations</p></dd>
 
 
 <dt>na_rm</dt>
@@ -181,9 +133,8 @@ unquoted variable name. For <code>_vec()</code> functions, a <code>numeric</code
 values should be stripped before the computation proceeds.</p></dd>
 
 
-<dt>seed</dt>
-<dd><p>A random seed to use for all metric calculations.
-Defaults to the current seed.</p></dd>
+<dt>include_self</dt>
+<dd><p>Include each region itself in its own list of neighbors?</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -203,74 +154,51 @@ For ww_local_getis_ord_g_vec(), a numeric vector of <code>length(truth)</code> (
 <span class="r-in"><span><span class="va">guerry_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">crime_pers</span> <span class="op">~</span> <span class="va">literacy</span>, <span class="va">guerry_modeled</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">guerry_modeled</span><span class="op">$</span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">guerry_lm</span>, <span class="va">guerry_modeled</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ctg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">wts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights</a></span><span class="op">(</span><span class="va">ctg</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">ww_local_getis_ord_g</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ww_local_getis_ord_g</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 85 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .metric           .estimator .estimate                         geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.353</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.11</span>  (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.929</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.794</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_getis_ord_g standard      -<span style="color: #BB0000;">2.22</span>  (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.403</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.152</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.455</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_getis_ord_g standard      16.4   (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.97</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_getis_ord_g standard       0.913 (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_getis_ord_g standard       2.49  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_getis_ord_g standard       2.15  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.58</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.19</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.68</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_getis_ord_g standard       0.627 (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.60</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_getis_ord_g standard       0.964 (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_getis_ord_g standard      -<span style="color: #BB0000;">2.71</span>  (((931664 1785222, 930836 17857…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 75 more rows</span></span>
-<span class="r-in"><span><span class="fu">ww_local_g</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ww_local_getis_ord</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 170 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .metric           .estimator .estimate                         geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.353</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.11</span>  (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.929</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.794</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_getis_ord_g standard      -<span style="color: #BB0000;">2.22</span>  (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.403</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.152</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_getis_ord_g standard      -<span style="color: #BB0000;">0.455</span> (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_getis_ord_g standard      16.4   (((931664 1785222, 930836 17857…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.97</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_getis_ord_g standard       0.913 (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_getis_ord_g standard       2.49  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_getis_ord_g standard       2.15  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.58</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.19</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.68</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_getis_ord_g standard       0.627 (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_getis_ord_g standard      -<span style="color: #BB0000;">1.60</span>  (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_getis_ord_g standard       0.964 (((931664 1785222, 930836 17857…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_getis_ord_g standard      -<span style="color: #BB0000;">2.71</span>  (((931664 1785222, 930836 17857…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 160 more rows</span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">ww_local_getis_ord_g_star</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> attr `self.include` is `TRUE`. Reporting Gi*.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 85 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .metric                .estimator .estimate                    geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">1.68</span><span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">2.74</span><span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">2.42</span><span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_getis_ord_g_star standard     2.28<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_getis_ord_g_star standard     1.67<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_getis_ord_g_star standard     1.99<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">2.21</span><span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_getis_ord_g_star standard     3.24<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">9.93</span><span style="color: #949494;">e</span>13 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_getis_ord_g_star standard     3.09<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 75 more rows</span></span>
-<span class="r-in"><span><span class="fu">ww_local_g_star</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> attr `self.include` is `TRUE`. Reporting Gi*.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> attr `self.include` is `TRUE`. Reporting Gi*.</span>
+<span class="r-in"><span><span class="fu">ww_local_getis_ord</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, include_self <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 170 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .metric                .estimator .estimate                    geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">1.68</span><span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">2.74</span><span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">2.42</span><span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_getis_ord_g_star standard     2.28<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_getis_ord_g_star standard     1.67<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_getis_ord_g_star standard     1.99<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">2.21</span><span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_getis_ord_g_star standard     3.24<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_getis_ord_g_star standard    -<span style="color: #BB0000;">9.93</span><span style="color: #949494;">e</span>13 (((931664 1785222, 930836 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_getis_ord_g_star standard     3.09<span style="color: #949494;">e</span>14 (((931664 1785222, 930836 …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .metric               .estimator .estimate                     geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_getis_ord_gstar standard       1.35  (((931664 1785222, 930836 1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_getis_ord_gstar standard       2.64  (((931664 1785222, 930836 1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_getis_ord_gstar standard       2.33  (((931664 1785222, 930836 1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_getis_ord_gstar standard      -<span style="color: #BB0000;">1.84</span>  (((931664 1785222, 930836 1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_getis_ord_gstar standard      -<span style="color: #BB0000;">1.19</span>  (((931664 1785222, 930836 1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_getis_ord_gstar standard      -<span style="color: #BB0000;">2.06</span>  (((931664 1785222, 930836 1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_getis_ord_gstar standard       1.58  (((931664 1785222, 930836 1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_getis_ord_gstar standard      -<span style="color: #BB0000;">2.32</span>  (((931664 1785222, 930836 1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_getis_ord_gstar standard       0.880 (((931664 1785222, 930836 1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_getis_ord_gstar standard      -<span style="color: #BB0000;">2.74</span>  (((931664 1785222, 930836 1…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 160 more rows</span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -56,12 +56,9 @@
 <span><span class="fu">ww_local_moran_i_vec</span><span class="op">(</span></span>
 <span>  <span class="va">truth</span>,</span>
 <span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
-<span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
-<span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
 <span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="va">.Random.seed</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -70,12 +67,9 @@
 <span><span class="fu">ww_local_moran_pvalue_vec</span><span class="op">(</span></span>
 <span>  <span class="va">truth</span>,</span>
 <span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
-<span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
-<span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
 <span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="va">.Random.seed</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -83,12 +77,9 @@
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">truth</span>,</span>
 <span>  <span class="va">estimate</span>,</span>
-<span>  <span class="va">nb</span>,</span>
-<span>  <span class="va">wt</span>,</span>
-<span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
-<span>  nsim <span class="op">=</span> <span class="fl">499</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
 <span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="va">.Random.seed</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -101,7 +92,7 @@ and <code>estimate</code> arguments.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Not currently used.</p></dd>
+<dd><p>Additional arguments passed to <code><a href="https://r-spatial.github.io/spdep/reference/localmoran.html" class="external-link">spdep::localmoran()</a></code>.</p></dd>
 
 
 <dt>truth</dt>
@@ -119,30 +110,17 @@ specified different ways but the primary method is to use an
 unquoted variable name. For <code>_vec()</code> functions, a <code>numeric</code> vector.</p></dd>
 
 
-<dt>nb</dt>
-<dd><p>a neighbor list object for example as created by <code><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity()</a></code>.</p></dd>
-
-
 <dt>wt</dt>
-<dd><p>a weights list as created by <code><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights()</a></code>.</p></dd>
+<dd><p>A "listw" object, for instance as created with <code><a href="ww_build_weights.html">ww_build_weights()</a></code></p></dd>
 
 
 <dt>alternative</dt>
-<dd><p>default <code>"two.sided"</code>. Should be one of <code>"greater"</code>, <code>"less"</code>, or <code>"two.sided"</code> to specify the alternative hypothesis.</p></dd>
-
-
-<dt>nsim</dt>
-<dd><p>The number of simulations to run.</p></dd>
+<dd><p>a character string specifying the alternative hypothesis, must be one of greater, less or two.sided (default).</p></dd>
 
 
 <dt>na_rm</dt>
 <dd><p>A <code>logical</code> value indicating whether <code>NA</code>
 values should be stripped before the computation proceeds.</p></dd>
-
-
-<dt>seed</dt>
-<dd><p>A random seed to use for all metric calculations.
-Defaults to the current seed.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -162,10 +140,7 @@ For ww_local_moran_i_vec(), a numeric vector of <code>length(truth)</code> (or N
 <span class="r-in"><span><span class="va">guerry_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">crime_pers</span> <span class="op">~</span> <span class="va">literacy</span>, <span class="va">guerry_modeled</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">guerry_modeled</span><span class="op">$</span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">guerry_lm</span>, <span class="va">guerry_modeled</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ctg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_contiguity.html" class="external-link">st_contiguity</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">wts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sfdep.josiahparry.com/reference/st_weights.html" class="external-link">st_weights</a></span><span class="op">(</span><span class="va">ctg</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">ww_local_moran_i</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ww_local_moran_i</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 85 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .metric       .estimator .estimate                             geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
@@ -180,7 +155,7 @@ For ww_local_moran_i_vec(), a numeric vector of <code>length(truth)</code> (or N
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_moran_i standard     -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">9</span> (((931664 1785222, 930836 1785736, …</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_moran_i standard      0.710  (((931664 1785222, 930836 1785736, …</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 75 more rows</span></span>
-<span class="r-in"><span><span class="fu">ww_local_moran</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span>, <span class="va">ctg</span>, <span class="va">wts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ww_local_moran</span><span class="op">(</span><span class="va">guerry_modeled</span>, <span class="va">crime_pers</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 170 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .metric       .estimator .estimate                             geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON&gt;</span></span>
@@ -195,7 +170,6 @@ For ww_local_moran_i_vec(), a numeric vector of <code>length(truth)</code> (or N
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_moran_i standard     -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">9</span> (((931664 1785222, 930836 1785736, …</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_moran_i standard      0.710  (((931664 1785222, 930836 1785736, …</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 160 more rows</span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
