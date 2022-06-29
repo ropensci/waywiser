@@ -1,8 +1,7 @@
-# Local Geary statistics are stable
+# Local geary statistics are stable
 
     Code
-      df_local_c <- ww_local_geary_c(guerry_modeled, crime_pers, predictions, ctg,
-        wts)
+      df_local_c <- ww_local_geary_c(guerry_modeled, crime_pers, predictions)
       df_local_c[1:3]
     Output
       # A tibble: 85 x 3
@@ -23,30 +22,28 @@
 ---
 
     Code
-      df_local_c_p <- ww_local_geary_pvalue(guerry_modeled, crime_pers, predictions,
-        ctg, wts)
+      df_local_c_p <- ww_local_geary_pvalue(guerry_modeled, crime_pers, predictions)
       df_local_c_p[1:3]
     Output
       # A tibble: 85 x 3
          .metric            .estimator .estimate
          <chr>              <chr>          <dbl>
-       1 local_geary_pvalue standard       0.885
-       2 local_geary_pvalue standard       0.865
-       3 local_geary_pvalue standard       0.928
-       4 local_geary_pvalue standard       0.937
-       5 local_geary_pvalue standard       0.832
-       6 local_geary_pvalue standard       0.933
-       7 local_geary_pvalue standard       0.801
-       8 local_geary_pvalue standard       0.890
-       9 local_geary_pvalue standard       0.602
-      10 local_geary_pvalue standard       0.779
+       1 local_geary_pvalue standard       0.202
+       2 local_geary_pvalue standard       0.255
+       3 local_geary_pvalue standard       0.164
+       4 local_geary_pvalue standard       0.141
+       5 local_geary_pvalue standard       0.277
+       6 local_geary_pvalue standard       0.138
+       7 local_geary_pvalue standard       0.422
+       8 local_geary_pvalue standard       0.208
+       9 local_geary_pvalue standard       0.802
+      10 local_geary_pvalue standard       0.412
       # ... with 75 more rows
 
 ---
 
     Code
-      df_local_c_both <- ww_local_geary(guerry_modeled, crime_pers, predictions, ctg,
-        wts)
+      df_local_c_both <- ww_local_geary(guerry_modeled, crime_pers, predictions)
       df_local_c_both[1:3]
     Output
       # A tibble: 170 x 3
@@ -68,7 +65,7 @@
 
     Code
       (vec_local_c <- ww_local_geary_c_vec(guerry_modeled$crime_pers, guerry_modeled$
-        predictions, ctg, wts))
+        predictions, weights))
     Output
        [1] 0.981119438 0.836402177 0.707464373 0.108332465 0.264075824 1.361485477
        [7] 3.641239412 1.571824022 0.867252524 0.737094462 0.573376555 0.001605731
@@ -90,21 +87,21 @@
 
     Code
       (vec_local_c_p <- ww_local_geary_pvalue_vec(guerry_modeled$crime_pers,
-      guerry_modeled$predictions, ctg, wts))
+      guerry_modeled$predictions, weights))
     Output
-       [1] 0.88544191 0.86525549 0.92765287 0.93719614 0.83187131 0.93256580
-       [7] 0.80143632 0.88979840 0.60227107 0.77922654 0.98623933 0.91978704
-      [13] 0.18044847 0.42243657 0.70511930 0.90051807 0.37765871 0.28145872
-      [19] 0.97306847 0.92745453 0.71720612 0.61271234 0.29110017 0.93326315
-      [25] 0.57159635 0.49533890 0.88634524 0.95823272 0.68637825 0.92061864
-      [31] 0.91275148 0.92729126 0.79442798 0.72012206 0.03844014 0.60176320
-      [37] 0.80652079 0.85719274 0.59498542 0.58193244 0.67683169 0.72871659
-      [43] 0.90993935 0.88513298 0.39362700 0.96963818 0.86027821 0.90720345
-      [49] 0.07762623 0.90044360 0.97030404 0.35723240 0.78461325 0.87345459
-      [55] 0.52298564 0.91365792 0.91901054 0.68542189 0.88564968 0.52850804
-      [61] 0.15186839 0.86576012 0.82882315 0.90333044 0.71075775 0.82999351
-      [67] 0.38141031 0.63278947 0.98663369 0.95768630 0.73242172 0.07453237
-      [73] 0.80108438 0.69636892 0.72937981 0.94516991 0.94742301 0.84287608
-      [79] 0.92040705 0.96737853 0.85617290 0.25305094 0.05387566 0.46639136
-      [85] 0.52381805
+       [1] 0.20234363 0.25519649 0.16396588 0.14117561 0.27656178 0.13803991
+       [7] 0.42226813 0.20763065 0.80158334 0.41221634 0.02279793 0.16590372
+      [13] 0.36280952 0.94038689 0.57012896 0.20065488 0.74279801 0.56659279
+      [19] 0.07231964 0.16050628 0.50930118 0.74413041 0.72654516 0.14156081
+      [25] 0.82683764 0.96497971 0.23835208 0.09164608 0.65695357 0.14596483
+      [31] 0.21116270 0.11062386 0.47581719 0.52089308 0.09617881 0.83006042
+      [37] 0.37021871 0.27543027 0.84760567 0.81945612 0.64406665 0.55516421
+      [43] 0.16365565 0.21954679 0.78645827 0.07224471 0.24248642 0.17178516
+      [49] 0.16197800 0.21527791 0.06550740 0.68776553 0.44107979 0.22441812
+      [55] 0.91939521 0.16998047 0.19854332 0.64059101 0.23958631 0.96021717
+      [61] 0.29282034 0.23743981 0.33944054 0.19039950 0.54411569 0.33254192
+      [67] 0.76919602 0.81252824 0.03109512 0.10399128 0.47133467 0.17643651
+      [73] 0.37037862 0.56606511 0.60793474 0.10983655 0.11452305 0.32746708
+      [79] 0.17184942 0.06669041 0.29892492 0.54538910 0.09744018 0.91852500
+      [85] 0.91349534
 

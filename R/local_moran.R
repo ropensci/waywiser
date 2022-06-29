@@ -3,27 +3,24 @@
 #' Calculate the local Moran's I statistic for model residuals.
 #'
 #' @inheritParams yardstick::rmse
-#' @inheritParams sfdep::local_moran
-#' @param seed A random seed to use for all metric calculations.
-#'  Defaults to the current seed.
+#' @inheritParams spdep::localmoran
+#' @param wt A "listw" object, for instance as created with [ww_build_weights()]
+#' @param ... Additional arguments passed to [spdep::localmoran()].
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For ww_local_moran_i_vec(), a numeric vector of `length(truth)` (or NA).
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")
 #'
 #' guerry_modeled <- guerry
 #' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
 #' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 #'
-#' ctg <- st_contiguity(guerry)
-#' wts <- st_weights(ctg)
-#'
-#' ww_local_moran_i(guerry_modeled, crime_pers, predictions, ctg, wts)
-#' ww_local_moran(guerry_modeled, crime_pers, predictions, ctg, wts)
+#' ww_local_moran_i(guerry_modeled, crime_pers, predictions)
+#' ww_local_moran(guerry_modeled, crime_pers, predictions)
 #'
 #' @rdname local_moran_i
 #' @export
@@ -37,22 +34,16 @@ ww_local_moran_i <- new_numeric_metric(ww_local_moran_i, direction = "zero")
 ww_local_moran_i.data.frame <- function(data,
                                         truth,
                                         estimate,
-                                        nb,
-                                        wt,
-                                        alternative = "greater",
-                                        nsim = 499,
+                                        wt = NULL,
+                                        alternative = "two.sided",
                                         na_rm = TRUE,
-                                        seed = .Random.seed,
                                         ...) {
 
-  if (rlang::is_function(nb)) {
-    nb <- do.call(nb, data)
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
   }
   if (rlang::is_function(wt)) {
-    wt <- do.call(wt, data)
-  }
-  if (is.null(wt)) {
-    wt <- sfdep::st_weights(nb)
+    wt <- do.call(wt, list(data))
   }
 
   metric_summarizer(
@@ -63,13 +54,10 @@ ww_local_moran_i.data.frame <- function(data,
     estimate = !! enquo(estimate),
     na_rm = na_rm,
     metric_fn_options = list(
-      nb = nb,
       wt = wt,
       alternative = alternative,
-      nsim = nsim,
-      seed = seed
-    ),
-    ...
+      ...
+    )
   )
 }
 
@@ -77,32 +65,27 @@ ww_local_moran_i.data.frame <- function(data,
 #' @export
 ww_local_moran_i_vec <- function(truth,
                                  estimate,
-                                 nb,
-                                 wt,
-                                 alternative = "greater",
-                                 nsim = 499,
+                                 wt = NULL,
+                                 alternative = "two.sided",
                                  na_rm = TRUE,
-                                 seed = .Random.seed,
                                  ...) {
+
+  if (!inherits(wt, "listw")) {
+    rlang::abort(
+      "`wt` must be a 'listw' object",
+      "i" = "You can create 'listw' objects using `build_weights()`"
+    )
+  }
 
   ww_local_moran_i_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    old_seed <- .Random.seed
-    set.seed(seed)
-
-    out <- sfdep::local_moran(
+    spdep::localmoran(
       x = resid,
-      nb = nb,
-      wt = wt,
+      listw = wt,
       alternative = alternative,
-      nsim = nsim,
       ...
-    )$ii
-
-    set.seed(old_seed)
-
-    out
+    )[, 1]
 
   }
 
@@ -125,7 +108,20 @@ ww_local_moran_pvalue <- function(data, ...) {
 ww_local_moran_pvalue <- new_numeric_metric(ww_local_moran_pvalue, "minimize")
 
 #' @export
-ww_local_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", nsim = 499, na_rm = TRUE, seed = .Random.seed, ...) {
+ww_local_moran_pvalue.data.frame <- function(data,
+                                             truth,
+                                             estimate,
+                                             wt = NULL,
+                                             alternative = "two.sided",
+                                             na_rm = TRUE,
+                                             ...) {
+
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
+  }
+  if (rlang::is_function(wt)) {
+    wt <- do.call(wt, list(data))
+  }
 
   metric_summarizer(
     metric_nm = "local_moran_pvalue",
@@ -135,37 +131,38 @@ ww_local_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alte
     estimate = !! enquo(estimate),
     na_rm = na_rm,
     metric_fn_options = list(
-      nb = nb,
       wt = wt,
       alternative = alternative,
-      nsim = nsim
-    ),
-    ...
+      ...
+    )
   )
 }
 
 #' @rdname local_moran_i
 #' @export
-ww_local_moran_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "greater", nsim = 499, na_rm = TRUE, seed = .Random.seed, ...) {
+ww_local_moran_pvalue_vec <- function(truth,
+                                      estimate,
+                                      wt = NULL,
+                                      alternative = "two.sided",
+                                      na_rm = TRUE,
+                                      ...) {
+
+  if (!inherits(wt, "listw")) {
+    rlang::abort(
+      "`wt` must be a 'listw' object",
+      "i" = "You can create 'listw' objects using `build_weights()`"
+    )
+  }
 
   ww_local_moran_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    old_seed <- .Random.seed
-    set.seed(seed)
-
-    out <- sfdep::local_moran(
+    spdep::localmoran(
       x = resid,
-      nb = nb,
-      wt = wt,
+      listw = wt,
       alternative = alternative,
-      nsim = nsim,
       ...
-    )$p_ii
-
-    set.seed(old_seed)
-
-    out
+    )[, 5]
 
   }
 
@@ -184,24 +181,26 @@ ww_local_moran_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "gr
 ww_local_moran <- function(data,
                            truth,
                            estimate,
-                           nb,
-                           wt,
-                           alternative = "greater",
-                           nsim = 499,
+                           wt = NULL,
+                           alternative = "two.sided",
                            na_rm = TRUE,
-                           seed = .Random.seed,
                            ...) {
+
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
+  }
+  if (rlang::is_function(wt)) {
+    wt <- do.call(wt, list(data))
+  }
+
   metrics <- metric_set(ww_local_moran_i, ww_local_moran_pvalue)
   metrics(
     data,
     truth = !! enquo(truth),
     estimate = !! enquo(estimate),
-    nb = nb,
     wt = wt,
     alternative = alternative,
-    nsim = nsim,
     na_rm = na_rm,
-    seed = seed,
     ...
   )
 }

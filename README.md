@@ -21,7 +21,7 @@ ruler or yardstick. The waywiser R package makes measuring model
 performance on spatial data easier, extending the
 [yardstick](https://yardstick.tidymodels.org/) R package to incorporate
 measures of spatial autocorrelation provided by
-[sfdep](https://sfdep.josiahparry.com/).
+[spdep](https://cran.r-project.org/package=spdep).
 
 Please note that this package is highly experimental. The user-facing
 API is likely to change without deprecation warnings up until the first
@@ -67,26 +67,6 @@ load the data now:
 data(guerry, package = "sfdep")
 ```
 
-waywiser builds on top of the [sfdep](https://sfdep.josiahparry.com/)
-package, itself an extension for the
-[spdep](https://r-spatial.github.io/spdep/index.html) spatial dependence
-library. These packages expect you to have objects representing the
-neighbors of your data set and the spatial weights between observations.
-
-As a result, right now waywiser also expects you to already have those
-objects pre-created and to pass them as arguments to model metric
-functions. We’ll find the neighbors in our data using the
-`st_contiguity()` function, and then calculate spatial weights via
-`st_weights()`:
-
-``` r
-nb <- st_contiguity(guerry)
-wt <- st_weights(nb)
-```
-
-With our spatial relationships defined, we can now fit a model and
-calculate spatial dependency in our model residuals!
-
 We’ll fit a simple linear model relating crimes against persons with
 literacy, and then generate predictions from that model. We can use
 `ww_local_moran_i()` to calculate the local spatial autocorrelation of
@@ -95,7 +75,7 @@ our residuals at each data point:
 ``` r
 guerry %>%
   mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
-  ww_local_moran_i(crime_pers, pred, nb, wt)
+  ww_local_moran_i(crime_pers, pred)
 #> # A tibble: 85 × 4
 #>    .metric       .estimator .estimate                                   geometry
 #>    <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
@@ -112,16 +92,121 @@ guerry %>%
 #> # … with 75 more rows
 ```
 
-Or if we use `ww_local_moran_i_vec`, we can add a column to our original
-data frame with our statistic, which makes plotting using our original
-geometries easier:
+If you’re familiar with spdep, you can probably guess that waywiser is
+doing *something* under the hood here to calculate which of our
+observations are neighbors, and how to create spatial weights from those
+neighborhoods. And that guess would be right – waywiser is making use of
+two functions, `ww_build_neighbors()` and `ww_build_weights()`, in order
+to automatically calculate spatial weights for calculating metrics:
+
+``` r
+ww_build_neighbors(guerry)
+#> Neighbour list object:
+#> Number of regions: 85 
+#> Number of nonzero links: 420 
+#> Percentage nonzero weights: 5.813149 
+#> Average number of links: 4.941176
+
+ww_build_weights(guerry)
+#> Characteristics of weights list object:
+#> Neighbour list object:
+#> Number of regions: 85 
+#> Number of nonzero links: 420 
+#> Percentage nonzero weights: 5.813149 
+#> Average number of links: 4.941176 
+#> 
+#> Weights style: W 
+#> Weights constants summary:
+#>    n   nn S0      S1       S2
+#> W 85 7225 85 37.2761 347.6683
+```
+
+These functions aren’t always the best way to calculate spatial weights
+for your data, however. As a resultm waywiser also lets you specify your
+own weights directly:
+
+``` r
+weights <- guerry %>%
+  sf::st_geometry() %>%
+  sf::st_centroid() %>%
+  spdep::dnearneigh(0, 97000) %>%
+  spdep::nb2listw()
+
+weights
+#> Characteristics of weights list object:
+#> Neighbour list object:
+#> Number of regions: 85 
+#> Number of nonzero links: 314 
+#> Percentage nonzero weights: 4.346021 
+#> Average number of links: 3.694118 
+#> 
+#> Weights style: W 
+#> Weights constants summary:
+#>    n   nn S0       S1       S2
+#> W 85 7225 85 51.86738 348.7071
+
+guerry %>%
+  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
+  ww_local_moran_i(crime_pers, pred, weights)
+#> # A tibble: 85 × 4
+#>    .metric       .estimator .estimate                                   geometry
+#>    <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
+#>  1 local_moran_i standard    0.530    (((381847 1762775, 381116 1763059, 379972…
+#>  2 local_moran_i standard    0.794    (((381847 1762775, 381116 1763059, 379972…
+#>  3 local_moran_i standard    0.646    (((381847 1762775, 381116 1763059, 379972…
+#>  4 local_moran_i standard    0.687    (((381847 1762775, 381116 1763059, 379972…
+#>  5 local_moran_i standard    0.207    (((381847 1762775, 381116 1763059, 379972…
+#>  6 local_moran_i standard    1.49     (((381847 1762775, 381116 1763059, 379972…
+#>  7 local_moran_i standard    0.692    (((381847 1762775, 381116 1763059, 379972…
+#>  8 local_moran_i standard    1.69     (((381847 1762775, 381116 1763059, 379972…
+#>  9 local_moran_i standard   -0.000610 (((381847 1762775, 381116 1763059, 379972…
+#> 10 local_moran_i standard    0.859    (((381847 1762775, 381116 1763059, 379972…
+#> # … with 75 more rows
+```
+
+Or as a function, which lets you use custom weights with other
+tidymodels functions like `fit_resamples()`:
+
+``` r
+weights_function <- function(data) {
+  data %>%
+    sf::st_geometry() %>%
+    sf::st_centroid() %>%
+    spdep::dnearneigh(0, 97000) %>%
+    spdep::nb2listw()
+} 
+
+guerry %>%
+  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
+  ww_local_moran_i(crime_pers, pred, weights_function)
+#> # A tibble: 85 × 4
+#>    .metric       .estimator .estimate                                   geometry
+#>    <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
+#>  1 local_moran_i standard    0.530    (((381847 1762775, 381116 1763059, 379972…
+#>  2 local_moran_i standard    0.794    (((381847 1762775, 381116 1763059, 379972…
+#>  3 local_moran_i standard    0.646    (((381847 1762775, 381116 1763059, 379972…
+#>  4 local_moran_i standard    0.687    (((381847 1762775, 381116 1763059, 379972…
+#>  5 local_moran_i standard    0.207    (((381847 1762775, 381116 1763059, 379972…
+#>  6 local_moran_i standard    1.49     (((381847 1762775, 381116 1763059, 379972…
+#>  7 local_moran_i standard    0.692    (((381847 1762775, 381116 1763059, 379972…
+#>  8 local_moran_i standard    1.69     (((381847 1762775, 381116 1763059, 379972…
+#>  9 local_moran_i standard   -0.000610 (((381847 1762775, 381116 1763059, 379972…
+#> 10 local_moran_i standard    0.859    (((381847 1762775, 381116 1763059, 379972…
+#> # … with 75 more rows
+```
+
+Providing custom weights also lets us use `ww_local_moran_i_vec` to add
+a column to our original data frame with our statistic, which makes
+plotting using our original geometries easier:
 
 ``` r
 library(ggplot2)
 
+weights <- ww_build_weights(guerry)
+
 guerry %>%
   mutate(pred = predict(lm(crime_pers ~ literacy, .)),
-         .estimate = ww_local_moran_i_vec(crime_pers, pred, nb, wt)) %>% 
+         .estimate = ww_local_moran_i_vec(crime_pers, pred, weights)) %>% 
   mutate(
     cut_points = case_when(
       .estimate <= -1 ~ "(-Inf, -1]",
@@ -143,7 +228,7 @@ guerry %>%
   )
 ```
 
-<img src="man/figures/README-2022_06_28(2)-guerry-1.png" width="100%" />
+<img src="man/figures/README-2022_06_29-guerry-1.png" width="100%" />
 
 This makes it easy to see what areas are poorly represented by our
 model, which might lead us to identify ways to improve our model or help

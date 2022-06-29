@@ -24,7 +24,7 @@ theme_set(theme_minimal())
 [![Codecov test coverage](https://codecov.io/gh/mikemahoney218/waywiser/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mikemahoney218/waywiser?branch=main)
 <!-- badges: end -->
 
-"Waywiser" is an old-timey name for a [surveyor's wheel](https://en.wikipedia.org/wiki/Surveyor%27s_wheel), a device that makes measuring long distances easier than with measurement tools like a ruler or yardstick. The waywiser R package makes measuring model performance on spatial data easier, extending the [yardstick](https://yardstick.tidymodels.org/) R package to incorporate measures of spatial autocorrelation provided by [sfdep](https://sfdep.josiahparry.com/).
+"Waywiser" is an old-timey name for a [surveyor's wheel](https://en.wikipedia.org/wiki/Surveyor%27s_wheel), a device that makes measuring long distances easier than with measurement tools like a ruler or yardstick. The waywiser R package makes measuring model performance on spatial data easier, extending the [yardstick](https://yardstick.tidymodels.org/) R package to incorporate measures of spatial autocorrelation provided by [spdep](https://cran.r-project.org/package=spdep).
 
 Please note that this package is highly experimental. The user-facing API is likely to change without deprecation warnings up until the first CRAN release.
 
@@ -54,33 +54,65 @@ We'll be working with the `guerry` data from the sfdep package, fitting a linear
 data(guerry, package = "sfdep")
 ```
 
-waywiser builds on top of the [sfdep](https://sfdep.josiahparry.com/) package, itself an extension for the [spdep](https://r-spatial.github.io/spdep/index.html) spatial dependence library. These packages expect you to have objects representing the neighbors of your data set and the spatial weights between observations. 
-
-As a result, right now waywiser also expects you to already have those objects pre-created and to pass them as arguments to model metric functions. We'll find the neighbors in our data using the `st_contiguity()` function, and then calculate spatial weights via `st_weights()`:
-
-```{r}
-nb <- st_contiguity(guerry)
-wt <- st_weights(nb)
-```
-
-With our spatial relationships defined, we can now fit a model and calculate spatial dependency in our model residuals! 
-
 We'll fit a simple linear model relating crimes against persons with literacy, and then generate predictions from that model. We can use `ww_local_moran_i()` to calculate the local spatial autocorrelation of our residuals at each data point:
 
 ```{r}
 guerry %>%
   mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
-  ww_local_moran_i(crime_pers, pred, nb, wt)
+  ww_local_moran_i(crime_pers, pred)
 ```
 
-Or if we use `ww_local_moran_i_vec`, we can add a column to our original data frame with our statistic, which makes plotting using our original geometries easier:
+If you're familiar with spdep, you can probably guess that waywiser is doing _something_ under the hood here to calculate which of our observations are neighbors, and how to create spatial weights from those neighborhoods. And that guess would be right -- waywiser is making use of two functions, `ww_build_neighbors()` and `ww_build_weights()`, in order to automatically calculate spatial weights for calculating metrics:
 
-```{r 2022_06_28(2)-guerry, fig.width=8}
+```{r}
+ww_build_neighbors(guerry)
+
+ww_build_weights(guerry)
+```
+
+These functions aren't always the best way to calculate spatial weights for your data, however. As a resultm waywiser also lets you specify your own weights directly:
+
+```{r}
+weights <- guerry %>%
+  sf::st_geometry() %>%
+  sf::st_centroid() %>%
+  spdep::dnearneigh(0, 97000) %>%
+  spdep::nb2listw()
+
+weights
+
+guerry %>%
+  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
+  ww_local_moran_i(crime_pers, pred, weights)
+```
+
+Or as a function, which lets you use custom weights with other tidymodels functions like `fit_resamples()`:
+
+```{r}
+weights_function <- function(data) {
+  data %>%
+    sf::st_geometry() %>%
+    sf::st_centroid() %>%
+    spdep::dnearneigh(0, 97000) %>%
+    spdep::nb2listw()
+} 
+
+guerry %>%
+  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
+  ww_local_moran_i(crime_pers, pred, weights_function)
+```
+
+
+Providing custom weights also lets us use `ww_local_moran_i_vec` to add a column to our original data frame with our statistic, which makes plotting using our original geometries easier:
+
+```{r 2022_06_29-guerry, fig.width=8}
 library(ggplot2)
+
+weights <- ww_build_weights(guerry)
 
 guerry %>%
   mutate(pred = predict(lm(crime_pers ~ literacy, .)),
-         .estimate = ww_local_moran_i_vec(crime_pers, pred, nb, wt)) %>% 
+         .estimate = ww_local_moran_i_vec(crime_pers, pred, weights)) %>% 
   mutate(
     cut_points = case_when(
       .estimate <= -1 ~ "(-Inf, -1]",

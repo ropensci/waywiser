@@ -1,29 +1,26 @@
-#' Local Moran's I statistic
+#' Local Geary's C statistic
 #'
-#' Calculate the local Moran's I statistic for model residuals.
+#' Calculate the local Geary's C statistic for model residuals.
 #'
 #' @inheritParams yardstick::rmse
-#' @inheritParams sfdep::local_c_perm
-#' @param seed A random seed to use for all metric calculations.
-#'  Defaults to the current seed.
+#' @inheritParams spdep::localC_perm
+#' @param wt A "listw" object, for instance as created with [ww_build_weights()]
+#' @param ... Additional arguments passed to [spdep::localC_perm()].
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For ww_local_geary_c_vec(), a numeric vector of `length(truth)` (or NA).
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")
 #'
 #' guerry_modeled <- guerry
 #' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
 #' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 #'
-#' ctg <- st_contiguity(guerry)
-#' wts <- st_weights(ctg)
-#'
-#' ww_local_geary_c(guerry_modeled, crime_pers, predictions, ctg, wts)
-#' ww_local_geary(guerry_modeled, crime_pers, predictions, ctg, wts)
+#' ww_local_geary_c(guerry_modeled, crime_pers, predictions)
+#' ww_local_geary(guerry_modeled, crime_pers, predictions)
 #'
 #' @rdname local_geary_c
 #' @export
@@ -37,22 +34,15 @@ ww_local_geary_c <- new_numeric_metric(ww_local_geary_c, direction = "zero")
 ww_local_geary_c.data.frame <- function(data,
                                         truth,
                                         estimate,
-                                        nb,
-                                        wt,
-                                        alternative = "greater",
-                                        nsim = 499,
+                                        wt = NULL,
                                         na_rm = TRUE,
-                                        seed = .Random.seed,
                                         ...) {
 
-  if (rlang::is_function(nb)) {
-    nb <- do.call(nb, data)
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
   }
   if (rlang::is_function(wt)) {
-    wt <- do.call(wt, data)
-  }
-  if (is.null(wt)) {
-    wt <- sfdep::st_weights(nb)
+    wt <- do.call(wt, list(data))
   }
 
   metric_summarizer(
@@ -63,13 +53,9 @@ ww_local_geary_c.data.frame <- function(data,
     estimate = !! enquo(estimate),
     na_rm = na_rm,
     metric_fn_options = list(
-      nb = nb,
       wt = wt,
-      alternative = alternative,
-      nsim = nsim,
-      seed = seed
-    ),
-    ...
+      ...
+    )
   )
 }
 
@@ -77,19 +63,27 @@ ww_local_geary_c.data.frame <- function(data,
 #' @export
 ww_local_geary_c_vec <- function(truth,
                                  estimate,
-                                 nb,
                                  wt,
                                  na_rm = TRUE,
                                  ...) {
 
+  if (!inherits(wt, "listw")) {
+    rlang::abort(
+      "`wt` must be a 'listw' object",
+      "i" = "You can create 'listw' objects using `build_weights()`"
+    )
+  }
+
+  dots <- list(...)
+  dots <- dots$zero.policy
+
   ww_local_geary_c_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    sfdep::local_c(
+    spdep::localC(
       x = resid,
-      nb = nb,
-      wt = wt,
-      ...
+      listw = wt,
+      zero.policy = dots
     )
 
   }
@@ -113,7 +107,21 @@ ww_local_geary_pvalue <- function(data, ...) {
 ww_local_geary_pvalue <- new_numeric_metric(ww_local_geary_pvalue, "minimize")
 
 #' @export
-ww_local_geary_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", nsim = 499, na_rm = TRUE, seed = .Random.seed, ...) {
+ww_local_geary_pvalue.data.frame <- function(data,
+                                             truth,
+                                             estimate,
+                                             wt = NULL,
+                                             alternative = "two.sided",
+                                             nsim = 499,
+                                             na_rm = TRUE,
+                                             ...) {
+
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
+  }
+  if (rlang::is_function(wt)) {
+    wt <- do.call(wt, list(data))
+  }
 
   metric_summarizer(
     metric_nm = "local_geary_pvalue",
@@ -123,38 +131,45 @@ ww_local_geary_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alte
     estimate = !! enquo(estimate),
     na_rm = na_rm,
     metric_fn_options = list(
-      nb = nb,
       wt = wt,
       alternative = alternative,
-      nsim = nsim
-    ),
-    ...
+      nsim = nsim,
+      ...
+    )
   )
 }
 
 #' @rdname local_geary_c
 #' @export
-ww_local_geary_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "greater", nsim = 499, na_rm = TRUE, seed = .Random.seed, ...) {
+ww_local_geary_pvalue_vec <- function(truth,
+                                      estimate,
+                                      wt = NULL,
+                                      alternative = "two.sided",
+                                      nsim = 499,
+                                      na_rm = TRUE,
+                                      ...) {
+
+  if (!inherits(wt, "listw")) {
+    rlang::abort(
+      "`wt` must be a 'listw' object",
+      "i" = "You can create 'listw' objects using `build_weights()`"
+    )
+  }
 
   ww_local_geary_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    old_seed <- .Random.seed
-    set.seed(seed)
-
-    out <- sfdep::local_c_perm(
+    out <- spdep::localC_perm(
       x = resid,
-      nb = nb,
-      wt = wt,
+      listw = wt,
       alternative = alternative,
       nsim = nsim,
       ...
-    )$p_ci
+    )
 
-    set.seed(old_seed)
-
-    out
-
+    as.vector(
+      attr(out, "pseudo-p")[, 4]
+    )
   }
 
   metric_vec_template(
@@ -172,24 +187,28 @@ ww_local_geary_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "gr
 ww_local_geary <- function(data,
                            truth,
                            estimate,
-                           nb,
-                           wt,
-                           alternative = "greater",
+                           wt = NULL,
+                           alternative = "two.sided",
                            nsim = 499,
                            na_rm = TRUE,
-                           seed = .Random.seed,
                            ...) {
+
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
+  }
+  if (rlang::is_function(wt)) {
+    wt <- do.call(wt, list(data))
+  }
+
   metrics <- metric_set(ww_local_geary_c, ww_local_geary_pvalue)
   metrics(
     data,
     truth = !! enquo(truth),
     estimate = !! enquo(estimate),
-    nb = nb,
     wt = wt,
     alternative = alternative,
     nsim = nsim,
     na_rm = na_rm,
-    seed = seed,
     ...
   )
 }

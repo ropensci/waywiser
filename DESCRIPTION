@@ -22,14 +22,14 @@ Depends:
     R (>= 3.5)
 Imports: 
     rlang,
-    sfdep,
+    spdep,
     yardstick
 Suggests: 
     covr,
     dplyr,
     ggplot2,
     sf,
-    spatialsample,
+    sfdep,
     testthat (>= 3.0.0),
     tidymodels,
     tidyr

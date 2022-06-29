@@ -6,26 +6,25 @@
 #' `ww_global_moran()` returns both.
 #'
 #' @inheritParams yardstick::rmse
-#' @inheritParams sfdep::global_moran
-#' @inheritParams sfdep::global_moran_test
+#' @inheritParams spdep::moran.test
+#' @param wt A "listw" object, for instance as created with [ww_build_weights()]
+#' @param randomization variance of I calculated under the assumption of randomisation, if FALSE normality
+#' @param ... Additional arguments passed to [spdep::moran.test()].
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups times the number of metrics.
 #' For ww_global_moran_i_vec(), a single numeric value (or NA).
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")
 #'
 #' guerry_modeled <- guerry
 #' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
 #' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 #'
-#' ctg <- st_contiguity(guerry)
-#' wts <- st_weights(ctg)
-#'
-#' ww_global_moran_i(guerry_modeled, crime_pers, predictions, ctg, wts)
-#' ww_global_moran(guerry_modeled, crime_pers, predictions, ctg, wts)
+#' ww_global_moran_i(guerry_modeled, crime_pers, predictions)
+#' ww_global_moran(guerry_modeled, crime_pers, predictions)
 #'
 #' @rdname global_moran_i
 #' @export
@@ -36,16 +35,20 @@ ww_global_moran_i <- function(data, ...) {
 ww_global_moran_i <- new_numeric_metric(ww_global_moran_i, direction = "zero")
 
 #' @export
-ww_global_moran_i.data.frame <- function(data, truth, estimate, nb, wt, na_rm = TRUE, ...) {
+ww_global_moran_i.data.frame <- function(data,
+                                         truth,
+                                         estimate,
+                                         wt = NULL,
+                                         alternative = "greater",
+                                         randomization = TRUE,
+                                         na_rm = TRUE,
+                                         ...) {
 
-  if (rlang::is_function(nb)) {
-    nb <- do.call(nb, data)
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
   }
   if (rlang::is_function(wt)) {
-    wt <- do.call(wt, data)
-  }
-  if (is.null(wt)) {
-    wt <- sfdep::st_weights(nb)
+    wt <- do.call(wt, list(data))
   }
 
   metric_summarizer(
@@ -56,27 +59,42 @@ ww_global_moran_i.data.frame <- function(data, truth, estimate, nb, wt, na_rm = 
     estimate = !! enquo(estimate),
     na_rm = na_rm,
     metric_fn_options = list(
-      nb = nb,
-      wt = wt
-    ),
-    ...
+      wt = wt,
+      alternative = "greater",
+      randomization = TRUE,
+      ...
+    )
   )
 }
 
 #' @rdname global_moran_i
 #' @export
-ww_global_moran_i_vec <- function(truth, estimate, nb, wt, na_rm = TRUE, ...) {
+ww_global_moran_i_vec <- function(truth,
+                                  estimate,
+                                  wt = NULL,
+                                  alternative = "greater",
+                                  randomization = TRUE,
+                                  na_rm = TRUE,
+                                  ...) {
+
+  if (!inherits(wt, "listw")) {
+    rlang::abort(
+      "`wt` must be a 'listw' object",
+      "i" = "You can create 'listw' objects using `build_weights()`"
+    )
+  }
 
   ww_global_moran_i_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    sfdep::global_moran(
+    spdep::moran.test(
       x = resid,
-      nb = nb,
-      wt = wt,
-      na_ok = na_rm,
+      listw = wt,
+      alternative = alternative,
+      randomisation = randomization,
       ...
-    )$I
+    )$estimate[[1]]
+
   }
 
   metric_vec_template(
@@ -98,16 +116,20 @@ ww_global_moran_pvalue <- function(data, ...) {
 ww_global_moran_pvalue <- new_numeric_metric(ww_global_moran_pvalue, "minimize")
 
 #' @export
-ww_global_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", randomization = TRUE, na_rm = TRUE, ...) {
+ww_global_moran_pvalue.data.frame <- function(data,
+                                              truth,
+                                              estimate,
+                                              wt = NULL,
+                                              alternative = "greater",
+                                              randomization = TRUE,
+                                              na_rm = TRUE,
+                                              ...) {
 
-  if (rlang::is_function(nb)) {
-    nb <- do.call(nb, data)
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
   }
   if (rlang::is_function(wt)) {
-    wt <- do.call(wt, data)
-  }
-  if (is.null(wt)) {
-    wt <- sfdep::st_weights(nb)
+    wt <- do.call(wt, list(data))
   }
 
   metric_summarizer(
@@ -118,28 +140,39 @@ ww_global_moran_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alt
     estimate = !! enquo(estimate),
     na_rm = na_rm,
     metric_fn_options = list(
-      nb = nb,
       wt = wt,
       alternative = alternative,
-      randomization = randomization
-    ),
-    ...
+      randomization = randomization,
+      ...
+    )
   )
 }
 
 #' @rdname global_moran_i
 #' @export
-ww_global_moran_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "greater", randomization = TRUE, na_rm = TRUE, ...) {
+ww_global_moran_pvalue_vec <- function(truth,
+                                       estimate,
+                                       wt = NULL,
+                                       alternative = "greater",
+                                       randomization = TRUE,
+                                       na_rm = TRUE,
+                                       ...) {
+
+  if (!inherits(wt, "listw")) {
+    rlang::abort(
+      "`wt` must be a 'listw' object",
+      "i" = "You can create 'listw' objects using `build_weights()`"
+    )
+  }
 
   ww_global_moran_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    sfdep::global_moran_test(
+    spdep::moran.test(
       x = resid,
-      nb = nb,
-      wt = wt,
+      listw = wt,
       alternative = alternative,
-      randomization = randomization,
+      randomisation = randomization,
       ...
     )$p.value
   }
@@ -159,18 +192,24 @@ ww_global_moran_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "g
 ww_global_moran <- function(data,
                             truth,
                             estimate,
-                            nb,
-                            wt,
+                            wt = NULL,
                             alternative = "greater",
                             randomization = TRUE,
                             na_rm = TRUE,
                             ...) {
+
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
+  }
+  if (rlang::is_function(wt)) {
+    wt <- do.call(wt, list(data))
+  }
+
   metrics <- metric_set(ww_global_moran_i, ww_global_moran_pvalue)
   metrics(
     data,
     truth = !! enquo(truth),
     estimate = !! enquo(estimate),
-    nb = nb,
     wt = wt,
     alternative = alternative,
     randomization = randomization,

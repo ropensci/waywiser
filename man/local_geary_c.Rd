@@ -6,23 +6,21 @@
 \alias{ww_local_geary_pvalue}
 \alias{ww_local_geary_pvalue_vec}
 \alias{ww_local_geary}
-\title{Local Moran's I statistic}
+\title{Local Geary's C statistic}
 \usage{
 ww_local_geary_c(data, ...)
 
-ww_local_geary_c_vec(truth, estimate, nb, wt, na_rm = TRUE, ...)
+ww_local_geary_c_vec(truth, estimate, wt, na_rm = TRUE, ...)
 
 ww_local_geary_pvalue(data, ...)
 
 ww_local_geary_pvalue_vec(
   truth,
   estimate,
-  nb,
-  wt,
-  alternative = "greater",
+  wt = NULL,
+  alternative = "two.sided",
   nsim = 499,
   na_rm = TRUE,
-  seed = .Random.seed,
   ...
 )
 
@@ -30,12 +28,10 @@ ww_local_geary(
   data,
   truth,
   estimate,
-  nb,
-  wt,
-  alternative = "greater",
+  wt = NULL,
+  alternative = "two.sided",
   nsim = 499,
   na_rm = TRUE,
-  seed = .Random.seed,
   ...
 )
 }
@@ -43,7 +39,7 @@ ww_local_geary(
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
 and \code{estimate} arguments.}
 
-\item{...}{Not currently used.}
+\item{...}{Additional arguments passed to \code{\link[spdep:localC]{spdep::localC_perm()}}.}
 
 \item{truth}{The column identifier for the true results
 (that is \code{numeric}). This should be an unquoted column name although
@@ -56,19 +52,14 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{nb}{a neighbor list}
-
-\item{wt}{a weights list}
+\item{wt}{A "listw" object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}}
 
 \item{na_rm}{A \code{logical} value indicating whether \code{NA}
 values should be stripped before the computation proceeds.}
 
-\item{alternative}{A character defining the alternative hypothesis. Must be one of "two.sided", "less" or "greater".}
+\item{alternative}{A character defining the alternative hypothesis. Must be one of \code{"two.sided"}, \code{"less"} or \code{"greater"}.}
 
-\item{nsim}{The number of simulations used to generate reference distribution.}
-
-\item{seed}{A random seed to use for all metric calculations.
-Defaults to the current seed.}
+\item{nsim}{The number of simulations to be used for permutation test.}
 }
 \value{
 A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
@@ -76,19 +67,17 @@ For grouped data frames, the number of rows returned will be the same as the num
 For ww_local_geary_c_vec(), a numeric vector of \code{length(truth)} (or NA).
 }
 \description{
-Calculate the local Moran's I statistic for model residuals.
+Calculate the local Geary's C statistic for model residuals.
 }
 \examples{
+\dontshow{if (rlang::is_installed("sfdep")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(guerry, package = "sfdep")
 
 guerry_modeled <- guerry
 guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
 guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
-ctg <- st_contiguity(guerry)
-wts <- st_weights(ctg)
-
-ww_local_geary_c(guerry_modeled, crime_pers, predictions, ctg, wts)
-ww_local_geary(guerry_modeled, crime_pers, predictions, ctg, wts)
-
+ww_local_geary_c(guerry_modeled, crime_pers, predictions)
+ww_local_geary(guerry_modeled, crime_pers, predictions)
+\dontshow{\}) # examplesIf}
 }

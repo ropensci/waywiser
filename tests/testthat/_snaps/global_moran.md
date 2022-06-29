@@ -1,8 +1,7 @@
 # Global Moran statistics are stable
 
     Code
-      df_global_i <- ww_global_moran_i(guerry_modeled, crime_pers, predictions, ctg,
-        wts)
+      df_global_i <- ww_global_moran_i(guerry_modeled, crime_pers, predictions)
       df_global_i[1:3]
     Output
       # A tibble: 1 x 3
@@ -13,8 +12,7 @@
 ---
 
     Code
-      df_global_i_p <- ww_global_moran_pvalue(guerry_modeled, crime_pers, predictions,
-        ctg, wts)
+      df_global_i_p <- ww_global_moran_pvalue(guerry_modeled, crime_pers, predictions)
       df_global_i_p[1:3]
     Output
       # A tibble: 1 x 3
@@ -25,8 +23,7 @@
 ---
 
     Code
-      df_global_i_both <- ww_global_moran(guerry_modeled, crime_pers, predictions,
-        ctg, wts)
+      df_global_i_both <- ww_global_moran(guerry_modeled, crime_pers, predictions)
       df_global_i_both[1:3]
     Output
       # A tibble: 2 x 3
@@ -39,7 +36,7 @@
 
     Code
       (vec_global_i <- ww_global_moran_i_vec(guerry_modeled$crime_pers,
-      guerry_modeled$predictions, ctg, wts))
+      guerry_modeled$predictions, weights))
     Output
       [1] 0.4115652
 
@@ -47,7 +44,7 @@
 
     Code
       (vec_global_i_p <- ww_global_moran_pvalue_vec(guerry_modeled$crime_pers,
-      guerry_modeled$predictions, ctg, wts))
+      guerry_modeled$predictions, weights))
     Output
       [1] 7.234758e-10
 

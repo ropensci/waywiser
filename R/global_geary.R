@@ -1,31 +1,30 @@
-#' Global Moran's I statistic
+#' Global Geary's C statistic
 #'
-#' Calculate the global Moran's I statistic for model residuals.
+#' Calculate the global Geary's C statistic for model residuals.
 #' `ww_global_geary_c()` returns the statistic itself, while
 #' `ww_global_geary_pvalue()` returns the associated p value.
 #' `ww_global_geary()` returns both.
 #'
 #' @inheritParams yardstick::rmse
-#' @inheritParams sfdep::global_c
-#' @inheritParams sfdep::global_c_perm
+#' @inheritParams spdep::geary.test
+#' @param wt A "listw" object, for instance as created with [ww_build_weights()]
+#' @param randomization variance of I calculated under the assumption of randomisation, if FALSE normality
+#' @param ... Additional arguments passed to [spdep::geary.test()].
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups times the number of metrics.
 #' For ww_global_geary_c_vec(), a single numeric value (or NA).
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")
 #'
 #' guerry_modeled <- guerry
 #' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
 #' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 #'
-#' ctg <- st_contiguity(guerry)
-#' wts <- st_weights(ctg)
-#'
-#' ww_global_geary_c(guerry_modeled, crime_pers, predictions, ctg, wts)
-#' ww_global_geary(guerry_modeled, crime_pers, predictions, ctg, wts)
+#' ww_global_geary_c(guerry_modeled, crime_pers, predictions)
+#' ww_global_geary(guerry_modeled, crime_pers, predictions)
 #'
 #' @rdname global_geary_c
 #' @export
@@ -36,16 +35,20 @@ ww_global_geary_c <- function(data, ...) {
 ww_global_geary_c <- new_numeric_metric(ww_global_geary_c, direction = "zero")
 
 #' @export
-ww_global_geary_c.data.frame <- function(data, truth, estimate, nb, wt, allow_zero = TRUE, na_rm = TRUE, ...) {
+ww_global_geary_c.data.frame <- function(data,
+                                         truth,
+                                         estimate,
+                                         wt = NULL,
+                                         alternative = "greater",
+                                         randomization = TRUE,
+                                         na_rm = TRUE,
+                                         ...) {
 
-  if (rlang::is_function(nb)) {
-    nb <- do.call(nb, data)
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
   }
   if (rlang::is_function(wt)) {
-    wt <- do.call(wt, data)
-  }
-  if (is.null(wt)) {
-    wt <- sfdep::st_weights(nb)
+    wt <- do.call(wt, list(data))
   }
 
   metric_summarizer(
@@ -56,27 +59,41 @@ ww_global_geary_c.data.frame <- function(data, truth, estimate, nb, wt, allow_ze
     estimate = !! enquo(estimate),
     na_rm = na_rm,
     metric_fn_options = list(
-      nb = nb,
-      wt = wt
-    ),
-    ...
+      wt = wt,
+      alternative = "greater",
+      randomization = TRUE,
+      ...
+    )
   )
 }
 
 #' @rdname global_geary_c
 #' @export
-ww_global_geary_c_vec <- function(truth, estimate, nb, wt, allow_zero = TRUE, na_rm = TRUE, ...) {
+ww_global_geary_c_vec <- function(truth,
+                                  estimate,
+                                  wt = NULL,
+                                  alternative = "greater",
+                                  randomization = TRUE,
+                                  na_rm = TRUE,
+                                  ...) {
+
+  if (!inherits(wt, "listw")) {
+    rlang::abort(
+      "`wt` must be a 'listw' object",
+      "i" = "You can create 'listw' objects using `build_weights()`"
+    )
+  }
 
   ww_global_geary_c_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    sfdep::global_c(
+    spdep::geary.test(
       x = resid,
-      nb = nb,
-      wt = wt,
-      allow_zero = TRUE,
+      listw = wt,
+      randomisation = randomization,
+      alternative = alternative,
       ...
-    )$C
+    )$estimate[[1]]
   }
 
   metric_vec_template(
@@ -98,16 +115,20 @@ ww_global_geary_pvalue <- function(data, ...) {
 ww_global_geary_pvalue <- new_numeric_metric(ww_global_geary_pvalue, "minimize")
 
 #' @export
-ww_global_geary_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alternative = "greater", nsim = 499, allow_zero = NULL, na_rm = TRUE, ...) {
+ww_global_geary_pvalue.data.frame <- function(data,
+                                              truth,
+                                              estimate,
+                                              wt = NULL,
+                                              alternative = "greater",
+                                              randomization = TRUE,
+                                              na_rm = TRUE,
+                                              ...) {
 
-  if (rlang::is_function(nb)) {
-    nb <- do.call(nb, data)
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
   }
   if (rlang::is_function(wt)) {
-    wt <- do.call(wt, data)
-  }
-  if (is.null(wt)) {
-    wt <- sfdep::st_weights(nb)
+    wt <- do.call(wt, list(data))
   }
 
   metric_summarizer(
@@ -118,30 +139,39 @@ ww_global_geary_pvalue.data.frame <- function(data, truth, estimate, nb, wt, alt
     estimate = !! enquo(estimate),
     na_rm = na_rm,
     metric_fn_options = list(
-      nb = nb,
       wt = wt,
       alternative = alternative,
-      nsim = nsim,
-      allow_zero = allow_zero
-    ),
-    ...
+      randomization = randomization,
+      ...
+    )
   )
 }
 
 #' @rdname global_geary_c
 #' @export
-ww_global_geary_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "greater", nsim = 499, allow_zero = NULL, na_rm = TRUE, ...) {
+ww_global_geary_pvalue_vec <- function(truth,
+                                       estimate,
+                                       wt = NULL,
+                                       alternative = "greater",
+                                       randomization = TRUE,
+                                       na_rm = TRUE,
+                                       ...) {
+
+  if (!inherits(wt, "listw")) {
+    rlang::abort(
+      "`wt` must be a 'listw' object",
+      "i" = "You can create 'listw' objects using `build_weights()`"
+    )
+  }
 
   ww_global_geary_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    sfdep::global_c_perm(
+    spdep::geary.test(
       x = resid,
-      nb = nb,
-      wt = wt,
+      listw = wt,
       alternative = alternative,
-      nsim = nsim,
-      allow_zero = allow_zero,
+      randomisation = randomization,
       ...
     )$p.value
   }
@@ -161,23 +191,27 @@ ww_global_geary_pvalue_vec <- function(truth, estimate, nb, wt, alternative = "g
 ww_global_geary <- function(data,
                             truth,
                             estimate,
-                            nb,
-                            wt,
+                            wt = NULL,
                             alternative = "greater",
-                            nsim = 499,
-                            allow_zero = NULL,
+                            randomization = TRUE,
                             na_rm = TRUE,
                             ...) {
+
+  if (is.null(wt)) {
+    wt <- ww_build_weights(data)
+  }
+  if (rlang::is_function(wt)) {
+    wt <- do.call(wt, list(data))
+  }
+
   metrics <- metric_set(ww_global_geary_c, ww_global_geary_pvalue)
   metrics(
     data,
     truth = !! enquo(truth),
     estimate = !! enquo(estimate),
-    nb = nb,
     wt = wt,
     alternative = alternative,
-    nsim = nsim,
-    allow_zero = allow_zero,
+    randomization = randomization,
     na_rm = na_rm,
     ...
   )
