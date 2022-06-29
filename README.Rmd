@@ -41,7 +41,7 @@ devtools::install_github("mikemahoney218/waywiser")
 
 Let's walk through how we can use waywiser to find local indicators of spatial autocorrelation for a very simple model, looking at how tree canopy coverage impacts temperature in Boston, Massachusetts. First things first, let's load a few libraries:
 
-```{r}
+```{r message=FALSE}
 # waywiser itself, of course:
 library(waywiser)
 # For the %>% pipe and mutate:
@@ -70,7 +70,7 @@ ww_build_neighbors(guerry)
 ww_build_weights(guerry)
 ```
 
-These functions aren't always the best way to calculate spatial weights for your data, however. As a resultm waywiser also lets you specify your own weights directly:
+These functions aren't always the best way to calculate spatial weights for your data, however. As a result, waywiser also lets you specify your own weights directly:
 
 ```{r}
 weights <- guerry %>%

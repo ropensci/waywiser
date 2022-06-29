@@ -49,14 +49,6 @@ things first, let’s load a few libraries:
 library(waywiser)
 # For the %>% pipe and mutate:
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 ```
 
 We’ll be working with the `guerry` data from the sfdep package, fitting
@@ -122,7 +114,7 @@ ww_build_weights(guerry)
 ```
 
 These functions aren’t always the best way to calculate spatial weights
-for your data, however. As a resultm waywiser also lets you specify your
+for your data, however. As a result, waywiser also lets you specify your
 own weights directly:
 
 ``` r
