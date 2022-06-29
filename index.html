@@ -106,15 +106,7 @@
 <code class="sourceCode R"><span><span class="co"># waywiser itself, of course:</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mikemahoney218/waywiser" class="external-link">waywiser</a></span><span class="op">)</span></span>
 <span><span class="co"># For the %&gt;% pipe and mutate:</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 <p>We’ll be working with the <code>guerry</code> data from the sfdep package, fitting a linear model to associate crimes against persons with literacy. Let’s load the data now:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">guerry</span>, package <span class="op">=</span> <span class="st">"sfdep"</span><span class="op">)</span></span></code></pre></div>
@@ -158,7 +150,7 @@
 <span><span class="co">#&gt; Weights constants summary:</span></span>
 <span><span class="co">#&gt;    n   nn S0      S1       S2</span></span>
 <span><span class="co">#&gt; W 85 7225 85 37.2761 347.6683</span></span></code></pre></div>
-<p>These functions aren’t always the best way to calculate spatial weights for your data, however. As a resultm waywiser also lets you specify your own weights directly:</p>
+<p>These functions aren’t always the best way to calculate spatial weights for your data, however. As a result, waywiser also lets you specify your own weights directly:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">weights</span> <span class="op">&lt;-</span> <span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
