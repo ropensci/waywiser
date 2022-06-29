@@ -123,7 +123,7 @@ unquoted variable name. For <code>_vec()</code> functions, a <code>numeric</code
 
 
 <dt>wt</dt>
-<dd><p>A "listw" object, for instance as created with <code><a href="ww_build_weights.html">ww_build_weights()</a></code></p></dd>
+<dd><p>A "listw" object, for instance as created with <code><a href="ww_build_weights.html">ww_build_weights()</a></code>.</p></dd>
 
 
 <dt>alternative</dt>
@@ -143,9 +143,9 @@ values should be stripped before the computation proceeds.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A tibble with columns .metric, .estimator, and .estimate.
-For grouped data frames, the number of rows returned will be the same as the number of groups times the number of metrics.
-For ww_global_moran_i_vec(), a single numeric value (or NA).</p>
+<p>A tibble with columns .metric, .estimator, and .estimate and <code>nrow(data)</code> rows of values.
+For grouped data frames, the number of rows returned will be the same as the number of groups.
+For <code>_vec()</code> functions, a numeric vector of <code>length(truth)</code> (or NA).</p>
     </div>
 
     <div class="section level2">
