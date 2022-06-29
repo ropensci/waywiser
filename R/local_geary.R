@@ -1,16 +1,19 @@
 #' Local Geary's C statistic
 #'
 #' Calculate the local Geary's C statistic for model residuals.
+#' `ww_local_geary_c()` returns the statistic itself, while
+#' `ww_local_geary_pvalue()` returns the associated p value.
+#' `ww_local_geary()` returns both.
 #'
 #' @inheritParams yardstick::rmse
 #' @inheritParams spdep::localC_perm
-#' @param wt A "listw" object, for instance as created with [ww_build_weights()]
+#' @param wt A "listw" object, for instance as created with [ww_build_weights()].
 #' @param ... Additional arguments passed to [spdep::localC_perm()].
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
-#' For ww_local_geary_c_vec(), a numeric vector of `length(truth)` (or NA).
+#' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
 #'
 #' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")

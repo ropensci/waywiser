@@ -7,14 +7,14 @@
 #'
 #' @inheritParams yardstick::rmse
 #' @inheritParams spdep::geary.test
-#' @param wt A "listw" object, for instance as created with [ww_build_weights()]
+#' @param wt A "listw" object, for instance as created with [ww_build_weights()].
 #' @param randomization variance of I calculated under the assumption of randomisation, if FALSE normality
 #' @param ... Additional arguments passed to [spdep::geary.test()].
 #'
 #' @return
-#' A tibble with columns .metric, .estimator, and .estimate.
-#' For grouped data frames, the number of rows returned will be the same as the number of groups times the number of metrics.
-#' For ww_global_geary_c_vec(), a single numeric value (or NA).
+#' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
+#' For grouped data frames, the number of rows returned will be the same as the number of groups.
+#' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
 #'
 #' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")

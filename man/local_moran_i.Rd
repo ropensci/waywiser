@@ -57,7 +57,7 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{wt}{A "listw" object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}}
+\item{wt}{A "listw" object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.}
 
 \item{alternative}{a character string specifying the alternative hypothesis, must be one of greater, less or two.sided (default).}
 
@@ -67,10 +67,13 @@ values should be stripped before the computation proceeds.}
 \value{
 A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
-For ww_local_moran_i_vec(), a numeric vector of \code{length(truth)} (or NA).
+For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
 }
 \description{
 Calculate the local Moran's I statistic for model residuals.
+\code{ww_local_moran_i()} returns the statistic itself, while
+\code{ww_local_moran_pvalue()} returns the associated p value.
+\code{ww_local_moran()} returns both.
 }
 \examples{
 \dontshow{if (rlang::is_installed("sfdep")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

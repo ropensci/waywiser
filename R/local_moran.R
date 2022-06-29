@@ -1,16 +1,19 @@
 #' Local Moran's I statistic
 #'
 #' Calculate the local Moran's I statistic for model residuals.
+#' `ww_local_moran_i()` returns the statistic itself, while
+#' `ww_local_moran_pvalue()` returns the associated p value.
+#' `ww_local_moran()` returns both.
 #'
 #' @inheritParams yardstick::rmse
 #' @inheritParams spdep::localmoran
-#' @param wt A "listw" object, for instance as created with [ww_build_weights()]
+#' @param wt A "listw" object, for instance as created with [ww_build_weights()].
 #' @param ... Additional arguments passed to [spdep::localmoran()].
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
-#' For ww_local_moran_i_vec(), a numeric vector of `length(truth)` (or NA).
+#' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
 #'
 #' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")

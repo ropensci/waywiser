@@ -1,17 +1,23 @@
 #' Local Getis-Ord G and G* statistic
 #'
 #' Calculate the local Getis-Ord G and G* statistic for model residuals.
+#' `ww_local_getis_ord_g()` returns the statistic itself, while
+#' `ww_local_getis_ord_pvalue()` returns the associated p value.
+#' `ww_local_getis_ord()` returns both.
 #'
 #' @inheritParams yardstick::rmse
 #' @inheritParams spdep::localG_perm
-#' @param wt A "listw" object, for instance as created with [ww_build_weights()]
+#' @param wt A "listw" object, for instance as created with [ww_build_weights()].
 #' @param ... Arguments passed to [spdep::localG_perm()]
 #' @inheritParams ww_build_weights
+#' @param include_self Include each region itself in its own list of neighbors?
+#' Only used when `wt` is `NULL`, and if `TRUE` means this function calculates
+#' G* instead of G.
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
-#' For ww_local_getis_ord_g_vec(), a numeric vector of `length(truth)` (or NA).
+#' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
 #'
 #' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")
