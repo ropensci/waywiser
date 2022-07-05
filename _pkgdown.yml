@@ -8,7 +8,6 @@ template:
     success: "#325d88"
     base_font: {google: "Noto Sans"}
     heading_font: {google: "Patua One"}
-    code_font: {google: "JetBrains Mono"}
 
 authors:
   Michael Mahoney:
