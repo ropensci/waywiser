@@ -1,15 +1,21 @@
 url: https://mikemahoney218.github.io/waywiser/
 
 template:
-  package: tidytemplate
   bootstrap: 5
+  bootswatch: sandstone
   bslib:
-    danger: "#CA225E"
-    primary: "#CA225E"
+    primary: "#325d88"
+    success: "#325d88"
+    base_font: {google: "Noto Sans"}
+    heading_font: {google: "Patua One"}
+    code_font: {google: "JetBrains Mono"}
 
 authors:
   Michael Mahoney:
     href: "https://www.mm218.dev/"
+  RStudio:
+    href: https://www.rstudio.com
+    html: <img src='https://www.tidyverse.org/rstudio-logo.svg' alt='RStudio' width='72' />
 
 development:
   mode: auto

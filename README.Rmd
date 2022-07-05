@@ -113,16 +113,6 @@ weights <- ww_build_weights(guerry)
 guerry %>%
   mutate(pred = predict(lm(crime_pers ~ literacy, .)),
          .estimate = ww_local_moran_i_vec(crime_pers, pred, weights)) %>% 
-  mutate(
-    cut_points = case_when(
-      .estimate <= -1 ~ "(-Inf, -1]",
-      .estimate <= -0.5 ~ "(-1, -0.5]",
-      .estimate <= 0 ~ "(-0.5, 0]",
-      .estimate <= 0.5 ~ "(0, 0.5]",
-      .estimate <= 1 ~ "(0.5, 1]",
-      .estimate > 1 ~ "(1, Inf)",
-    )
-  ) %>% 
   sf::st_as_sf() %>% 
   ggplot(aes(fill = .estimate)) +
   geom_sf() + 
