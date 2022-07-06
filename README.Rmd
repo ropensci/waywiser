@@ -106,6 +106,7 @@ guerry %>%
 Providing custom weights also lets us use `ww_local_moran_i_vec` to add a column to our original data frame with our statistic, which makes plotting using our original geometries easier:
 
 ```{r 2022_06_29-guerry, fig.width=8}
+#| fig.alt: A map of calculated Moran's I values for the Guerry data set.
 library(ggplot2)
 
 weights <- ww_build_weights(guerry)

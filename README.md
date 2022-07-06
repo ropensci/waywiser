@@ -210,7 +210,7 @@ guerry %>%
   )
 ```
 
-<img src="man/figures/README-2022_06_29-guerry-1.png" width="100%" />
+<img src="man/figures/README-2022_06_29-guerry-1.png" title="A map of calculated Moran's I values for the Guerry data set." alt="A map of calculated Moran's I values for the Guerry data set." width="100%" />
 
 This makes it easy to see what areas are poorly represented by our
 model, which might lead us to identify ways to improve our model or help
