@@ -14,7 +14,7 @@
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
-#' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
+#' For `_vec()` functions, a single value (or NA).
 #'
 #' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")
@@ -23,7 +23,7 @@
 #' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
 #' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 #'
-#' ww_global_geary(guerry_modeled, crime_pers, predictions)
+#' ww_global_geary_c(guerry_modeled, crime_pers, predictions)
 #'
 #' @rdname global_geary_c
 #' @export

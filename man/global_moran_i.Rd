@@ -72,7 +72,7 @@ values should be stripped before the computation proceeds.}
 \value{
 A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
-For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
+For \verb{_vec()} functions, a single value (or NA).
 }
 \description{
 Calculate the global Moran's I statistic for model residuals.

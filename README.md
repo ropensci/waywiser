@@ -8,8 +8,7 @@
 [![R-CMD-check](https://github.com/mikemahoney218/waywiser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mikemahoney218/waywiser/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/waywiser)](https://CRAN.R-project.org/package=waywiser)
+\[![CRAN status](https://www.r-pkg.org/badges/version/waywiser)\]
 [![Codecov test
 coverage](https://codecov.io/gh/mikemahoney218/waywiser/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mikemahoney218/waywiser?branch=main)
 <!-- badges: end -->
@@ -24,6 +23,12 @@ measures of spatial autocorrelation provided by
 [spdep](https://cran.r-project.org/package=spdep).
 
 ## Installation
+
+You can install waywiser from CRAN via:
+
+``` r
+install.packages("waywiser")
+```
 
 You can install the development version of waywiser from
 [GitHub](https://github.com/) with:

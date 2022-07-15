@@ -72,7 +72,7 @@ values should be stripped before the computation proceeds.}
 \value{
 A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
-For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
+For \verb{_vec()} functions, a single value (or NA).
 }
 \description{
 Calculate the global Geary's C statistic for model residuals.
@@ -88,6 +88,6 @@ guerry_modeled <- guerry
 guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
 guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
-ww_global_geary(guerry_modeled, crime_pers, predictions)
+ww_global_geary_c(guerry_modeled, crime_pers, predictions)
 \dontshow{\}) # examplesIf}
 }

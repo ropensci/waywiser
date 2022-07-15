@@ -14,7 +14,7 @@
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
-#' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
+#' For `_vec()` functions, a single value (or NA).
 #'
 #' @examplesIf rlang::is_installed("sfdep")
 #' data(guerry, package = "sfdep")
