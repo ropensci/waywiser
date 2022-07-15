@@ -1,4 +1,4 @@
-# waywiser 0.0.0.9000
+# waywiser 0.1.0
 
 * Added functions for automatically constructing `nb` and `listw` objects
 
