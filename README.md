@@ -23,10 +23,6 @@ performance on spatial data easier, extending the
 measures of spatial autocorrelation provided by
 [spdep](https://cran.r-project.org/package=spdep).
 
-Please note that this package is highly experimental. The user-facing
-API is likely to change without deprecation warnings up until the first
-CRAN release.
-
 ## Installation
 
 You can install the development version of waywiser from
@@ -40,9 +36,8 @@ devtools::install_github("mikemahoney218/waywiser")
 ## Example
 
 Let’s walk through how we can use waywiser to find local indicators of
-spatial autocorrelation for a very simple model, looking at how tree
-canopy coverage impacts temperature in Boston, Massachusetts. First
-things first, let’s load a few libraries:
+spatial autocorrelation for a very simple model. First things first,
+let’s load a few libraries:
 
 ``` r
 # waywiser itself, of course:
@@ -222,14 +217,10 @@ This project is released with a [Contributor Code of
 Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 
--   For questions and discussions about tidymodels packages, modeling,
-    and machine learning, please [post on RStudio
-    Community](https://community.rstudio.com/new-topic?category_id=15&tags=tidymodels,question).
-
 -   If you think you have encountered a bug, please [submit an
-    issue](https://github.com/tidymodels/rules/issues).
+    issue](https://github.com/mikemahoney218/waywiser).
 
--   Either way, learn how to create and share a
+-   Please include a
     [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
-    (a minimal, reproducible example), to clearly communicate about your
+    (a minimal, reproducible example) to clearly communicate about your
     code.

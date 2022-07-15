@@ -86,13 +86,14 @@ ww_global_geary_c_vec <- function(truth,
   ww_global_geary_c_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    spdep::geary.test(
+    spdep::geary(
       x = resid,
       listw = wt,
-      randomisation = randomization,
-      alternative = alternative,
+      length(wt[["neighbours"]]),
+      length(wt[["neighbours"]]) - 1,
+      spdep::Szero(wt),
       ...
-    )$estimate[[1]]
+    )$C
   }
 
   metric_vec_template(
