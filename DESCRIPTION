@@ -13,7 +13,10 @@ Description: Predictive models of spatial data may have spatially
     clustered geographically due to spatial structure in the underlying
     data. These functions provide methods for measuring the spatial
     structure of model errors for models, and are particularly useful for
-    models fit using the 'tidymodels' framework.
+    models fit using the 'tidymodels' framework. Methods include Moran's I
+    (Moran (1950) <doi:10.2307/2332142>), Geary's C 
+    (Geary (1954) <doi:10.2307/2986645>) and Getis-Ord's G
+    (Ord and Getis (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>).
 License: MIT + file LICENSE
 URL: https://github.com/mikemahoney218/waywiser,
     https://mikemahoney218.github.io/waywiser/
