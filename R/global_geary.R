@@ -23,7 +23,7 @@
 #' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
 #' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 #'
-#' \donttest{
+#' \dontrun{
 #' ww_global_geary(guerry_modeled, crime_pers, predictions)
 #' }
 #'
