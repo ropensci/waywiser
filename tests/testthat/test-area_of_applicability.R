@@ -5,6 +5,8 @@ test <- train[701:1000, ]
 train <- train[1:700, ]
 comb_rset <- rsample::make_splits(train, test)
 comb_rset <- rsample::manual_rset(list(comb_rset), "Fold1")
+comb_rset_no_y <- rsample::make_splits(train[2:11], test[2:11])
+comb_rset_no_y <- rsample::manual_rset(list(comb_rset_no_y), "Fold1")
 
 pp <- ppr(y ~ ., data = train, nterms = 11)
 importance <- vip::vi_permute(
@@ -55,7 +57,9 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
   methods <- list(
     ww_area_of_applicability(y ~ ., train, test, importance),
     ww_area_of_applicability(train[2:11], test[2:11], importance),
-    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance)
+    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance),
+    ww_area_of_applicability(comb_rset_no_y, importance = importance),
+    ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance)
   )
 
   expect_identical(
@@ -66,6 +70,16 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
   expect_identical(
     methods[[2]]$aoa_threshold,
     methods[[3]]$aoa_threshold
+  )
+
+  expect_identical(
+    methods[[3]]$aoa_threshold,
+    methods[[4]]$aoa_threshold
+  )
+
+  expect_identical(
+    methods[[4]]$aoa_threshold,
+    methods[[5]]$aoa_threshold
   )
 
 })

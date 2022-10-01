@@ -22,7 +22,7 @@
 #' applicability won't be correct.
 #'
 #' @param rset An `rset` object, produced by resampling functions from rsample
-#' or spatialsample. When using this method, `x` must be a formula or recipe,
+#' or spatialsample. When using this method, `x` must be a recipe,
 #' in which case the expected predictors will be extracted and any specified
 #' pre-processing will be performed, or missing (either not provided, provided
 #' as NULL, or provided as NA) in which case all provided variables will be
@@ -166,9 +166,9 @@ ww_area_of_applicability.rset <- function(rset, x, importance, ...) {
   aoa$training <- rset$splits[[1]]$data
   aoa$sds <- purrr::map_dbl(aoa$training, stats::sd, na.rm = TRUE)
   aoa$means <- purrr::map_dbl(aoa$training, mean, na.rm = TRUE)
-  aoa$d_bar <- mean(unlist(purrr::map(aoa, purrr::chuck, "d_bar")))
+  aoa$d_bar <- mean(unlist(purrr::map(aoa_calcs, purrr::chuck, "d_bar")))
 
-  di <- unlist(purrr::map(aoa, purrr::chuck, "di"))
+  di <- unlist(purrr::map(aoa_calcs, purrr::chuck, "di"))
   aoa["di"] <- NULL
   aoa$aoa_threshold <- calc_aoa(di)
 
