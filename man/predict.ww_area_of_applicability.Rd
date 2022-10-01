@@ -48,3 +48,8 @@ aoa <- ww_area_of_applicability(y ~ ., train, test, importance = importance)
 predict(aoa, test)
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+Other area of applicability functions: 
+\code{\link{ww_area_of_applicability}()}
+}
+\concept{area of applicability functions}

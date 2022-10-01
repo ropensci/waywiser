@@ -28,6 +28,8 @@ importance <- vi_permute(
   pred_wrapper = predict
 )
 
+
 ww_area_of_applicability(trn[2:11], importance = importance)
 \dontshow{\}) # examplesIf}
 }
+\keyword{internal}

@@ -101,3 +101,8 @@ H. Meyer and E. Pebesma. 2021. "Predicting into unknown space? Estimating
 the area of applicability of spatial prediction models," Methods in Ecology
 and Evolution 12(9), pp 1620 - 1633, doi: 10.1111/2041-210X.13650.
 }
+\seealso{
+Other area of applicability functions: 
+\code{\link{predict.ww_area_of_applicability}()}
+}
+\concept{area of applicability functions}

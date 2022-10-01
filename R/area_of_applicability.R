@@ -60,6 +60,8 @@
 #' to calculate the distance of new data to the original training data, and
 #' determine if new data is within a model's area of applicability.
 #'
+#' @family area of applicability functions
+#'
 #' @examplesIf rlang::is_installed("vip")
 #' library(vip)
 #' train <- gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
@@ -410,6 +412,8 @@ predict_ww_area_of_applicability_bridge <- function(type, model, predictors) {
 #' A tibble of predictions. The number of rows in the tibble is guaranteed
 #' to be the same as the number of rows in `new_data`.
 #'
+#' @family area of applicability functions
+#'
 #' @examplesIf rlang::is_installed("vip")
 #' library(vip)
 #' train <- gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
@@ -468,6 +472,7 @@ valid_predict_types <- function() {
 #'
 #' @inheritParams rlang::args_dots_empty
 #'
+#' @keywords internal
 #'
 #' @examplesIf rlang::is_installed("vip")
 #' library(vip)
@@ -479,6 +484,7 @@ valid_predict_types <- function() {
 #'   metric = "rsquared",
 #'   pred_wrapper = predict
 #' )
+#'
 #'
 #' ww_area_of_applicability(trn[2:11], importance = importance)
 #'
