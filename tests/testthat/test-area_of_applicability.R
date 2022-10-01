@@ -108,6 +108,7 @@ test_that("normal use", {
     predict(aoa, test)
   )
 
+  skip_on_os("mac")
   expect_snapshot(
     predict(aoa, train)
   )
