@@ -18,7 +18,6 @@
        9 local_moran_i standard     -0.0109
       10 local_moran_i standard      0.710 
       # ... with 75 more rows
-      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -40,7 +39,6 @@
        9 local_moran_pvalue standard     0.335  
       10 local_moran_pvalue standard     0.00663
       # ... with 75 more rows
-      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -62,7 +60,6 @@
        9 local_moran_i standard     -0.0109
       10 local_moran_i standard      0.710 
       # ... with 160 more rows
-      # i Use `print(n = ...)` to see more rows
 
 ---
 

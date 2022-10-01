@@ -18,7 +18,6 @@
        9 local_getis_ord_g standard       0.964
       10 local_getis_ord_g standard      -2.71 
       # ... with 75 more rows
-      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -41,7 +40,6 @@
        9 local_getis_ord_g_pvalue standard     0.361  
       10 local_getis_ord_g_pvalue standard     0.00787
       # ... with 75 more rows
-      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -63,7 +61,6 @@
        9 local_getis_ord_g standard       0.964
       10 local_getis_ord_g standard      -2.71 
       # ... with 160 more rows
-      # i Use `print(n = ...)` to see more rows
 
 ---
 
