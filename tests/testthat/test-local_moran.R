@@ -1,3 +1,4 @@
+set.seed(123)
 test_that("Local Moran statistics are stable", {
 
   skip_if_not(rlang::is_installed("sfdep"))

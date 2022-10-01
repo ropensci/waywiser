@@ -1,0 +1,132 @@
+set.seed(123)
+skip_if_not(rlang::is_installed("vip"))
+train <- vip::gen_friedman(1000, seed = 101)
+test <- train[701:1000, ]
+train <- train[1:700, ]
+
+pp <- ppr(y ~ ., data = train, nterms = 11)
+importance <- vip::vi_permute(
+  pp,
+  target = "y",
+  metric = "rsquared",
+  pred_wrapper = predict
+)
+
+test_that("`ww_area_of_applicability` is properly classed", {
+  model <- ww_area_of_applicability(y ~ ., train, test, importance)
+  expect_s3_class(model, "ww_area_of_applicability")
+  expect_s3_class(model, "hardhat_model")
+})
+
+
+test_that("`ww_area_of_applicability` is not defined for vectors", {
+  expect_snapshot_error(
+    ww_area_of_applicability(mtcars$mpg)
+  )
+})
+
+test_that("`ww_area_of_applicability` finds 0 distance between identical data", {
+
+  expect_equal(
+    ww_area_of_applicability(y ~ ., train, train, importance)$aoa_threshold,
+    0
+  )
+
+})
+
+test_that("`ww_area_of_applicability` works with or without a validation set", {
+
+  expect_error(
+    ww_area_of_applicability(y ~ ., train, test, importance),
+    NA
+  )
+
+  expect_error(
+    ww_area_of_applicability(y ~ ., train, importance = importance),
+    NA
+  )
+
+})
+
+test_that("`ww_area_of_applicability` methods are equivalent", {
+
+  methods <- list(
+    ww_area_of_applicability(y ~ ., train, test, importance),
+    ww_area_of_applicability(train[2:11], test[2:11], importance),
+    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance)
+  )
+
+  expect_identical(
+    methods[[1]]$aoa_threshold,
+    methods[[2]]$aoa_threshold
+  )
+
+  expect_identical(
+    methods[[2]]$aoa_threshold,
+    methods[[3]]$aoa_threshold
+  )
+
+})
+
+test_that("`ww_area_of_applicability` can handle different column orders", {
+
+  expect_identical(
+    ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
+    ww_area_of_applicability(train[2:11], test[11:2], importance)$aoa_threshold
+  )
+
+  expect_identical(
+    ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
+    ww_area_of_applicability(train[11:2], test[2:11], importance)$aoa_threshold
+  )
+
+})
+
+test_that("`predict_ww_area_of_applicability_numeric` fails when model has no pcs argument", {
+  expect_snapshot(error = TRUE,
+                  predict_ww_area_of_applicability_numeric(mtcars, mtcars)
+  )
+})
+
+skip_if_not(rlang::is_installed("vip"))
+train <- vip::gen_friedman(1000, seed = 101)
+test <- train[701:1000, ]
+train <- train[1:700, ]
+
+pp <- ppr(y ~ ., data = train, nterms = 11)
+importance <- vip::vi_permute(
+  pp,
+  target = "y",
+  metric = "rsquared",
+  pred_wrapper = predict
+)
+aoa <- ww_area_of_applicability(y ~ ., train, test, importance)
+
+test_that("normal use", {
+
+  expect_snapshot(
+    predict(aoa, test)
+  )
+
+  skip_on_os("mac")
+  expect_snapshot(
+    predict(aoa, train)
+  )
+
+})
+
+test_that("`new_ww_area_of_applicability` arguments are assigned correctly", {
+  x <- ww_area_of_applicability(y ~ ., train, test, importance)
+
+  skip_on_os("mac")
+  expect_equal(names(x), c("training", "importance", "sds", "means", "d_bar", "aoa_threshold", "blueprint"))
+  expect_snapshot(x$training)
+  expect_snapshot(x$importance)
+  expect_snapshot(x$sds)
+  expect_snapshot(x$means)
+  expect_snapshot(x$d_bar)
+  expect_snapshot(x$aoa_threshold)
+  expect_snapshot(x$blueprint)
+  expect_s3_class(x$blueprint, "hardhat_blueprint")
+})
+

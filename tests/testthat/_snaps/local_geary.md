@@ -18,7 +18,6 @@
        9 local_geary_c standard       0.867
       10 local_geary_c standard       0.737
       # ... with 75 more rows
-      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -40,7 +39,6 @@
        9 local_geary_pvalue standard       0.802
       10 local_geary_pvalue standard       0.412
       # ... with 75 more rows
-      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -62,7 +60,6 @@
        9 local_geary_c standard       0.867
       10 local_geary_c standard       0.737
       # ... with 160 more rows
-      # i Use `print(n = ...)` to see more rows
 
 ---
 
