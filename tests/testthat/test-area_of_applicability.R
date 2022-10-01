@@ -3,6 +3,8 @@ skip_if_not(rlang::is_installed("vip"))
 train <- vip::gen_friedman(1000, seed = 101)
 test <- train[701:1000, ]
 train <- train[1:700, ]
+comb_rset <- rsample::make_splits(train, test)
+comb_rset <- rsample::manual_rset(list(comb_rset), "Fold1")
 
 pp <- ppr(y ~ ., data = train, nterms = 11)
 importance <- vip::vi_permute(

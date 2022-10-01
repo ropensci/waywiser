@@ -6,6 +6,7 @@
 \alias{ww_area_of_applicability.matrix}
 \alias{ww_area_of_applicability.formula}
 \alias{ww_area_of_applicability.recipe}
+\alias{ww_area_of_applicability.rset}
 \title{Find the area of applicability}
 \usage{
 ww_area_of_applicability(x, ...)
@@ -17,10 +18,12 @@ ww_area_of_applicability(x, ...)
 \method{ww_area_of_applicability}{formula}(x, data, validation = NULL, importance, ...)
 
 \method{ww_area_of_applicability}{recipe}(x, data, validation = NULL, importance, ...)
+
+\method{ww_area_of_applicability}{rset}(rset, x, importance, ...)
 }
 \arguments{
 \item{x}{Either a data frame, matrix, formula
-(specifying predictor terms on the right-hand side), or recipe
+(specifying predictor terms on the right-hand side), recipe
 (from \code{\link[recipes:recipe]{recipes::recipe()}}.
 
 If \code{x} is a recipe, it should be the same one used to pre-process the data
@@ -52,8 +55,15 @@ All variables in the training data (\code{x} or \code{data}, depending on the co
 must have a matching importance estimate, and all terms with importance
 estimates must be in the training data.}
 
-\item{data}{When \code{x} is a recipe or formula, \code{data} must be the data frame
-representing your "training" data.}
+\item{data}{The data frame representing your "training" data, when using the
+formula or recipe methods.}
+
+\item{rset}{An \code{rset} object, produced by resampling functions from rsample
+or spatialsample. When using this method, \code{x} must be a formula or recipe,
+in which case the expected predictors will be extracted and any specified
+pre-processing will be performed, or missing (either not provided, provided
+as NULL, or provided as NA) in which case all provided variables will be
+used to calculate the area of applicability.}
 }
 \value{
 A \code{ww_area_of_applicability} object, which can be used with \code{\link[=predict]{predict()}}
