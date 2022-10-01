@@ -58,8 +58,7 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
     ww_area_of_applicability(y ~ ., train, test, importance),
     ww_area_of_applicability(train[2:11], test[2:11], importance),
     ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance),
-    ww_area_of_applicability(comb_rset_no_y, importance = importance),
-    ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance)
+    ww_area_of_applicability(comb_rset_no_y, importance = importance)
   )
 
   expect_identical(
@@ -77,9 +76,10 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
     methods[[4]]$aoa_threshold
   )
 
+  skip_if_not_installed("recipes")
   expect_identical(
     methods[[4]]$aoa_threshold,
-    methods[[5]]$aoa_threshold
+    ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance)$aoa_threshold
   )
 
 })
