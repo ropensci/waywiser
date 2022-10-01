@@ -16,11 +16,14 @@ coverage](https://codecov.io/gh/mikemahoney218/waywiser/branch/main/graph/badge.
 “Waywiser” is an old-timey name for a [surveyor’s
 wheel](https://en.wikipedia.org/wiki/Surveyor%27s_wheel), a device that
 makes measuring long distances easier than with measurement tools like a
-ruler or yardstick. The waywiser R package makes measuring model
-performance on spatial data easier, extending the
+ruler or yardstick. The waywiser R package makes assessing models of
+spatial data easier, both by extending the
 [yardstick](https://yardstick.tidymodels.org/) R package to incorporate
 measures of spatial autocorrelation provided by
-[spdep](https://cran.r-project.org/package=spdep).
+[spdep](https://cran.r-project.org/package=spdep) and by providing an
+implementation of the “area of applicability” as defined by [Meyer and
+Pebesma (2021) \<doi:
+10.1111/2041-210X.13650\>](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13650)
 
 ## Installation
 
