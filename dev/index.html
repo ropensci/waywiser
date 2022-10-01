@@ -5,12 +5,15 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Predictive models of spatial data may have spatially
+<meta name="description" content="Assessing predictive models of spatial data can be challenging, 
+    both because these models are typically built for extrapolating outside the
+    original region represented by training data and due to potential spatially
     structured errors, with &quot;hot spots&quot; of higher than expected error
     clustered geographically due to spatial structure in the underlying
     data. These functions provide methods for measuring the spatial
-    structure of model errors for models, and are particularly useful for
-    models fit using the tidymodels framework. Methods include Morans I
+    structure of model errors and evaluating where predictions can be made 
+    safely, and are particularly useful for models fit using the tidymodels 
+    framework. Methods include Morans I
     (Moran (1950) &lt;doi:10.2307/2332142&gt;), Gearys C 
     (Geary (1954) &lt;doi:10.2307/2986645&gt;), Getis-Ords G
     (Ord and Getis (1995) &lt;doi:10.1111/j.1538-4632.1995.tb00912.x&gt;),
@@ -30,12 +33,15 @@
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Methods for Assessing Spatial Models">
-<meta property="og:description" content="Predictive models of spatial data may have spatially
+<meta property="og:description" content="Assessing predictive models of spatial data can be challenging, 
+    both because these models are typically built for extrapolating outside the
+    original region represented by training data and due to potential spatially
     structured errors, with &quot;hot spots&quot; of higher than expected error
     clustered geographically due to spatial structure in the underlying
     data. These functions provide methods for measuring the spatial
-    structure of model errors for models, and are particularly useful for
-    models fit using the tidymodels framework. Methods include Morans I
+    structure of model errors and evaluating where predictions can be made 
+    safely, and are particularly useful for models fit using the tidymodels 
+    framework. Methods include Morans I
     (Moran (1950) &lt;doi:10.2307/2332142&gt;), Gearys C 
     (Geary (1954) &lt;doi:10.2307/2986645&gt;), Getis-Ords G
     (Ord and Getis (1995) &lt;doi:10.1111/j.1538-4632.1995.tb00912.x&gt;),
@@ -97,7 +103,7 @@
 </h1>
 </div>
 <!-- badges: start -->
-<p>“Waywiser” is an old-timey name for a <a href="https://en.wikipedia.org/wiki/Surveyor%27s_wheel" class="external-link">surveyor’s wheel</a>, a device that makes measuring long distances easier than with measurement tools like a ruler or yardstick. The waywiser R package makes measuring model performance on spatial data easier, extending the <a href="https://yardstick.tidymodels.org/" class="external-link">yardstick</a> R package to incorporate measures of spatial autocorrelation provided by <a href="https://cran.r-project.org/package=spdep" class="external-link">spdep</a>.</p>
+<p>“Waywiser” is an old-timey name for a <a href="https://en.wikipedia.org/wiki/Surveyor%27s_wheel" class="external-link">surveyor’s wheel</a>, a device that makes measuring long distances easier than with measurement tools like a ruler or yardstick. The waywiser R package makes assessing models of spatial data easier, both by extending the <a href="https://yardstick.tidymodels.org/" class="external-link">yardstick</a> R package to incorporate measures of spatial autocorrelation provided by <a href="https://cran.r-project.org/package=spdep" class="external-link">spdep</a> and by providing an implementation of the “area of applicability” as defined by <a href="https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13650" class="external-link">Meyer and Pebesma (2021) &lt;doi: 10.1111/2041-210X.13650&gt;</a></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
