@@ -19,12 +19,13 @@ ww_area_of_applicability(x, ...)
 
 \method{ww_area_of_applicability}{recipe}(x, data, validation = NULL, importance, ...)
 
-\method{ww_area_of_applicability}{rset}(rset, x, importance, ...)
+\method{ww_area_of_applicability}{rset}(x, y = NULL, importance, ...)
 }
 \arguments{
 \item{x}{Either a data frame, matrix, formula
 (specifying predictor terms on the right-hand side), recipe
-(from \code{\link[recipes:recipe]{recipes::recipe()}}.
+(from \code{\link[recipes:recipe]{recipes::recipe()}}, or \code{rset} object, produced by resampling functions
+from rsample or spatialsample.
 
 If \code{x} is a recipe, it should be the same one used to pre-process the data
 used in your model. If the recipe used to build the area of applicability
@@ -58,12 +59,12 @@ estimates must be in the training data.}
 \item{data}{The data frame representing your "training" data, when using the
 formula or recipe methods.}
 
-\item{rset}{An \code{rset} object, produced by resampling functions from rsample
-or spatialsample. When using this method, \code{x} must be a formula or recipe,
-in which case the expected predictors will be extracted and any specified
-pre-processing will be performed, or missing (either not provided, provided
-as NULL, or provided as NA) in which case all provided variables will be
-used to calculate the area of applicability.}
+\item{y}{Optional: a recipe (from \code{\link[recipes:recipe]{recipes::recipe()}}) or formula.
+
+If \code{y} is a recipe, it should be the same one used to pre-process the data
+used in your model. If the recipe used to build the area of applicability
+doesn't match the one used to build the model, the returned area of
+applicability won't be correct.}
 }
 \value{
 A \code{ww_area_of_applicability} object, which can be used with \code{\link[=predict]{predict()}}

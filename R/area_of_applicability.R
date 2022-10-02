@@ -14,19 +14,20 @@
 #'
 #' @param x Either a data frame, matrix, formula
 #' (specifying predictor terms on the right-hand side), recipe
-#' (from [recipes::recipe()].
+#' (from [recipes::recipe()], or `rset` object, produced by resampling functions
+#' from rsample or spatialsample.
 #'
 #' If `x` is a recipe, it should be the same one used to pre-process the data
 #' used in your model. If the recipe used to build the area of applicability
 #' doesn't match the one used to build the model, the returned area of
 #' applicability won't be correct.
 #'
-#' @param rset An `rset` object, produced by resampling functions from rsample
-#' or spatialsample. When using this method, `x` must be a recipe,
-#' in which case the expected predictors will be extracted and any specified
-#' pre-processing will be performed, or missing (either not provided, provided
-#' as NULL, or provided as NA) in which case all provided variables will be
-#' used to calculate the area of applicability.
+#' @param y Optional: a recipe (from [recipes::recipe()]) or formula.
+#'
+#' If `y` is a recipe, it should be the same one used to pre-process the data
+#' used in your model. If the recipe used to build the area of applicability
+#' doesn't match the one used to build the model, the returned area of
+#' applicability won't be correct.
 #'
 #' @param data The data frame representing your "training" data, when using the
 #'  formula or recipe methods.
@@ -135,23 +136,23 @@ ww_area_of_applicability.recipe <- ww_area_of_applicability.formula
 
 #' @export
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.rset <- function(rset, x, importance, ...) {
+ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
   rlang::check_dots_empty()
 
-  if (missing(x) || identical(x, NULL) || identical(x, NA)) x <- NA_real_
+  if (missing(y) || identical(y, NULL) || identical(y, NA)) y <- NA_real_
 
   aoa_calcs <- purrr::map(
-    rset$splits,
+    x$splits,
     function(rsplit) {
       training <- rsample::analysis(rsplit)
       validation <- rsample::assessment(rsplit)
 
-      if (identical(x, NA_real_)) {
-        training <- hardhat::mold(training, x)
-        validation <- hardhat::mold(validation, x)
+      if (identical(y, NA_real_)) {
+        training <- hardhat::mold(training, y)
+        validation <- hardhat::mold(validation, y)
       } else {
-        training <- hardhat::mold(x, training)
-        validation <- hardhat::mold(x, validation)
+        training <- hardhat::mold(y, training)
+        validation <- hardhat::mold(y, validation)
       }
       ww_area_of_applicability_impl(
         training,
@@ -163,7 +164,7 @@ ww_area_of_applicability.rset <- function(rset, x, importance, ...) {
   )
 
   aoa <- aoa_calcs[[1]]
-  aoa$training <- rset$splits[[1]]$data
+  aoa$training <- x$splits[[1]]$data
   aoa$sds <- purrr::map_dbl(aoa$training, stats::sd, na.rm = TRUE)
   aoa$means <- purrr::map_dbl(aoa$training, mean, na.rm = TRUE)
   aoa$d_bar <- mean(unlist(purrr::map(aoa_calcs, purrr::chuck, "d_bar")))
