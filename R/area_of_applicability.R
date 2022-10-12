@@ -402,52 +402,6 @@ check_di_columns_numeric <- function(training, validation) {
   }
 }
 
-# -----------------------------------------------------------------------------
-# ---------------------- Model function implementation ------------------------
-# -----------------------------------------------------------------------------
-
-predict_ww_area_of_applicability_numeric <- function(model, predictors) {
-
-  if (!("ww_area_of_applicability" %in% class(model))) {
-    rlang::abort(
-      "`model` must be an `ww_area_of_applicability` object",
-      call = rlang::caller_env()
-    )
-  }
-
-  predictors <- center_and_scale(predictors, model$sds, model$means)
-  predictors <- sweep(predictors, 2, model$importance, "*")
-  dk <- calculate_dk(model$training, predictors)
-  di <- dk / model$d_bar
-  aoa <- di <= model$aoa_threshold
-
-  tibble::tibble(
-    di = di,
-    aoa = aoa
-  )
-}
-
-# -----------------------------------------------------------------------------
-# ------------------------ Model function bridge ------------------------------
-# -----------------------------------------------------------------------------
-
-predict_ww_area_of_applicability_bridge <- function(type, model, predictors) {
-  if (!all(names(model$training) %in% names(predictors))) {
-    rlang::abort(
-      "Some variables used to calculate the DI are missing from `new_data`",
-      call = rlang::caller_env()
-    )
-  }
-  predictors <- predictors[names(model$training)]
-  predictors <- as.matrix(predictors)
-
-  predict_function <- get_aoa_predict_function(type)
-  predictions <- predict_function(model, predictors)
-
-  hardhat::validate_prediction_size(predictions, predictors)
-
-  predictions
-}
 
 # -----------------------------------------------------------------------------
 # ----------------------- Model function interface ----------------------------
@@ -459,12 +413,7 @@ predict_ww_area_of_applicability_bridge <- function(type, model, predictors) {
 #'
 #' @param new_data A data frame or matrix of new samples.
 #'
-#' @param type A single character. The type of predictions to generate.
-#' Valid options are:
-#'
-#' - `"numeric"` for numeric predictions.
-#'
-#' @param ... Not used, but required for extensibility.
+#' @param ... Not used
 #'
 #' @details The function computes the distance indices of the new data and
 #' whether or not they are "inside" the area of applicability.
@@ -493,10 +442,33 @@ predict_ww_area_of_applicability_bridge <- function(type, model, predictors) {
 #' predict(aoa, test)
 #'
 #' @export
-predict.ww_area_of_applicability <- function(object, new_data, type = "numeric", ...) {
+predict.ww_area_of_applicability <- function(object, new_data, ...) {
   forged <- hardhat::forge(new_data, object$blueprint)
-  rlang::arg_match(type, valid_predict_types())
-  predict_ww_area_of_applicability_bridge(type, object, forged$predictors)
+
+  if (!all(names(object$training) %in% names(forged$predictors))) {
+    rlang::abort(
+      "Some variables used to calculate the DI are missing from `new_data`",
+      call = rlang::caller_env()
+    )
+  }
+
+  predictors <- forged$predictors[names(object$training)]
+  predictors <- as.matrix(predictors)
+
+  predictors <- center_and_scale(predictors, object$sds, object$means)
+  predictors <- sweep(predictors, 2, object$importance, "*")
+  dk <- calculate_dk(object$training, predictors)
+  di <- dk / object$d_bar
+  aoa <- di <= object$aoa_threshold
+
+  predictions <- tibble::tibble(
+    di = di,
+    aoa = aoa
+  )
+
+  hardhat::validate_prediction_size(predictions, predictors)
+
+  predictions
 }
 
 delayedAssign("score", {
@@ -510,21 +482,6 @@ delayedAssign("score", {
 })
 
 score.ww_area_of_applicability <- predict.ww_area_of_applicability
-
-# -----------------------------------------------------------------------------
-# ----------------------- Helper functions ------------------------------------
-# -----------------------------------------------------------------------------
-
-get_aoa_predict_function <- function(type) {
-  switch(
-    type,
-    numeric = predict_ww_area_of_applicability_numeric
-  )
-}
-
-valid_predict_types <- function() {
-  c("numeric")
-}
 
 #' Print number of predictors and area-of-applicability threshold
 #'

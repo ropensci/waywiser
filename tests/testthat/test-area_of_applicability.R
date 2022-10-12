@@ -98,12 +98,6 @@ test_that("`ww_area_of_applicability` can handle different column orders", {
 
 })
 
-test_that("`predict_ww_area_of_applicability_numeric` fails when model has no pcs argument", {
-  expect_snapshot(error = TRUE,
-                  predict_ww_area_of_applicability_numeric(mtcars, mtcars)
-  )
-})
-
 skip_if_not(rlang::is_installed("vip"))
 train <- vip::gen_friedman(1000, seed = 101)
 test <- train[701:1000, ]

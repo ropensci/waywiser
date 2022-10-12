@@ -4,13 +4,6 @@
     i `ww_area_of_applicability()` can only handle data.frames, matrices, formulas, and recipes.
     x `x` is a numeric
 
-# `predict_ww_area_of_applicability_numeric` fails when model has no pcs argument
-
-    Code
-      predict_ww_area_of_applicability_numeric(mtcars, mtcars)
-    Error <rlang_error>
-      `model` must be an `ww_area_of_applicability` object
-
 # normal use
 
     Code
