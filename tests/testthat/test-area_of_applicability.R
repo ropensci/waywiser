@@ -62,15 +62,18 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
   )
 
   expect_identical(
-    methods[[1]]$aoa_threshold,
-    methods[[2]]$aoa_threshold
+    head(methods[[1]], -1),
+    head(methods[[2]], -1)
   )
 
   expect_identical(
-    methods[[2]]$aoa_threshold,
-    methods[[3]]$aoa_threshold
+    head(methods[[2]], -1),
+    head(methods[[3]], -1)
   )
 
+  # Comparing rset method to the others --
+  # because here we calculate our training data on the entire thing
+  # the training, means, sds slots are all different
   expect_identical(
     methods[[3]]$aoa_threshold,
     methods[[4]]$aoa_threshold
@@ -78,8 +81,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
 
   skip_if_not_installed("recipes")
   expect_identical(
-    methods[[4]]$aoa_threshold,
-    ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance)$aoa_threshold
+    head(methods[[4]], -1),
+    head(ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance), -1)
   )
 
 })
