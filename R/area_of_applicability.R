@@ -163,9 +163,15 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
   )
 
   aoa <- aoa_calcs[[1]]
-  aoa$training <- x$splits[[1]]$data
-  aoa$sds <- purrr::map_dbl(aoa$training, stats::sd, na.rm = TRUE)
-  aoa$means <- purrr::map_dbl(aoa$training, mean, na.rm = TRUE)
+  aoa$training <- if (identical(y, NA_real_)) {
+    x$splits[[1]]$data
+  } else {
+    hardhat::mold(y, x$splits[[1]]$data)$predictors
+  }
+  res <- standardize_and_weight(aoa$training, NULL, tidy_importance(importance))
+  aoa$training <- res$training
+  aoa$sds <- res$sds
+  aoa$means <- res$means
   aoa$d_bar <- mean(unlist(purrr::map(aoa_calcs, purrr::chuck, "d_bar")))
 
   di <- unlist(purrr::map(aoa_calcs, purrr::chuck, "di"))
