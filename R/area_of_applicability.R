@@ -231,7 +231,7 @@ ww_area_of_applicability_impl <- function(training, validation, importance, ...,
   # 2.1 Standardization of predictor variables
   # 2.2 Weighting of variables
   res <- standardize_and_weight(res$training, res$validation, res$importance)
-  di <- calc_di(training, validation, importance)
+  di <- calc_di(res$training, res$validation, res$importance)
   aoa_threshold <- calc_aoa(di$di)
 
   aoa <- hardhat::new_model(
@@ -252,17 +252,16 @@ ww_area_of_applicability_impl <- function(training, validation, importance, ...,
 }
 
 calc_di <- function(training, validation, importance) {
-  res <- ww_area_of_applicability_prep(training, validation, importance)
 
   # 2.3 Multivariate distance calculation
   # Calculates the distance between each point in the `validation` set
   # (or `training`, if `validation` is `NULL`)
   # to the closest point in the training set
-  dk <- calculate_dk(res$training, res$validation)
+  dk <- calculate_dk(training, validation)
 
   # 2.4 Dissimilarity index
   # Find the mean nearest neighbor distance between training points:
-  dists <- proxyC::dist(as.matrix(res$training))
+  dists <- proxyC::dist(as.matrix(training))
   diag(dists) <- NA
   d_bar <- Matrix::mean(dists, na.rm = TRUE)
 

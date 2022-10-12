@@ -17,18 +17,18 @@
       predict(aoa, test)
     Output
       # A tibble: 300 x 2
-             di aoa  
-          <dbl> <lgl>
-       1 0.0589 TRUE 
-       2 0.0232 TRUE 
-       3 0.0324 TRUE 
-       4 0.0311 TRUE 
-       5 0.330  TRUE 
-       6 0.0670 TRUE 
-       7 0.0395 TRUE 
-       8 0.0181 TRUE 
-       9 0.361  TRUE 
-      10 0.0407 TRUE 
+              di aoa  
+           <dbl> <lgl>
+       1 0.0230  TRUE 
+       2 0.00907 TRUE 
+       3 0.0126  TRUE 
+       4 0.0121  TRUE 
+       5 0.129   FALSE
+       6 0.0261  TRUE 
+       7 0.0154  TRUE 
+       8 0.00707 TRUE 
+       9 0.141   FALSE
+      10 0.0159  TRUE 
       # ... with 290 more rows
 
 ---
@@ -46,9 +46,9 @@
        5 0        TRUE 
        6 0        TRUE 
        7 0        TRUE 
-       8 2.95e- 9 TRUE 
-       9 5.22e-10 TRUE 
-      10 4.17e- 9 TRUE 
+       8 1.15e- 9 TRUE 
+       9 2.04e-10 TRUE 
+      10 1.63e- 9 TRUE 
       # ... with 690 more rows
 
 # `new_ww_area_of_applicability` arguments are assigned correctly
@@ -1492,14 +1492,14 @@
     Code
       x$d_bar
     Output
-      [1] 1.261971
+      [1] 3.233198
 
 ---
 
     Code
       x$aoa_threshold
     Output
-      [1] 0.5978109
+      [1] 0.08904517
 
 ---
 
