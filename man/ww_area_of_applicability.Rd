@@ -11,13 +11,13 @@
 \usage{
 ww_area_of_applicability(x, ...)
 
-\method{ww_area_of_applicability}{data.frame}(x, validation = NULL, importance, ...)
+\method{ww_area_of_applicability}{data.frame}(x, testing = NULL, importance, ...)
 
-\method{ww_area_of_applicability}{matrix}(x, validation = NULL, importance, ...)
+\method{ww_area_of_applicability}{matrix}(x, testing = NULL, importance, ...)
 
-\method{ww_area_of_applicability}{formula}(x, data, validation = NULL, importance, ...)
+\method{ww_area_of_applicability}{formula}(x, data, testing = NULL, importance, ...)
 
-\method{ww_area_of_applicability}{recipe}(x, data, validation = NULL, importance, ...)
+\method{ww_area_of_applicability}{recipe}(x, data, testing = NULL, importance, ...)
 
 \method{ww_area_of_applicability}{rset}(x, y = NULL, importance, ...)
 }
@@ -34,7 +34,7 @@ applicability won't be correct.}
 
 \item{...}{Not currently used.}
 
-\item{validation}{A data frame or matrix containing the data used to
+\item{testing}{A data frame or matrix containing the data used to
 validate your model. This should be the same data as used to calculate all
 model accuracy metrics.
 
@@ -47,7 +47,7 @@ applicability.}
 \item{importance}{Either:
 \itemize{
 \item A data.frame with two columns: \code{term}, containing the names of each
-variable in the training and validation data, and \code{estimate}, containing
+variable in the training and testing data, and \code{estimate}, containing
 the (raw or scaled) feature importance for each variable.
 \item An object of class \code{vi} with at least two columns, \code{Variable} and \code{Importance}.
 }
@@ -79,11 +79,13 @@ about the method; it can be used with any type of data.
 }
 \details{
 Predictions made on points "inside" the area of applicability should be as
-accurate as predictions made on the data provided to \code{y} or \code{validation}.
-That means that generally \code{y} or \code{validation} should be your final hold-out
-set, or the assessment set of a cross-validation fold, so that predictions
-on points inside the area of applicability are accurately described by your
-reported model metrics.
+accurate as predictions made on the data provided to \code{testing}.
+That means that generally \code{testing} should be your final hold-out
+set so that predictions on points inside the area of applicability are
+accurately described by your reported model metrics.
+When passing an \code{rset} object to \code{x}, predictions made on points "inside" the
+area of applicability instead should be as accurate as predictions made on
+the assessment sets during cross-validation.
 
 This method assumes your model was fit using dummy variables in the place of
 any non-numeric predictor, and that you have one importance score per

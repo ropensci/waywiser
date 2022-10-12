@@ -38,7 +38,7 @@ test_that("`ww_area_of_applicability` finds 0 distance between identical data", 
 
 })
 
-test_that("`ww_area_of_applicability` works with or without a validation set", {
+test_that("`ww_area_of_applicability` works with or without a testing set", {
 
   expect_error(
     ww_area_of_applicability(y ~ ., train, test, importance),

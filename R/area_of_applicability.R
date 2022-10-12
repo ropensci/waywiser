@@ -6,11 +6,13 @@
 #' about the method; it can be used with any type of data.
 #'
 #' Predictions made on points "inside" the area of applicability should be as
-#' accurate as predictions made on the data provided to `y` or `validation`.
-#' That means that generally `y` or `validation` should be your final hold-out
-#' set, or the assessment set of a cross-validation fold, so that predictions
-#' on points inside the area of applicability are accurately described by your
-#' reported model metrics.
+#' accurate as predictions made on the data provided to `testing`.
+#' That means that generally `testing` should be your final hold-out
+#' set so that predictions on points inside the area of applicability are
+#' accurately described by your reported model metrics.
+#' When passing an `rset` object to `x`, predictions made on points "inside" the
+#' area of applicability instead should be as accurate as predictions made on
+#' the assessment sets during cross-validation.
 #'
 #' @param x Either a data frame, matrix, formula
 #' (specifying predictor terms on the right-hand side), recipe
@@ -32,7 +34,7 @@
 #' @param data The data frame representing your "training" data, when using the
 #'  formula or recipe methods.
 #'
-#' @param validation A data frame or matrix containing the data used to
+#' @param testing A data frame or matrix containing the data used to
 #'  validate your model. This should be the same data as used to calculate all
 #'  model accuracy metrics.
 #'
@@ -45,7 +47,7 @@
 #' @param importance Either:
 #'
 #'   * A data.frame with two columns: `term`, containing the names of each
-#'     variable in the training and validation data, and `estimate`, containing
+#'     variable in the training and testing data, and `estimate`, containing
 #'     the (raw or scaled) feature importance for each variable.
 #'   * An object of class `vi` with at least two columns, `Variable` and `Importance`.
 #'
@@ -109,11 +111,11 @@ ww_area_of_applicability.default <- function(x, ...) {
 
 #' @export
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.data.frame <- function(x, validation = NULL, importance, ...) {
+ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, ...) {
   rlang::check_dots_empty()
   training <- hardhat::mold(x, NA_real_)
-  if (!is.null(validation)) validation <- hardhat::mold(validation, NA_real_)
-  ww_area_of_applicability_impl(training, validation, importance, ...)
+  if (!is.null(testing)) testing <- hardhat::mold(testing, NA_real_)
+  ww_area_of_applicability_impl(training, testing, importance, ...)
 }
 
 #' @export
@@ -122,11 +124,11 @@ ww_area_of_applicability.matrix <- ww_area_of_applicability.data.frame
 
 #' @export
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.formula <- function(x, data, validation = NULL, importance, ...) {
+ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance, ...) {
   rlang::check_dots_empty()
   training <- hardhat::mold(x, data)
-  if (!is.null(validation)) validation <- hardhat::mold(x, validation)
-  ww_area_of_applicability_impl(training, validation, importance, ...)
+  if (!is.null(testing)) testing <- hardhat::mold(x, testing)
+  ww_area_of_applicability_impl(training, testing, importance, ...)
 }
 
 #' @export
@@ -144,18 +146,18 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
     x$splits,
     function(rsplit) {
       training <- rsample::analysis(rsplit)
-      validation <- rsample::assessment(rsplit)
+      testing <- rsample::assessment(rsplit)
 
       if (identical(y, NA_real_)) {
         training <- hardhat::mold(training, y)
-        validation <- hardhat::mold(validation, y)
+        testing <- hardhat::mold(testing, y)
       } else {
         training <- hardhat::mold(y, training)
-        validation <- hardhat::mold(y, validation)
+        testing <- hardhat::mold(y, testing)
       }
       ww_area_of_applicability_impl(
         training,
-        validation,
+        testing,
         importance,
         include_di = TRUE
       )
@@ -210,33 +212,33 @@ tidy_importance.default <- function(importance, ...) {
   )
 }
 
-ww_area_of_applicability_prep <- function(training, validation, importance) {
+ww_area_of_applicability_prep <- function(training, testing, importance) {
   training <- training$predictors
 
-  validation <- check_di_validation(training, validation)
+  testing <- check_di_testing(training, testing)
 
   importance <- check_di_importance(training, importance)
-  check_di_columns_numeric(training, validation)
+  check_di_columns_numeric(training, testing)
 
   list(
     training = training,
-    validation = validation,
+    testing = testing,
     importance = importance
   )
 }
 
-ww_area_of_applicability_impl <- function(training, validation, importance, ..., include_di = FALSE) {
+ww_area_of_applicability_impl <- function(training, testing, importance, ..., include_di = FALSE) {
 
   blueprint <- training$blueprint
-  res <- ww_area_of_applicability_prep(training, validation, importance)
+  res <- ww_area_of_applicability_prep(training, testing, importance)
 
   # Comments reference section numbers from Meyer and Pebesma 2021
   # (doi: 10.1111/2041-210X.13650)
 
   # 2.1 Standardization of predictor variables
   # 2.2 Weighting of variables
-  res <- standardize_and_weight(res$training, res$validation, res$importance)
-  di <- calc_di(res$training, res$validation, res$importance)
+  res <- standardize_and_weight(res$training, res$testing, res$importance)
+  di <- calc_di(res$training, res$testing, res$importance)
   aoa_threshold <- calc_aoa(di$di)
 
   aoa <- hardhat::new_model(
@@ -256,13 +258,13 @@ ww_area_of_applicability_impl <- function(training, validation, importance, ...,
   aoa
 }
 
-calc_di <- function(training, validation, importance) {
+calc_di <- function(training, testing, importance) {
 
   # 2.3 Multivariate distance calculation
-  # Calculates the distance between each point in the `validation` set
-  # (or `training`, if `validation` is `NULL`)
+  # Calculates the distance between each point in the `testing` set
+  # (or `training`, if `testing` is `NULL`)
   # to the closest point in the training set
-  dk <- calculate_dk(training, validation)
+  dk <- calculate_dk(training, testing)
 
   # 2.4 Dissimilarity index
   # Find the mean nearest neighbor distance between training points:
@@ -278,16 +280,16 @@ calc_di <- function(training, validation, importance) {
 
 }
 
-standardize_and_weight <- function(training, validation, importance) {
+standardize_and_weight <- function(training, testing, importance) {
   # Store standard deviations and means of all predictors from training
-  # We'll save these to standardize `validation` and any data passed to `predict`
+  # We'll save these to standardize `testing` and any data passed to `predict`
   # Then scale & center `training`
   sds <- purrr::map_dbl(training, stats::sd, na.rm = TRUE)
   means <- purrr::map_dbl(training, mean, na.rm = TRUE)
   training <- center_and_scale(training, sds, means)
 
   # Re-order `importance`'s rows
-  # so they match the column order of `training` and `validation`
+  # so they match the column order of `training` and `testing`
   importance_order <- purrr::map_dbl(
     names(training),
     ~ which(importance[["term"]] == .x)
@@ -295,18 +297,18 @@ standardize_and_weight <- function(training, validation, importance) {
   importance <- importance[importance_order, ][["estimate"]]
   training <- sweep(training, 2, importance, "*")
 
-  # Now apply all the above to the validation set, if provided
-  if (!is.null(validation)) {
-    # `validation` was re-ordered to match `training` back in the bridge function
+  # Now apply all the above to the testing set, if provided
+  if (!is.null(testing)) {
+    # `testing` was re-ordered to match `training` back in the bridge function
     # so we can scale, center, and weight without needing to worry about
     # column order
-    validation <- center_and_scale(validation, sds, means)
-    validation <- sweep(validation, 2, importance, "*")
+    testing <- center_and_scale(testing, sds, means)
+    testing <- sweep(testing, 2, importance, "*")
   }
 
   list(
     training = training,
-    validation = validation,
+    testing = testing,
     importance = importance,
     sds = sds,
     means = means
@@ -325,43 +327,43 @@ center_and_scale <- function(x, sds, means) {
   sweep(x, 2, means, "-") / sweep(x, 2, sds, "/")
 }
 
-# Calculate minimum distances from each validation point to the training data
+# Calculate minimum distances from each testing point to the training data
 #
-# If `validation` is `NULL`, then find the smallest distances between each
+# If `testing` is `NULL`, then find the smallest distances between each
 # point in `training` and the rest of the training data
-calculate_dk <- function(training, validation = NULL) {
+calculate_dk <- function(training, testing = NULL) {
 
-  if (is.null(validation)) {
+  if (is.null(testing)) {
     distances <- proxyC::dist(as.matrix(training))
     diag(distances) <- NA
   } else {
-    distances <- proxyC::dist(as.matrix(validation), as.matrix(training))
+    distances <- proxyC::dist(as.matrix(testing), as.matrix(training))
   }
 
   apply(distances, 1, min, na.rm = TRUE)
 
 }
 
-check_di_validation <- function(training, validation) {
+check_di_testing <- function(training, testing) {
 
   # If NULL, nothing to validate or re-order, so just return NULL
-  if (is.null(validation)) return(NULL)
+  if (is.null(testing)) return(NULL)
 
-  # Make sure that the validation set has the same columns, in the same order,
+  # Make sure that the testing set has the same columns, in the same order,
   # as the original training data
-  validation <- validation$predictors
+  testing <- testing$predictors
 
   if (
-    !all(names(training)   %in% names(validation)) ||
-    !all(names(validation) %in% names(training))
+    !all(names(training)   %in% names(testing)) ||
+    !all(names(testing) %in% names(training))
   ) {
     rlang::abort(
-      "`training` and `validation` must contain all the same columns"
+      "`training` and `testing` must contain all the same columns"
     )
   }
-  # Re-order validation so that its columns are guaranteed to be in the
+  # Re-order testing so that its columns are guaranteed to be in the
   # same order as those in `training`
-  validation[names(training)]
+  testing[names(training)]
 
 }
 
@@ -371,8 +373,8 @@ check_di_importance <- function(training, importance) {
 
   # Make sure that all training variables have importance values
   #
-  # Because we've already called check_di_validation, this also means all
-  # predictors in `validation` have importance values
+  # Because we've already called check_di_testing, this also means all
+  # predictors in `testing` have importance values
 
   all_importance <- all(names(training) %in% importance[["term"]])
 
@@ -393,10 +395,10 @@ check_di_importance <- function(training, importance) {
   importance
 }
 
-check_di_columns_numeric <- function(training, validation) {
+check_di_columns_numeric <- function(training, testing) {
   col_is_numeric <- c(
     purrr::map_lgl(training, is.numeric),
-    purrr::map_lgl(validation, is.numeric)
+    purrr::map_lgl(testing, is.numeric)
   )
 
   if (!all(col_is_numeric)) {
