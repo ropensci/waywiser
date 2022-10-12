@@ -71,12 +71,11 @@
 #' @family area of applicability functions
 #'
 #' @examplesIf rlang::is_installed("vip")
-#' library(vip)
-#' train <- gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
+#' train <- vip::gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
 #' test <- train[701:1000, ]
 #' train <- train[1:700, ]
 #' pp <- stats::ppr(y ~ ., data = train, nterms = 11)
-#' importance <- vi_permute(
+#' importance <- vip::vi_permute(
 #'   pp,
 #'   target = "y",
 #'   metric = "rsquared",
