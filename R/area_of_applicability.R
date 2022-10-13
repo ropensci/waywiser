@@ -289,19 +289,28 @@ ww_area_of_applicability_impl <- function(training, testing, importance, ..., in
   aoa
 }
 
-calc_di <- function(training, testing, importance) {
+calc_di <- function(training, testing, importance, d_bar) {
 
   # 2.3 Multivariate distance calculation
   # Calculates the distance between each point in the `testing` set
   # (or `training`, if `testing` is `NULL`)
   # to the closest point in the training set
-  dk <- calculate_dk(training, testing)
+  if (is.null(testing)) {
+    distances <- fields::rdist(as.matrix(training))
+    diag(distances) <- NA
+  } else {
+    distances <- fields::rdist(as.matrix(testing), as.matrix(training))
+  }
+
+  dk <- apply(distances, 1, min, na.rm = TRUE)
 
   # 2.4 Dissimilarity index
   # Find the mean nearest neighbor distance between training points:
-  dists <- fields::rdist(as.matrix(training))
-  diag(dists) <- NA
-  d_bar <- Matrix::mean(dists, na.rm = TRUE)
+  if (missing(d_bar)) {
+    dists <- fields::rdist(as.matrix(training))
+    diag(dists) <- NA
+    d_bar <- Matrix::mean(dists, na.rm = TRUE)
+  }
 
   list(
     # Use d_bar to rescale dk from 2.3
@@ -357,23 +366,6 @@ calc_aoa <- function(di) {
 center_and_scale <- function(x, sds, means) {
   x <- sweep(x, 2, means, "-")
   sweep(x, 2, sds, "/")
-}
-
-# Calculate minimum distances from each testing point to the training data
-#
-# If `testing` is `NULL`, then find the smallest distances between each
-# point in `training` and the rest of the training data
-calculate_dk <- function(training, testing = NULL) {
-
-  if (is.null(testing)) {
-    distances <- fields::rdist(as.matrix(training))
-    diag(distances) <- NA
-  } else {
-    distances <- fields::rdist(as.matrix(testing), as.matrix(training))
-  }
-
-  apply(distances, 1, min, na.rm = TRUE)
-
 }
 
 check_di_testing <- function(training, testing) {
@@ -493,8 +485,7 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
     object$importance
   )
 
-  dk <- calculate_dk(weighted$training, weighted$testing)
-  di <- dk / object$d_bar
+  di <- calc_di(weighted$training, weighted$testing, weighted$importance)$di
   aoa <- di <= object$aoa_threshold
 
   predictions <- tibble::tibble(
