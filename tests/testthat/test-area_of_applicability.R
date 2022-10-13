@@ -33,7 +33,8 @@ test_that("`ww_area_of_applicability` finds 0 distance between identical data", 
 
   expect_equal(
     ww_area_of_applicability(y ~ ., train, train, importance)$aoa_threshold,
-    0
+    0,
+    tolerance = 1e-7
   )
 
 })
