@@ -83,15 +83,55 @@ accurate as predictions made on the data provided to \code{testing}.
 That means that generally \code{testing} should be your final hold-out
 set so that predictions on points inside the area of applicability are
 accurately described by your reported model metrics.
-When passing an \code{rset} object to \code{x}, predictions made on points "inside" the
-area of applicability instead should be as accurate as predictions made on
-the assessment sets during cross-validation.
 
 This method assumes your model was fit using dummy variables in the place of
 any non-numeric predictor, and that you have one importance score per
 dummy variable. Having non-numeric predictors will cause this function to
 fail.
 }
+\section{Differences from CAST}{
+
+When passing an \code{rset} object to \code{x}, predictions made on points "inside" the
+area of applicability instead should be as accurate as predictions made on
+the assessment sets during cross-validation. This implementation differs from
+Meyer and Pebesma (2021) (and therefore from CAST) when using cross-validated
+data in order to minimize data leakage. Namely, in order to calculate
+the dissimilarity index \eqn{DI_{k}}, CAST:
+\enumerate{
+\item Rescales all data used for cross validation at once, lumping assessment
+folds in with analysis data,
+\item Calculates a single \eqn{\bar{d}} as the mean distance between all points
+in the rescaled data set, including between points in the same assessment
+fold.
+\item For each point \eqn{k} that's used in an assessment fold, calculates
+\eqn{d_{k}} as the minimum distance between \eqn{k} and any point in its
+corresponding analysis fold.
+\item Calculates \eqn{DI_{k}} by dividing \eqn{d_{k}} by \eqn{\bar{d}} (which
+was partially calculated as the distance between \eqn{k} and the rest of
+the rescaled data).
+}
+
+Because assessment data is used to calculate constants for rescaling analysis
+data and \eqn{\bar{d}}, the assessment data may appear too "similar" to
+the analysis data when calculating \eqn{DI_{k}}. As such, waywiser treats
+each fold in an \code{rset} independently:
+\enumerate{
+\item Each analysis set is rescaled independently.
+\item Separate \eqn{\bar{d}} are calculated for each fold, as the mean distance
+between all points in the analysis set for that fold.
+\item Identically to CAST, \eqn{d_{k}} is the minimum distance between a point
+\eqn{k} in the assessment fold and any point in the
+corresponding analysis fold.
+\item \eqn{DI_{k}} is then found by dividing \eqn{d_{k}} by \eqn{\bar{d}},
+which was calculated indepdently from {k}.
+}
+
+Predictions are made using the full training data set, rescaled once (in
+the same way as CAST), and the mean \eqn{\bar{d}} across folds, under the
+assumption that the "final" model in use will be retrained using the entire
+data set.
+}
+
 \examples{
 \dontshow{if (rlang::is_installed("vip")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 train <- vip::gen_friedman(1000, seed = 101)  # ?vip::gen_friedman

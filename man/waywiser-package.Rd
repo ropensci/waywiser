@@ -24,6 +24,7 @@ Useful links:
 
 Other contributors:
 \itemize{
+  \item Lucas Johnson \email{lucas.k.johnson03@gmail.com} (\href{https://orcid.org/0000-0002-7953-0260}{ORCID}) [contributor]
   \item RStudio [copyright holder, funder]
 }
 

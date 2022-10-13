@@ -10,9 +10,45 @@
 #' That means that generally `testing` should be your final hold-out
 #' set so that predictions on points inside the area of applicability are
 #' accurately described by your reported model metrics.
+#'
+#' @section Differences from CAST:
 #' When passing an `rset` object to `x`, predictions made on points "inside" the
 #' area of applicability instead should be as accurate as predictions made on
-#' the assessment sets during cross-validation.
+#' the assessment sets during cross-validation. This implementation differs from
+#' Meyer and Pebesma (2021) (and therefore from CAST) when using cross-validated
+#' data in order to minimize data leakage. Namely, in order to calculate
+#' the dissimilarity index \eqn{DI_{k}}, CAST:
+#'
+#' 1. Rescales all data used for cross validation at once, lumping assessment
+#'    folds in with analysis data,
+#' 2. Calculates a single \eqn{\bar{d}} as the mean distance between all points
+#'    in the rescaled data set, including between points in the same assessment
+#'    fold.
+#' 3. For each point \eqn{k} that's used in an assessment fold, calculates
+#'    \eqn{d_{k}} as the minimum distance between \eqn{k} and any point in its
+#'    corresponding analysis fold.
+#' 4. Calculates \eqn{DI_{k}} by dividing \eqn{d_{k}} by \eqn{\bar{d}} (which
+#'    was partially calculated as the distance between \eqn{k} and the rest of
+#'    the rescaled data).
+#'
+#' Because assessment data is used to calculate constants for rescaling analysis
+#' data and \eqn{\bar{d}}, the assessment data may appear too "similar" to
+#' the analysis data when calculating \eqn{DI_{k}}. As such, waywiser treats
+#' each fold in an `rset` independently:
+#'
+#' 1. Each analysis set is rescaled independently.
+#' 2. Separate \eqn{\bar{d}} are calculated for each fold, as the mean distance
+#'    between all points in the analysis set for that fold.
+#' 3. Identically to CAST, \eqn{d_{k}} is the minimum distance between a point
+#'    \eqn{k} in the assessment fold and any point in the
+#'    corresponding analysis fold.
+#' 4. \eqn{DI_{k}} is then found by dividing \eqn{d_{k}} by \eqn{\bar{d}},
+#'    which was calculated independently from {k}.
+#'
+#' Predictions are made using the full training data set, rescaled once (in
+#' the same way as CAST), and the mean \eqn{\bar{d}} across folds, under the
+#' assumption that the "final" model in use will be retrained using the entire
+#' data set.
 #'
 #' @param x Either a data frame, matrix, formula
 #' (specifying predictor terms on the right-hand side), recipe
@@ -96,7 +132,7 @@ ww_area_of_applicability <- function(x, ...) {
   UseMethod("ww_area_of_applicability")
 }
 
-#' @export
+#' @exportS3Method
 ww_area_of_applicability.default <- function(x, ...) {
   cls <- class(x)[1]
   rlang::abort(
@@ -109,7 +145,7 @@ ww_area_of_applicability.default <- function(x, ...) {
   )
 }
 
-#' @export
+#' @exportS3Method
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, ...) {
   rlang::check_dots_empty()
@@ -118,11 +154,11 @@ ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, .
   ww_area_of_applicability_impl(training, testing, importance, ...)
 }
 
-#' @export
+#' @exportS3Method
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.matrix <- ww_area_of_applicability.data.frame
 
-#' @export
+#' @exportS3Method
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance, ...) {
   rlang::check_dots_empty()
@@ -131,11 +167,11 @@ ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance
   ww_area_of_applicability_impl(training, testing, importance, ...)
 }
 
-#' @export
+#' @exportS3Method
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.recipe <- ww_area_of_applicability.formula
 
-#' @export
+#' @exportS3Method
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
   rlang::check_dots_empty()
@@ -449,7 +485,7 @@ check_di_columns_numeric <- function(training, testing) {
 #' aoa <- ww_area_of_applicability(y ~ ., train, test, importance = importance)
 #' predict(aoa, test)
 #'
-#' @export
+#' @exportS3Method
 predict.ww_area_of_applicability <- function(object, new_data, ...) {
   forged <- hardhat::forge(new_data, object$blueprint)
 
