@@ -142,6 +142,11 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
 
   if (missing(y) || identical(y, NULL) || identical(y, NA)) y <- NA_real_
 
+  # Standardize ALL data following CAST
+  res <- standardize_and_weight(
+    x$splits[[1]]$data, NULL, tidy_importance(importance)
+  )
+  browser()
   aoa_calcs <- purrr::map(
     x$splits,
     function(rsplit) {
@@ -159,24 +164,22 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
         training,
         testing,
         importance,
-        include_di = TRUE
+        include_di = TRUE,
+        means = res$means,
+        sds = res$sds
       )
     }
   )
 
   aoa <- aoa_calcs[[1]]
-  aoa$training <- if (identical(y, NA_real_)) {
-    x$splits[[1]]$data
-  } else {
-    hardhat::mold(y, x$splits[[1]]$data)$predictors
-  }
-  res <- standardize_and_weight(aoa$training, NULL, tidy_importance(importance))
   aoa$training <- res$training
   aoa$sds <- res$sds
   aoa$means <- res$means
   aoa$d_bar <- mean(unlist(purrr::map(aoa_calcs, purrr::chuck, "d_bar")))
 
-  di <- unlist(purrr::map(aoa_calcs, purrr::chuck, "di"))
+  # di <- unlist(purrr::map(aoa_calcs, purrr::chuck, "di"))
+  dk <- unlist(purrr::map(aoa_calcs, purrr::chuck, "dk"))
+  di <- dk / aoa$d_bar
   aoa["di"] <- NULL
   aoa$aoa_threshold <- calc_aoa(di)
 
@@ -227,7 +230,8 @@ ww_area_of_applicability_prep <- function(training, testing, importance) {
   )
 }
 
-ww_area_of_applicability_impl <- function(training, testing, importance, ..., include_di = FALSE) {
+ww_area_of_applicability_impl <- function(training, testing, importance, ..., include_di = FALSE,
+                                          sds = NULL, means = NULL) {
 
   blueprint <- training$blueprint
   res <- ww_area_of_applicability_prep(training, testing, importance)
@@ -237,22 +241,23 @@ ww_area_of_applicability_impl <- function(training, testing, importance, ..., in
 
   # 2.1 Standardization of predictor variables
   # 2.2 Weighting of variables
-  res <- standardize_and_weight(res$training, res$testing, res$importance)
+  res$training <- center_and_scale(res$training, sds, means)
+  res$testing <- center_and_scale(res$testing, sds, means)
   di <- calc_di(res$training, res$testing, res$importance)
   aoa_threshold <- calc_aoa(di$di)
 
   aoa <- hardhat::new_model(
     training = res$training,
     importance = res$importance,
-    sds = res$sds,
-    means = res$means,
+    sds = sds,
+    means = means,
     di = di$di,
+    dk = di$dk,
     d_bar = di$d_bar,
     aoa_threshold = aoa_threshold,
     blueprint = blueprint,
     class = "ww_area_of_applicability"
   )
-
   if (!include_di) aoa["di"] <- NULL
 
   aoa
@@ -274,6 +279,7 @@ calc_di <- function(training, testing, importance) {
 
   list(
     # Use d_bar to rescale dk from 2.3
+    dk = dk,
     di = dk / d_bar,
     d_bar = d_bar
   )
@@ -324,7 +330,7 @@ calc_aoa <- function(di) {
 }
 
 center_and_scale <- function(x, sds, means) {
-  sweep(x, 2, means, "-") / sweep(x, 2, sds, "/")
+  sweep(x, 2, means, "-") |> sweep(2, sds, "/")
 }
 
 # Calculate minimum distances from each testing point to the training data
@@ -332,7 +338,6 @@ center_and_scale <- function(x, sds, means) {
 # If `testing` is `NULL`, then find the smallest distances between each
 # point in `training` and the rest of the training data
 calculate_dk <- function(training, testing = NULL) {
-
   if (is.null(testing)) {
     distances <- proxyC::dist(as.matrix(training))
     diag(distances) <- NA
