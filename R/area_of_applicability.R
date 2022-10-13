@@ -203,14 +203,10 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
 
   aoa <- aoa_calcs[[1]]
   aoa$training <- if (identical(y, NA_real_)) {
-    x$splits[[1]]$data
+    hardhat::mold(x$splits[[1]]$data, NA_real_)$predictors
   } else {
     hardhat::mold(y, x$splits[[1]]$data)$predictors
   }
-  res <- standardize_and_weight(aoa$training, NULL, tidy_importance(importance))
-  aoa$training <- res$training
-  aoa$sds <- res$sds
-  aoa$means <- res$means
   aoa$d_bar <- mean(unlist(purrr::map(aoa_calcs, purrr::chuck, "d_bar")))
 
   di <- unlist(purrr::map(aoa_calcs, purrr::chuck, "di"))
@@ -267,22 +263,20 @@ ww_area_of_applicability_prep <- function(training, testing, importance) {
 ww_area_of_applicability_impl <- function(training, testing, importance, ..., include_di = FALSE) {
 
   blueprint <- training$blueprint
-  res <- ww_area_of_applicability_prep(training, testing, importance)
+  prep <- ww_area_of_applicability_prep(training, testing, importance)
 
   # Comments reference section numbers from Meyer and Pebesma 2021
   # (doi: 10.1111/2041-210X.13650)
 
   # 2.1 Standardization of predictor variables
   # 2.2 Weighting of variables
-  res <- standardize_and_weight(res$training, res$testing, res$importance)
+  res <- standardize_and_weight(prep$training, prep$testing, prep$importance)
   di <- calc_di(res$training, res$testing, res$importance)
   aoa_threshold <- calc_aoa(di$di)
 
   aoa <- hardhat::new_model(
-    training = res$training,
+    training = prep$training,
     importance = res$importance,
-    sds = res$sds,
-    means = res$means,
     di = di$di,
     d_bar = di$d_bar,
     aoa_threshold = aoa_threshold,
@@ -331,8 +325,8 @@ standardize_and_weight <- function(training, testing, importance) {
     names(training),
     ~ which(importance[["term"]] == .x)
   )
-  importance <- importance[importance_order, ][["estimate"]]
-  training <- sweep(training, 2, importance, "*")
+  importance <- importance[importance_order, ]
+  training <- sweep(training, 2, importance[["estimate"]], "*")
 
   # Now apply all the above to the testing set, if provided
   if (!is.null(testing)) {
@@ -340,7 +334,7 @@ standardize_and_weight <- function(training, testing, importance) {
     # so we can scale, center, and weight without needing to worry about
     # column order
     testing <- center_and_scale(testing, sds, means)
-    testing <- sweep(testing, 2, importance, "*")
+    testing <- sweep(testing, 2, importance[["estimate"]], "*")
   }
 
   list(
@@ -493,11 +487,13 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
   }
 
   predictors <- forged$predictors[names(object$training)]
-  predictors <- as.matrix(predictors)
+  weighted <- standardize_and_weight(
+    object$training,
+    predictors,
+    object$importance
+  )
 
-  predictors <- center_and_scale(predictors, object$sds, object$means)
-  predictors <- sweep(predictors, 2, object$importance, "*")
-  dk <- calculate_dk(object$training, predictors)
+  dk <- calculate_dk(weighted$training, weighted$testing)
   di <- dk / object$d_bar
   aoa <- di <= object$aoa_threshold
 
