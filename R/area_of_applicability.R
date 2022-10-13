@@ -10,17 +10,18 @@
 #' That means that generally `testing` should be your final hold-out
 #' set so that predictions on points inside the area of applicability are
 #' accurately described by your reported model metrics.
-#'
-#' @section Differences from CAST:
 #' When passing an `rset` object to `x`, predictions made on points "inside" the
 #' area of applicability instead should be as accurate as predictions made on
-#' the assessment sets during cross-validation. This implementation differs from
+#' the assessment sets during cross-validation.
+#'
+#' @section Differences from CAST:
+#' This implementation differs from
 #' Meyer and Pebesma (2021) (and therefore from CAST) when using cross-validated
 #' data in order to minimize data leakage. Namely, in order to calculate
 #' the dissimilarity index \eqn{DI_{k}}, CAST:
 #'
 #' 1. Rescales all data used for cross validation at once, lumping assessment
-#'    folds in with analysis data,
+#'    folds in with analysis data.
 #' 2. Calculates a single \eqn{\bar{d}} as the mean distance between all points
 #'    in the rescaled data set, including between points in the same assessment
 #'    fold.

@@ -83,6 +83,9 @@ accurate as predictions made on the data provided to \code{testing}.
 That means that generally \code{testing} should be your final hold-out
 set so that predictions on points inside the area of applicability are
 accurately described by your reported model metrics.
+When passing an \code{rset} object to \code{x}, predictions made on points "inside" the
+area of applicability instead should be as accurate as predictions made on
+the assessment sets during cross-validation.
 
 This method assumes your model was fit using dummy variables in the place of
 any non-numeric predictor, and that you have one importance score per
@@ -91,15 +94,13 @@ fail.
 }
 \section{Differences from CAST}{
 
-When passing an \code{rset} object to \code{x}, predictions made on points "inside" the
-area of applicability instead should be as accurate as predictions made on
-the assessment sets during cross-validation. This implementation differs from
+This implementation differs from
 Meyer and Pebesma (2021) (and therefore from CAST) when using cross-validated
 data in order to minimize data leakage. Namely, in order to calculate
 the dissimilarity index \eqn{DI_{k}}, CAST:
 \enumerate{
 \item Rescales all data used for cross validation at once, lumping assessment
-folds in with analysis data,
+folds in with analysis data.
 \item Calculates a single \eqn{\bar{d}} as the mean distance between all points
 in the rescaled data set, including between points in the same assessment
 fold.
