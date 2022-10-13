@@ -485,7 +485,13 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
     object$importance
   )
 
-  di <- calc_di(weighted$training, weighted$testing, weighted$importance)$di
+  di <- calc_di(
+    weighted$training,
+    weighted$testing,
+    weighted$importance,
+    object$d_bar
+  )$di
+
   aoa <- di <= object$aoa_threshold
 
   predictions <- tibble::tibble(
