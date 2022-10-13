@@ -131,6 +131,10 @@ Predictions are made using the full training data set, rescaled once (in
 the same way as CAST), and the mean \eqn{\bar{d}} across folds, under the
 assumption that the "final" model in use will be retrained using the entire
 data set.
+
+In practice, this means waywiser produces very slightly higher \eqn{\bar{d}}
+values than CAST and a slightly higher area of applicability threshold than
+CAST when using \code{rset} objects.
 }
 
 \examples{

@@ -51,6 +51,10 @@
 #' assumption that the "final" model in use will be retrained using the entire
 #' data set.
 #'
+#' In practice, this means waywiser produces very slightly higher \eqn{\bar{d}}
+#' values than CAST and a slightly higher area of applicability threshold than
+#' CAST when using `rset` objects.
+#'
 #' @param x Either a data frame, matrix, formula
 #' (specifying predictor terms on the right-hand side), recipe
 #' (from [recipes::recipe()], or `rset` object, produced by resampling functions
