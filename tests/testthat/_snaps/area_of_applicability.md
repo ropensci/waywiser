@@ -30,18 +30,18 @@
       predict(aoa, train)
     Output
       # A tibble: 700 x 2
-                    di aoa  
-                 <dbl> <lgl>
-       1 0.00000000906 TRUE 
-       2 0             TRUE 
-       3 0             TRUE 
-       4 0             TRUE 
-       5 0.00000000906 TRUE 
-       6 0.0000000181  TRUE 
-       7 0             TRUE 
-       8 0             TRUE 
-       9 0             TRUE 
-      10 0.00000000906 TRUE 
+            di aoa  
+         <dbl> <lgl>
+       1     0 TRUE 
+       2     0 TRUE 
+       3     0 TRUE 
+       4     0 TRUE 
+       5     0 TRUE 
+       6     0 TRUE 
+       7     0 TRUE 
+       8     0 TRUE 
+       9     0 TRUE 
+      10     0 TRUE 
       # ... with 690 more rows
 
 # `new_ww_area_of_applicability` arguments are assigned correctly

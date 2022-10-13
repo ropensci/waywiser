@@ -90,12 +90,12 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
 
 test_that("`ww_area_of_applicability` can handle different column orders", {
 
-  expect_identical(
+  expect_equal(
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
     ww_area_of_applicability(train[2:11], test[11:2], importance)$aoa_threshold
   )
 
-  expect_identical(
+  expect_equal(
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
     ww_area_of_applicability(train[11:2], test[2:11], importance)$aoa_threshold
   )

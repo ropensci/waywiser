@@ -304,7 +304,7 @@ calc_di <- function(training, testing, importance) {
 
   # 2.4 Dissimilarity index
   # Find the mean nearest neighbor distance between training points:
-  dists <- proxyC::dist(as.matrix(training))
+  dists <- fields::rdist(as.matrix(training))
   diag(dists) <- NA
   d_bar <- Matrix::mean(dists, na.rm = TRUE)
 
@@ -371,10 +371,10 @@ center_and_scale <- function(x, sds, means) {
 calculate_dk <- function(training, testing = NULL) {
 
   if (is.null(testing)) {
-    distances <- proxyC::dist(as.matrix(training))
+    distances <- fields::rdist(as.matrix(training))
     diag(distances) <- NA
   } else {
-    distances <- proxyC::dist(as.matrix(testing), as.matrix(training))
+    distances <- fields::rdist(as.matrix(testing), as.matrix(training))
   }
 
   apply(distances, 1, min, na.rm = TRUE)
@@ -445,11 +445,6 @@ check_di_columns_numeric <- function(training, testing) {
     )
   }
 }
-
-
-# -----------------------------------------------------------------------------
-# ----------------------- Model function interface ----------------------------
-# -----------------------------------------------------------------------------
 
 #' Predict from a `ww_area_of_applicability`
 #'

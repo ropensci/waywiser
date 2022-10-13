@@ -30,10 +30,10 @@ BugReports: https://github.com/mikemahoney218/waywiser/issues
 Depends: 
     R (>= 3.5)
 Imports: 
+    fields,
     glue,
     hardhat,
     Matrix,
-    proxyC,
     purrr,
     rlang,
     rsample,
