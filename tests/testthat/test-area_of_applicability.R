@@ -132,6 +132,11 @@ test_that("normal use", {
 test_that("`new_ww_area_of_applicability` arguments are assigned correctly", {
   x <- ww_area_of_applicability(y ~ ., train, test, importance)
 
+  expect_identical(
+    as.data.frame(x$training),
+    train[2:11]
+  )
+
   skip_on_os("mac")
   expect_equal(names(x), c("training", "importance", "d_bar", "aoa_threshold", "blueprint"))
   expect_snapshot(x$training)
