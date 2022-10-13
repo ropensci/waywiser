@@ -156,7 +156,7 @@ ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, .
   rlang::check_dots_empty()
   training <- hardhat::mold(x, NA_real_)
   if (!is.null(testing)) testing <- hardhat::mold(testing, NA_real_)
-  ww_area_of_applicability_impl(training, testing, importance, ...)
+  create_aoa(training, testing, importance, ...)
 }
 
 #' @exportS3Method
@@ -169,7 +169,7 @@ ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance
   rlang::check_dots_empty()
   training <- hardhat::mold(x, data)
   if (!is.null(testing)) testing <- hardhat::mold(x, testing)
-  ww_area_of_applicability_impl(training, testing, importance, ...)
+  create_aoa(training, testing, importance, ...)
 }
 
 #' @exportS3Method
@@ -196,7 +196,7 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
         training <- hardhat::mold(y, training)
         testing <- hardhat::mold(y, testing)
       }
-      ww_area_of_applicability_impl(
+      create_aoa(
         training,
         testing,
         importance,
@@ -218,158 +218,69 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
   aoa$aoa_threshold <- calc_aoa(di)
 
   aoa
-
 }
 
-tidy_importance <- function(importance, ...) {
-  UseMethod("tidy_importance")
-}
+# Comments reference section numbers from Meyer and Pebesma 2021
+# (doi: 10.1111/2041-210X.13650)
 
-tidy_importance.vi <- function(importance, ...) {
-  data.frame(
-    term = importance[["Variable"]],
-    estimate = importance[["Importance"]]
-  )
-}
+create_aoa <- function(training, testing, importance, ..., include_di = FALSE) {
+  aoa <- prep_tables(training, testing, importance)
 
-tidy_importance.data.frame <- function(importance, ...) {
-  if (!all(c("term", "estimate") %in% names(importance))) {
-    rlang::abort(
-      "'term' and 'estimate' must be columns in `importance`",
-      call = rlang::caller_env()
-    )
-  }
-  importance
-}
+  aoa$d_bar <- calc_d_bar(aoa$transformed_training)
+  aoa$di <- calc_di(aoa$transformed_training, aoa$testing, aoa$d_bar)
+  aoa$aoa_threshold <- calc_aoa(aoa$di)
 
-tidy_importance.default <- function(importance, ...) {
-  cls <- class(importance)[1]
-  rlang::abort(
-    glue::glue("Can't construct a tidy importance table from an object of class {cls}")
-  )
-}
-
-ww_area_of_applicability_prep <- function(training, testing, importance) {
-  training <- training$predictors
-
-  testing <- check_di_testing(training, testing)
-
-  importance <- check_di_importance(training, importance)
-  check_di_columns_numeric(training, testing)
-
-  list(
-    training = training,
-    testing = testing,
-    importance = importance
-  )
-}
-
-ww_area_of_applicability_impl <- function(training, testing, importance, ..., include_di = FALSE) {
-
-  blueprint <- training$blueprint
-  prep <- ww_area_of_applicability_prep(training, testing, importance)
-
-  # Comments reference section numbers from Meyer and Pebesma 2021
-  # (doi: 10.1111/2041-210X.13650)
-
-  # 2.1 Standardization of predictor variables
-  # 2.2 Weighting of variables
-  res <- standardize_and_weight(prep$training, prep$testing, prep$importance)
-  di <- calc_di(res$training, res$testing, res$importance)
-  aoa_threshold <- calc_aoa(di$di)
-
-  aoa <- hardhat::new_model(
-    training = prep$training,
-    importance = res$importance,
-    di = di$di,
-    d_bar = di$d_bar,
-    aoa_threshold = aoa_threshold,
-    blueprint = blueprint,
-    class = "ww_area_of_applicability"
-  )
-
+  aoa <- aoa[c(
+    "training",
+    "importance",
+    "di",
+    "d_bar",
+    "aoa_threshold",
+    "blueprint",
+    "class"
+  )]
   if (!include_di) aoa["di"] <- NULL
 
-  aoa
+  do.call(hardhat::new_model, aoa)
+
 }
 
-calc_di <- function(training, testing, importance, d_bar) {
-
-  # 2.3 Multivariate distance calculation
-  # Calculates the distance between each point in the `testing` set
-  # (or `training`, if `testing` is `NULL`)
-  # to the closest point in the training set
-  if (is.null(testing)) {
-    distances <- fields::rdist(as.matrix(training))
-    diag(distances) <- NA
-  } else {
-    distances <- fields::rdist(as.matrix(testing), as.matrix(training))
-  }
-
-  dk <- apply(distances, 1, min, na.rm = TRUE)
-
-  # 2.4 Dissimilarity index
-  # Find the mean nearest neighbor distance between training points:
-  if (missing(d_bar)) {
-    dists <- fields::rdist(as.matrix(training))
-    diag(dists) <- NA
-    d_bar <- Matrix::mean(dists, na.rm = TRUE)
-  }
-
-  list(
-    # Use d_bar to rescale dk from 2.3
-    di = dk / d_bar,
-    d_bar = d_bar
+prep_tables <- function(training, testing, importance) {
+  aoa <- list(
+    training = training$predictors,
+    class = "ww_area_of_applicability",
+    blueprint = training$blueprint
   )
 
-}
+  aoa$testing <- check_di_testing(aoa$training, testing)
+  check_di_columns_numeric(aoa$training, aoa$testing)
+  aoa$importance <- check_di_importance(aoa$training, importance)
 
-standardize_and_weight <- function(training, testing, importance) {
+  # 2.1 Standardization of predictor variables
   # Store standard deviations and means of all predictors from training
-  # We'll save these to standardize `testing` and any data passed to `predict`
+  # We'll save these to standardize `testing`
   # Then scale & center `training`
-  sds <- purrr::map_dbl(training, stats::sd, na.rm = TRUE)
-  means <- purrr::map_dbl(training, mean, na.rm = TRUE)
-  training <- center_and_scale(training, sds, means)
+  aoa$sds <- purrr::map_dbl(aoa$training, stats::sd, na.rm = TRUE)
+  aoa$means <- purrr::map_dbl(aoa$training, mean, na.rm = TRUE)
 
-  # Re-order `importance`'s rows
-  # so they match the column order of `training` and `testing`
-  importance_order <- purrr::map_dbl(
-    names(training),
-    ~ which(importance[["term"]] == .x)
+  aoa$transformed_training <- standardize_and_weight(
+    aoa$training,
+    aoa$sds,
+    aoa$means,
+    aoa$importance
   )
-  importance <- importance[importance_order, ]
-  training <- sweep(training, 2, importance[["estimate"]], "*")
 
-  # Now apply all the above to the testing set, if provided
-  if (!is.null(testing)) {
-    # `testing` was re-ordered to match `training` back in the bridge function
-    # so we can scale, center, and weight without needing to worry about
-    # column order
-    testing <- center_and_scale(testing, sds, means)
-    testing <- sweep(testing, 2, importance[["estimate"]], "*")
+  if (!is.null(aoa$testing)) {
+    # We can freely overwrite testing here;
+    # we don't need the untransformed version
+    aoa$testing <- standardize_and_weight(
+      aoa$testing,
+      aoa$sds,
+      aoa$means,
+      aoa$importance
+    )
   }
-
-  list(
-    training = training,
-    testing = testing,
-    importance = importance,
-    sds = sds,
-    means = means
-  )
-
-}
-
-calc_aoa <- function(di) {
-  # Section 2.5 in Meyer and Pebesma
-  as.vector(
-    stats::quantile(di, 0.75, na.rm = TRUE) + (1.5 * stats::IQR(di, na.rm = TRUE))
-  )
-}
-
-center_and_scale <- function(x, sds, means) {
-  x <- sweep(x, 2, means, "-")
-  sweep(x, 2, sds, "/")
+  aoa
 }
 
 check_di_testing <- function(training, testing) {
@@ -396,16 +307,13 @@ check_di_testing <- function(training, testing) {
 }
 
 check_di_importance <- function(training, importance) {
-
   importance <- tidy_importance(importance)
 
   # Make sure that all training variables have importance values
   #
   # Because we've already called check_di_testing, this also means all
   # predictors in `testing` have importance values
-
   all_importance <- all(names(training) %in% importance[["term"]])
-
   if (!all_importance) {
     rlang::abort(
       "All predictors must have an importance value in `importance`",
@@ -420,7 +328,13 @@ check_di_importance <- function(training, importance) {
     )
   }
 
-  importance
+  # Re-order `importance`'s rows
+  # so they match the column order of `training` and `testing`
+  importance_order <- purrr::map_dbl(
+    names(training),
+    ~ which(importance[["term"]] == .x)
+  )
+  importance[importance_order, ]
 }
 
 check_di_columns_numeric <- function(training, testing) {
@@ -437,13 +351,57 @@ check_di_columns_numeric <- function(training, testing) {
   }
 }
 
+standardize_and_weight <- function(dat, sds, means, importance) {
+  # 2.1 Standardize
+  dat <- sweep(dat, 2, means, "-")
+  dat <- sweep(dat, 2, sds, "/")
+  # 2.2 Weighting of variables
+  sweep(dat, 2, importance[["estimate"]], "*")
+}
+
+calc_d_bar <- function(training) {
+  # 2.4 Dissimilarity index
+  # Find the mean nearest neighbor distance between training points:
+  dists <- fields::rdist(as.matrix(training))
+  diag(dists) <- NA
+  Matrix::mean(dists, na.rm = TRUE)
+}
+
+calc_di <- function(training, testing, d_bar) {
+  # 2.3 Multivariate distance calculation
+  # Calculates the distance between each point in the `testing` set
+  # (or `training`, if `testing` is `NULL`)
+  # to the closest point in the training set
+  if (is.null(testing)) {
+    distances <- fields::rdist(as.matrix(training))
+    diag(distances) <- NA
+  } else {
+    distances <- fields::rdist(as.matrix(testing), as.matrix(training))
+  }
+
+  dk <- apply(distances, 1, min, na.rm = TRUE)
+
+  if (missing(d_bar)) d_bar <- calc_d_bar(training)
+
+  # Use d_bar to rescale dk from 2.3
+  dk / d_bar
+
+}
+
+calc_aoa <- function(di) {
+  # Section 2.5 in Meyer and Pebesma
+  as.vector(
+    stats::quantile(di, 0.75, na.rm = TRUE) + (1.5 * stats::IQR(di, na.rm = TRUE))
+  )
+}
+
 #' Predict from a `ww_area_of_applicability`
 #'
 #' @param object A `ww_area_of_applicability` object.
 #'
 #' @param new_data A data frame or matrix of new samples.
 #'
-#' @param ... Not used
+#' @param ... Not used.
 #'
 #' @details The function computes the distance indices of the new data and
 #' whether or not they are "inside" the area of applicability.
@@ -483,25 +441,17 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
     )
   }
 
-  prepped <- ww_area_of_applicability_prep(
+  prepped_tables <- prep_tables(
     training,
     new_data,
     object$importance
   )
 
-  weighted <- standardize_and_weight(
-    prepped$training,
-    prepped$testing,
-    prepped$importance
-  )
-
   di <- calc_di(
-    weighted$training,
-    weighted$testing,
-    weighted$importance,
+    prepped_tables$transformed_training,
+    prepped_tables$testing,
     object$d_bar
-  )$di
-
+  )
   aoa <- di <= object$aoa_threshold
 
   predictions <- tibble::tibble(
@@ -509,7 +459,7 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
     aoa = aoa
   )
 
-  hardhat::validate_prediction_size(predictions, prepped$testing)
+  hardhat::validate_prediction_size(predictions, new_data$predictors)
 
   predictions
 }
