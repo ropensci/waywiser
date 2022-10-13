@@ -6,25 +6,76 @@
 #' about the method; it can be used with any type of data.
 #'
 #' Predictions made on points "inside" the area of applicability should be as
-#' accurate as predictions made on the data provided to `y` or `validation`.
-#' That means that generally `y` or `validation` should be your final hold-out
-#' set, or the assessment set of a cross-validation fold, so that predictions
-#' on points inside the area of applicability are accurately described by your
-#' reported model metrics.
+#' accurate as predictions made on the data provided to `testing`.
+#' That means that generally `testing` should be your final hold-out
+#' set so that predictions on points inside the area of applicability are
+#' accurately described by your reported model metrics.
+#' When passing an `rset` object to `x`, predictions made on points "inside" the
+#' area of applicability instead should be as accurate as predictions made on
+#' the assessment sets during cross-validation.
+#'
+#' @section Differences from CAST:
+#' This implementation differs from
+#' Meyer and Pebesma (2021) (and therefore from CAST) when using cross-validated
+#' data in order to minimize data leakage. Namely, in order to calculate
+#' the dissimilarity index \eqn{DI_{k}}, CAST:
+#'
+#' 1. Rescales all data used for cross validation at once, lumping assessment
+#'    folds in with analysis data.
+#' 2. Calculates a single \eqn{\bar{d}} as the mean distance between all points
+#'    in the rescaled data set, including between points in the same assessment
+#'    fold.
+#' 3. For each point \eqn{k} that's used in an assessment fold, calculates
+#'    \eqn{d_{k}} as the minimum distance between \eqn{k} and any point in its
+#'    corresponding analysis fold.
+#' 4. Calculates \eqn{DI_{k}} by dividing \eqn{d_{k}} by \eqn{\bar{d}} (which
+#'    was partially calculated as the distance between \eqn{k} and the rest of
+#'    the rescaled data).
+#'
+#' Because assessment data is used to calculate constants for rescaling analysis
+#' data and \eqn{\bar{d}}, the assessment data may appear too "similar" to
+#' the analysis data when calculating \eqn{DI_{k}}. As such, waywiser treats
+#' each fold in an `rset` independently:
+#'
+#' 1. Each analysis set is rescaled independently.
+#' 2. Separate \eqn{\bar{d}} are calculated for each fold, as the mean distance
+#'    between all points in the analysis set for that fold.
+#' 3. Identically to CAST, \eqn{d_{k}} is the minimum distance between a point
+#'    \eqn{k} in the assessment fold and any point in the
+#'    corresponding analysis fold.
+#' 4. \eqn{DI_{k}} is then found by dividing \eqn{d_{k}} by \eqn{\bar{d}},
+#'    which was calculated independently from {k}.
+#'
+#' Predictions are made using the full training data set, rescaled once (in
+#' the same way as CAST), and the mean \eqn{\bar{d}} across folds, under the
+#' assumption that the "final" model in use will be retrained using the entire
+#' data set.
+#'
+#' In practice, this means waywiser produces very slightly higher \eqn{\bar{d}}
+#' values than CAST and a slightly higher area of applicability threshold than
+#' CAST when using `rset` objects.
 #'
 #' @param x Either a data frame, matrix, formula
-#' (specifying predictor terms on the right-hand side), or recipe
-#' (from [recipes::recipe()].
+#' (specifying predictor terms on the right-hand side), recipe
+#' (from [recipes::recipe()], or `rset` object, produced by resampling functions
+#' from rsample or spatialsample.
 #'
 #' If `x` is a recipe, it should be the same one used to pre-process the data
 #' used in your model. If the recipe used to build the area of applicability
 #' doesn't match the one used to build the model, the returned area of
 #' applicability won't be correct.
 #'
-#' @param data When `x` is a recipe or formula, `data` must be the data frame
-#' representing your "training" data.
+#' @param y Optional: a recipe (from [recipes::recipe()]) or formula.
 #'
-#' @param validation A data frame or matrix containing the data used to
+#' If `y` is a recipe, it should be the same one used to pre-process the data
+#' used in your model. If the recipe used to build the area of applicability
+#' doesn't match the one used to build the model, the returned area of
+#' applicability won't be correct.
+#'
+#' @param data The data frame representing your "training" data, when using the
+#'  formula or recipe methods.
+#'
+#' @param testing A data frame or matrix containing the data used to
 #'  validate your model. This should be the same data as used to calculate all
 #'  model accuracy metrics.
 #'
@@ -37,7 +88,7 @@
 #' @param importance Either:
 #'
 #'   * A data.frame with two columns: `term`, containing the names of each
-#'     variable in the training and validation data, and `estimate`, containing
+#'     variable in the training and testing data, and `estimate`, containing
 #'     the (raw or scaled) feature importance for each variable.
 #'   * An object of class `vi` with at least two columns, `Variable` and `Importance`.
 #'
@@ -63,12 +114,11 @@
 #' @family area of applicability functions
 #'
 #' @examplesIf rlang::is_installed("vip")
-#' library(vip)
-#' train <- gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
+#' train <- vip::gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
 #' test <- train[701:1000, ]
 #' train <- train[1:700, ]
 #' pp <- stats::ppr(y ~ ., data = train, nterms = 11)
-#' importance <- vi_permute(
+#' importance <- vip::vi_permute(
 #'   pp,
 #'   target = "y",
 #'   metric = "rsquared",
@@ -87,7 +137,7 @@ ww_area_of_applicability <- function(x, ...) {
   UseMethod("ww_area_of_applicability")
 }
 
-#' @export
+#' @exportS3Method
 ww_area_of_applicability.default <- function(x, ...) {
   cls <- class(x)[1]
   rlang::abort(
@@ -100,31 +150,76 @@ ww_area_of_applicability.default <- function(x, ...) {
   )
 }
 
-#' @export
+#' @exportS3Method
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.data.frame <- function(x, validation = NULL, importance, ...) {
+ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, ...) {
   rlang::check_dots_empty()
   training <- hardhat::mold(x, NA_real_)
-  if (!is.null(validation)) validation <- hardhat::mold(validation, NA_real_)
-  ww_area_of_applicability_bridge(training, validation, importance, ...)
+  if (!is.null(testing)) testing <- hardhat::mold(testing, NA_real_)
+  ww_area_of_applicability_impl(training, testing, importance, ...)
 }
 
-#' @export
+#' @exportS3Method
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.matrix <- ww_area_of_applicability.data.frame
 
-#' @export
+#' @exportS3Method
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.formula <- function(x, data, validation = NULL, importance, ...) {
+ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance, ...) {
   rlang::check_dots_empty()
   training <- hardhat::mold(x, data)
-  if (!is.null(validation)) validation <- hardhat::mold(x, validation)
-  ww_area_of_applicability_bridge(training, validation, importance, ...)
+  if (!is.null(testing)) testing <- hardhat::mold(x, testing)
+  ww_area_of_applicability_impl(training, testing, importance, ...)
 }
 
-#' @export
+#' @exportS3Method
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.recipe <- ww_area_of_applicability.formula
+
+#' @exportS3Method
+#' @rdname ww_area_of_applicability
+ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
+  rlang::check_dots_empty()
+
+  if (missing(y) || identical(y, NULL) || identical(y, NA)) y <- NA_real_
+
+  aoa_calcs <- purrr::map(
+    x$splits,
+    function(rsplit) {
+      training <- rsample::analysis(rsplit)
+      testing <- rsample::assessment(rsplit)
+
+      if (identical(y, NA_real_)) {
+        training <- hardhat::mold(training, y)
+        testing <- hardhat::mold(testing, y)
+      } else {
+        training <- hardhat::mold(y, training)
+        testing <- hardhat::mold(y, testing)
+      }
+      ww_area_of_applicability_impl(
+        training,
+        testing,
+        importance,
+        include_di = TRUE
+      )
+    }
+  )
+
+  aoa <- aoa_calcs[[1]]
+  aoa$training <- if (identical(y, NA_real_)) {
+    hardhat::mold(x$splits[[1]]$data, NA_real_)$predictors
+  } else {
+    hardhat::mold(y, x$splits[[1]]$data)$predictors
+  }
+  aoa$d_bar <- mean(unlist(purrr::map(aoa_calcs, purrr::chuck, "d_bar")))
+
+  di <- unlist(purrr::map(aoa_calcs, purrr::chuck, "di"))
+  aoa["di"] <- NULL
+  aoa$aoa_threshold <- calc_aoa(di)
+
+  aoa
+
+}
 
 tidy_importance <- function(importance, ...) {
   UseMethod("tidy_importance")
@@ -154,147 +249,149 @@ tidy_importance.default <- function(importance, ...) {
   )
 }
 
-# -----------------------------------------------------------------------------
-# ---------------------- Model function implementation ------------------------
-# -----------------------------------------------------------------------------
+ww_area_of_applicability_prep <- function(training, testing, importance) {
+  training <- training$predictors
 
-ww_area_of_applicability_impl <- function(training, validation, importance, ...) {
+  testing <- check_di_testing(training, testing)
+
+  importance <- check_di_importance(training, importance)
+  check_di_columns_numeric(training, testing)
+
+  list(
+    training = training,
+    testing = testing,
+    importance = importance
+  )
+}
+
+ww_area_of_applicability_impl <- function(training, testing, importance, ..., include_di = FALSE) {
+
+  blueprint <- training$blueprint
+  prep <- ww_area_of_applicability_prep(training, testing, importance)
 
   # Comments reference section numbers from Meyer and Pebesma 2021
   # (doi: 10.1111/2041-210X.13650)
 
   # 2.1 Standardization of predictor variables
+  # 2.2 Weighting of variables
+  res <- standardize_and_weight(prep$training, prep$testing, prep$importance)
+  di <- calc_di(res$training, res$testing, res$importance)
+  aoa_threshold <- calc_aoa(di$di)
 
+  aoa <- hardhat::new_model(
+    training = prep$training,
+    importance = res$importance,
+    di = di$di,
+    d_bar = di$d_bar,
+    aoa_threshold = aoa_threshold,
+    blueprint = blueprint,
+    class = "ww_area_of_applicability"
+  )
+
+  if (!include_di) aoa["di"] <- NULL
+
+  aoa
+}
+
+calc_di <- function(training, testing, importance, d_bar) {
+
+  # 2.3 Multivariate distance calculation
+  # Calculates the distance between each point in the `testing` set
+  # (or `training`, if `testing` is `NULL`)
+  # to the closest point in the training set
+  if (is.null(testing)) {
+    distances <- fields::rdist(as.matrix(training))
+    diag(distances) <- NA
+  } else {
+    distances <- fields::rdist(as.matrix(testing), as.matrix(training))
+  }
+
+  dk <- apply(distances, 1, min, na.rm = TRUE)
+
+  # 2.4 Dissimilarity index
+  # Find the mean nearest neighbor distance between training points:
+  if (missing(d_bar)) {
+    dists <- fields::rdist(as.matrix(training))
+    diag(dists) <- NA
+    d_bar <- Matrix::mean(dists, na.rm = TRUE)
+  }
+
+  list(
+    # Use d_bar to rescale dk from 2.3
+    di = dk / d_bar,
+    d_bar = d_bar
+  )
+
+}
+
+standardize_and_weight <- function(training, testing, importance) {
   # Store standard deviations and means of all predictors from training
-  # We'll save these to standardize `validation` and any data passed to `predict`
+  # We'll save these to standardize `testing` and any data passed to `predict`
   # Then scale & center `training`
   sds <- purrr::map_dbl(training, stats::sd, na.rm = TRUE)
   means <- purrr::map_dbl(training, mean, na.rm = TRUE)
   training <- center_and_scale(training, sds, means)
 
-  # 2.2 Weighting of variables
-
   # Re-order `importance`'s rows
-  # so they match the column order of `training` and `validation`
+  # so they match the column order of `training` and `testing`
   importance_order <- purrr::map_dbl(
     names(training),
     ~ which(importance[["term"]] == .x)
   )
-  importance <- importance[importance_order, ][["estimate"]]
-  training <- sweep(training, 2, importance, "*")
+  importance <- importance[importance_order, ]
+  training <- sweep(training, 2, importance[["estimate"]], "*")
 
-  # Now apply all the above to the validation set, if provided
-  if (!is.null(validation)) {
-    # `validation` was re-ordered to match `training` back in the bridge function
+  # Now apply all the above to the testing set, if provided
+  if (!is.null(testing)) {
+    # `testing` was re-ordered to match `training` back in the bridge function
     # so we can scale, center, and weight without needing to worry about
     # column order
-    validation <- center_and_scale(validation, sds, means)
-    validation <- sweep(validation, 2, importance, "*")
+    testing <- center_and_scale(testing, sds, means)
+    testing <- sweep(testing, 2, importance[["estimate"]], "*")
   }
 
-  # 2.3 Multivariate distance calculation
-
-  # Calculates the distance between each point in the `validation` set
-  # (or `training`, if `validation` is `NULL`)
-  # to the closest point in the training set
-  dk <- calculate_dk(training, validation)
-
-  # 2.4 Dissimilarity index
-
-  # Find the mean nearest neighbor distance between training points:
-  d_bar <- proxyC::dist(as.matrix(training))
-  diag(d_bar) <- NA
-  d_bar <- Matrix::mean(d_bar, na.rm = TRUE)
-
-  # Use it to rescale dk from 2.3
-  di <- dk / d_bar
-
-  # 2.5 Deriving the area of applicability
-  aoa_threshold <- as.vector(
-    stats::quantile(di, 0.75, na.rm = TRUE) + (1.5 * stats::IQR(di, na.rm = TRUE))
-  )
-
-  res <- list(
+  list(
     training = training,
+    testing = testing,
     importance = importance,
     sds = sds,
-    means = means,
-    d_bar = d_bar,
-    aoa_threshold = aoa_threshold
+    means = means
   )
-  res
+
+}
+
+calc_aoa <- function(di) {
+  # Section 2.5 in Meyer and Pebesma
+  as.vector(
+    stats::quantile(di, 0.75, na.rm = TRUE) + (1.5 * stats::IQR(di, na.rm = TRUE))
+  )
 }
 
 center_and_scale <- function(x, sds, means) {
-  sweep(x, 2, means, "-") / sweep(x, 2, sds, "/")
+  x <- sweep(x, 2, means, "-")
+  sweep(x, 2, sds, "/")
 }
 
-# Calculate minimum distances from each validation point to the training data
-#
-# If `validation` is `NULL`, then find the smallest distances between each
-# point in `training` and the rest of the training data
-calculate_dk <- function(training, validation = NULL) {
-
-  if (is.null(validation)) {
-    distances <- proxyC::dist(as.matrix(training))
-    diag(distances) <- NA
-  } else {
-    distances <- proxyC::dist(as.matrix(validation), as.matrix(training))
-  }
-
-  apply(distances, 1, min, na.rm = TRUE)
-
-}
-
-# -----------------------------------------------------------------------------
-# ------------------------ Model function bridge ------------------------------
-# -----------------------------------------------------------------------------
-
-ww_area_of_applicability_bridge <- function(training, validation, importance, ...) {
-
-  blueprint <- training$blueprint
-  training <- training$predictors
-
-  validation <- check_di_validation(training, validation)
-
-  importance <- check_di_importance(training, importance)
-  check_di_columns_numeric(training, validation)
-
-  fit <- ww_area_of_applicability_impl(training, validation, importance, ...)
-
-  hardhat::new_model(
-    training = fit$training,
-    importance = fit$importance,
-    sds = fit$sds,
-    means = fit$means,
-    d_bar = fit$d_bar,
-    aoa_threshold = fit$aoa_threshold,
-    blueprint = blueprint,
-    class = "ww_area_of_applicability"
-  )
-
-}
-
-check_di_validation <- function(training, validation) {
+check_di_testing <- function(training, testing) {
 
   # If NULL, nothing to validate or re-order, so just return NULL
-  if (is.null(validation)) return(NULL)
+  if (is.null(testing)) return(NULL)
 
-  # Make sure that the validation set has the same columns, in the same order,
+  # Make sure that the testing set has the same columns, in the same order,
   # as the original training data
-  validation <- validation$predictors
+  testing <- testing$predictors
 
   if (
-    !all(names(training)   %in% names(validation)) ||
-    !all(names(validation) %in% names(training))
+    !all(names(training)   %in% names(testing)) ||
+    !all(names(testing) %in% names(training))
   ) {
     rlang::abort(
-      "`training` and `validation` must contain all the same columns"
+      "`training` and `testing` must contain all the same columns"
     )
   }
-  # Re-order validation so that its columns are guaranteed to be in the
+  # Re-order testing so that its columns are guaranteed to be in the
   # same order as those in `training`
-  validation[names(training)]
+  testing[names(training)]
 
 }
 
@@ -304,8 +401,8 @@ check_di_importance <- function(training, importance) {
 
   # Make sure that all training variables have importance values
   #
-  # Because we've already called check_di_validation, this also means all
-  # predictors in `validation` have importance values
+  # Because we've already called check_di_testing, this also means all
+  # predictors in `testing` have importance values
 
   all_importance <- all(names(training) %in% importance[["term"]])
 
@@ -326,10 +423,10 @@ check_di_importance <- function(training, importance) {
   importance
 }
 
-check_di_columns_numeric <- function(training, validation) {
+check_di_columns_numeric <- function(training, testing) {
   col_is_numeric <- c(
     purrr::map_lgl(training, is.numeric),
-    purrr::map_lgl(validation, is.numeric)
+    purrr::map_lgl(testing, is.numeric)
   )
 
   if (!all(col_is_numeric)) {
@@ -340,69 +437,13 @@ check_di_columns_numeric <- function(training, validation) {
   }
 }
 
-# -----------------------------------------------------------------------------
-# ---------------------- Model function implementation ------------------------
-# -----------------------------------------------------------------------------
-
-predict_ww_area_of_applicability_numeric <- function(model, predictors) {
-
-  if (!("ww_area_of_applicability" %in% class(model))) {
-    rlang::abort(
-      "`model` must be an `ww_area_of_applicability` object",
-      call = rlang::caller_env()
-    )
-  }
-
-  predictors <- center_and_scale(predictors, model$sds, model$means)
-  predictors <- sweep(predictors, 2, model$importance, "*")
-  dk <- calculate_dk(model$training, predictors)
-  di <- dk / model$d_bar
-  aoa <- di <= model$aoa_threshold
-
-  tibble::tibble(
-    di = di,
-    aoa = aoa
-  )
-}
-
-# -----------------------------------------------------------------------------
-# ------------------------ Model function bridge ------------------------------
-# -----------------------------------------------------------------------------
-
-predict_ww_area_of_applicability_bridge <- function(type, model, predictors) {
-  if (!all(names(model$training) %in% names(predictors))) {
-    rlang::abort(
-      "Some variables used to calculate the DI are missing from `new_data`",
-      call = rlang::caller_env()
-    )
-  }
-  predictors <- predictors[names(model$training)]
-  predictors <- as.matrix(predictors)
-
-  predict_function <- get_aoa_predict_function(type)
-  predictions <- predict_function(model, predictors)
-
-  hardhat::validate_prediction_size(predictions, predictors)
-
-  predictions
-}
-
-# -----------------------------------------------------------------------------
-# ----------------------- Model function interface ----------------------------
-# -----------------------------------------------------------------------------
-
 #' Predict from a `ww_area_of_applicability`
 #'
 #' @param object A `ww_area_of_applicability` object.
 #'
 #' @param new_data A data frame or matrix of new samples.
 #'
-#' @param type A single character. The type of predictions to generate.
-#' Valid options are:
-#'
-#' - `"numeric"` for numeric predictions.
-#'
-#' @param ... Not used, but required for extensibility.
+#' @param ... Not used
 #'
 #' @details The function computes the distance indices of the new data and
 #' whether or not they are "inside" the area of applicability.
@@ -430,11 +471,47 @@ predict_ww_area_of_applicability_bridge <- function(type, model, predictors) {
 #' aoa <- ww_area_of_applicability(y ~ ., train, test, importance = importance)
 #' predict(aoa, test)
 #'
-#' @export
-predict.ww_area_of_applicability <- function(object, new_data, type = "numeric", ...) {
-  forged <- hardhat::forge(new_data, object$blueprint)
-  rlang::arg_match(type, valid_predict_types())
-  predict_ww_area_of_applicability_bridge(type, object, forged$predictors)
+#' @exportS3Method
+predict.ww_area_of_applicability <- function(object, new_data, ...) {
+  new_data <- hardhat::forge(new_data, object$blueprint)
+  training <- hardhat::forge(object$training, object$blueprint)
+
+  if (!all(names(training$predictors) %in% names(new_data$predictors))) {
+    rlang::abort(
+      "Some variables used to calculate the DI are missing from `new_data`",
+      call = rlang::caller_env()
+    )
+  }
+
+  prepped <- ww_area_of_applicability_prep(
+    training,
+    new_data,
+    object$importance
+  )
+
+  weighted <- standardize_and_weight(
+    prepped$training,
+    prepped$testing,
+    prepped$importance
+  )
+
+  di <- calc_di(
+    weighted$training,
+    weighted$testing,
+    weighted$importance,
+    object$d_bar
+  )$di
+
+  aoa <- di <= object$aoa_threshold
+
+  predictions <- tibble::tibble(
+    di = di,
+    aoa = aoa
+  )
+
+  hardhat::validate_prediction_size(predictions, prepped$testing)
+
+  predictions
 }
 
 delayedAssign("score", {
@@ -448,21 +525,6 @@ delayedAssign("score", {
 })
 
 score.ww_area_of_applicability <- predict.ww_area_of_applicability
-
-# -----------------------------------------------------------------------------
-# ----------------------- Helper functions ------------------------------------
-# -----------------------------------------------------------------------------
-
-get_aoa_predict_function <- function(type) {
-  switch(
-    type,
-    numeric = predict_ww_area_of_applicability_numeric
-  )
-}
-
-valid_predict_types <- function() {
-  c("numeric")
-}
 
 #' Print number of predictors and area-of-applicability threshold
 #'

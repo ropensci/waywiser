@@ -6,22 +6,26 @@
 \alias{ww_area_of_applicability.matrix}
 \alias{ww_area_of_applicability.formula}
 \alias{ww_area_of_applicability.recipe}
+\alias{ww_area_of_applicability.rset}
 \title{Find the area of applicability}
 \usage{
 ww_area_of_applicability(x, ...)
 
-\method{ww_area_of_applicability}{data.frame}(x, validation = NULL, importance, ...)
+\method{ww_area_of_applicability}{data.frame}(x, testing = NULL, importance, ...)
 
-\method{ww_area_of_applicability}{matrix}(x, validation = NULL, importance, ...)
+\method{ww_area_of_applicability}{matrix}(x, testing = NULL, importance, ...)
 
-\method{ww_area_of_applicability}{formula}(x, data, validation = NULL, importance, ...)
+\method{ww_area_of_applicability}{formula}(x, data, testing = NULL, importance, ...)
 
-\method{ww_area_of_applicability}{recipe}(x, data, validation = NULL, importance, ...)
+\method{ww_area_of_applicability}{recipe}(x, data, testing = NULL, importance, ...)
+
+\method{ww_area_of_applicability}{rset}(x, y = NULL, importance, ...)
 }
 \arguments{
 \item{x}{Either a data frame, matrix, formula
-(specifying predictor terms on the right-hand side), or recipe
-(from \code{\link[recipes:recipe]{recipes::recipe()}}.
+(specifying predictor terms on the right-hand side), recipe
+(from \code{\link[recipes:recipe]{recipes::recipe()}}, or \code{rset} object, produced by resampling functions
+from rsample or spatialsample.
 
 If \code{x} is a recipe, it should be the same one used to pre-process the data
 used in your model. If the recipe used to build the area of applicability
@@ -30,7 +34,7 @@ applicability won't be correct.}
 
 \item{...}{Not currently used.}
 
-\item{validation}{A data frame or matrix containing the data used to
+\item{testing}{A data frame or matrix containing the data used to
 validate your model. This should be the same data as used to calculate all
 model accuracy metrics.
 
@@ -43,7 +47,7 @@ applicability.}
 \item{importance}{Either:
 \itemize{
 \item A data.frame with two columns: \code{term}, containing the names of each
-variable in the training and validation data, and \code{estimate}, containing
+variable in the training and testing data, and \code{estimate}, containing
 the (raw or scaled) feature importance for each variable.
 \item An object of class \code{vi} with at least two columns, \code{Variable} and \code{Importance}.
 }
@@ -52,8 +56,15 @@ All variables in the training data (\code{x} or \code{data}, depending on the co
 must have a matching importance estimate, and all terms with importance
 estimates must be in the training data.}
 
-\item{data}{When \code{x} is a recipe or formula, \code{data} must be the data frame
-representing your "training" data.}
+\item{data}{The data frame representing your "training" data, when using the
+formula or recipe methods.}
+
+\item{y}{Optional: a recipe (from \code{\link[recipes:recipe]{recipes::recipe()}}) or formula.
+
+If \code{y} is a recipe, it should be the same one used to pre-process the data
+used in your model. If the recipe used to build the area of applicability
+doesn't match the one used to build the model, the returned area of
+applicability won't be correct.}
 }
 \value{
 A \code{ww_area_of_applicability} object, which can be used with \code{\link[=predict]{predict()}}
@@ -68,25 +79,71 @@ about the method; it can be used with any type of data.
 }
 \details{
 Predictions made on points "inside" the area of applicability should be as
-accurate as predictions made on the data provided to \code{y} or \code{validation}.
-That means that generally \code{y} or \code{validation} should be your final hold-out
-set, or the assessment set of a cross-validation fold, so that predictions
-on points inside the area of applicability are accurately described by your
-reported model metrics.
+accurate as predictions made on the data provided to \code{testing}.
+That means that generally \code{testing} should be your final hold-out
+set so that predictions on points inside the area of applicability are
+accurately described by your reported model metrics.
+When passing an \code{rset} object to \code{x}, predictions made on points "inside" the
+area of applicability instead should be as accurate as predictions made on
+the assessment sets during cross-validation.
 
 This method assumes your model was fit using dummy variables in the place of
 any non-numeric predictor, and that you have one importance score per
 dummy variable. Having non-numeric predictors will cause this function to
 fail.
 }
+\section{Differences from CAST}{
+
+This implementation differs from
+Meyer and Pebesma (2021) (and therefore from CAST) when using cross-validated
+data in order to minimize data leakage. Namely, in order to calculate
+the dissimilarity index \eqn{DI_{k}}, CAST:
+\enumerate{
+\item Rescales all data used for cross validation at once, lumping assessment
+folds in with analysis data.
+\item Calculates a single \eqn{\bar{d}} as the mean distance between all points
+in the rescaled data set, including between points in the same assessment
+fold.
+\item For each point \eqn{k} that's used in an assessment fold, calculates
+\eqn{d_{k}} as the minimum distance between \eqn{k} and any point in its
+corresponding analysis fold.
+\item Calculates \eqn{DI_{k}} by dividing \eqn{d_{k}} by \eqn{\bar{d}} (which
+was partially calculated as the distance between \eqn{k} and the rest of
+the rescaled data).
+}
+
+Because assessment data is used to calculate constants for rescaling analysis
+data and \eqn{\bar{d}}, the assessment data may appear too "similar" to
+the analysis data when calculating \eqn{DI_{k}}. As such, waywiser treats
+each fold in an \code{rset} independently:
+\enumerate{
+\item Each analysis set is rescaled independently.
+\item Separate \eqn{\bar{d}} are calculated for each fold, as the mean distance
+between all points in the analysis set for that fold.
+\item Identically to CAST, \eqn{d_{k}} is the minimum distance between a point
+\eqn{k} in the assessment fold and any point in the
+corresponding analysis fold.
+\item \eqn{DI_{k}} is then found by dividing \eqn{d_{k}} by \eqn{\bar{d}},
+which was calculated independently from {k}.
+}
+
+Predictions are made using the full training data set, rescaled once (in
+the same way as CAST), and the mean \eqn{\bar{d}} across folds, under the
+assumption that the "final" model in use will be retrained using the entire
+data set.
+
+In practice, this means waywiser produces very slightly higher \eqn{\bar{d}}
+values than CAST and a slightly higher area of applicability threshold than
+CAST when using \code{rset} objects.
+}
+
 \examples{
 \dontshow{if (rlang::is_installed("vip")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-library(vip)
-train <- gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
+train <- vip::gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
 test <- train[701:1000, ]
 train <- train[1:700, ]
 pp <- stats::ppr(y ~ ., data = train, nterms = 11)
-importance <- vi_permute(
+importance <- vip::vi_permute(
   pp,
   target = "y",
   metric = "rsquared",

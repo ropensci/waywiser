@@ -4,20 +4,14 @@
 \alias{predict.ww_area_of_applicability}
 \title{Predict from a \code{ww_area_of_applicability}}
 \usage{
-\method{predict}{ww_area_of_applicability}(object, new_data, type = "numeric", ...)
+\method{predict}{ww_area_of_applicability}(object, new_data, ...)
 }
 \arguments{
 \item{object}{A \code{ww_area_of_applicability} object.}
 
 \item{new_data}{A data frame or matrix of new samples.}
 
-\item{type}{A single character. The type of predictions to generate.
-Valid options are:
-\itemize{
-\item \code{"numeric"} for numeric predictions.
-}}
-
-\item{...}{Not used, but required for extensibility.}
+\item{...}{Not used}
 }
 \value{
 A tibble of predictions. The number of rows in the tibble is guaranteed
