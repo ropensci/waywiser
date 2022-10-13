@@ -63,24 +63,28 @@ about the method; it can be used with any type of data.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for data.frame</span></span>
-<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, validation <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, testing <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for matrix</span></span>
-<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, validation <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, testing <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for formula</span></span>
-<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, validation <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, testing <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for recipe</span></span>
-<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, validation <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, testing <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for rset</span></span>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
 <dd><p>Either a data frame, matrix, formula
-(specifying predictor terms on the right-hand side), or recipe
-(from <code><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipes::recipe()</a></code>.</p>
+(specifying predictor terms on the right-hand side), recipe
+(from <code><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipes::recipe()</a></code>, or <code>rset</code> object, produced by resampling functions
+from rsample or spatialsample.</p>
 <p>If <code>x</code> is a recipe, it should be the same one used to pre-process the data
 used in your model. If the recipe used to build the area of applicability
 doesn't match the one used to build the model, the returned area of
@@ -91,7 +95,7 @@ applicability won't be correct.</p></dd>
 <dd><p>Not currently used.</p></dd>
 
 
-<dt>validation</dt>
+<dt>testing</dt>
 <dd><p>A data frame or matrix containing the data used to
 validate your model. This should be the same data as used to calculate all
 model accuracy metrics.</p>
@@ -104,7 +108,7 @@ applicability.</p></dd>
 
 <dt>importance</dt>
 <dd><p>Either:</p><ul><li><p>A data.frame with two columns: <code>term</code>, containing the names of each
-variable in the training and validation data, and <code>estimate</code>, containing
+variable in the training and testing data, and <code>estimate</code>, containing
 the (raw or scaled) feature importance for each variable.</p></li>
 <li><p>An object of class <code>vi</code> with at least two columns, <code>Variable</code> and <code>Importance</code>.</p></li>
 </ul><p>All variables in the training data (<code>x</code> or <code>data</code>, depending on the context)
@@ -113,8 +117,16 @@ estimates must be in the training data.</p></dd>
 
 
 <dt>data</dt>
-<dd><p>When <code>x</code> is a recipe or formula, <code>data</code> must be the data frame
-representing your "training" data.</p></dd>
+<dd><p>The data frame representing your "training" data, when using the
+formula or recipe methods.</p></dd>
+
+
+<dt>y</dt>
+<dd><p>Optional: a recipe (from <code><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipes::recipe()</a></code>) or formula.</p>
+<p>If <code>y</code> is a recipe, it should be the same one used to pre-process the data
+used in your model. If the recipe used to build the area of applicability
+doesn't match the one used to build the model, the returned area of
+applicability won't be correct.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -130,15 +142,54 @@ determine if new data is within a model's area of applicability.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Predictions made on points "inside" the area of applicability should be as
-accurate as predictions made on the data provided to <code>y</code> or <code>validation</code>.
-That means that generally <code>y</code> or <code>validation</code> should be your final hold-out
-set, or the assessment set of a cross-validation fold, so that predictions
-on points inside the area of applicability are accurately described by your
-reported model metrics.</p>
+accurate as predictions made on the data provided to <code>testing</code>.
+That means that generally <code>testing</code> should be your final hold-out
+set so that predictions on points inside the area of applicability are
+accurately described by your reported model metrics.
+When passing an <code>rset</code> object to <code>x</code>, predictions made on points "inside" the
+area of applicability instead should be as accurate as predictions made on
+the assessment sets during cross-validation.</p>
 <p>This method assumes your model was fit using dummy variables in the place of
 any non-numeric predictor, and that you have one importance score per
 dummy variable. Having non-numeric predictors will cause this function to
 fail.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="differences-from-cast">Differences from CAST<a class="anchor" aria-label="anchor" href="#differences-from-cast"></a></h2>
+    
+
+<p>This implementation differs from
+Meyer and Pebesma (2021) (and therefore from CAST) when using cross-validated
+data in order to minimize data leakage. Namely, in order to calculate
+the dissimilarity index \(DI_{k}\), CAST:</p><ol><li><p>Rescales all data used for cross validation at once, lumping assessment
+folds in with analysis data.</p></li>
+<li><p>Calculates a single \(\bar{d}\) as the mean distance between all points
+in the rescaled data set, including between points in the same assessment
+fold.</p></li>
+<li><p>For each point \(k\) that's used in an assessment fold, calculates
+\(d_{k}\) as the minimum distance between \(k\) and any point in its
+corresponding analysis fold.</p></li>
+<li><p>Calculates \(DI_{k}\) by dividing \(d_{k}\) by \(\bar{d}\) (which
+was partially calculated as the distance between \(k\) and the rest of
+the rescaled data).</p></li>
+</ol><p>Because assessment data is used to calculate constants for rescaling analysis
+data and \(\bar{d}\), the assessment data may appear too "similar" to
+the analysis data when calculating \(DI_{k}\). As such, waywiser treats
+each fold in an <code>rset</code> independently:</p><ol><li><p>Each analysis set is rescaled independently.</p></li>
+<li><p>Separate \(\bar{d}\) are calculated for each fold, as the mean distance
+between all points in the analysis set for that fold.</p></li>
+<li><p>Identically to CAST, \(d_{k}\) is the minimum distance between a point
+\(k\) in the assessment fold and any point in the
+corresponding analysis fold.</p></li>
+<li><p>\(DI_{k}\) is then found by dividing \(d_{k}\) by \(\bar{d}\),
+which was calculated independently from k.</p></li>
+</ol><p>Predictions are made using the full training data set, rescaled once (in
+the same way as CAST), and the mean \(\bar{d}\) across folds, under the
+assumption that the "final" model in use will be retrained using the entire
+data set.</p>
+<p>In practice, this means waywiser produces very slightly higher \(\bar{d}\)
+values than CAST and a slightly higher area of applicability threshold than
+CAST when using <code>rset</code> objects.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -154,12 +205,11 @@ and Evolution 12(9), pp 1620 - 1633, doi: 10.1111/2041-210X.13650.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/koalaverse/vip/" class="external-link">vip</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/vip/man/gen_friedman.html" class="external-link">gen_friedman</a></span><span class="op">(</span><span class="fl">1000</span>, seed <span class="op">=</span> <span class="fl">101</span><span class="op">)</span>  <span class="co"># ?vip::gen_friedman</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">train</span> <span class="op">&lt;-</span> <span class="fu">vip</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/vip/man/gen_friedman.html" class="external-link">gen_friedman</a></span><span class="op">(</span><span class="fl">1000</span>, seed <span class="op">=</span> <span class="fl">101</span><span class="op">)</span>  <span class="co"># ?vip::gen_friedman</span></span></span>
 <span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">train</span><span class="op">[</span><span class="fl">701</span><span class="op">:</span><span class="fl">1000</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">train</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">700</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">pp</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/ppr.html" class="external-link">ppr</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span>, nterms <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">importance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/vip/man/vi_permute.html" class="external-link">vi_permute</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">importance</span> <span class="op">&lt;-</span> <span class="fu">vip</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/vip/man/vi_permute.html" class="external-link">vi_permute</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">pp</span>,</span></span>
 <span class="r-in"><span>  target <span class="op">=</span> <span class="st">"y"</span>,</span></span>
 <span class="r-in"><span>  metric <span class="op">=</span> <span class="st">"rsquared"</span>,</span></span>
@@ -170,7 +220,7 @@ and Evolution 12(9), pp 1620 - 1633, doi: 10.1111/2041-210X.13650.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Predictors:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Area-of-applicability threshold:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0.0890452</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.3080491</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
