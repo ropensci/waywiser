@@ -330,7 +330,8 @@ calc_aoa <- function(di) {
 }
 
 center_and_scale <- function(x, sds, means) {
-  sweep(x, 2, means, "-") |> sweep(2, sds, "/")
+  x <- sweep(x, 2, means, "-")
+  sweep(x, 2, sds, "/")
 }
 
 # Calculate minimum distances from each testing point to the training data
