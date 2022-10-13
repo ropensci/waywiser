@@ -469,20 +469,26 @@ check_di_columns_numeric <- function(training, testing) {
 #'
 #' @exportS3Method
 predict.ww_area_of_applicability <- function(object, new_data, ...) {
-  forged <- hardhat::forge(new_data, object$blueprint)
+  new_data <- hardhat::forge(new_data, object$blueprint)
+  training <- hardhat::forge(object$training, object$blueprint)
 
-  if (!all(names(object$training) %in% names(forged$predictors))) {
+  if (!all(names(training$predictors) %in% names(new_data$predictors))) {
     rlang::abort(
       "Some variables used to calculate the DI are missing from `new_data`",
       call = rlang::caller_env()
     )
   }
 
-  predictors <- forged$predictors[names(object$training)]
-  weighted <- standardize_and_weight(
-    object$training,
-    predictors,
+  prepped <- ww_area_of_applicability_prep(
+    training,
+    new_data,
     object$importance
+  )
+
+  weighted <- standardize_and_weight(
+    prepped$training,
+    prepped$testing,
+    prepped$importance
   )
 
   di <- calc_di(
@@ -499,7 +505,7 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
     aoa = aoa
   )
 
-  hardhat::validate_prediction_size(predictions, predictors)
+  hardhat::validate_prediction_size(predictions, prepped$testing)
 
   predictions
 }
