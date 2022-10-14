@@ -125,7 +125,8 @@
 #'   pred_wrapper = predict
 #' )
 #'
-#' ww_area_of_applicability(y ~ ., train, test, importance = importance)
+#' aoa <- ww_area_of_applicability(y ~ ., train, test, importance = importance)
+#' predict(aoa, test)
 #'
 #' @references
 #' H. Meyer and E. Pebesma. 2021. "Predicting into unknown space? Estimating
@@ -463,18 +464,6 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
 
   predictions
 }
-
-delayedAssign("score", {
-  if (rlang::is_installed("applicable")) {
-    applicable::score
-  } else {
-    function(object, ...) {
-      UseMethod("score")
-    }
-  }
-})
-
-score.ww_area_of_applicability <- predict.ww_area_of_applicability
 
 #' Print number of predictors and area-of-applicability threshold
 #'
