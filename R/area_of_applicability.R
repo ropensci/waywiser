@@ -299,12 +299,9 @@ check_di_testing <- function(training, testing) {
   # as the original training data
   testing <- testing$predictors
 
-  if (
-    !all(names(training)   %in% names(testing)) ||
-    !all(names(testing) %in% names(training))
-  ) {
+  if (!all(names(training) %in% names(testing))) {
     rlang::abort(
-      "`training` and `testing` must contain all the same columns"
+      "Some columns in `training` were not present in `testing` (or `new_data`)"
     )
   }
   # Re-order testing so that its columns are guaranteed to be in the
