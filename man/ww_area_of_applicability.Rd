@@ -150,7 +150,8 @@ importance <- vip::vi_permute(
   pred_wrapper = predict
 )
 
-ww_area_of_applicability(y ~ ., train, test, importance = importance)
+aoa <- ww_area_of_applicability(y ~ ., train, test, importance = importance)
+predict(aoa, test)
 \dontshow{\}) # examplesIf}
 }
 \references{

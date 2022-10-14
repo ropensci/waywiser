@@ -11,7 +11,7 @@
 
 \item{new_data}{A data frame or matrix of new samples.}
 
-\item{...}{Not used}
+\item{...}{Not used.}
 }
 \value{
 A tibble of predictions. The number of rows in the tibble is guaranteed

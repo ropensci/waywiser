@@ -207,11 +207,20 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
   )
 
   aoa <- aoa_calcs[[1]]
-  aoa$training <- if (identical(y, NA_real_)) {
+  training <- if (identical(y, NA_real_)) {
     hardhat::mold(x$splits[[1]]$data, NA_real_)$predictors
   } else {
     hardhat::mold(y, x$splits[[1]]$data)$predictors
   }
+  aoa$sds <- purrr::map_dbl(training, stats::sd, na.rm = TRUE)
+  aoa$means <- purrr::map_dbl(training, mean, na.rm = TRUE)
+  aoa$transformed_training <- standardize_and_weight(
+    training,
+    aoa$sds,
+    aoa$means,
+    aoa$importance
+  )
+
   aoa$d_bar <- mean(unlist(purrr::map(aoa_calcs, purrr::chuck, "d_bar")))
 
   di <- unlist(purrr::map(aoa_calcs, purrr::chuck, "di"))
@@ -225,28 +234,6 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
 # (doi: 10.1111/2041-210X.13650)
 
 create_aoa <- function(training, testing, importance, ..., include_di = FALSE) {
-  aoa <- prep_tables(training, testing, importance)
-
-  aoa$d_bar <- calc_d_bar(aoa$transformed_training)
-  aoa$di <- calc_di(aoa$transformed_training, aoa$testing, aoa$d_bar)
-  aoa$aoa_threshold <- calc_aoa(aoa$di)
-
-  aoa <- aoa[c(
-    "training",
-    "importance",
-    "di",
-    "d_bar",
-    "aoa_threshold",
-    "blueprint",
-    "class"
-  )]
-  if (!include_di) aoa["di"] <- NULL
-
-  do.call(hardhat::new_model, aoa)
-
-}
-
-prep_tables <- function(training, testing, importance) {
   aoa <- list(
     training = training$predictors,
     class = "ww_area_of_applicability",
@@ -281,7 +268,26 @@ prep_tables <- function(training, testing, importance) {
       aoa$importance
     )
   }
-  aoa
+
+  aoa$d_bar <- calc_d_bar(aoa$transformed_training)
+  aoa$di <- calc_di(aoa$transformed_training, aoa$testing, aoa$d_bar)
+  aoa$aoa_threshold <- calc_aoa(aoa$di)
+
+  aoa <- aoa[c(
+    "transformed_training",
+    "sds",
+    "means",
+    "importance",
+    "di",
+    "d_bar",
+    "aoa_threshold",
+    "blueprint",
+    "class"
+  )]
+  if (!include_di) aoa["di"] <- NULL
+
+  do.call(hardhat::new_model, aoa)
+
 }
 
 check_di_testing <- function(training, testing) {
@@ -433,24 +439,27 @@ calc_aoa <- function(di) {
 #' @exportS3Method
 predict.ww_area_of_applicability <- function(object, new_data, ...) {
   new_data <- hardhat::forge(new_data, object$blueprint)
-  training <- hardhat::forge(object$training, object$blueprint)
 
-  if (!all(names(training$predictors) %in% names(new_data$predictors))) {
+  if (!all(names(object$transformed_training) %in% names(new_data$predictors))) {
     rlang::abort(
       "Some variables used to calculate the DI are missing from `new_data`",
       call = rlang::caller_env()
     )
   }
 
-  prepped_tables <- prep_tables(
-    training,
+  new_data <- check_di_testing(object$transformed_training, new_data)
+  check_di_columns_numeric(object$transformed_training, new_data)
+
+  new_data <- standardize_and_weight(
     new_data,
+    object$sds,
+    object$means,
     object$importance
   )
 
   di <- calc_di(
-    prepped_tables$transformed_training,
-    prepped_tables$testing,
+    object$transformed_training,
+    new_data,
     object$d_bar
   )
   aoa <- di <= object$aoa_threshold
@@ -460,7 +469,7 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
     aoa = aoa
   )
 
-  hardhat::validate_prediction_size(predictions, new_data$predictors)
+  hardhat::validate_prediction_size(predictions, new_data)
 
   predictions
 }
