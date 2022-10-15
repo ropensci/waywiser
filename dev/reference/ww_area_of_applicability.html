@@ -63,19 +63,45 @@ about the method; it can be used with any type of data.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for data.frame</span></span>
-<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, testing <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  testing <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">importance</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  na_action <span class="op">=</span> <span class="va">na.fail</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for matrix</span></span>
-<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, testing <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  testing <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">importance</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  na_action <span class="op">=</span> <span class="va">na.fail</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for formula</span></span>
-<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, testing <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">data</span>,</span>
+<span>  testing <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">importance</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  na_action <span class="op">=</span> <span class="va">na.fail</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for recipe</span></span>
-<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, testing <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">data</span>,</span>
+<span>  testing <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">importance</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  na_action <span class="op">=</span> <span class="va">na.fail</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for rset</span></span>
-<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ww_area_of_applicability</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">importance</span>, <span class="va">...</span>, na_action <span class="op">=</span> <span class="va">na.fail</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -114,6 +140,16 @@ the (raw or scaled) feature importance for each variable.</p></li>
 </ul><p>All variables in the training data (<code>x</code> or <code>data</code>, depending on the context)
 must have a matching importance estimate, and all terms with importance
 estimates must be in the training data.</p></dd>
+
+
+<dt>na_action</dt>
+<dd><p>A function which indicates what should happen when the data
+(any of <code>x</code>, <code>data</code>, or <code>testing</code>) contain NAs. The default is <code>na.fail</code>;
+you may wish to set it to <code>na.omit</code> or any of the functions from the "zoo"
+package. This function ignores the value of <code>options("na.action")</code> in order
+to make cross-computer (and cross-session) results more stable. Note that
+this argument only impacts fitting the area of applicability and has no
+impact on predictions.</p></dd>
 
 
 <dt>data</dt>
