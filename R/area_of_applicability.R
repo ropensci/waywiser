@@ -98,6 +98,14 @@
 #'
 #' @param ... Not currently used.
 #'
+#' @param na_action A function which indicates what should happen when the data
+#' (any of `x`, `data`, or `testing`) contain NAs. The default is `na.fail`;
+#' you may wish to set it to `na.omit` or any of the functions from the "zoo"
+#' package. This function ignores the value of `options("na.action")` in order
+#' to make cross-computer (and cross-session) results more stable. Note that
+#' this argument only impacts fitting the area of applicability and has no
+#' impact on predictions.
+#'
 #' @details
 #'
 #' This method assumes your model was fit using dummy variables in the place of
@@ -153,11 +161,11 @@ ww_area_of_applicability.default <- function(x, ...) {
 
 #' @exportS3Method
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, ...) {
+ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, ..., na_action = na.fail) {
   rlang::check_dots_empty()
   training <- hardhat::mold(x, NA_real_)
   if (!is.null(testing)) testing <- hardhat::mold(testing, NA_real_)
-  create_aoa(training, testing, importance, ...)
+  create_aoa(training, testing, importance, ..., na_action = na_action)
 }
 
 #' @exportS3Method
@@ -166,11 +174,11 @@ ww_area_of_applicability.matrix <- ww_area_of_applicability.data.frame
 
 #' @exportS3Method
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance, ...) {
+ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance, ..., na_action = na.fail) {
   rlang::check_dots_empty()
   training <- hardhat::mold(x, data)
   if (!is.null(testing)) testing <- hardhat::mold(x, testing)
-  create_aoa(training, testing, importance, ...)
+  create_aoa(training, testing, importance, ..., na_action = na_action)
 }
 
 #' @exportS3Method
@@ -179,7 +187,7 @@ ww_area_of_applicability.recipe <- ww_area_of_applicability.formula
 
 #' @exportS3Method
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
+ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_action = na.fail) {
   rlang::check_dots_empty()
 
   if (missing(y) || identical(y, NULL) || identical(y, NA)) y <- NA_real_
@@ -201,7 +209,8 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
         training,
         testing,
         importance,
-        include_di = TRUE
+        include_di = TRUE,
+        na_action = na_action
       )
     }
   )
@@ -233,14 +242,41 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ...) {
 # Comments reference section numbers from Meyer and Pebesma 2021
 # (doi: 10.1111/2041-210X.13650)
 
-create_aoa <- function(training, testing, importance, ..., include_di = FALSE) {
+create_aoa <- function(training, testing, importance, na_action, ..., include_di = FALSE) {
   aoa <- list(
     training = training$predictors,
     class = "ww_area_of_applicability",
     blueprint = training$blueprint
   )
+  tryCatch(
+    aoa$training <- do.call(na_action, list(aoa$training)),
+    error = function(e) {
+      rlang::abort(
+        c(
+          "Missing values in the training set data (either `x` or `data`).",
+          i = "Either process your data to fix the NA values or set `na_action`."
+        ),
+        call = rlang::caller_env()
+      )
+    }
+  )
 
   aoa$testing <- check_di_testing(aoa$training, testing)
+  if (!is.null(aoa$testing)) {
+    tryCatch(
+      aoa$testing <- do.call(na_action, list(aoa$testing)),
+      error = function(e) {
+        rlang::abort(
+          c(
+            "Missing values in the test set data (either `x` or `testing`).",
+            i = "Either process your data to fix the NA values or set `na_action`."
+          ),
+          call = rlang::caller_env()
+        )
+      }
+    )
+
+  }
   check_di_columns_numeric(aoa$training, aoa$testing)
   aoa$importance <- check_di_importance(aoa$training, importance)
 
@@ -301,7 +337,8 @@ check_di_testing <- function(training, testing) {
 
   if (!all(names(training) %in% names(testing))) {
     rlang::abort(
-      "Some columns in `training` were not present in `testing` (or `new_data`)"
+      "Some columns in `training` were not present in `testing` (or `new_data`).",
+      call = rlang::caller_env(2)
     )
   }
   # Re-order testing so that its columns are guaranteed to be in the
@@ -320,15 +357,16 @@ check_di_importance <- function(training, importance) {
   all_importance <- all(names(training) %in% importance[["term"]])
   if (!all_importance) {
     rlang::abort(
-      "All predictors must have an importance value in `importance`",
-      call = rlang::caller_env()
+      "All predictors must have an importance value in `importance`.",
+      call = rlang::caller_env(2)
     )
   }
 
   all_variables <- all(importance[["term"]] %in% names(training))
   if (!all_variables) {
     rlang::abort(
-      "All variables with an importance value in `importance` must be included as predictors"
+      "All variables with an importance value in `importance` must be included as predictors.",
+      call = rlang::caller_env(2)
     )
   }
 
@@ -349,8 +387,8 @@ check_di_columns_numeric <- function(training, testing) {
 
   if (!all(col_is_numeric)) {
     rlang::abort(
-      "All predictors must be numeric",
-      call = rlang::caller_env()
+      "All predictors must be numeric.",
+      call = rlang::caller_env(2)
     )
   }
 }
@@ -412,8 +450,19 @@ calc_aoa <- function(di) {
 #'
 #' @return
 #'
-#' A tibble of predictions. The number of rows in the tibble is guaranteed
-#' to be the same as the number of rows in `new_data`.
+#' A tibble of predictions, with two columns: `di`, numeric, contains the
+#' "dissimilarity index" of each point in `new_data`, while `aoa`, logical,
+#' contains whether a row is inside (`TRUE`) or outside (`FALSE`) the area of
+#' applicability.
+#'
+#' Note that this function is often called using [raster::predict()] or
+#' [terra::predict()], in which case `aoa` will be converted to numeric
+#' implicitly; `1` values correspond to cells "inside" the area of applicability
+#' and `0` corresponds to cells "outside" the AOA.
+#'
+#' The number of rows in the tibble is guaranteed
+#' to be the same as the number of rows in `new_data`. Rows with `NA` predictor
+#' values will have `NA` `di` and `aoa` values.
 #'
 #' @family area of applicability functions
 #'
@@ -437,14 +486,9 @@ calc_aoa <- function(di) {
 predict.ww_area_of_applicability <- function(object, new_data, ...) {
   new_data <- hardhat::forge(new_data, object$blueprint)
 
-  if (!all(names(object$transformed_training) %in% names(new_data$predictors))) {
-    rlang::abort(
-      "Some variables used to calculate the DI are missing from `new_data`",
-      call = rlang::caller_env()
-    )
-  }
-
   new_data <- check_di_testing(object$transformed_training, new_data)
+  existing_new_data <- complete.cases(new_data)
+
   check_di_columns_numeric(object$transformed_training, new_data)
 
   new_data <- standardize_and_weight(
@@ -454,17 +498,18 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
     object$importance
   )
 
-  di <- calc_di(
+  predictions <- tibble::tibble(
+    di = NA_real_,
+    aoa = NA,
+    .rows = nrow(new_data)
+  )
+
+  predictions[existing_new_data, ]$di <- calc_di(
     object$transformed_training,
-    new_data,
+    new_data[existing_new_data, ],
     object$d_bar
   )
-  aoa <- di <= object$aoa_threshold
-
-  predictions <- tibble::tibble(
-    di = di,
-    aoa = aoa
-  )
+  predictions$aoa <- predictions$di <= object$aoa_threshold
 
   hardhat::validate_prediction_size(predictions, new_data)
 
