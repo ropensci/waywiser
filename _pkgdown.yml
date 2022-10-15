@@ -24,14 +24,16 @@ figures:
   fig.height: ~
 
 reference:
-  - title: Autocorrelation Metrics
+  - title: Area of applicability functions
+    contents:
+      - contains("ww_area_of_applicability")
+  - title: Autocorrelation metrics
     contents:
       - contains("global_moran")
       - contains("local_moran")
       - contains("global_geary")
       - contains("local_geary")
       - contains("local_getis")
-      - contains("ww_area_of_applicability")
   - title: Utilities
     contents:
       - starts_with("ww_build")

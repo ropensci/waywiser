@@ -4,6 +4,104 @@
     i `ww_area_of_applicability()` can only handle data.frames, matrices, formulas, and recipes.
     x `x` is a numeric
 
+# NAs are handled
+
+    Missing values in the training set data (either `x` or `data`).
+    i Either process your data to fix the NA values or set `na_action`.
+
+---
+
+    Code
+      ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit)
+    Output
+      # Predictors:
+         10
+      Area-of-applicability threshold:
+         0.3083
+
+---
+
+    Missing values in the training set data (either `x` or `data`).
+    i Either process your data to fix the NA values or set `na_action`.
+
+---
+
+    Code
+      ww_area_of_applicability(train[2:11], test[2:11], importance, na_action = na.omit)
+    Output
+      # Predictors:
+         10
+      Area-of-applicability threshold:
+         0.3083
+
+---
+
+    Missing values in the training set data (either `x` or `data`).
+    i Either process your data to fix the NA values or set `na_action`.
+
+---
+
+    Code
+      ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]),
+      importance, na_action = na.omit)
+    Output
+      # Predictors:
+         10
+      Area-of-applicability threshold:
+         0.3083
+
+---
+
+    Missing values in the training set data (either `x` or `data`).
+    i Either process your data to fix the NA values or set `na_action`.
+
+---
+
+    Code
+      ww_area_of_applicability(comb_rset_no_y, importance = importance, na_action = na.omit)
+    Output
+      # Predictors:
+         10
+      Area-of-applicability threshold:
+         0.3083
+
+---
+
+    Missing values in the training set data (either `x` or `data`).
+    i Either process your data to fix the NA values or set `na_action`.
+
+---
+
+    Code
+      ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance,
+      na_action = na.omit)
+    Output
+      # Predictors:
+         10
+      Area-of-applicability threshold:
+         0.3083
+
+---
+
+    Code
+      predict(ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit),
+      test)
+    Output
+      # A tibble: 300 x 2
+              di aoa  
+           <dbl> <lgl>
+       1 NA      NA   
+       2  0.191  TRUE 
+       3  0.190  TRUE 
+       4  0.0802 TRUE 
+       5  0.141  TRUE 
+       6  0.288  TRUE 
+       7  0.178  TRUE 
+       8  0.205  TRUE 
+       9  0.134  TRUE 
+      10  0.177  TRUE 
+      # ... with 290 more rows
+
 # normal use
 
     Code

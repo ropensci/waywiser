@@ -14,8 +14,19 @@
 \item{...}{Not used.}
 }
 \value{
-A tibble of predictions. The number of rows in the tibble is guaranteed
-to be the same as the number of rows in \code{new_data}.
+A tibble of predictions, with two columns: \code{di}, numeric, contains the
+"dissimilarity index" of each point in \code{new_data}, while \code{aoa}, logical,
+contains whether a row is inside (\code{TRUE}) or outside (\code{FALSE}) the area of
+applicability.
+
+Note that this function is often called using \code{\link[raster:predict]{raster::predict()}} or
+\code{\link[terra:predict]{terra::predict()}}, in which case \code{aoa} will be converted to numeric
+implicitly; \code{1} values correspond to cells "inside" the area of applicability
+and \code{0} corresponds to cells "outside" the AOA.
+
+The number of rows in the tibble is guaranteed
+to be the same as the number of rows in \code{new_data}. Rows with \code{NA} predictor
+values will have \code{NA} \code{di} and \code{aoa} values.
 }
 \description{
 Predict from a \code{ww_area_of_applicability}

@@ -68,8 +68,18 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
   )
 
   expect_identical(
+    predict(methods[[1]], test),
+    predict(methods[[2]], test)
+  )
+
+  expect_identical(
     head(methods[[2]], -1),
     head(methods[[3]], -1)
+  )
+
+  expect_identical(
+    predict(methods[[2]], test),
+    predict(methods[[3]], test)
   )
 
   # Comparing rset method to the others --
@@ -81,10 +91,21 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
   )
 
   skip_if_not_installed("recipes")
+  methods[[5]] <- ww_area_of_applicability(
+    comb_rset,
+    recipes::recipe(y ~ ., train),
+    importance = importance
+  )
   expect_identical(
     head(methods[[4]], -1),
-    head(ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance), -1)
+    head(methods[[5]], -1)
   )
+
+  expect_identical(
+    predict(methods[[4]], test),
+    predict(methods[[5]], test)
+  )
+
 
 })
 
@@ -98,6 +119,69 @@ test_that("`ww_area_of_applicability` can handle different column orders", {
   expect_equal(
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
     ww_area_of_applicability(train[11:2], test[2:11], importance)$aoa_threshold
+  )
+
+})
+
+test_that("NAs are handled", {
+
+  train[1, 2] <- NA
+  test[1, 2] <- NA
+  comb_rset <- rsample::make_splits(train, test)
+  comb_rset <- rsample::manual_rset(list(comb_rset), "Fold1")
+  comb_rset_no_y <- rsample::make_splits(train[2:11], test[2:11])
+  comb_rset_no_y <- rsample::manual_rset(list(comb_rset_no_y), "Fold1")
+
+  expect_snapshot_error(
+    ww_area_of_applicability(y ~ ., train, test, importance)
+  )
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit)
+  )
+
+  expect_snapshot_error(
+    ww_area_of_applicability(train[2:11], test[2:11], importance)
+  )
+  expect_snapshot(
+    ww_area_of_applicability(train[2:11], test[2:11], importance, na_action = na.omit)
+  )
+
+  expect_snapshot_error(
+    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance)
+  )
+  expect_snapshot(
+    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance, na_action = na.omit)
+  )
+
+  expect_snapshot_error(
+    ww_area_of_applicability(comb_rset_no_y, importance = importance)
+  )
+  expect_snapshot(
+    ww_area_of_applicability(comb_rset_no_y, importance = importance, na_action = na.omit)
+  )
+
+  skip_if_not_installed("recipes")
+  expect_snapshot_error(
+    ww_area_of_applicability(
+      comb_rset,
+      recipes::recipe(y ~ ., train),
+      importance = importance
+    )
+  )
+  expect_snapshot(
+    ww_area_of_applicability(
+      comb_rset,
+      recipes::recipe(y ~ ., train),
+      importance = importance,
+      na_action = na.omit
+    )
+  )
+
+  expect_snapshot(
+    predict(
+      ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit),
+      test
+    )
   )
 
 })
