@@ -23,7 +23,7 @@ measures of spatial autocorrelation provided by
 [spdep](https://cran.r-project.org/package=spdep) and by providing an
 implementation of the “area of applicability” as defined by [Meyer and
 Pebesma (2021) \<doi:
-10.1111/2041-210X.13650\>](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13650).
+10.1111/2041-210X.13650\>](https://doi.org/10.1111/2041-210X.13650).
 
 ## Installation
 
