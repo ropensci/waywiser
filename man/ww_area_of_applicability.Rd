@@ -101,8 +101,8 @@ doesn't match the one used to build the model, the returned area of
 applicability won't be correct.}
 }
 \value{
-A \code{ww_area_of_applicability} object, which can be used with \code{\link[=predict]{predict()}}
-to calculate the distance of new data to the original training data, and
+A \code{ww_area_of_applicability} object, which can be used with \code{\link[=predict]{predict()}} to
+calculate the distance of new data to the original training data, and
 determine if new data is within a model's area of applicability.
 }
 \description{
