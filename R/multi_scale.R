@@ -28,6 +28,9 @@
 #' @param grids Optionally, a list of pre-computed `sf` or `sfc` objects
 #' specifying polygon boundaries to
 #' @inheritParams sf::st_make_grid
+#' @param aggregation_function The function to use to aggregate predictions and
+#' true values at various scales, by default [mean()]. You can pass any function
+#' which takes a single vector and returns a scalar.
 #'
 #' @return A tibble with five columns: `.metric`, with the name
 #' of the metric that the row describes; `.estimator`, with the name of the
@@ -68,7 +71,8 @@ ww_multi_scale <- function(
     estimate,
     metrics = list(yardstick::rmse, yardstick::mae),
     grids = NULL,
-    ...
+    ...,
+    aggregation_function = mean
 ) {
   .truth <- .estimate <- NULL
 
@@ -116,8 +120,8 @@ ww_multi_scale <- function(
         idx_list,
         function(idx) dplyr::summarise(
           data[idx, , drop = FALSE],
-          .truth = mean({{ truth }}),
-          .estimate = mean({{ estimate }})
+          .truth = rlang::exec(aggregation_function, {{ truth }}),
+          .estimate = rlang::exec(mean, {{ estimate }})
         )
       )
     }
