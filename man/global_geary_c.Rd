@@ -81,15 +81,12 @@ Calculate the global Geary's C statistic for model residuals.
 \code{ww_global_geary()} returns both.
 }
 \examples{
-\dontshow{if (rlang::is_installed("sfdep")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-data(guerry, package = "sfdep")
 
-guerry_modeled <- guerry
-guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
-guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
+guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
+guerry$predictions <- predict(guerry_lm, guerry)
 
 \dontrun{
-ww_global_geary(guerry_modeled, crime_pers, predictions)
+ww_global_geary(guerry, Crm_prs, predictions)
 }
-\dontshow{\}) # examplesIf}
+
 }

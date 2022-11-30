@@ -19,16 +19,16 @@
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
 #'
-#' @examplesIf rlang::is_installed("sfdep")
-#' data(guerry, package = "sfdep")
+#' @examples
 #'
-#' guerry_modeled <- guerry
-#' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
-#' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 #'
-#' ww_local_getis_ord_g(guerry_modeled, crime_pers, predictions)
-#' ww_local_getis_ord(guerry_modeled, crime_pers, predictions)
-#' ww_local_getis_ord(guerry_modeled, crime_pers, predictions, include_self = TRUE)
+#'
+#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
+#' guerry$predictions <- predict(guerry_lm, guerry)
+#'
+#' ww_local_getis_ord_g(guerry, Crm_prs, predictions)
+#' ww_local_getis_ord(guerry, Crm_prs, predictions)
+#' ww_local_getis_ord(guerry, Crm_prs, predictions, include_self = TRUE)
 #'
 #' @rdname local_getis_ord_g
 #' @export

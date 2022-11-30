@@ -1,7 +1,7 @@
 # Local geary statistics are stable
 
     Code
-      df_local_c <- ww_local_geary_c(guerry_modeled, crime_pers, predictions)
+      df_local_c <- ww_local_geary_c(guerry_modeled, Crm_prs, predictions)
       df_local_c[1:3]
     Output
       # A tibble: 85 x 3
@@ -22,7 +22,7 @@
 ---
 
     Code
-      df_local_c_p <- ww_local_geary_pvalue(guerry_modeled, crime_pers, predictions)
+      df_local_c_p <- ww_local_geary_pvalue(guerry_modeled, Crm_prs, predictions)
       df_local_c_p[1:3]
     Output
       # A tibble: 85 x 3
@@ -43,7 +43,7 @@
 ---
 
     Code
-      df_local_c_both <- ww_local_geary(guerry_modeled, crime_pers, predictions)
+      df_local_c_both <- ww_local_geary(guerry_modeled, Crm_prs, predictions)
       df_local_c_both[1:3]
     Output
       # A tibble: 170 x 3
@@ -64,7 +64,7 @@
 ---
 
     Code
-      (vec_local_c <- ww_local_geary_c_vec(guerry_modeled$crime_pers, guerry_modeled$
+      (vec_local_c <- ww_local_geary_c_vec(guerry_modeled$Crm_prs, guerry_modeled$
         predictions, weights))
     Output
        [1] 0.981119438 0.836402177 0.707464373 0.108332465 0.264075824 1.361485477
@@ -86,7 +86,7 @@
 ---
 
     Code
-      (vec_local_c_p <- ww_local_geary_pvalue_vec(guerry_modeled$crime_pers,
+      (vec_local_c_p <- ww_local_geary_pvalue_vec(guerry_modeled$Crm_prs,
       guerry_modeled$predictions, weights))
     Output
        [1] 0.20234363 0.25519649 0.16396588 0.14117561 0.27656178 0.13803991

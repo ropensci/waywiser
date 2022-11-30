@@ -1,7 +1,7 @@
 # Global Geary statistics are stable
 
     Code
-      df_global_c <- ww_global_geary_c(guerry_modeled, crime_pers, predictions)
+      df_global_c <- ww_global_geary_c(guerry_modeled, Crm_prs, predictions)
       df_global_c[1:3]
     Output
       # A tibble: 1 x 3
@@ -12,7 +12,7 @@
 ---
 
     Code
-      df_global_c_p <- ww_global_geary_pvalue(guerry_modeled, crime_pers, predictions)
+      df_global_c_p <- ww_global_geary_pvalue(guerry_modeled, Crm_prs, predictions)
       df_global_c_p[1:3]
     Output
       # A tibble: 1 x 3
@@ -23,7 +23,7 @@
 ---
 
     Code
-      df_global_c_both <- ww_global_geary(guerry_modeled, crime_pers, predictions)
+      df_global_c_both <- ww_global_geary(guerry_modeled, Crm_prs, predictions)
       df_global_c_both[1:3]
     Output
       # A tibble: 2 x 3
@@ -35,15 +35,15 @@
 ---
 
     Code
-      (vec_global_c <- ww_global_geary_c_vec(guerry_modeled$crime_pers,
-      guerry_modeled$predictions, weights))
+      (vec_global_c <- ww_global_geary_c_vec(guerry_modeled$Crm_prs, guerry_modeled$
+        predictions, weights))
     Output
       [1] 0.5654044
 
 ---
 
     Code
-      (vec_global_c_p <- ww_global_geary_pvalue_vec(guerry_modeled$crime_pers,
+      (vec_global_c_p <- ww_global_geary_pvalue_vec(guerry_modeled$Crm_prs,
       guerry_modeled$predictions, weights))
     Output
       [1] 7.548865e-10
