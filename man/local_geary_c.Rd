@@ -73,14 +73,13 @@ Calculate the local Geary's C statistic for model residuals.
 \code{ww_local_geary()} returns both.
 }
 \examples{
-\dontshow{if (rlang::is_installed("sfdep")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-data(guerry, package = "sfdep")
 
-guerry_modeled <- guerry
-guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
-guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
-ww_local_geary_c(guerry_modeled, crime_pers, predictions)
-ww_local_geary(guerry_modeled, crime_pers, predictions)
-\dontshow{\}) # examplesIf}
+
+guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
+guerry$predictions <- predict(guerry_lm, guerry)
+
+ww_local_geary_c(guerry, Crm_prs, predictions)
+ww_local_geary(guerry, Crm_prs, predictions)
+
 }

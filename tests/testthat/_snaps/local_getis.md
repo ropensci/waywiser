@@ -1,7 +1,7 @@
 # Local Getis-Ord statistics are stable
 
     Code
-      df_local_i <- ww_local_getis_ord_g(guerry_modeled, crime_pers, predictions)
+      df_local_i <- ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions)
       df_local_i[1:3]
     Output
       # A tibble: 85 x 3
@@ -22,8 +22,7 @@
 ---
 
     Code
-      df_local_i_p <- ww_local_getis_ord_pvalue(guerry_modeled, crime_pers,
-        predictions)
+      df_local_i_p <- ww_local_getis_ord_pvalue(guerry_modeled, Crm_prs, predictions)
       df_local_i_p[1:3]
     Output
       # A tibble: 85 x 3
@@ -44,7 +43,7 @@
 ---
 
     Code
-      df_local_i_both <- ww_local_getis_ord(guerry_modeled, crime_pers, predictions)
+      df_local_i_both <- ww_local_getis_ord(guerry_modeled, Crm_prs, predictions)
       df_local_i_both[1:3]
     Output
       # A tibble: 170 x 3
@@ -65,8 +64,8 @@
 ---
 
     Code
-      (vec_local_i <- ww_local_getis_ord_g_vec(guerry_modeled$crime_pers,
-      guerry_modeled$predictions, weights))
+      (vec_local_i <- ww_local_getis_ord_g_vec(guerry_modeled$Crm_prs, guerry_modeled$
+        predictions, weights))
     Output
        [1]  0.91288164  2.49305353  2.14692501 -1.57511235 -1.18988831 -1.67703329
        [7]  0.62706195 -1.60139345  0.96397088 -2.71475331 -3.05125861 -1.64429475
@@ -87,7 +86,7 @@
 ---
 
     Code
-      (vec_local_i_p <- ww_local_getis_ord_pvalue_vec(guerry_modeled$crime_pers,
+      (vec_local_i_p <- ww_local_getis_ord_pvalue_vec(guerry_modeled$Crm_prs,
       guerry_modeled$predictions, weights))
     Output
        [1] 0.338551650 0.017476897 0.046989319 0.136306243 0.252759855 0.094280941

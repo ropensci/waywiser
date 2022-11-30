@@ -81,14 +81,13 @@ Calculate the global Moran's I statistic for model residuals.
 \code{ww_global_moran()} returns both.
 }
 \examples{
-\dontshow{if (rlang::is_installed("sfdep")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-data(guerry, package = "sfdep")
 
-guerry_modeled <- guerry
-guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
-guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
-ww_global_moran_i(guerry_modeled, crime_pers, predictions)
-ww_global_moran(guerry_modeled, crime_pers, predictions)
-\dontshow{\}) # examplesIf}
+
+guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
+guerry$predictions <- predict(guerry_lm, guerry)
+
+ww_global_moran_i(guerry, Crm_prs, predictions)
+ww_global_moran(guerry, Crm_prs, predictions)
+
 }

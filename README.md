@@ -54,14 +54,7 @@ library(waywiser)
 library(dplyr)
 ```
 
-We’ll be working with the `guerry` data from the sfdep package, fitting
-a linear model to associate crimes against persons with literacy. Let’s
-load the data now:
-
-``` r
-data(guerry, package = "sfdep")
-```
-
+We’ll be working with the `guerry` data included in waywiser package.
 We’ll fit a simple linear model relating crimes against persons with
 literacy, and then generate predictions from that model. We can use
 `ww_local_moran_i()` to calculate the local spatial autocorrelation of
@@ -69,11 +62,11 @@ our residuals at each data point:
 
 ``` r
 guerry %>%
-  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
-  ww_local_moran_i(crime_pers, pred)
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  ww_local_moran_i(Crm_prs, pred)
 #> # A tibble: 85 × 4
 #>    .metric       .estimator .estimate                                   geometry
-#>    <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
+#>    <chr>         <chr>          <dbl>                         <MULTIPOLYGON [m]>
 #>  1 local_moran_i standard      0.530  (((381847 1762775, 381116 1763059, 379972…
 #>  2 local_moran_i standard      0.858  (((381847 1762775, 381116 1763059, 379972…
 #>  3 local_moran_i standard      0.759  (((381847 1762775, 381116 1763059, 379972…
@@ -141,11 +134,11 @@ weights
 #> W 85 7225 85 51.86738 348.7071
 
 guerry %>%
-  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
-  ww_local_moran_i(crime_pers, pred, weights)
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  ww_local_moran_i(Crm_prs, pred, weights)
 #> # A tibble: 85 × 4
 #>    .metric       .estimator .estimate                                   geometry
-#>    <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
+#>    <chr>         <chr>          <dbl>                         <MULTIPOLYGON [m]>
 #>  1 local_moran_i standard    0.530    (((381847 1762775, 381116 1763059, 379972…
 #>  2 local_moran_i standard    0.794    (((381847 1762775, 381116 1763059, 379972…
 #>  3 local_moran_i standard    0.646    (((381847 1762775, 381116 1763059, 379972…
@@ -172,11 +165,11 @@ weights_function <- function(data) {
 } 
 
 guerry %>%
-  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
-  ww_local_moran_i(crime_pers, pred, weights_function)
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  ww_local_moran_i(Crm_prs, pred, weights_function)
 #> # A tibble: 85 × 4
 #>    .metric       .estimator .estimate                                   geometry
-#>    <chr>         <chr>          <dbl>                             <MULTIPOLYGON>
+#>    <chr>         <chr>          <dbl>                         <MULTIPOLYGON [m]>
 #>  1 local_moran_i standard    0.530    (((381847 1762775, 381116 1763059, 379972…
 #>  2 local_moran_i standard    0.794    (((381847 1762775, 381116 1763059, 379972…
 #>  3 local_moran_i standard    0.646    (((381847 1762775, 381116 1763059, 379972…
@@ -200,8 +193,8 @@ library(ggplot2)
 weights <- ww_build_weights(guerry)
 
 guerry %>%
-  mutate(pred = predict(lm(crime_pers ~ literacy, .)),
-         .estimate = ww_local_moran_i_vec(crime_pers, pred, weights)) %>% 
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .)),
+         .estimate = ww_local_moran_i_vec(Crm_prs, pred, weights)) %>% 
   sf::st_as_sf() %>% 
   ggplot(aes(fill = .estimate)) +
   geom_sf() + 
@@ -225,10 +218,10 @@ This project is released with a [Contributor Code of
 Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 
--   If you think you have encountered a bug, please [submit an
-    issue](https://github.com/mikemahoney218/waywiser).
+- If you think you have encountered a bug, please [submit an
+  issue](https://github.com/mikemahoney218/waywiser).
 
--   Please include a
-    [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
-    (a minimal, reproducible example) to clearly communicate about your
-    code.
+- Please include a
+  [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+  (a minimal, reproducible example) to clearly communicate about your
+  code.
