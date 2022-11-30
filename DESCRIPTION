@@ -49,7 +49,6 @@ Suggests:
     ggplot2,
     modeldata,
     recipes,
-    sfdep,
     spatialsample,
     spelling,
     testthat (>= 3.0.0),
