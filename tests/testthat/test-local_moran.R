@@ -1,45 +1,45 @@
 set.seed(123)
 test_that("Local Moran statistics are stable", {
 
-  skip_if_not(rlang::is_installed("sfdep"))
+ 
 
-  data(guerry, package = "sfdep")
+ 
 
   guerry_modeled <- guerry
-  guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
+  guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
   weights <- ww_build_weights(guerry)
 
-  resid <- guerry_modeled$crime_pers - guerry_modeled$predictions
+  resid <- guerry_modeled$Crm_prs - guerry_modeled$predictions
 
   expect_snapshot(
     {
-      df_local_i <- ww_local_moran_i(guerry_modeled, crime_pers, predictions)
+      df_local_i <- ww_local_moran_i(guerry_modeled, Crm_prs, predictions)
       df_local_i[1:3]
     }
   )
 
   expect_snapshot(
     {
-      df_local_i_p <- ww_local_moran_pvalue(guerry_modeled, crime_pers, predictions)
+      df_local_i_p <- ww_local_moran_pvalue(guerry_modeled, Crm_prs, predictions)
       df_local_i_p[1:3]
     }
   )
 
   expect_snapshot(
     {
-      df_local_i_both <- ww_local_moran(guerry_modeled, crime_pers, predictions)
+      df_local_i_both <- ww_local_moran(guerry_modeled, Crm_prs, predictions)
       df_local_i_both[1:3]
     }
   )
 
   expect_snapshot(
-    (vec_local_i <- ww_local_moran_i_vec(guerry_modeled$crime_pers, guerry_modeled$predictions, weights))
+    (vec_local_i <- ww_local_moran_i_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
   )
 
   expect_snapshot(
-    (vec_local_i_p <- ww_local_moran_pvalue_vec(guerry_modeled$crime_pers, guerry_modeled$predictions, weights))
+    (vec_local_i_p <- ww_local_moran_pvalue_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
   )
 
   expect_identical(

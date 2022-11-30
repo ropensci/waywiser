@@ -1,21 +1,21 @@
 set.seed(123)
 test_that("Local Getis-Ord statistics are stable", {
 
-  skip_if_not(rlang::is_installed("sfdep"))
+ 
 
-  data(guerry, package = "sfdep")
+ 
 
   guerry_modeled <- guerry
-  guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
+  guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
   weights <- ww_build_weights(guerry)
 
-  resid <- guerry_modeled$crime_pers - guerry_modeled$predictions
+  resid <- guerry_modeled$Crm_prs - guerry_modeled$predictions
 
   expect_snapshot(
     {
-      df_local_i <- ww_local_getis_ord_g(guerry_modeled, crime_pers, predictions)
+      df_local_i <- ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions)
       df_local_i[1:3]
     }
   )
@@ -23,7 +23,7 @@ test_that("Local Getis-Ord statistics are stable", {
   set.seed(123)
   expect_snapshot(
     {
-      df_local_i_p <- ww_local_getis_ord_pvalue(guerry_modeled, crime_pers, predictions)
+      df_local_i_p <- ww_local_getis_ord_pvalue(guerry_modeled, Crm_prs, predictions)
       df_local_i_p[1:3]
     }
   )
@@ -31,18 +31,18 @@ test_that("Local Getis-Ord statistics are stable", {
   set.seed(123)
   expect_snapshot(
     {
-      df_local_i_both <- ww_local_getis_ord(guerry_modeled, crime_pers, predictions)
+      df_local_i_both <- ww_local_getis_ord(guerry_modeled, Crm_prs, predictions)
       df_local_i_both[1:3]
     }
   )
 
   expect_snapshot(
-    (vec_local_i <- ww_local_getis_ord_g_vec(guerry_modeled$crime_pers, guerry_modeled$predictions, weights))
+    (vec_local_i <- ww_local_getis_ord_g_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
   )
 
   set.seed(123)
   expect_snapshot(
-    (vec_local_i_p <- ww_local_getis_ord_pvalue_vec(guerry_modeled$crime_pers, guerry_modeled$predictions, weights))
+    (vec_local_i_p <- ww_local_getis_ord_pvalue_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
   )
 
   expect_identical(

@@ -57,18 +57,12 @@ library(waywiser)
 library(dplyr)
 ```
 
-We'll be working with the `guerry` data from the sfdep package, fitting a linear model to associate crimes against persons with literacy. Let's load the data now:
-
-```{r}
-data(guerry, package = "sfdep")
-```
-
-We'll fit a simple linear model relating crimes against persons with literacy, and then generate predictions from that model. We can use `ww_local_moran_i()` to calculate the local spatial autocorrelation of our residuals at each data point:
+We'll be working with the `guerry` data included in waywiser package. We'll fit a simple linear model relating crimes against persons with literacy, and then generate predictions from that model. We can use `ww_local_moran_i()` to calculate the local spatial autocorrelation of our residuals at each data point:
 
 ```{r}
 guerry %>%
-  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
-  ww_local_moran_i(crime_pers, pred)
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  ww_local_moran_i(Crm_prs, pred)
 ```
 
 If you're familiar with spdep, you can probably guess that waywiser is doing _something_ under the hood here to calculate which of our observations are neighbors, and how to create spatial weights from those neighborhoods. And that guess would be right -- waywiser is making use of two functions, `ww_build_neighbors()` and `ww_build_weights()`, in order to automatically calculate spatial weights for calculating metrics:
@@ -91,8 +85,8 @@ weights <- guerry %>%
 weights
 
 guerry %>%
-  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
-  ww_local_moran_i(crime_pers, pred, weights)
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  ww_local_moran_i(Crm_prs, pred, weights)
 ```
 
 Or as a function, which lets you use custom weights with other tidymodels functions like `fit_resamples()`:
@@ -107,8 +101,8 @@ weights_function <- function(data) {
 } 
 
 guerry %>%
-  mutate(pred = predict(lm(crime_pers ~ literacy, .))) %>% 
-  ww_local_moran_i(crime_pers, pred, weights_function)
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  ww_local_moran_i(Crm_prs, pred, weights_function)
 ```
 
 
@@ -121,8 +115,8 @@ library(ggplot2)
 weights <- ww_build_weights(guerry)
 
 guerry %>%
-  mutate(pred = predict(lm(crime_pers ~ literacy, .)),
-         .estimate = ww_local_moran_i_vec(crime_pers, pred, weights)) %>% 
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .)),
+         .estimate = ww_local_moran_i_vec(Crm_prs, pred, weights)) %>% 
   sf::st_as_sf() %>% 
   ggplot(aes(fill = .estimate)) +
   geom_sf() + 

@@ -1,44 +1,44 @@
 test_that("Global Geary statistics are stable", {
 
-  skip_if_not(rlang::is_installed("sfdep"))
+ 
 
-  data(guerry, package = "sfdep")
+ 
 
   guerry_modeled <- guerry
-  guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
+  guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
   weights <- ww_build_weights(guerry)
 
-  resid <- guerry_modeled$crime_pers - guerry_modeled$predictions
+  resid <- guerry_modeled$Crm_prs - guerry_modeled$predictions
 
   expect_snapshot(
     {
-      df_global_c <- ww_global_geary_c(guerry_modeled, crime_pers, predictions)
+      df_global_c <- ww_global_geary_c(guerry_modeled, Crm_prs, predictions)
       df_global_c[1:3]
     }
   )
 
   expect_snapshot(
     {
-      df_global_c_p <- ww_global_geary_pvalue(guerry_modeled, crime_pers, predictions)
+      df_global_c_p <- ww_global_geary_pvalue(guerry_modeled, Crm_prs, predictions)
       df_global_c_p[1:3]
     }
   )
 
   expect_snapshot(
     {
-      df_global_c_both <- ww_global_geary(guerry_modeled, crime_pers, predictions)
+      df_global_c_both <- ww_global_geary(guerry_modeled, Crm_prs, predictions)
       df_global_c_both[1:3]
     }
   )
 
   expect_snapshot(
-    (vec_global_c <- ww_global_geary_c_vec(guerry_modeled$crime_pers, guerry_modeled$predictions, weights))
+    (vec_global_c <- ww_global_geary_c_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
   )
 
   expect_snapshot(
-    (vec_global_c_p <- ww_global_geary_pvalue_vec(guerry_modeled$crime_pers, guerry_modeled$predictions, weights))
+    (vec_global_c_p <- ww_global_geary_pvalue_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
   )
 
   expect_identical(

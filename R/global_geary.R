@@ -16,15 +16,13 @@
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For `_vec()` functions, a single value (or NA).
 #'
-#' @examplesIf rlang::is_installed("sfdep")
-#' data(guerry, package = "sfdep")
+#' @examples
 #'
-#' guerry_modeled <- guerry
-#' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
-#' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
+#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
+#' guerry$predictions <- predict(guerry_lm, guerry)
 #'
 #' \dontrun{
-#' ww_global_geary(guerry_modeled, crime_pers, predictions)
+#' ww_global_geary(guerry, Crm_prs, predictions)
 #' }
 #'
 #' @rdname global_geary_c

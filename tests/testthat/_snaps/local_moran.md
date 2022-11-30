@@ -1,7 +1,7 @@
 # Local Moran statistics are stable
 
     Code
-      df_local_i <- ww_local_moran_i(guerry_modeled, crime_pers, predictions)
+      df_local_i <- ww_local_moran_i(guerry_modeled, Crm_prs, predictions)
       df_local_i[1:3]
     Output
       # A tibble: 85 x 3
@@ -22,7 +22,7 @@
 ---
 
     Code
-      df_local_i_p <- ww_local_moran_pvalue(guerry_modeled, crime_pers, predictions)
+      df_local_i_p <- ww_local_moran_pvalue(guerry_modeled, Crm_prs, predictions)
       df_local_i_p[1:3]
     Output
       # A tibble: 85 x 3
@@ -43,7 +43,7 @@
 ---
 
     Code
-      df_local_i_both <- ww_local_moran(guerry_modeled, crime_pers, predictions)
+      df_local_i_both <- ww_local_moran(guerry_modeled, Crm_prs, predictions)
       df_local_i_both[1:3]
     Output
       # A tibble: 170 x 3
@@ -64,7 +64,7 @@
 ---
 
     Code
-      (vec_local_i <- ww_local_moran_i_vec(guerry_modeled$crime_pers, guerry_modeled$
+      (vec_local_i <- ww_local_moran_i_vec(guerry_modeled$Crm_prs, guerry_modeled$
         predictions, weights))
     Output
                  1            2            3            4            5            6 
@@ -101,7 +101,7 @@
 ---
 
     Code
-      (vec_local_i_p <- ww_local_moran_pvalue_vec(guerry_modeled$crime_pers,
+      (vec_local_i_p <- ww_local_moran_pvalue_vec(guerry_modeled$Crm_prs,
       guerry_modeled$predictions, weights))
     Output
                 1           2           3           4           5           6 

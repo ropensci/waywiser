@@ -88,15 +88,14 @@ Calculate the local Getis-Ord G and G* statistic for model residuals.
 \code{ww_local_getis_ord()} returns both.
 }
 \examples{
-\dontshow{if (rlang::is_installed("sfdep")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-data(guerry, package = "sfdep")
 
-guerry_modeled <- guerry
-guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
-guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
-ww_local_getis_ord_g(guerry_modeled, crime_pers, predictions)
-ww_local_getis_ord(guerry_modeled, crime_pers, predictions)
-ww_local_getis_ord(guerry_modeled, crime_pers, predictions, include_self = TRUE)
-\dontshow{\}) # examplesIf}
+
+guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
+guerry$predictions <- predict(guerry_lm, guerry)
+
+ww_local_getis_ord_g(guerry, Crm_prs, predictions)
+ww_local_getis_ord(guerry, Crm_prs, predictions)
+ww_local_getis_ord(guerry, Crm_prs, predictions, include_self = TRUE)
+
 }

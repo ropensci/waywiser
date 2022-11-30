@@ -15,15 +15,15 @@
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
 #'
-#' @examplesIf rlang::is_installed("sfdep")
-#' data(guerry, package = "sfdep")
+#' @examples
 #'
-#' guerry_modeled <- guerry
-#' guerry_lm <- lm(crime_pers ~ literacy, guerry_modeled)
-#' guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 #'
-#' ww_local_geary_c(guerry_modeled, crime_pers, predictions)
-#' ww_local_geary(guerry_modeled, crime_pers, predictions)
+#'
+#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
+#' guerry$predictions <- predict(guerry_lm, guerry)
+#'
+#' ww_local_geary_c(guerry, Crm_prs, predictions)
+#' ww_local_geary(guerry, Crm_prs, predictions)
 #'
 #' @rdname local_geary_c
 #' @export
