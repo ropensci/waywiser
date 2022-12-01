@@ -147,6 +147,9 @@ ww_multi_scale <- function(
 
       if (length(missing) > 0) {
         note <- "Some observations were not within any grid cell, and as such were not used in any assessments. Their row numbers are in the `missing_indices` column."
+        missing <- list(missing)
+      } else {
+        missing <- list()
       }
 
       tibble::tibble(
