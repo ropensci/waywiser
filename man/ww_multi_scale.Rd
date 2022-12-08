@@ -56,7 +56,8 @@ A tibble with six columns: \code{.metric}, with the name
 of the metric that the row describes; \code{.estimator}, with the name of the
 estimator used, \code{.estimate}, with the output of the metric function;
 \code{.grid_args}, with the arguments passed to \code{\link[sf:st_make_grid]{sf::st_make_grid()}} via \code{...}
-(if any), \code{.grid}, containing the grids used to aggregate predictions,
+(if any), \code{.grid}, containing the grids used to aggregate predictions as well
+as the aggregated \code{.truth} and \code{.estimate} values,
 and \code{.notes}, which will indicate any observations which were not used in
 a given assessment.
 }

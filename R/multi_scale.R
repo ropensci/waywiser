@@ -130,6 +130,10 @@ ww_multi_scale <- function(
     )
   }
 
+  if (!is.na(sf::st_crs(data))) {
+    grids <- purrr::map(grids, sf::st_transform, sf::st_crs(data))
+  }
+
   grid_intersections <- purrr::map(
     grids,
     function(grid) {
@@ -200,7 +204,13 @@ ww_multi_scale <- function(
       out <- metrics(dat, .truth, .estimate)
       out[attr(out, "sf_column")] <- NULL
       out$.grid_args <- list(grid_args[grid_arg, ])
-      out$.grid <- list(sf::st_as_sf(grid))
+      out$.grid <- list(
+        sf::st_join(
+          sf::st_as_sf(grid),
+          dat,
+          sf::st_contains
+        )
+      )
       out$.notes <- list(.notes)
       out
     }
