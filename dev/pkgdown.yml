@@ -1,8 +1,9 @@
 pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
-articles: {}
-last_built: 2022-11-30T23:47Z
+articles:
+  multi-scale-assessment: multi-scale-assessment.html
+last_built: 2022-12-09T16:45Z
 urls:
   reference: https://mikemahoney218.github.io/waywiser/reference
   article: https://mikemahoney218.github.io/waywiser/articles

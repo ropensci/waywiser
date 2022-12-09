@@ -27,6 +27,12 @@ ww_local_moran() returns both."><meta property="og:image" content="https://mikem
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/multi-scale-assessment.html">Multi-scale model assessment in waywiser</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
@@ -153,31 +159,31 @@ For <code>_vec()</code> functions, a numeric vector of <code>length(truth)</code
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 85 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .metric       .estimator .estimate                                   geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [m]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_moran_i standard      0.530  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_moran_i standard      0.858  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_moran_i standard      0.759  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_moran_i standard      0.732  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_moran_i standard      0.207  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_moran_i standard      0.860  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_moran_i standard      0.692  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_moran_i standard      1.69   (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_moran_i standard     -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">9</span> (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_moran_i standard      0.710  (((931664 1785222, 930836 1785736, 929664…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_moran_i standard      0.530  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_moran_i standard      0.858  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_moran_i standard      0.759  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_moran_i standard      0.732  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_moran_i standard      0.207  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_moran_i standard      0.860  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_moran_i standard      0.692  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_moran_i standard      1.69   (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_moran_i standard     -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">9</span> (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_moran_i standard      0.710  (((381847 1762775, 381116 1763059, 379972…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 75 more rows</span></span>
 <span class="r-in"><span><span class="fu">ww_local_moran</span><span class="op">(</span><span class="va">guerry</span>, <span class="va">Crm_prs</span>, <span class="va">predictions</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 170 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .metric       .estimator .estimate                                   geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [m]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_moran_i standard      0.530  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_moran_i standard      0.858  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_moran_i standard      0.759  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_moran_i standard      0.732  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_moran_i standard      0.207  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_moran_i standard      0.860  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_moran_i standard      0.692  (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_moran_i standard      1.69   (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_moran_i standard     -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">9</span> (((931664 1785222, 930836 1785736, 929664…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_moran_i standard      0.710  (((931664 1785222, 930836 1785736, 929664…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_moran_i standard      0.530  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_moran_i standard      0.858  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_moran_i standard      0.759  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_moran_i standard      0.732  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_moran_i standard      0.207  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_moran_i standard      0.860  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_moran_i standard      0.692  (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_moran_i standard      1.69   (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_moran_i standard     -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">9</span> (((381847 1762775, 381116 1763059, 379972…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_moran_i standard      0.710  (((381847 1762775, 381116 1763059, 379972…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 160 more rows</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

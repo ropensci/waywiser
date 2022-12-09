@@ -16,6 +16,12 @@
     <loc>https://mikemahoney218.github.io/waywiser/dev/SUPPORT.html</loc>
   </url>
   <url>
+    <loc>https://mikemahoney218.github.io/waywiser/dev/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/dev/articles/multi-scale-assessment.html</loc>
+  </url>
+  <url>
     <loc>https://mikemahoney218.github.io/waywiser/dev/authors.html</loc>
   </url>
   <url>
@@ -71,5 +77,8 @@
   </url>
   <url>
     <loc>https://mikemahoney218.github.io/waywiser/dev/reference/ww_make_polygon_neighbors.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/dev/reference/ww_multi_scale.html</loc>
   </url>
 </urlset>
