@@ -3,7 +3,7 @@ pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   multi-scale-assessment: multi-scale-assessment.html
-last_built: 2022-12-09T16:45Z
+last_built: 2022-12-09T23:26Z
 urls:
   reference: https://mikemahoney218.github.io/waywiser/reference
   article: https://mikemahoney218.github.io/waywiser/articles
