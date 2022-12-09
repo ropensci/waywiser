@@ -1,5 +1,8 @@
 # waywiser (development version)
 
+* Added functions and a vignette for multi-scale assessment of model 
+  predictions.
+
 # waywiser 0.2.0
 
 * Added functions for calculating the area of applicability of a model. 

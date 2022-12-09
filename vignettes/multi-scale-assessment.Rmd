@@ -1,0 +1,157 @@
+---
+title: "Multi-scale model assessment in waywiser"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Multi-scale model assessment in waywiser}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = rlang::is_installed("ggplot2") && rlang::is_installed("tigris")
+)
+```
+
+```{r setup, include=FALSE}
+ggplot2::theme_set(ggplot2::theme_minimal())
+```
+
+This vignette walks through how to use waywiser to assess model predictions at
+multiple spatial scales. The data and code here are adapted from the 
+[tidymodels multi-scale assessment tutorial.](https://www.tidymodels.org/learn/work/multi-scale/)
+However, that tutorial performs a cross-validation procedure at each scale of 
+aggregation, meaning that you're measuring how well your model does when both
+trained and evaluated at multiple scales of aggregation; this vignette focuses
+instead on evaluating a single model's predictions across multiple scales.
+
+We're going to use the `ny_trees` data in waywiser, adapted from that post. 
+First things first, we'll set up our environment, loading a few packages 
+and telling sf to download the coordinate reference system for our data,
+if needed:
+
+```{r}
+library(sf)
+library(tidyr)
+library(dplyr)
+library(waywiser)
+
+invisible(sf_proj_network(TRUE))
+```
+
+The data we're working with is extremely simple, reflecting the number of trees
+and amount of aboveground biomass ("AGB", the total amount of aboveground woody 
+bits) at a number of plots across New York State. We can plot it to see that 
+there's some obvious spatial dependence in this data -- certain regions have
+clusters of much higher AGB values, while other areas (such as the area around
+New York City to the south) have clusters of much lower AGB.
+
+```{r}
+library(ggplot2)
+
+ny_trees %>%
+  ggplot() + 
+  geom_sf(aes(color = agb), alpha = 0.4) + 
+  scale_color_distiller(palette = "Greens", direction = 1)
+```
+
+Because our focus here is on model _assessment_, not model fitting, we're going
+to use an extremely simple linear regression to try and model AGB across the 
+state. We'll predict AGB as being a linear function of the number of trees at
+each plot, and then we're going to use this model to predict expected AGB:
+
+```{r}
+agb_lm <- lm(agb ~ n_trees, ny_trees)
+ny_trees$predicted <- predict(agb_lm, ny_trees)
+```
+
+Now we're ready to perform our multi-scale assessments. The `ww_multi_scale()`
+function supports two different methods for performing assessments: first, 
+you can pass arguments to `sf::st_make_grid()` (via `...`), specifying the sort
+of grids that you want to make. For instance, if we wanted to make grids with
+apothems (the distance from the middle of a grid cell to the middle of its 
+sides) ranging from 10km to 100km long, we can call the function like this:
+
+```{r}
+cell_sizes <- seq(10, 100, 10) * 1000
+ny_multi_scale <- ww_multi_scale(
+  ny_trees,
+  agb,
+  predicted,
+  cellsize = cell_sizes
+)
+
+ny_multi_scale
+```
+
+We've now got a tibble with estimates for our model's RMSE and MAE at each scale 
+of aggregation! We can use this information to better understand how our model 
+does when predictions are being aggregated across larger units than a single
+plot; for instance, our model _generally_ does better at larger scales of 
+aggregation:
+
+```{r}
+ny_multi_scale %>%
+  unnest(.grid_args) %>%
+  ggplot(aes(x = cellsize, y = .estimate, color = .metric)) + 
+  geom_line()
+```
+
+Note that we used the `.grid_args` column, which stores the arguments we used to
+make the grid, to associate our performance estimates with their corresponding
+`cellsize`.
+
+In addition to our top-level performance estimates, our `ny_multi_scale` object
+also includes our true and estimated AGB, aggregated to each scale, in the 
+`.grid` column. This lets us easily check what our predictions look like at each 
+level of aggregation:
+
+```{r}
+ny_multi_scale$.grid[[9]] %>%
+  filter(!is.na(.estimate)) %>%
+  ggplot(aes(fill = .estimate)) + 
+  geom_sf() + 
+  scale_fill_distiller(palette = "Greens", direction = 1)
+```
+
+In addition to specifying systematic grids via `sf::st_make_grid()`, 
+`ww_multi_scale()` also allows you to provide your own aggregation units. For 
+instance, we can use the `tigris` package to download census block group 
+boundaries, as well as county and county subdivision boundaries, for the state 
+of New York:
+
+```{r}
+suppressPackageStartupMessages(library(tigris))
+
+ny_block_groups <- block_groups("NY")
+ny_county_subdivisions <- county_subdivisions("NY")
+ny_counties <- counties("NY")
+```
+
+We can then provide those `sf` objects straight to `ww_multi_scale`:
+
+```{r warning=FALSE}
+ny_division_assessment <- ww_multi_scale(
+  ny_trees,
+  agb,
+  predicted,
+  grids = list(
+    ny_block_groups,
+    ny_county_subdivisions,
+    ny_counties
+  )
+)
+
+ny_division_assessment %>%
+  mutate(
+    division = rep(c("Block group", "County subdivision", "County"), each = 2)
+  ) %>%
+  ggplot(aes(x = division, y = .estimate, fill = .metric)) + 
+  geom_col(position = position_dodge())
+```
+
+By providing grids directly to `ww_multi_scale()`, we can see how well our model 
+performs when we aggregate predictions to more semantically meaningful levels 
+than the systematic grids.
