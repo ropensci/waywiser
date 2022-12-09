@@ -115,8 +115,8 @@
 #'
 #' @return
 #'
-#' A `ww_area_of_applicability` object, which can be used with [predict()]
-#' to calculate the distance of new data to the original training data, and
+#' A `ww_area_of_applicability` object, which can be used with [predict()] to
+#' calculate the distance of new data to the original training data, and
 #' determine if new data is within a model's area of applicability.
 #'
 #' @family area of applicability functions
@@ -404,7 +404,7 @@ standardize_and_weight <- function(dat, sds, means, importance) {
 calc_d_bar <- function(training) {
   # 2.4 Dissimilarity index
   # Find the mean nearest neighbor distance between training points:
-  dists <- fields::rdist(as.matrix(training))
+  dists <- fields::rdist(training)
   diag(dists) <- NA
   Matrix::mean(dists, na.rm = TRUE)
 }
@@ -415,13 +415,10 @@ calc_di <- function(training, testing, d_bar) {
   # (or `training`, if `testing` is `NULL`)
   # to the closest point in the training set
   if (is.null(testing)) {
-    distances <- fields::rdist(as.matrix(training))
-    diag(distances) <- NA
+    dk <- FNN::knn.dist(training, 1)[, 1]
   } else {
-    distances <- fields::rdist(as.matrix(testing), as.matrix(training))
+    dk <- FNN::knnx.dist(training, testing, 1)[, 1]
   }
-
-  dk <- apply(distances, 1, min, na.rm = TRUE)
 
   if (missing(d_bar)) d_bar <- calc_d_bar(training)
 

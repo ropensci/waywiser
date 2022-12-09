@@ -32,6 +32,7 @@ Depends:
 Imports: 
     dplyr,
     fields,
+    FNN,
     glue,
     hardhat,
     Matrix,
