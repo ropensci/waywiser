@@ -1,0 +1,96 @@
+---
+title: "Calculating residual spatial autocorrelation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Calculating residual spatial autocorrelation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Let's walk through how we can use waywiser to find local indicators of spatial autocorrelation for a very simple model. First things first, let's load a few libraries:
+
+```{r message=FALSE}
+# waywiser itself, of course:
+library(waywiser)
+# For the %>% pipe and mutate:
+library(dplyr)
+```
+
+We'll be working with the `guerry` data included in waywiser package. We'll fit a simple linear model relating crimes against persons with literacy, and then generate predictions from that model. We can use `ww_local_moran_i()` to calculate the local spatial autocorrelation of our residuals at each data point:
+
+```{r}
+guerry %>%
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  ww_local_moran_i(Crm_prs, pred)
+```
+
+If you're familiar with spdep, you can probably guess that waywiser is doing _something_ under the hood here to calculate which of our observations are neighbors, and how to create spatial weights from those neighborhoods. And that guess would be right -- waywiser is making use of two functions, `ww_build_neighbors()` and `ww_build_weights()`, in order to automatically calculate spatial weights for calculating metrics:
+
+```{r}
+ww_build_neighbors(guerry)
+
+ww_build_weights(guerry)
+```
+
+These functions aren't always the best way to calculate spatial weights for your data, however. As a result, waywiser also lets you specify your own weights directly:
+
+```{r}
+weights <- guerry %>%
+  sf::st_geometry() %>%
+  sf::st_centroid() %>%
+  spdep::dnearneigh(0, 97000) %>%
+  spdep::nb2listw()
+
+weights
+
+guerry %>%
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  ww_local_moran_i(Crm_prs, pred, weights)
+```
+
+Or as a function, which lets you use custom weights with other tidymodels functions like `fit_resamples()`:
+
+```{r}
+weights_function <- function(data) {
+  data %>%
+    sf::st_geometry() %>%
+    sf::st_centroid() %>%
+    spdep::dnearneigh(0, 97000) %>%
+    spdep::nb2listw()
+} 
+
+guerry %>%
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  ww_local_moran_i(Crm_prs, pred, weights_function)
+```
+
+
+Providing custom weights also lets us use `ww_local_moran_i_vec()` to add a column to our original data frame with our statistic, which makes plotting using our original geometries easier:
+
+```{r 2022_06_29-guerry, fig.width=8}
+library(ggplot2)
+
+weights <- ww_build_weights(guerry)
+
+guerry %>%
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .)),
+         .estimate = ww_local_moran_i_vec(Crm_prs, pred, weights)) %>% 
+  sf::st_as_sf() %>% 
+  ggplot(aes(fill = .estimate)) +
+  geom_sf() + 
+  scale_fill_gradient2(
+    "Moran's I", 
+    low = "#018571", 
+    mid = "white", 
+    high = "#A6611A"
+  )
+```
+
+This makes it easy to see what areas are poorly represented by our model, which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we're working with.

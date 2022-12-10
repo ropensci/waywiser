@@ -4,11 +4,11 @@
 \name{waywiser-package}
 \alias{waywiser}
 \alias{waywiser-package}
-\title{waywiser: Methods for Assessing Spatial Models}
+\title{waywiser: Ergonomic Methods for Assessing Spatial Models}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Assessing predictive models of spatial data can be challenging, both because these models are typically built for extrapolating outside the original region represented by training data and due to potential spatially structured errors, with "hot spots" of higher than expected error clustered geographically due to spatial structure in the underlying data. These functions provide methods for measuring the spatial structure of model errors and evaluating where predictions can be made safely, and are particularly useful for models fit using the 'tidymodels' framework. Methods include Moran's I ('Moran' (1950) \doi{10.2307/2332142}), Geary's C ('Geary' (1954) \doi{10.2307/2986645}), Getis-Ord's G ('Ord' and 'Getis' (1995) \doi{10.1111/j.1538-4632.1995.tb00912.x}), as well as an implementation of the area of applicability methodology from 'Meyer' and 'Pebesma' (2021) (\doi{10.1111/2041-210X.13650}).
+Assessing predictive models of spatial data can be challenging, both because these models are typically built for extrapolating outside the original region represented by training data and due to potential spatially structured errors, with "hot spots" of higher than expected error clustered geographically due to spatial structure in the underlying data. Methods are provided for assessing models fit to spatial data, including approaches for measuring the spatial structure of model errors, assessing model predictions at multiple spatial scales, and evaluating where predictions can be made safely. Methods areparticularly useful for models fit using the 'tidymodels' framework. Methods include Moran's I ('Moran' (1950) \doi{10.2307/2332142}), Geary's C ('Geary' (1954) \doi{10.2307/2986645}), Getis-Ord's G ('Ord' and 'Getis' (1995) \doi{10.1111/j.1538-4632.1995.tb00912.x}), an implementation of the area of applicability methodology from 'Meyer' and 'Pebesma' (2021) (\doi{10.1111/2041-210X.13650}), and an implementation of multi-scale assessment as described in 'Riemann' et al. (2010) (\doi{10.1016/j.rse.2010.05.010}).
 }
 \seealso{
 Useful links:

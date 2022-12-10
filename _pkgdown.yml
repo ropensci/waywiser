@@ -30,13 +30,13 @@ reference:
   - title: Multi-scale assessment functions
     contents:
       - contains("multi_scale")
-  - title: Autocorrelation metrics
+  - title: Yardstick extension metrics
     contents:
-      - contains("global_moran")
-      - contains("local_moran")
-      - contains("global_geary")
-      - contains("local_geary")
-      - contains("local_getis")
+      - contains("moran")
+      - contains("geary")
+      - contains("getis")
+      - ww_agreement_coefficient
+      - ww_willmott_d
   - title: Utilities
     contents:
       - starts_with("ww_build")

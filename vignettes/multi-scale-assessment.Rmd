@@ -1,8 +1,8 @@
 ---
-title: "Multi-scale model assessment in waywiser"
+title: "Multi-scale model assessment"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Multi-scale model assessment in waywiser}
+  %\VignetteIndexEntry{Multi-scale model assessment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -59,8 +59,8 @@ ww_global_geary_c.data.frame <- function(data,
     na_rm = na_rm,
     metric_fn_options = list(
       wt = wt,
-      alternative = "greater",
-      randomization = TRUE,
+      alternative = alternative,
+      randomization = randomization,
       ...
     )
   )
