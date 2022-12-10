@@ -215,11 +215,6 @@ ww_unsystematic_mpd_vec <- function(truth,
                                     estimate,
                                     na_rm = TRUE,
                                     ...) {
-
-  ww_unsystematic_mpd_impl <- function(truth, estimate, ...) {
-    calc_spdu(truth, estimate) / length(truth)
-  }
-
   metric_vec_template(
     metric_impl = ww_unsystematic_mpd_impl,
     truth = truth,
@@ -228,6 +223,10 @@ ww_unsystematic_mpd_vec <- function(truth,
     cls = "numeric",
     ...
   )
+}
+
+ww_unsystematic_mpd_impl <- function(truth, estimate, ...) {
+  calc_spdu(truth, estimate) / length(truth)
 }
 
 #' @rdname ww_agreement_coefficient
@@ -262,11 +261,6 @@ ww_systematic_mpd_vec <- function(truth,
                                   estimate,
                                   na_rm = TRUE,
                                   ...) {
-
-  ww_systematic_mpd_impl <- function(truth, estimate, ...) {
-    calc_spds(truth, estimate) / length(truth)
-  }
-
   metric_vec_template(
     metric_impl = ww_systematic_mpd_impl,
     truth = truth,
@@ -275,6 +269,10 @@ ww_systematic_mpd_vec <- function(truth,
     cls = "numeric",
     ...
   )
+}
+
+ww_systematic_mpd_impl <- function(truth, estimate, ...) {
+  calc_spds(truth, estimate) / length(truth)
 }
 
 #' @rdname ww_agreement_coefficient
@@ -311,7 +309,7 @@ ww_unsystematic_rmpd_vec <- function(truth,
                                     ...) {
 
   ww_unsystematic_rmpd_impl <- function(truth, estimate, ...) {
-    sqrt(calc_spdu(truth, estimate) / length(truth))
+    sqrt(ww_unsystematic_mpd_impl(truth, estimate, ...))
   }
 
   metric_vec_template(
@@ -358,7 +356,7 @@ ww_systematic_rmpd_vec <- function(truth,
                                   ...) {
 
   ww_systematic_rmpd_impl <- function(truth, estimate, ...) {
-    sqrt(calc_spds(truth, estimate) / length(truth))
+    sqrt(ww_systematic_mpd_impl(truth, estimate, ...))
   }
 
   metric_vec_template(
@@ -387,7 +385,7 @@ gmfr <- function(truth, estimate) {
   mean_truth <- mean(truth)
   mean_estimate <- mean(estimate)
 
-  correlation_sign <- sign(cor(truth, estimate))
+  correlation_sign <- sign(stats::cor(truth, estimate))
 
   b <- sqrt(
     sum((truth - mean_truth)^2) /

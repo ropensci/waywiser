@@ -175,14 +175,6 @@ ww_systematic_mse_vec <- function(truth,
                                   estimate,
                                   na_rm = TRUE,
                                   ...) {
-
-  ww_systematic_mse_impl <- function(truth, estimate, ...) {
-    dt <- data.frame(truth = truth, estimate = estimate)
-    preds <- predict(lm(truth ~ estimate, dt), dt)
-
-    mean((preds - truth)^2)
-  }
-
   metric_vec_template(
     metric_impl = ww_systematic_mse_impl,
     truth = truth,
@@ -191,6 +183,13 @@ ww_systematic_mse_vec <- function(truth,
     cls = "numeric",
     ...
   )
+}
+
+ww_systematic_mse_impl <- function(truth, estimate, ...) {
+  dt <- data.frame(truth = truth, estimate = estimate)
+  preds <- predict(stats::lm(truth ~ estimate, dt), dt)
+
+  mean((preds - truth)^2)
 }
 
 #' @rdname ww_willmott_d
@@ -225,14 +224,6 @@ ww_unsystematic_mse_vec <- function(truth,
                                     estimate,
                                     na_rm = TRUE,
                                     ...) {
-
-  ww_unsystematic_mse_impl <- function(truth, estimate, ...) {
-    dt <- data.frame(truth = truth, estimate = estimate)
-    preds <- predict(lm(truth ~ estimate, dt), dt)
-
-    mean((estimate - preds)^2)
-  }
-
   metric_vec_template(
     metric_impl = ww_unsystematic_mse_impl,
     truth = truth,
@@ -241,6 +232,13 @@ ww_unsystematic_mse_vec <- function(truth,
     cls = "numeric",
     ...
   )
+}
+
+ww_unsystematic_mse_impl <- function(truth, estimate, ...) {
+  dt <- data.frame(truth = truth, estimate = estimate)
+  preds <- predict(stats::lm(truth ~ estimate, dt), dt)
+
+  mean((estimate - preds)^2)
 }
 
 #' @rdname ww_willmott_d
@@ -277,10 +275,7 @@ ww_systematic_rmse_vec <- function(truth,
                                   ...) {
 
   ww_systematic_rmse_impl <- function(truth, estimate, ...) {
-    dt <- data.frame(truth = truth, estimate = estimate)
-    preds <- predict(lm(truth ~ estimate, dt), dt)
-
-    sqrt(mean((preds - truth)^2))
+    sqrt(ww_systematic_mse_impl(truth, estimate, ...))
   }
 
   metric_vec_template(
@@ -327,10 +322,7 @@ ww_unsystematic_rmse_vec <- function(truth,
                                     ...) {
 
   ww_unsystematic_rmse_impl <- function(truth, estimate, ...) {
-    dt <- data.frame(truth = truth, estimate = estimate)
-    preds <- predict(lm(truth ~ estimate, dt), dt)
-
-    sqrt(mean((estimate - preds)^2))
+    sqrt(ww_unsystematic_mse_impl(truth, estimate, ...))
   }
 
   metric_vec_template(
