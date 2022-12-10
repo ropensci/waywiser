@@ -22,6 +22,9 @@
     <loc>https://mikemahoney218.github.io/waywiser/dev/articles/multi-scale-assessment.html</loc>
   </url>
   <url>
+    <loc>https://mikemahoney218.github.io/waywiser/dev/articles/residual-autocorrelation.html</loc>
+  </url>
+  <url>
     <loc>https://mikemahoney218.github.io/waywiser/dev/authors.html</loc>
   </url>
   <url>
@@ -64,6 +67,9 @@
     <loc>https://mikemahoney218.github.io/waywiser/dev/reference/waywiser-package.html</loc>
   </url>
   <url>
+    <loc>https://mikemahoney218.github.io/waywiser/dev/reference/ww_agreement_coefficient.html</loc>
+  </url>
+  <url>
     <loc>https://mikemahoney218.github.io/waywiser/dev/reference/ww_area_of_applicability.html</loc>
   </url>
   <url>
@@ -80,5 +86,8 @@
   </url>
   <url>
     <loc>https://mikemahoney218.github.io/waywiser/dev/reference/ww_multi_scale.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/dev/reference/ww_willmott_d.html</loc>
   </url>
 </urlset>

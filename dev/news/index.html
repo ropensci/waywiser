@@ -24,7 +24,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/multi-scale-assessment.html">Multi-scale model assessment in waywiser</a>
+    <a class="dropdown-item" href="../articles/multi-scale-assessment.html">Multi-scale model assessment</a>
+    <a class="dropdown-item" href="../articles/residual-autocorrelation.html">Calculating residual spatial autocorrelation</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -52,7 +53,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="waywiser-development-version">waywiser (development version)<a class="anchor" aria-label="anchor" href="#waywiser-development-version"></a></h2>
-<ul><li>Added functions and a vignette for multi-scale assessment of model predictions.</li>
+<ul><li><p>Added functions (primarily <code><a href="../reference/ww_multi_scale.html">ww_multi_scale()</a></code>) and a vignette for multi-scale assessment of model predictions.</p></li>
+<li><p>Rewrote README and moved the old content to a new vignette on assessing the spatial dependency in model residuals.</p></li>
+<li><p>Added functions to calculate metrics from Ji and Gallo (2006) and Willmott (1981): <code><a href="../reference/ww_agreement_coefficient.html">ww_agreement_coefficient()</a></code>, <code><a href="../reference/ww_agreement_coefficient.html">ww_systematic_agreement_coefficient()</a></code>, <code><a href="../reference/ww_agreement_coefficient.html">ww_unsystematic_agreement_coefficient()</a></code>, <code>ww_unsystematic_mpd(),</code>, <code><a href="../reference/ww_agreement_coefficient.html">ww_systematic_mpd()</a></code>, <code><a href="../reference/ww_agreement_coefficient.html">ww_unsystematic_rmpd()</a></code>, <code><a href="../reference/ww_agreement_coefficient.html">ww_systematic_rmpd()</a></code>, <code><a href="../reference/ww_willmott_d.html">ww_willmott_d()</a></code>, <code><a href="../reference/ww_willmott_d.html">ww_systematic_mse()</a></code>, <code><a href="../reference/ww_willmott_d.html">ww_unsystematic_mse()</a></code>, <code><a href="../reference/ww_willmott_d.html">ww_systematic_rmse()</a></code>, <code><a href="../reference/ww_willmott_d.html">ww_unsystematic_rmse()</a></code>.</p></li>
+<li><p>Added a dependency on FNN.</p></li>
+<li><p>Changed a call in <code><a href="../reference/ww_area_of_applicability.html">ww_area_of_applicability()</a></code> to use FNN for nearest neighbors, rather than fields. This sped up prediction by a <em>lot</em>.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="waywiser-020">waywiser 0.2.0<a class="anchor" aria-label="anchor" href="#waywiser-020"></a></h2><p class="text-muted">CRAN release: 2022-10-23</p>

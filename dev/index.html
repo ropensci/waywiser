@@ -10,16 +10,19 @@
     original region represented by training data and due to potential spatially
     structured errors, with &quot;hot spots&quot; of higher than expected error
     clustered geographically due to spatial structure in the underlying
-    data. These functions provide methods for measuring the spatial
-    structure of model errors and evaluating where predictions can be made 
-    safely, and are particularly useful for models fit using the tidymodels 
-    framework. Methods include Morans I
+    data. Methods are provided for assessing models fit to spatial data, 
+    including approaches for measuring the spatial structure of model errors,
+    assessing model predictions at multiple spatial scales, and evaluating where 
+    predictions can be made safely. Methods areparticularly useful for models 
+    fit using the tidymodels framework. Methods include Morans I
     (Moran (1950) &lt;doi:10.2307/2332142&gt;), Gearys C 
     (Geary (1954) &lt;doi:10.2307/2986645&gt;), Getis-Ords G
     (Ord and Getis (1995) &lt;doi:10.1111/j.1538-4632.1995.tb00912.x&gt;),
-    as well as an implementation of the area of applicability methodology from
-    Meyer and Pebesma' (2021) (&lt;doi:10.1111/2041-210X.13650&gt;).">
-<title>Methods for Assessing Spatial Models • waywiser</title>
+    an implementation of the area of applicability methodology from Meyer and 
+    Pebesma (2021) (&lt;doi:10.1111/2041-210X.13650&gt;), and an implementation of
+    multi-scale assessment as described in Riemann' et al. (2010)
+    (&lt;doi:10.1016/j.rse.2010.05.010&gt;).">
+<title>Ergonomic Methods for Assessing Spatial Models • waywiser</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -32,21 +35,24 @@
 <link href="deps/Patua_One-0.4.4/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Methods for Assessing Spatial Models">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Ergonomic Methods for Assessing Spatial Models">
 <meta property="og:description" content="Assessing predictive models of spatial data can be challenging, 
     both because these models are typically built for extrapolating outside the
     original region represented by training data and due to potential spatially
     structured errors, with &quot;hot spots&quot; of higher than expected error
     clustered geographically due to spatial structure in the underlying
-    data. These functions provide methods for measuring the spatial
-    structure of model errors and evaluating where predictions can be made 
-    safely, and are particularly useful for models fit using the tidymodels 
-    framework. Methods include Morans I
+    data. Methods are provided for assessing models fit to spatial data, 
+    including approaches for measuring the spatial structure of model errors,
+    assessing model predictions at multiple spatial scales, and evaluating where 
+    predictions can be made safely. Methods areparticularly useful for models 
+    fit using the tidymodels framework. Methods include Morans I
     (Moran (1950) &lt;doi:10.2307/2332142&gt;), Gearys C 
     (Geary (1954) &lt;doi:10.2307/2986645&gt;), Getis-Ords G
     (Ord and Getis (1995) &lt;doi:10.1111/j.1538-4632.1995.tb00912.x&gt;),
-    as well as an implementation of the area of applicability methodology from
-    Meyer and Pebesma' (2021) (&lt;doi:10.1111/2041-210X.13650&gt;).">
+    an implementation of the area of applicability methodology from Meyer and 
+    Pebesma (2021) (&lt;doi:10.1111/2041-210X.13650&gt;), and an implementation of
+    multi-scale assessment as described in Riemann' et al. (2010)
+    (&lt;doi:10.1016/j.rse.2010.05.010&gt;).">
 <meta property="og:image" content="https://mikemahoney218.github.io/waywiser/logo.png">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -77,7 +83,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/multi-scale-assessment.html">Multi-scale model assessment in waywiser</a>
+    <a class="dropdown-item" href="articles/multi-scale-assessment.html">Multi-scale model assessment</a>
+    <a class="dropdown-item" href="articles/residual-autocorrelation.html">Calculating residual spatial autocorrelation</a>
   </div>
 </li>
 <li class="nav-item">
@@ -110,7 +117,7 @@
 </div>
 <!-- badges: start -->
 
-<p>“Waywiser” is an old-timey name for a <a href="https://en.wikipedia.org/wiki/Surveyor%27s_wheel" class="external-link">surveyor’s wheel</a>, a device that makes measuring long distances easier than with measurement tools like a ruler or yardstick. The waywiser R package makes assessing models of spatial data easier, both by extending the <a href="https://yardstick.tidymodels.org/" class="external-link">yardstick</a> R package to incorporate measures of spatial autocorrelation provided by <a href="https://cran.r-project.org/package=spdep" class="external-link">spdep</a> and by providing an implementation of the “area of applicability” as defined by <a href="https://doi.org/10.1111/2041-210X.13650" class="external-link">Meyer and Pebesma (2021) &lt;doi: 10.1111/2041-210X.13650&gt;</a>.</p>
+<p>“Waywiser” is an old-timey name for a <a href="https://en.wikipedia.org/wiki/Surveyor%27s_wheel" class="external-link">surveyor’s wheel</a>, a device that makes measuring long distances easier than with measurement tools like a ruler or yardstick. The waywiser R package makes it easier to measure the performance of models fit to spatial data by providing ergonomic tools to assess the spatial dependence of model residuals, to assess model predictions across multiple scales, and to calculate the area of applicability of a model.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -125,137 +132,79 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>Let’s walk through how we can use waywiser to find local indicators of spatial autocorrelation for a very simple model. First things first, let’s load a few libraries:</p>
+<p>Let’s say that we fit a linear model predicting crimes against people as a function of literacy, using the <code>guerry</code> data included in waywiser:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># waywiser itself, of course:</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mikemahoney218/waywiser" class="external-link">waywiser</a></span><span class="op">)</span></span>
-<span><span class="co"># For the %&gt;% pipe and mutate:</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
-<p>We’ll be working with the <code>guerry</code> data included in waywiser package. We’ll fit a simple linear model relating crimes against persons with literacy, and then generate predictions from that model. We can use <code><a href="reference/local_moran_i.html">ww_local_moran_i()</a></code> to calculate the local spatial autocorrelation of our residuals at each data point:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mikemahoney218/waywiser" class="external-link">waywiser</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">split_idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span><span class="va">guerry_train</span> <span class="op">&lt;-</span> <span class="va">guerry</span><span class="op">[</span><span class="va">split_idx</span>, <span class="op">]</span></span>
+<span><span class="va">guerry_test</span> <span class="op">&lt;-</span> <span class="va">guerry</span><span class="op">[</span><span class="op">-</span><span class="va">split_idx</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="va">crime_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Crm_prs</span> <span class="op">~</span> <span class="va">Litercy</span>, <span class="va">guerry_train</span><span class="op">)</span></span></code></pre></div>
+<p>We want to assess this model, to better understand how well it predicts crime rates across 1830s France. One method to do so is to evaluate our predictions at multiple levels of aggregation, as suggested by Riemann et al. (2010) (&lt;doi: 10.1016/j.rse.2010.05.010&gt;). This approach is focused on aggregating point predictions, so we’ll convert our data to points and then see how well our predictions perform when aggregated to two different scales:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Crm_prs</span> <span class="op">~</span> <span class="va">Litercy</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i</a></span><span class="op">(</span><span class="va">Crm_prs</span>, <span class="va">pred</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 85 × 4</span></span>
-<span><span class="co">#&gt;    .metric       .estimator .estimate                                   geometry</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt;                         &lt;MULTIPOLYGON [m]&gt;</span></span>
-<span><span class="co">#&gt;  1 local_moran_i standard      0.530  (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  2 local_moran_i standard      0.858  (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  3 local_moran_i standard      0.759  (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  4 local_moran_i standard      0.732  (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  5 local_moran_i standard      0.207  (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  6 local_moran_i standard      0.860  (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  7 local_moran_i standard      0.692  (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  8 local_moran_i standard      1.69   (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  9 local_moran_i standard     -0.0109 (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt; 10 local_moran_i standard      0.710  (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt; # … with 75 more rows</span></span></code></pre></div>
-<p>If you’re familiar with spdep, you can probably guess that waywiser is doing <em>something</em> under the hood here to calculate which of our observations are neighbors, and how to create spatial weights from those neighborhoods. And that guess would be right – waywiser is making use of two functions, <code><a href="reference/ww_build_neighbors.html">ww_build_neighbors()</a></code> and <code><a href="reference/ww_build_weights.html">ww_build_weights()</a></code>, in order to automatically calculate spatial weights for calculating metrics:</p>
+<code class="sourceCode R"><span><span class="va">guerry_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  .truth <span class="op">=</span> <span class="va">guerry</span><span class="op">$</span><span class="va">Crm_prs</span>,</span>
+<span>  .estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">crime_model</span>, <span class="va">guerry</span><span class="op">)</span>,</span>
+<span>  geometry <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">guerry_points</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">guerry_points</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">guerry_multi_scale</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ww_multi_scale.html">ww_multi_scale</a></span><span class="op">(</span></span>
+<span>  <span class="va">guerry_points</span>,</span>
+<span>  <span class="va">.truth</span>,</span>
+<span>  <span class="va">.estimate</span>,</span>
+<span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">guerry_multi_scale</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 6</span></span>
+<span><span class="co">#&gt;   .metric .estimator .estimate .grid_args       .grid         .notes          </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;list&gt;           &lt;list&gt;        &lt;list&gt;          </span></span>
+<span><span class="co">#&gt; 1 rmse    standard       4893. &lt;tibble [1 × 1]&gt; &lt;sf [25 × 3]&gt; &lt;tibble [0 × 2]&gt;</span></span>
+<span><span class="co">#&gt; 2 mae     standard       4393. &lt;tibble [1 × 1]&gt; &lt;sf [25 × 3]&gt; &lt;tibble [0 × 2]&gt;</span></span>
+<span><span class="co">#&gt; 3 rmse    standard       3207. &lt;tibble [1 × 1]&gt; &lt;sf [4 × 3]&gt;  &lt;tibble [0 × 2]&gt;</span></span>
+<span><span class="co">#&gt; 4 mae     standard       3172. &lt;tibble [1 × 1]&gt; &lt;sf [4 × 3]&gt;  &lt;tibble [0 × 2]&gt;</span></span></code></pre></div>
+<p>More information about multi-scale assessment is included in <code><a href="articles/multi-scale-assessment.html">vignette("multi-scale-assessment", package = "waywiser")</a></code>.</p>
+<p>We could also assess the spatial dependence of our model residuals, to identify any potential “hot spots” where our model is consistently less accurate than we’d expect by chance:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/ww_build_neighbors.html">ww_build_neighbors</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Neighbour list object:</span></span>
-<span><span class="co">#&gt; Number of regions: 85 </span></span>
-<span><span class="co">#&gt; Number of nonzero links: 420 </span></span>
-<span><span class="co">#&gt; Percentage nonzero weights: 5.813149 </span></span>
-<span><span class="co">#&gt; Average number of links: 4.941176</span></span>
+<code class="sourceCode R"><span><span class="va">guerry_predicted</span> <span class="op">&lt;-</span> <span class="va">guerry</span></span>
+<span><span class="va">guerry_predicted</span><span class="op">$</span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">crime_model</span>, <span class="va">guerry</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/ww_build_weights.html">ww_build_weights</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Characteristics of weights list object:</span></span>
-<span><span class="co">#&gt; Neighbour list object:</span></span>
-<span><span class="co">#&gt; Number of regions: 85 </span></span>
-<span><span class="co">#&gt; Number of nonzero links: 420 </span></span>
-<span><span class="co">#&gt; Percentage nonzero weights: 5.813149 </span></span>
-<span><span class="co">#&gt; Average number of links: 4.941176 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Weights style: W </span></span>
-<span><span class="co">#&gt; Weights constants summary:</span></span>
-<span><span class="co">#&gt;    n   nn S0      S1       S2</span></span>
-<span><span class="co">#&gt; W 85 7225 85 37.2761 347.6683</span></span></code></pre></div>
-<p>These functions aren’t always the best way to calculate spatial weights for your data, however. As a result, waywiser also lets you specify your own weights directly:</p>
+<span><span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i</a></span><span class="op">(</span><span class="va">guerry_predicted</span>, <span class="va">Crm_prs</span>, <span class="va">predictions</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 85 × 4</span></span>
+<span><span class="co">#&gt;    .metric       .estimator .estimate                                   geometry</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt;                         &lt;MULTIPOLYGON [m]&gt;</span></span>
+<span><span class="co">#&gt;  1 local_moran_i standard      0.548  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  2 local_moran_i standard      0.943  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  3 local_moran_i standard      0.636  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  4 local_moran_i standard      0.700  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  5 local_moran_i standard      0.137  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  6 local_moran_i standard      0.917  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  7 local_moran_i standard      0.900  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  8 local_moran_i standard      1.79   (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt;  9 local_moran_i standard      0.0208 (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt; 10 local_moran_i standard      0.750  (((381847 1762775, 381116 1763059, 379972…</span></span>
+<span><span class="co">#&gt; # … with 75 more rows</span></span></code></pre></div>
+<p>More information about multi-scale assessment is included in <code><a href="articles/residual-autocorrelation.html">vignette("residual-autocorrelation", package = "waywiser")</a></code>.</p>
+<p>Lastly, we can also see if there’s any areas in our data that are too different from our training data for us to safely predict on, which fall outside the “area of applicability” defined by Meyer and Pebesma (2021) (&lt;doi: 10.1111/2041-210X.13650&gt;):</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">weights</span> <span class="op">&lt;-</span> <span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">spdep</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/spdep/reference/dnearneigh.html" class="external-link">dnearneigh</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">97000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">spdep</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/spdep/reference/nb2listw.html" class="external-link">nb2listw</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">crime_model_aoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ww_area_of_applicability.html">ww_area_of_applicability</a></span><span class="op">(</span></span>
+<span>  <span class="va">Crm_prs</span> <span class="op">~</span> <span class="va">Litercy</span>,</span>
+<span>  <span class="va">guerry_train</span>,</span>
+<span>  <span class="va">guerry_test</span>,</span>
+<span>  importance <span class="op">=</span> <span class="fu">vip</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/vip/man/vi_model.html" class="external-link">vi_model</a></span><span class="op">(</span><span class="va">crime_model</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">weights</span></span>
-<span><span class="co">#&gt; Characteristics of weights list object:</span></span>
-<span><span class="co">#&gt; Neighbour list object:</span></span>
-<span><span class="co">#&gt; Number of regions: 85 </span></span>
-<span><span class="co">#&gt; Number of nonzero links: 314 </span></span>
-<span><span class="co">#&gt; Percentage nonzero weights: 4.346021 </span></span>
-<span><span class="co">#&gt; Average number of links: 3.694118 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Weights style: W </span></span>
-<span><span class="co">#&gt; Weights constants summary:</span></span>
-<span><span class="co">#&gt;    n   nn S0       S1       S2</span></span>
-<span><span class="co">#&gt; W 85 7225 85 51.86738 348.7071</span></span>
+<span><span class="va">guerry_aoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span>
+<span>  <span class="va">guerry</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">crime_model_aoa</span>, <span class="va">guerry</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Crm_prs</span> <span class="op">~</span> <span class="va">Litercy</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i</a></span><span class="op">(</span><span class="va">Crm_prs</span>, <span class="va">pred</span>, <span class="va">weights</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 85 × 4</span></span>
-<span><span class="co">#&gt;    .metric       .estimator .estimate                                   geometry</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt;                         &lt;MULTIPOLYGON [m]&gt;</span></span>
-<span><span class="co">#&gt;  1 local_moran_i standard    0.530    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  2 local_moran_i standard    0.794    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  3 local_moran_i standard    0.646    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  4 local_moran_i standard    0.687    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  5 local_moran_i standard    0.207    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  6 local_moran_i standard    1.49     (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  7 local_moran_i standard    0.692    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  8 local_moran_i standard    1.69     (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  9 local_moran_i standard   -0.000610 (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt; 10 local_moran_i standard    0.859    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt; # … with 75 more rows</span></span></code></pre></div>
-<p>Or as a function, which lets you use custom weights with other tidymodels functions like <code>fit_resamples()</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">weights_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu">spdep</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/spdep/reference/dnearneigh.html" class="external-link">dnearneigh</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">97000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu">spdep</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/spdep/reference/nb2listw.html" class="external-link">nb2listw</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">}</span> </span>
-<span></span>
-<span><span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Crm_prs</span> <span class="op">~</span> <span class="va">Litercy</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i</a></span><span class="op">(</span><span class="va">Crm_prs</span>, <span class="va">pred</span>, <span class="va">weights_function</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 85 × 4</span></span>
-<span><span class="co">#&gt;    .metric       .estimator .estimate                                   geometry</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt;                         &lt;MULTIPOLYGON [m]&gt;</span></span>
-<span><span class="co">#&gt;  1 local_moran_i standard    0.530    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  2 local_moran_i standard    0.794    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  3 local_moran_i standard    0.646    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  4 local_moran_i standard    0.687    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  5 local_moran_i standard    0.207    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  6 local_moran_i standard    1.49     (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  7 local_moran_i standard    0.692    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  8 local_moran_i standard    1.69     (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt;  9 local_moran_i standard   -0.000610 (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt; 10 local_moran_i standard    0.859    (((381847 1762775, 381116 1763059, 379972…</span></span>
-<span><span class="co">#&gt; # … with 75 more rows</span></span></code></pre></div>
-<p>Providing custom weights also lets us use <code>ww_local_moran_i_vec</code> to add a column to our original data frame with our statistic, which makes plotting using our original geometries easier:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ww_build_weights.html">ww_build_weights</a></span><span class="op">(</span><span class="va">guerry</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Crm_prs</span> <span class="op">~</span> <span class="va">Litercy</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>         .estimate <span class="op">=</span> <span class="fu"><a href="reference/local_moran_i.html">ww_local_moran_i_vec</a></span><span class="op">(</span><span class="va">Crm_prs</span>, <span class="va">pred</span>, <span class="va">weights</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">.estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient2</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Moran's I"</span>, </span>
-<span>    low <span class="op">=</span> <span class="st">"#018571"</span>, </span>
-<span>    mid <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    high <span class="op">=</span> <span class="st">"#A6611A"</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-2022_06_29-guerry-1.png" title="A map of calculated Moran's I values for the Guerry data set." alt="A map of calculated Moran's I values for the Guerry data set." width="100%"></p>
-<p>This makes it easy to see what areas are poorly represented by our model, which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we’re working with.</p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">guerry_aoa</span><span class="op">[</span><span class="st">"aoa"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
+<p>We can see that two areas are outside our model’s area of applicability, meaning that we probably can’t trust our model when extrapolating into those regions!</p>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
