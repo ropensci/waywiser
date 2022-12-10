@@ -92,16 +92,17 @@ For grouped data frames, the number of rows returned will be the same as the num
 For \verb{_vec()} functions, a single value (or NA).
 }
 \description{
-These functions calculate the agreement coefficient from Ji and Gallo (2006).
-This method provides a useful measurement of agreement between two data sets
-which is bounded, symmetrical, and can be decomposed into systematic and
-unsystematic components;
+These functions calculate the agreement coefficient and related measures from
+Ji and Gallo (2006). Agreement coefficients provides a useful measurement of
+agreement between two data sets which is bounded, symmetrical, and can be
+decomposed into systematic and unsystematic components;
 however, it assumes a linear relationship between the two data sets and
 treats both "truth" and "estimate" as being of equal quality, and as such may
 not be a useful metric in all scenarios.
 }
 \details{
-Values range from 0 to 1, with 1 indicating perfect agreement.
+Agreement coefficient values range from 0 to 1, with 1 indicating perfect
+agreement.
 }
 \examples{
 # Calculated values match Ji and Gallo 2006:

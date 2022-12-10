@@ -2,13 +2,19 @@
 % Please edit documentation in R/willmott_d.R
 \name{ww_willmott_d}
 \alias{ww_willmott_d}
+\alias{ww_willmott_d.data.frame}
 \alias{ww_willmott_d_vec}
+\alias{ww_willmott_dr}
+\alias{ww_willmott_dr.data.frame}
+\alias{ww_willmott_dr_vec}
 \alias{ww_systematic_mse}
+\alias{ww_systematic_mse.data.frame}
 \alias{ww_systematic_mse_vec}
 \alias{ww_unsystematic_mse}
 \alias{ww_unsystematic_mse.data.frame}
 \alias{ww_unsystematic_mse_vec}
 \alias{ww_systematic_rmse}
+\alias{ww_systematic_rmse.data.frame}
 \alias{ww_systematic_rmse_vec}
 \alias{ww_unsystematic_rmse}
 \alias{ww_unsystematic_rmse.data.frame}
@@ -17,9 +23,19 @@
 \usage{
 ww_willmott_d(data, ...)
 
+\method{ww_willmott_d}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+
 ww_willmott_d_vec(truth, estimate, na_rm = TRUE, ...)
 
+ww_willmott_dr(data, ...)
+
+\method{ww_willmott_dr}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+
+ww_willmott_dr_vec(truth, estimate, na_rm = TRUE, ...)
+
 ww_systematic_mse(data, ...)
+
+\method{ww_systematic_mse}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
 ww_systematic_mse_vec(truth, estimate, na_rm = TRUE, ...)
 
@@ -30,6 +46,8 @@ ww_unsystematic_mse(data, ...)
 ww_unsystematic_mse_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_systematic_rmse(data, ...)
+
+\method{ww_systematic_rmse}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
 ww_systematic_rmse_vec(truth, estimate, na_rm = TRUE, ...)
 
@@ -92,6 +110,10 @@ pp 184-194, doi: 10.1080/02723646.1981.10642213.
 Willmott, C. J. 1982. "Some Comments on the Evaluation of Model Performance".
 Bulletin of the American Meteorological Society 63(11), pp 1309-1313,
 doi: 10.1175/1520-0477(1982)063<1309:SCOTEO>2.0.CO;2.
+
+Wilmott, C. J., Robeson, S. M., and Matsuura, K. "A refined index of model
+perfomance". International Journal of Climatology 32, pp 2088-2094, doi:
+10.1002/joc.2419.
 }
 \seealso{
 Other agreement metrics: 

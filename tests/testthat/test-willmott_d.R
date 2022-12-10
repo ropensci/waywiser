@@ -3,9 +3,17 @@ test_that("Willmott's D estimates are the same across methods", {
   y <- c(2, 3, 5, 5, 6, 8)
   df <- data.frame(x = x, y = y)
 
+  sim <- c(5, 7, 9, 2, 4.5, 6.7)
+  obs <- c(4.7, 6, 10, 2.5, 4, 7)
+
   expect_equal(
     ww_willmott_d_vec(y, x),
     0.5137892
+  )
+
+  expect_equal(
+    ww_willmott_dr_vec(obs, sim),
+    0.847457627118644
   )
 
   expect_equal(
@@ -21,6 +29,11 @@ test_that("Willmott's D estimates are the same across methods", {
   expect_equal(
     ww_willmott_d_vec(x, y),
     ww_willmott_d(df, x, y)$.estimate
+  )
+
+  expect_equal(
+    ww_willmott_dr_vec(x, y),
+    ww_willmott_dr(df, x, y)$.estimate
   )
 
   expect_equal(

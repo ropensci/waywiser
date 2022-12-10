@@ -35,6 +35,10 @@
 #' Bulletin of the American Meteorological Society 63(11), pp 1309-1313,
 #' doi: 10.1175/1520-0477(1982)063<1309:SCOTEO>2.0.CO;2.
 #'
+#' Wilmott, C. J., Robeson, S. M., and Matsuura, K. "A refined index of model
+#' perfomance". International Journal of Climatology 32, pp 2088-2094, doi:
+#' 10.1002/joc.2419.
+#'
 #' @export
 ww_willmott_d <- function(data, ...) {
   UseMethod("ww_willmott_d")
@@ -77,6 +81,60 @@ ww_willmott_d_vec <- function(truth,
 
   metric_vec_template(
     metric_impl = ww_willmott_d_impl,
+    truth = truth,
+    estimate = estimate,
+    na_rm = na_rm,
+    cls = "numeric",
+    ...
+  )
+}
+
+#' @rdname ww_willmott_d
+#' @export
+ww_willmott_dr <- function(data, ...) {
+  UseMethod("ww_willmott_dr")
+}
+
+ww_willmott_dr <- new_numeric_metric(ww_willmott_dr, direction = "maximize")
+
+#' @rdname ww_willmott_d
+#' @export
+ww_willmott_dr.data.frame <- function(data,
+                                     truth,
+                                     estimate,
+                                     na_rm = TRUE,
+                                     ...) {
+  metric_summarizer(
+    metric_nm = "willmott_dr",
+    metric_fn = ww_willmott_dr_vec,
+    data = data,
+    truth = !! enquo(truth),
+    estimate = !! enquo(estimate),
+    na_rm = na_rm,
+    metric_fn_options = list(...)
+  )
+}
+
+#' @rdname ww_willmott_d
+#' @export
+ww_willmott_dr_vec <- function(truth,
+                              estimate,
+                              na_rm = TRUE,
+                              ...) {
+
+  ww_willmott_dr_impl <- function(truth, estimate, ...) {
+    term_1 <- sum(abs(estimate - truth))
+    term_2 <- sum(abs(truth - mean(truth))) * 2
+
+    if (term_1 <= term_2) {
+      1 - (term_1 / term_2)
+    } else {
+      (term_2 / term_1) - 1
+    }
+  }
+
+  metric_vec_template(
+    metric_impl = ww_willmott_dr_impl,
     truth = truth,
     estimate = estimate,
     na_rm = na_rm,
