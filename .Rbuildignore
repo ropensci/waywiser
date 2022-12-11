@@ -11,3 +11,5 @@
 ^CRAN-SUBMISSION$
 ^data-raw$
 ^vignettes/articles$
+^codemeta\.json$
+^CITATION\.cff$

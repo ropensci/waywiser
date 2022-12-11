@@ -19,10 +19,10 @@
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
 #'
+#' @family autocorrelation metrics
+#' @family yardstick metrics
+#'
 #' @examples
-#'
-#'
-#'
 #' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
 #' guerry$predictions <- predict(guerry_lm, guerry)
 #'

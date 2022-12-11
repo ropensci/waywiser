@@ -23,3 +23,7 @@ An object of class "nb"
 This function uses \code{\link[spdep:knearneigh]{spdep::knearneigh()}} and \code{\link[spdep:knn2nb]{spdep::knn2nb()}} to
 create a "nb" neighbors list.
 }
+\examples{
+ww_make_point_neighbors(ny_trees)
+
+}

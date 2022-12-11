@@ -30,9 +30,11 @@ test_that("`ww_area_of_applicability` is not defined for vectors", {
 })
 
 test_that("`ww_area_of_applicability` finds 0 distance between identical data", {
-
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
-    ww_area_of_applicability(y ~ ., train, train, importance)$aoa_threshold,
+    suppressWarnings(
+      ww_area_of_applicability(y ~ ., train, train, importance)$aoa_threshold
+    ),
     0,
     tolerance = 1e-7
   )
@@ -67,7 +69,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
     head(methods[[2]], -1)
   )
 
-  expect_identical(
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
     predict(methods[[1]], test),
     predict(methods[[2]], test)
   )
@@ -77,7 +80,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
     head(methods[[3]], -1)
   )
 
-  expect_identical(
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
     predict(methods[[2]], test),
     predict(methods[[3]], test)
   )
@@ -85,7 +89,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
   # Comparing rset method to the others --
   # because here we calculate our training data on the entire thing
   # the training, means, sds slots are all different
-  expect_identical(
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
     methods[[3]]$aoa_threshold,
     methods[[4]]$aoa_threshold
   )
@@ -101,7 +106,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
     head(methods[[5]], -1)
   )
 
-  expect_identical(
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
     predict(methods[[4]], test),
     predict(methods[[5]], test)
   )
@@ -111,11 +117,13 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
 
 test_that("`ww_area_of_applicability` can handle different column orders", {
 
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
     ww_area_of_applicability(train[2:11], test[11:2], importance)$aoa_threshold
   )
 
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
     ww_area_of_applicability(train[11:2], test[2:11], importance)$aoa_threshold
@@ -132,42 +140,61 @@ test_that("NAs are handled", {
   comb_rset_no_y <- rsample::make_splits(train[2:11], test[2:11])
   comb_rset_no_y <- rsample::manual_rset(list(comb_rset_no_y), "Fold1")
 
-  expect_snapshot_error(
-    ww_area_of_applicability(y ~ ., train, test, importance)
+  #' @srrstats {G2.14a} Users can error on NA:
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train, test, importance),
+    error = TRUE
   )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit)
   )
 
-  expect_snapshot_error(
-    ww_area_of_applicability(train[2:11], test[2:11], importance)
+  #' @srrstats {G2.14a} Users can error on NA:
+  expect_snapshot(
+    ww_area_of_applicability(train[2:11], test[2:11], importance),
+    error = TRUE
   )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(train[2:11], test[2:11], importance, na_action = na.omit)
   )
 
-  expect_snapshot_error(
-    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance)
+  #' @srrstats {G2.14a} Users can error on NA:
+  expect_snapshot(
+    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance),
+    error = TRUE
   )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance, na_action = na.omit)
   )
 
-  expect_snapshot_error(
-    ww_area_of_applicability(comb_rset_no_y, importance = importance)
+  #' @srrstats {G2.14a} Users can error on NA:
+  expect_snapshot(
+    ww_area_of_applicability(comb_rset_no_y, importance = importance),
+    error = TRUE
   )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(comb_rset_no_y, importance = importance, na_action = na.omit)
   )
 
+  #' @srrstats {G2.14a} Users can error on NA:
   skip_if_not_installed("recipes")
-  expect_snapshot_error(
+  expect_snapshot(
     ww_area_of_applicability(
       comb_rset,
       recipes::recipe(y ~ ., train),
       importance = importance
-    )
+    ),
+    error = TRUE
   )
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(
       comb_rset,
@@ -177,6 +204,7 @@ test_that("NAs are handled", {
     )
   )
 
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     predict(
       ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit),
@@ -210,6 +238,11 @@ test_that("normal use", {
   expect_snapshot(
     predict(aoa, train)
   )
+
+})
+
+test_that("CAST comparison", {
+  skip_if_not_installed("CAST")
 
 })
 

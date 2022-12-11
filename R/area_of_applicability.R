@@ -3,7 +3,9 @@
 #' This function calculates the "area of applicability" of a model, as
 #' introduced by Meyer and Pebesma (2021). While the initial paper introducing
 #' this method focused on spatial models, there is nothing inherently spatial
-#' about the method; it can be used with any type of data.
+#' about the method; it can be used with any type of data (and, because it does
+#' not care about the spatial arrangement of your data, can be used with 2D or
+#' 3D spatial data, and with geographic or projected CRS).
 #'
 #' Predictions made on points "inside" the area of applicability should be as
 #' accurate as predictions made on the data provided to `testing`.
@@ -90,7 +92,8 @@
 #'   * A data.frame with two columns: `term`, containing the names of each
 #'     variable in the training and testing data, and `estimate`, containing
 #'     the (raw or scaled) feature importance for each variable.
-#'   * An object of class `vi` with at least two columns, `Variable` and `Importance`.
+#'   * An object of class `vi` with at least two columns, `Variable` and
+#'     `Importance`.
 #'
 #' All variables in the training data (`x` or `data`, depending on the context)
 #' must have a matching importance estimate, and all terms with importance
@@ -98,13 +101,21 @@
 #'
 #' @param ... Not currently used.
 #'
+#' @srrstats {G2.0a} Explicit documentation on input lengths
+#' @srrstats {G2.1a} Explicit documentation on input types
+#' @srrstats {G2.14} Users can pass any function to handle NA values
+#' @srrstats {G2.14a} Users can pass any function to handle NA values
+#' @srrstats {G2.14b} Users can pass any function to handle NA values
+#' @srrstats {G2.14c} Users can pass any function to handle NA values
+#' @srrstats {G2.16}  Users can pass any preprocessing function
 #' @param na_action A function which indicates what should happen when the data
 #' (any of `x`, `data`, or `testing`) contain NAs. The default is `na.fail`;
 #' you may wish to set it to `na.omit` or any of the functions from the "zoo"
 #' package. This function ignores the value of `options("na.action")` in order
 #' to make cross-computer (and cross-session) results more stable. Note that
 #' this argument only impacts fitting the area of applicability and has no
-#' impact on predictions.
+#' impact on predictions. This argument must be of length 1; you cannot pass
+#' multiple functions to `na_action`.
 #'
 #' @details
 #'
@@ -136,6 +147,7 @@
 #' aoa <- ww_area_of_applicability(y ~ ., train, test, importance = importance)
 #' predict(aoa, test)
 #'
+#' @srrstats {G1.0} Reference for this method:
 #' @references
 #' H. Meyer and E. Pebesma. 2021. "Predicting into unknown space? Estimating
 #' the area of applicability of spatial prediction models," Methods in Ecology
@@ -143,6 +155,8 @@
 #'
 #' @export
 ww_area_of_applicability <- function(x, ...) {
+  #' @srrstats {G2.1} Method dispatch for explicit type checking
+  #' @srrstats {G2.7} Function handles matrices, data frames, and rset objects
   UseMethod("ww_area_of_applicability")
 }
 
@@ -163,7 +177,11 @@ ww_area_of_applicability.default <- function(x, ...) {
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, ..., na_action = na.fail) {
   rlang::check_dots_empty()
+  #' @srrstats {G2.8} Function converts to a standard input type
+  #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
   training <- hardhat::mold(x, NA_real_)
+  #' @srrstats {G2.8} Function converts to a standard input type
+  #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
   if (!is.null(testing)) testing <- hardhat::mold(testing, NA_real_)
   create_aoa(training, testing, importance, ..., na_action = na_action)
 }
@@ -176,8 +194,19 @@ ww_area_of_applicability.matrix <- ww_area_of_applicability.data.frame
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance, ..., na_action = na.fail) {
   rlang::check_dots_empty()
-  training <- hardhat::mold(x, data)
-  if (!is.null(testing)) testing <- hardhat::mold(x, testing)
+  # This method is also used for recipes, which don't need blueprints:
+  blueprint <- NULL
+  if (inherits(x, "formula")) {
+    blueprint <- hardhat::default_formula_blueprint(indicators = "none")
+  }
+  #' @srrstats {G2.8} Function converts to a standard input type
+  #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+  training <- hardhat::mold(x, data, blueprint = blueprint)
+  #' @srrstats {G2.8} Function converts to a standard input type
+  #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+  if (!is.null(testing)) {
+    testing <- hardhat::mold(x, testing, blueprint = blueprint)
+  }
   create_aoa(training, testing, importance, ..., na_action = na_action)
 }
 
@@ -199,10 +228,18 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_actio
       testing <- rsample::assessment(rsplit)
 
       if (identical(y, NA_real_)) {
+        #' @srrstats {G2.8} Function converts to a standard input type
+        #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
         training <- hardhat::mold(training, y)
+        #' @srrstats {G2.8} Function converts to a standard input type
+        #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
         testing <- hardhat::mold(testing, y)
       } else {
+        #' @srrstats {G2.8} Function converts to a standard input type
+        #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
         training <- hardhat::mold(y, training)
+        #' @srrstats {G2.8} Function converts to a standard input type
+        #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
         testing <- hardhat::mold(y, testing)
       }
       create_aoa(
@@ -217,12 +254,23 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_actio
 
   aoa <- aoa_calcs[[1]]
   training <- if (identical(y, NA_real_)) {
-    hardhat::mold(x$splits[[1]]$data, NA_real_)$predictors
+    #' @srrstats {G2.15} Enforcing no NAs are passed to base functions
+    check_for_missing(
+      hardhat::mold(x$splits[[1]]$data, NA_real_)$predictors,
+      na_action,
+      "training",
+      "(`x`)"
+    )
   } else {
-    hardhat::mold(y, x$splits[[1]]$data)$predictors
+    check_for_missing(
+      hardhat::mold(y, x$splits[[1]]$data)$predictors,
+      na_action,
+      "training",
+      "(`x`)"
+    )
   }
-  aoa$sds <- purrr::map_dbl(training, stats::sd, na.rm = TRUE)
-  aoa$means <- purrr::map_dbl(training, mean, na.rm = TRUE)
+  aoa$sds <- purrr::map_dbl(training, stats::sd)
+  aoa$means <- purrr::map_dbl(training, mean)
   aoa$transformed_training <- standardize_and_weight(
     training,
     aoa$sds,
@@ -242,50 +290,72 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_actio
 # Comments reference section numbers from Meyer and Pebesma 2021
 # (doi: 10.1111/2041-210X.13650)
 
+#' Workhorse function to create AOA objects from all input types
+#'
+#' @inheritParams ww_area_of_applicability
+#' @param include_di Boolean: include DI in the returned object? Necessary for
+#' post-processing AOA objects when working with rsets.
+#'
+#' @return
+#' A `ww_area_of_applicability` object, which can be used with [predict()] to
+#' calculate the distance of new data to the original training data, and
+#' determine if new data is within a model's area of applicability.
+#'
+#' @srrstats {G1.4a} Internal function documentation
+#'
+#' @noRd
 create_aoa <- function(training, testing, importance, na_action, ..., include_di = FALSE) {
   aoa <- list(
     training = training$predictors,
     class = "ww_area_of_applicability",
     blueprint = training$blueprint
   )
-  tryCatch(
-    aoa$training <- do.call(na_action, list(aoa$training)),
-    error = function(e) {
-      rlang::abort(
-        c(
-          "Missing values in the training set data (either `x` or `data`).",
-          i = "Either process your data to fix the NA values or set `na_action`."
-        ),
-        call = rlang::caller_env()
-      )
-    }
+
+  #' @srrstats {G2.0} Checking univariate inputs
+  #' @srrstats {G2.2} Restricting multivariate input
+  #' @srrstats {G2.13} Checking inputs prior to calculations
+  if (length(na_action) != 1) {
+    rlang::abort("Only one value can be passed to `na_action`.")
+  }
+
+  #' @srrstats {G2.13} Checking inputs prior to calculations
+  #' @srrstats {G2.15} Enforcing no NAs are passed to base functions
+  aoa$training <- check_for_missing(
+    aoa$training,
+    na_action,
+    "training",
+    "(either `x` or `data`)"
   )
 
-  aoa$testing <- check_di_testing(aoa$training, testing)
-  if (!is.null(aoa$testing)) {
-    tryCatch(
-      aoa$testing <- do.call(na_action, list(aoa$testing)),
-      error = function(e) {
-        rlang::abort(
-          c(
-            "Missing values in the test set data (either `x` or `testing`).",
-            i = "Either process your data to fix the NA values or set `na_action`."
-          ),
-          call = rlang::caller_env()
-        )
-      }
-    )
+  #' @srrstats {G2.13} Checking inputs prior to calculations
+  aoa$testing <- check_di_testing(aoa$training, testing, na_action)
 
+  #' @srrstats {G2.13} Checking inputs prior to calculations
+  if (nrow(aoa$training) == 0) {
+    rlang::abort(
+      "0 rows were passed as training data."
+    )
   }
+
+  #' @srrstats {G2.13} Checking inputs prior to calculations
+  if (!is.null(testing) && nrow(aoa$testing) == 0) {
+    rlang::abort(
+      "0 rows were passed as testing data."
+    )
+  }
+
+  #' @srrstats {G2.13} Checking inputs prior to calculations
   check_di_columns_numeric(aoa$training, aoa$testing)
+
+  #' @srrstats {G2.13} Checking inputs prior to calculations
   aoa$importance <- check_di_importance(aoa$training, importance)
 
   # 2.1 Standardization of predictor variables
   # Store standard deviations and means of all predictors from training
   # We'll save these to standardize `testing`
   # Then scale & center `training`
-  aoa$sds <- purrr::map_dbl(aoa$training, stats::sd, na.rm = TRUE)
-  aoa$means <- purrr::map_dbl(aoa$training, mean, na.rm = TRUE)
+  aoa$sds <- purrr::map_dbl(aoa$training, stats::sd)
+  aoa$means <- purrr::map_dbl(aoa$training, mean)
 
   aoa$transformed_training <- standardize_and_weight(
     aoa$training,
@@ -326,19 +396,68 @@ create_aoa <- function(training, testing, importance, na_action, ..., include_di
 
 }
 
-check_di_testing <- function(training, testing) {
+#' Run `na_action` against data, with useful error messages if needed
+#'
+#' @param dat A data.frame
+#' @inheritParams rlang::abort
+#' @inheritParams ww_area_of_applicability
+#' @param where The name of the object that is being passed to `dat`
+#' @param where_longer The name of the argument that the user would have passed `dat` to.
+#'
+#' @return `do.call(na_action, list(dat))`
+#'
+#' @srrstats {G1.4a} Internal function documentation
+#'
+#' @noRd
+check_for_missing <- function(dat, na_action, where, where_longer, call = rlang::caller_env()) {
+  if (any(is.na(dat))) {
+    tryCatch(
+      dat <- do.call(na_action, list(dat)),
+      error = function(e) {
+        rlang::abort(
+          c(
+            glue::glue("Missing values in the {where} set data {where_longer}."),
+            i = "Either process your data to fix the NA values or set `na_action`."
+          ),
+          call = call
+        )
+      }
+    )
+  }
+  dat
+}
+
+#' Validate "testing" objects and reorder columns to match training data
+#'
+#' @param training The data frame representing your "training" data.
+#'
+#' @param testing The output from [hardhat::mold()],
+#' containing the data used to validate your model.
+#' This should be the same data as used to calculate all model accuracy metrics.
+#'
+#' @return `testing`, with columns re-ordered to match `training`
+#'
+#' @srrstats {G1.4a} Internal function documentation
+#'
+#' @noRd
+check_di_testing <- function(training, testing, na_action = na.pass) {
 
   # If NULL, nothing to validate or re-order, so just return NULL
   if (is.null(testing)) return(NULL)
 
   # Make sure that the testing set has the same columns, in the same order,
   # as the original training data
-  testing <- testing$predictors
+  testing <- check_for_missing(
+    testing$predictors,
+    na_action,
+    "testing",
+    "(`testing` or `new_data`)",
+    call = rlang::caller_env(2)
+  )
 
   if (!all(names(training) %in% names(testing))) {
     rlang::abort(
-      "Some columns in `training` were not present in `testing` (or `new_data`).",
-      call = rlang::caller_env(2)
+      "Some columns in `training` were not present in `testing` (or `new_data`)."
     )
   }
   # Re-order testing so that its columns are guaranteed to be in the
@@ -347,6 +466,19 @@ check_di_testing <- function(training, testing) {
 
 }
 
+#' Validate "importance" objects
+#'
+#' @param training The data frame representing your "training" data.
+#'
+#' @param importance Any object accepted by [tidy_importance()].
+#'
+#' @return A standardized importance data frame, with columns "term" and
+#' "importance", with terms ordered in the same order as columns in training
+#' data.
+#'
+#' @srrstats {G1.4a} Internal function documentation
+#'
+#' @noRd
 check_di_importance <- function(training, importance) {
   importance <- tidy_importance(importance)
 
@@ -379,20 +511,50 @@ check_di_importance <- function(training, importance) {
   importance[importance_order, ]
 }
 
+#' Validate all predictor columns are numeric
+#'
+#' @param training The data frame representing your "training" data.
+#'
+#' @param testing The output from [check_di_testing()].
+#'
+#' @return TRUE, invisibly.
+#'
+#' @srrstats {G1.4a} Internal function documentation
+#'
+#' @noRd
 check_di_columns_numeric <- function(training, testing) {
   col_is_numeric <- c(
     purrr::map_lgl(training, is.numeric),
     purrr::map_lgl(testing, is.numeric)
   )
 
+  #' @srrstats {G2.1} Assert predictors are numeric.
+  #' @srrstats {G2.1a} Explicitly say predictors must be numeric.
+  #' @srrstats {G2.12} This errors when passed list columns.
   if (!all(col_is_numeric)) {
     rlang::abort(
       "All predictors must be numeric.",
-      call = rlang::caller_env(2)
+      call = rlang::caller_env(4)
     )
   }
+
+  return(invisible(TRUE))
 }
 
+#' Center and scale variables, and weight by variable importance
+#'
+#' @param dat A data frame with all numeric columns
+#' @param sds The standard deviation of each variable in `dat`, in the same
+#' order as `dat`
+#' @param means The mean of each variable in `dat`, in the same order as `dat`
+#' @param importance The output of [check_di_importance()].
+#'
+#' @return A data.frame in the same shape as `dat`, with standardized and
+#' weighted variables.
+#'
+#' @srrstats {G1.4a} Internal function documentation
+#'
+#' @noRd
 standardize_and_weight <- function(dat, sds, means, importance) {
   # 2.1 Standardize
   dat <- sweep(dat, 2, means, "-")
@@ -401,6 +563,16 @@ standardize_and_weight <- function(dat, sds, means, importance) {
   sweep(dat, 2, importance[["estimate"]], "*")
 }
 
+#' Calculate d_bar: The mean distance between training points.
+#'
+#' @param training The data frame representing your "training" data, after being
+#' run through [standardize_and_weight()].
+#'
+#' @return A numeric of length 1.
+#'
+#' @srrstats {G1.4a} Internal function documentation
+#'
+#' @noRd
 calc_d_bar <- function(training) {
   # 2.4 Dissimilarity index
   # Find the mean nearest neighbor distance between training points:
@@ -409,6 +581,25 @@ calc_d_bar <- function(training) {
   Matrix::mean(dists, na.rm = TRUE)
 }
 
+#' Calculate di
+#'
+#' di is the nearest neighbor distance of each point in "testing" to the
+#' training data (or, in the absence of testing data, of each point in training
+#' to the rest of the training set), divided by d_bar.
+#'
+#' @param training The data frame representing your "training" data, after being
+#' run through [standardize_and_weight()].
+#'
+#' @param testing The data frame representing your "testing" data, after being
+#' run through [standardize_and_weight()].
+#'
+#' @param d_bar The output of [calc_d_bar()].
+#'
+#' @return A numeric of length `nrow(training)`.
+#'
+#' @srrstats {G1.4a} Internal function documentation
+#'
+#' @noRd
 calc_di <- function(training, testing, d_bar) {
   # 2.3 Multivariate distance calculation
   # Calculates the distance between each point in the `testing` set
@@ -427,10 +618,20 @@ calc_di <- function(training, testing, d_bar) {
 
 }
 
+#' Calculate the area of applicability threshold
+#'
+#' @param di The output of [calc_di()].
+#'
+#' @return A numeric of length 1.
+#'
+#' @srrstats {G1.4a} Internal function documentation
+#'
+#' @noRd
 calc_aoa <- function(di) {
   # Section 2.5 in Meyer and Pebesma
   as.vector(
-    stats::quantile(di, 0.75, na.rm = TRUE) + (1.5 * stats::IQR(di, na.rm = TRUE))
+    stats::quantile(di, 0.75) +
+      (1.5 * stats::IQR(di))
   )
 }
 
@@ -481,6 +682,8 @@ calc_aoa <- function(di) {
 #'
 #' @exportS3Method
 predict.ww_area_of_applicability <- function(object, new_data, ...) {
+  #' @srrstats {G2.8} Function converts to a standard input type
+  #' @srrstats {G2.10} Extraction is handled by [hardhat::forge()]
   new_data <- hardhat::forge(new_data, object$blueprint)
 
   new_data <- check_di_testing(object$transformed_training, new_data)

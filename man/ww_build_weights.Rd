@@ -25,3 +25,7 @@ A \code{listw} object.
 \description{
 Build "listw" objects of spatial weights
 }
+\examples{
+ww_build_weights(guerry)
+
+}

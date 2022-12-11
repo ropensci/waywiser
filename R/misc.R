@@ -14,13 +14,14 @@
 #' be created using the centroids of the data as points, with a warning.
 #'
 #' @param ... Arguments passed to the neighbor-creating function.
-#'
-#'
 #' @param data An sf object (of class "sf" or "sfc").
 #' @param nb An object of class "nb" (in which case it will be returned
 #' unchanged), or a function to create an object of class "nb" from `data` and
 #' `...`, or `NULL`. See details.
 #' @inheritParams rlang::abort
+#'
+#' @examples
+#' ww_build_neighbors(guerry)
 #'
 #' @return An object of class "nb".
 #'
@@ -81,6 +82,9 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
 #'
 #' @return An object of class "nb"
 #'
+#' @examples
+#' ww_make_point_neighbors(ny_trees)
+#'
 #' @export
 ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
 
@@ -99,6 +103,9 @@ ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
 #'
 #' @return An object of class "nb"
 #'
+#' @examples
+#' ww_make_polygon_neighbors(guerry)
+#'
 #' @export
 ww_make_polygon_neighbors <- function(data, ...) {
   spdep::poly2nb(data, ...)
@@ -116,6 +123,9 @@ ww_make_polygon_neighbors <- function(data, ...) {
 #' @param ... Arguments passed to the weight constructing function.
 #'
 #' @return A `listw` object.
+#'
+#' @examples
+#' ww_build_weights(guerry)
 #'
 #' @export
 ww_build_weights <- function(x, wt = NULL, include_self = FALSE, ...) {

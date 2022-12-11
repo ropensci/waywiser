@@ -91,8 +91,9 @@ components of MSE equal total MSE (though the same is not true for RMSE).
 }
 \details{
 Values of d range from 0 to 1, with 1 indicating perfect agreement. Values of
-RMSE are in the same units as \code{truth} and \code{estimate}, while values of MSE are
-squared.
+dr range from -1 to 1, with 1 similarly indicating perfect agreement. Values
+of RMSE are in the same units as \code{truth} and \code{estimate}, while values of MSE
+are in squared units. \code{truth} and \code{estimate} must be the same length.
 }
 \examples{
 x <- c(6, 8, 9, 10, 11, 14)
@@ -111,12 +112,21 @@ Willmott, C. J. 1982. "Some Comments on the Evaluation of Model Performance".
 Bulletin of the American Meteorological Society 63(11), pp 1309-1313,
 doi: 10.1175/1520-0477(1982)063<1309:SCOTEO>2.0.CO;2.
 
-Wilmott, C. J., Robeson, S. M., and Matsuura, K. "A refined index of model
-perfomance". International Journal of Climatology 32, pp 2088-2094, doi:
+Willmott, C. J., Robeson, S. M., and Matsuura, K. "A refined index of model
+performance". International Journal of Climatology 32, pp 2088-2094, doi:
 10.1002/joc.2419.
 }
 \seealso{
 Other agreement metrics: 
 \code{\link{ww_agreement_coefficient}()}
+
+Other yardstick metrics: 
+\code{\link{ww_agreement_coefficient}()},
+\code{\link{ww_global_geary_c}()},
+\code{\link{ww_global_moran_i}()},
+\code{\link{ww_local_geary_c}()},
+\code{\link{ww_local_getis_ord_g}()},
+\code{\link{ww_local_moran_i}()}
 }
 \concept{agreement metrics}
+\concept{yardstick metrics}

@@ -75,7 +75,8 @@ applicability.}
 \item A data.frame with two columns: \code{term}, containing the names of each
 variable in the training and testing data, and \code{estimate}, containing
 the (raw or scaled) feature importance for each variable.
-\item An object of class \code{vi} with at least two columns, \code{Variable} and \code{Importance}.
+\item An object of class \code{vi} with at least two columns, \code{Variable} and
+\code{Importance}.
 }
 
 All variables in the training data (\code{x} or \code{data}, depending on the context)
@@ -88,7 +89,8 @@ you may wish to set it to \code{na.omit} or any of the functions from the "zoo"
 package. This function ignores the value of \code{options("na.action")} in order
 to make cross-computer (and cross-session) results more stable. Note that
 this argument only impacts fitting the area of applicability and has no
-impact on predictions.}
+impact on predictions. This argument must be of length 1; you cannot pass
+multiple functions to \code{na_action}.}
 
 \item{data}{The data frame representing your "training" data, when using the
 formula or recipe methods.}

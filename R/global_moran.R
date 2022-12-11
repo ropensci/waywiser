@@ -11,15 +11,15 @@
 #' @param randomization variance of I calculated under the assumption of randomisation, if FALSE normality
 #' @param ... Additional arguments passed to [spdep::moran.test()].
 #'
+#' @family autocorrelation metrics
+#' @family yardstick metrics
+#'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For `_vec()` functions, a single value (or NA).
 #'
 #' @examples
-#'
-#'
-#'
 #' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
 #' guerry$predictions <- predict(guerry_lm, guerry)
 #'

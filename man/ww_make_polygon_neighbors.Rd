@@ -18,3 +18,7 @@ An object of class "nb"
 This function is an extremely thin wrapper around \code{\link[spdep:poly2nb]{spdep::poly2nb()}},
 renamed to use the waywiser "ww" prefix.
 }
+\examples{
+ww_make_polygon_neighbors(guerry)
+
+}

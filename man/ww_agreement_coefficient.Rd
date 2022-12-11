@@ -92,17 +92,18 @@ For grouped data frames, the number of rows returned will be the same as the num
 For \verb{_vec()} functions, a single value (or NA).
 }
 \description{
-These functions calculate the agreement coefficient and related measures from
-Ji and Gallo (2006). Agreement coefficients provides a useful measurement of
-agreement between two data sets which is bounded, symmetrical, and can be
-decomposed into systematic and unsystematic components;
+These functions calculate the agreement coefficient and mean product
+difference (MPD), as well as their systematic and unsystematic components,
+from Ji and Gallo (2006). Agreement coefficients provides a useful
+measurement of agreement between two data sets which is bounded, symmetrical,
+and can be decomposed into systematic and unsystematic components;
 however, it assumes a linear relationship between the two data sets and
 treats both "truth" and "estimate" as being of equal quality, and as such may
 not be a useful metric in all scenarios.
 }
 \details{
 Agreement coefficient values range from 0 to 1, with 1 indicating perfect
-agreement.
+agreement. \code{truth} and \code{estimate} must be the same length.
 }
 \examples{
 # Calculated values match Ji and Gallo 2006:
@@ -126,5 +127,14 @@ doi: 10.14358/PERS.72.7.823.
 \seealso{
 Other agreement metrics: 
 \code{\link{ww_willmott_d}()}
+
+Other yardstick metrics: 
+\code{\link{ww_global_geary_c}()},
+\code{\link{ww_global_moran_i}()},
+\code{\link{ww_local_geary_c}()},
+\code{\link{ww_local_getis_ord_g}()},
+\code{\link{ww_local_moran_i}()},
+\code{\link{ww_willmott_d}()}
 }
 \concept{agreement metrics}
+\concept{yardstick metrics}

@@ -49,3 +49,7 @@ using \code{\link[=ww_make_polygon_neighbors]{ww_make_polygon_neighbors()}}.
 be created using the centroids of the data as points, with a warning.
 }
 }
+\examples{
+ww_build_neighbors(guerry)
+
+}

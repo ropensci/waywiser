@@ -1,15 +1,31 @@
 #' Agreement coefficient
 #'
-#' These functions calculate the agreement coefficient and related measures from
-#' Ji and Gallo (2006). Agreement coefficients provides a useful measurement of
-#' agreement between two data sets which is bounded, symmetrical, and can be
-#' decomposed into systematic and unsystematic components;
+#' These functions calculate the agreement coefficient and mean product
+#' difference (MPD), as well as their systematic and unsystematic components,
+#' from Ji and Gallo (2006). Agreement coefficients provides a useful
+#' measurement of agreement between two data sets which is bounded, symmetrical,
+#' and can be decomposed into systematic and unsystematic components;
 #' however, it assumes a linear relationship between the two data sets and
 #' treats both "truth" and "estimate" as being of equal quality, and as such may
 #' not be a useful metric in all scenarios.
 #'
 #' Agreement coefficient values range from 0 to 1, with 1 indicating perfect
-#' agreement.
+#' agreement. `truth` and `estimate` must be the same length.
+#'
+#' @srrstats {G2.0a} Lengths documented above.
+#'
+#' @srrstats {G1.4} roxygen2 documentation
+#' @srrstats {G2.1a} This function uses yardstick's type documentation.
+#' @srrstats {G2.2} This function uses yardstick's parameter checking.
+#' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
+#' @srrstats {G2.8} This function relies on yardstick's type validation, which ensures proper conversion.
+#' @srrstats {G2.10} Column extraction is properly handled within yardstick.
+#' @srrstats {G2.14} This function relies on yardstick's NA handling
+#' @srrstats {G2.14a} This function relies on yardstick's NA handling
+#' @srrstats {G2.14b} This function relies on yardstick's NA handling
+#' @srrstats {G2.14c} This function relies on yardstick's NA handling
+#' @srrstats {G2.15} This function relies on yardstick's NA handling
+#' @srrstats {G2.16} This function relies on yardstick's missingness handling.
 #'
 #' @inheritParams yardstick::rmse
 #'
@@ -19,7 +35,10 @@
 #' For `_vec()` functions, a single value (or NA).
 #'
 #' @family agreement metrics
+#' @family yardstick metrics
 #'
+#' @srrstats {G5.1} Testing data is below.
+#' @srrstats {G5.4c} Testing data is from the original paper.
 #' @examples
 #' # Calculated values match Ji and Gallo 2006:
 #' x <- c(6, 8, 9, 10, 11, 14)
@@ -33,6 +52,7 @@
 #' ww_systematic_rmpd_vec(x, y)
 #' ww_unsystematic_rmpd_vec(x, y)
 #'
+#' @srrstats {G1.0} Reference for these methods:
 #' @references
 #' Ji, L. and Gallo, K. 2006. "An Agreement Coefficient for Image Comparison."
 #' Photogrammetric Engineering & Remote Sensing 72(7), pp 823–833,
@@ -71,11 +91,8 @@ ww_agreement_coefficient_vec <- function(truth,
                                          ...) {
 
   ww_agreement_coefficient_impl <- function(truth, estimate, ...) {
-
-
     est_SSD <- calc_ssd(truth, estimate)
     est_SPOD <- calc_spod(truth, estimate)
-
     1 - est_SSD / est_SPOD
   }
 
@@ -369,8 +386,20 @@ ww_systematic_rmpd_vec <- function(truth,
   )
 }
 
+#' Return the sum of squared differences
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 calc_ssd <- function(truth, estimate) sum((truth - estimate)^2)
 
+#' Return Sum of Potential Difference from Ji and Gallo (2006)
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 calc_spod <- function(truth, estimate) {
   mean_truth <- mean(truth)
   mean_estimate <- mean(estimate)
@@ -381,6 +410,12 @@ calc_spod <- function(truth, estimate) {
   )
 }
 
+#' Return the coefficients of the GMFR line from Ji and Gallo (2006)
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 gmfr <- function(truth, estimate) {
   mean_truth <- mean(truth)
   mean_estimate <- mean(estimate)
@@ -402,6 +437,12 @@ gmfr <- function(truth, estimate) {
   )
 }
 
+#' Return the unsystematic sum product-difference from Ji and Gallo (2006)
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 calc_spdu <- function(truth, estimate) {
   mean_truth <- mean(truth)
   mean_estimate <- mean(estimate)
@@ -420,6 +461,12 @@ calc_spdu <- function(truth, estimate) {
   )
 }
 
+#' Return the systematic sum product-difference from Ji and Gallo (2006)
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 calc_spds <- function(truth, estimate) {
   est_spdu <- calc_spdu(truth, estimate)
   est_ssd <- calc_ssd(truth, estimate)

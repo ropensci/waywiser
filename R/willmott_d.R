@@ -7,8 +7,23 @@
 #' components of MSE equal total MSE (though the same is not true for RMSE).
 #'
 #' Values of d range from 0 to 1, with 1 indicating perfect agreement. Values of
-#' RMSE are in the same units as `truth` and `estimate`, while values of MSE are
-#' squared.
+#' dr range from -1 to 1, with 1 similarly indicating perfect agreement. Values
+#' of RMSE are in the same units as `truth` and `estimate`, while values of MSE
+#' are in squared units. `truth` and `estimate` must be the same length.
+#'
+#' @srrstats {G2.0a} Lengths documented above.
+#' @srrstats {G1.4} roxygen2 documentation
+#' @srrstats {G2.1a} This function uses yardstick's type documentation.
+#' @srrstats {G2.2} This function uses yardstick's parameter checking.
+#' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
+#' @srrstats {G2.8} This function relies on yardstick's type validation, which ensures proper conversion.
+#' @srrstats {G2.10} Column extraction is properly handled within yardstick.
+#' @srrstats {G2.14} This function relies on yardstick's NA handling
+#' @srrstats {G2.14a} This function relies on yardstick's NA handling
+#' @srrstats {G2.14b} This function relies on yardstick's NA handling
+#' @srrstats {G2.14c} This function relies on yardstick's NA handling
+#' @srrstats {G2.15} This function relies on yardstick's NA handling
+#' @srrstats {G2.16} This function relies on yardstick's missingness handling.
 #'
 #' @inheritParams yardstick::rmse
 #'
@@ -18,7 +33,9 @@
 #' For `_vec()` functions, a single value (or NA).
 #'
 #' @family agreement metrics
+#' @family yardstick metrics
 #'
+#' @srrstats {G5.1} Testing data is below.
 #' @examples
 #' x <- c(6, 8, 9, 10, 11, 14)
 #' y <- c(2, 3, 5, 5, 6, 8)
@@ -27,6 +44,7 @@
 #' ww_systematic_mse_vec(x, y)
 #' ww_unsystematic_mse_vec(x, y)
 #'
+#' @srrstats {G1.0} Reference for these methods:
 #' @references
 #' Willmott, C. J. 1981. "On the Validation of Models". Physical Geography 2(2),
 #' pp 184-194, doi: 10.1080/02723646.1981.10642213.
@@ -35,8 +53,8 @@
 #' Bulletin of the American Meteorological Society 63(11), pp 1309-1313,
 #' doi: 10.1175/1520-0477(1982)063<1309:SCOTEO>2.0.CO;2.
 #'
-#' Wilmott, C. J., Robeson, S. M., and Matsuura, K. "A refined index of model
-#' perfomance". International Journal of Climatology 32, pp 2088-2094, doi:
+#' Willmott, C. J., Robeson, S. M., and Matsuura, K. "A refined index of model
+#' performance". International Journal of Climatology 32, pp 2088-2094, doi:
 #' 10.1002/joc.2419.
 #'
 #' @export
@@ -186,6 +204,7 @@ ww_systematic_mse_vec <- function(truth,
 }
 
 ww_systematic_mse_impl <- function(truth, estimate, ...) {
+  check_truth_and_estimate(truth, estimate)
   dt <- data.frame(truth = truth, estimate = estimate)
   preds <- predict(stats::lm(truth ~ estimate, dt), dt)
 
@@ -235,6 +254,7 @@ ww_unsystematic_mse_vec <- function(truth,
 }
 
 ww_unsystematic_mse_impl <- function(truth, estimate, ...) {
+  check_truth_and_estimate(truth, estimate)
   dt <- data.frame(truth = truth, estimate = estimate)
   preds <- predict(stats::lm(truth ~ estimate, dt), dt)
 
@@ -335,3 +355,28 @@ ww_unsystematic_rmse_vec <- function(truth,
   )
 }
 
+#' Check to make sure truth and estimate are not all missing
+#'
+#' @srrstats {G5.8c} Checking for all missing input
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @inheritParams yardstick::rmse
+#'
+#' @noRd
+check_truth_and_estimate <- function(truth, estimate) {
+  if (all(
+    is.na(truth) | is.nan(truth) | is.infinite(truth)
+  )) {
+    rlang::abort(
+      "No non-missing values were passed to `truth`."
+    )
+  }
+
+  if (all(
+    is.na(estimate) | is.nan(estimate) | is.infinite(estimate)
+  )) {
+    rlang::abort(
+      "No non-missing values were passed to `estimate`."
+    )
+  }
+}
