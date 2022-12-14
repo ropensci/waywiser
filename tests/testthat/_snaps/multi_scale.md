@@ -15,6 +15,35 @@
 
 ---
 
-    Some observations were not within any grid cell, and as such were not used in any assessments.
-    i See the `.notes` column for details.
+    Code
+      ww_multi_scale(ames_sf, Sale_Price, predictions, grids = grids[1], metrics = yardstick::rmse)
+    Output
+      # A tibble: 1 x 6
+        .metric .estimator .estimate .grid_args       .grid          .notes          
+        <chr>   <chr>          <dbl> <list>           <list>         <list>          
+      1 rmse    standard      75108. <tibble [0 x 0]> <sf [344 x 3]> <tibble [0 x 2]>
+
+---
+
+    Code
+      ww_multi_scale(ames_sf, Sale_Price, predictions, n = list(c(1, 1)),
+      autoexpand_grid = FALSE)
+    Warning <rlang_warning>
+      Some observations were not within any grid cell, and as such were not used in any assessments.
+      i See the `.notes` column for details.
+    Output
+      # A tibble: 2 x 6
+        .metric .estimator .estimate .grid_args       .grid        .notes          
+        <chr>   <chr>          <dbl> <list>           <list>       <list>          
+      1 rmse    standard        51.1 <tibble [1 x 1]> <sf [1 x 3]> <tibble [1 x 2]>
+      2 mae     standard        51.1 <tibble [1 x 1]> <sf [1 x 3]> <tibble [1 x 2]>
+
+# expected errors
+
+    Code
+      ww_multi_scale(guerry_modeled, Crm_prs, predictions, n = list(c(1, 1)),
+      metrics = yardstick::rmse)
+    Error <rlang_error>
+      ww_multi_scale is currently only implemented for point geometries.
+      i Consider casting your data to points.
 

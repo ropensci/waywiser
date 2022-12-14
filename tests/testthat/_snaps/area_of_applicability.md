@@ -118,6 +118,35 @@
       10  0.177  TRUE 
       # ... with 290 more rows
 
+# Expected errors
+
+    Code
+      ww_area_of_applicability(y ~ ., train, test[1:10], importance)
+    Error <rlang_error>
+      Some columns in `training` were not present in `testing` (or `new_data`).
+
+---
+
+    Code
+      ww_area_of_applicability(y ~ ., train, test, na_action = c(na.omit, na.pass),
+      importance)
+    Error <rlang_error>
+      Only one value can be passed to `na_action`.
+
+---
+
+    Code
+      ww_area_of_applicability(y ~ ., train, test, head(importance, -1))
+    Error <rlang_error>
+      All predictors must have an importance value in `importance`.
+
+---
+
+    Code
+      ww_area_of_applicability(y ~ ., train[1:10], test[1:10], importance)
+    Error <rlang_error>
+      All variables with an importance value in `importance` must be included as predictors.
+
 # normal use
 
     Code

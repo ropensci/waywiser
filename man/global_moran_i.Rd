@@ -48,8 +48,6 @@ to make cross-computer (and cross-session) results more stable. Note that
 this argument only impacts fitting the area of applicability and has no
 impact on predictions. This argument must be of length 1; you cannot pass
 multiple functions to \code{na_action}.}
-
-\item{randomization}{variance of I calculated under the assumption of randomisation, if FALSE normality}
 }
 \value{
 A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.

@@ -171,6 +171,7 @@ ww_build_weights <- function(x, wt = NULL, include_self = FALSE, ...) {
 #' @noRd
 check_for_missing <- function(dat, na_action, where, where_longer, call = rlang::caller_env()) {
 
+  #' @srrstats {G2.2} Asserting univariate input
   if (length(na_action) != 1) {
     rlang::abort(
       "Only one value can be passed to na_action."
@@ -178,7 +179,15 @@ check_for_missing <- function(dat, na_action, where, where_longer, call = rlang:
   }
 
   if (any(is.na(dat))) {
+    #' @srrstats {G2.4} na_action can be character or function:
     tryCatch(
+      #' @srrstats {G2.13} Checking for missing data
+      #' @srrstats {G2.14} Any function may be passed to na_action
+      #' @srrstats {G2.14a} Any function may be passed to na_action
+      #' @srrstats {G2.14b} Any function may be passed to na_action
+      #' @srrstats {G2.14c} Any function may be passed to na_action
+      #' @srrstats {G2.15} Any function may be passed to na_action
+      #' @srrstats {G2.16} Any function may be passed to na_action
       dat <- do.call(na_action, list(dat)),
       error = function(e) {
         rlang::abort(

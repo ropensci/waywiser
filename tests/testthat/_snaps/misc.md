@@ -154,3 +154,20 @@
     Error <rlang_error>
       Couldn't figure out how to build a `listw` object from the provided arguments
 
+---
+
+    Code
+      ww_build_weights(guerry, include_self = TRUE)
+    Output
+      Characteristics of weights list object:
+      Neighbour list object:
+      Number of regions: 85 
+      Number of nonzero links: 505 
+      Percentage nonzero weights: 6.989619 
+      Average number of links: 5.941176 
+      
+      Weights style: W 
+      Weights constants summary:
+         n   nn S0       S1       S2
+      W 85 7225 85 30.34284 343.0238
+

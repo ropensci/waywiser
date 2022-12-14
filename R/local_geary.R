@@ -4,10 +4,19 @@
 #' `ww_local_geary_c()` returns the statistic itself, while
 #' `ww_local_geary_pvalue()` returns the associated p value.
 #'
-#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4} roxygen2 documentation
+#' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
+#' @srrstats {G2.8} Method dispatch enforces data.frame inputs
+#' @srrstats {G2.10} Column extraction is properly handled within yardstick.
+#' @srrstats {G2.14} Any function may be passed to na_action
+#' @srrstats {G2.14a} Any function may be passed to na_action
+#' @srrstats {G2.14b} Any function may be passed to na_action
+#' @srrstats {G2.14c} Any function may be passed to na_action
+#' @srrstats {G2.15} Any function may be passed to na_action
+#' @srrstats {G2.16} Any function may be passed to na_action
+#'
+#' @inheritParams global_geary_c
 #' @inheritParams spdep::localC_perm
-#' @inheritParams ww_area_of_applicability
-#' @param wt A "listw" object, for instance as created with [ww_build_weights()].
 #' @param ... Additional arguments passed to [spdep::localC_perm()].
 #'
 #' @return
@@ -23,7 +32,7 @@
 #' guerry$predictions <- predict(guerry_lm, guerry)
 #'
 #' ww_local_geary_c(guerry, Crm_prs, predictions)
-#' ww_local_geary(guerry, Crm_prs, predictions)
+#' ww_local_geary_pvalue(guerry, Crm_prs, predictions)
 #'
 #' @rdname local_geary_c
 #' @export

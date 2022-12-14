@@ -33,6 +33,15 @@ specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
 \item{wt}{A "listw" object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.}
+
+\item{na_action}{A function which indicates what should happen when the data
+(any of \code{x}, \code{data}, or \code{testing}) contain NAs. The default is \code{na.fail};
+you may wish to set it to \code{na.omit} or any of the functions from the "zoo"
+package. This function ignores the value of \code{options("na.action")} in order
+to make cross-computer (and cross-session) results more stable. Note that
+this argument only impacts fitting the area of applicability and has no
+impact on predictions. This argument must be of length 1; you cannot pass
+multiple functions to \code{na_action}.}
 }
 \value{
 A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
@@ -49,8 +58,8 @@ guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
 guerry$predictions <- predict(guerry_lm, guerry)
 
 ww_local_getis_ord_g(guerry, Crm_prs, predictions)
-ww_local_getis_ord(guerry, Crm_prs, predictions)
-ww_local_getis_ord(guerry, Crm_prs, predictions, include_self = TRUE)
+ww_local_getis_ord_g_pvalue(guerry, Crm_prs, predictions)
+ww_local_getis_ord_g(guerry, Crm_prs, predictions, include_self = TRUE)
 
 }
 \seealso{

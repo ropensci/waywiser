@@ -12,20 +12,16 @@
 #' Agreement coefficient values range from 0 to 1, with 1 indicating perfect
 #' agreement. `truth` and `estimate` must be the same length.
 #'
-#' @srrstats {G2.0a} Lengths documented above.
-#'
 #' @srrstats {G1.4} roxygen2 documentation
-#' @srrstats {G2.1a} This function uses yardstick's type documentation.
-#' @srrstats {G2.2} This function uses yardstick's parameter checking.
 #' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
-#' @srrstats {G2.8} This function relies on yardstick's type validation, which ensures proper conversion.
+#' @srrstats {G2.8} Method dispatch enforces data.frame inputs
 #' @srrstats {G2.10} Column extraction is properly handled within yardstick.
-#' @srrstats {G2.14} This function relies on yardstick's NA handling
-#' @srrstats {G2.14a} This function relies on yardstick's NA handling
-#' @srrstats {G2.14b} This function relies on yardstick's NA handling
-#' @srrstats {G2.14c} This function relies on yardstick's NA handling
-#' @srrstats {G2.15} This function relies on yardstick's NA handling
-#' @srrstats {G2.16} This function relies on yardstick's missingness handling.
+#' @srrstats {G2.14} Any function may be passed to na_action
+#' @srrstats {G2.14a} Any function may be passed to na_action
+#' @srrstats {G2.14b} Any function may be passed to na_action
+#' @srrstats {G2.14c} Any function may be passed to na_action
+#' @srrstats {G2.15} Any function may be passed to na_action
+#' @srrstats {G2.16} Any function may be passed to na_action
 #'
 #' @inheritParams yardstick::rmse
 #' @inheritParams ww_area_of_applicability

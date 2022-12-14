@@ -214,6 +214,28 @@ test_that("NAs are handled", {
 
 })
 
+test_that("Expected errors", {
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train, test[1:10], importance),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train, test, na_action = c(na.omit, na.pass), importance),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train, test, head(importance, -1)),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train[1:10], test[1:10], importance),
+    error = TRUE
+  )
+})
+
 skip_if_not(rlang::is_installed("vip"))
 train <- vip::gen_friedman(1000, seed = 101)
 test <- train[701:1000, ]

@@ -32,7 +32,17 @@ test_that("ww_multi_scale", {
   )
   expect_snapshot(made_w_grid_args)
 
-  expect_snapshot_warning(
+  expect_snapshot(
+    ww_multi_scale(
+      ames_sf,
+      Sale_Price,
+      predictions,
+      grids = grids[1],
+      metrics = yardstick::rmse
+    )
+  )
+
+  expect_snapshot(
     ww_multi_scale(
       ames_sf,
       Sale_Price,
@@ -63,6 +73,24 @@ test_that("ww_multi_scale", {
       aggregation_function = median
     )$.estimate,
     yardstick::mae_vec(median(ames_sf$Sale_Price), median(ames_sf$predictions))
+  )
+
+})
+
+test_that("expected errors", {
+  guerry_modeled <- guerry
+  guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
+  guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
+
+  expect_snapshot(
+    ww_multi_scale(
+      guerry_modeled,
+      Crm_prs,
+      predictions,
+      n = list(c(1, 1)),
+      metrics = yardstick::rmse
+    ),
+    error = TRUE
   )
 
 })

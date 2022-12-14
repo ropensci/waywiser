@@ -4,11 +4,23 @@
 #' `ww_global_geary_c()` returns the statistic itself, while
 #' `ww_global_geary_pvalue()` returns the associated p value.
 #'
+#' @srrstats {G1.4} roxygen2 documentation
+#' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
+#' @srrstats {G2.8} Method dispatch enforces data.frame inputs
+#' @srrstats {G2.10} Column extraction is properly handled within yardstick.
+#' @srrstats {G2.14} Any function may be passed to na_action
+#' @srrstats {G2.14a} Any function may be passed to na_action
+#' @srrstats {G2.14b} Any function may be passed to na_action
+#' @srrstats {G2.14c} Any function may be passed to na_action
+#' @srrstats {G2.15} Any function may be passed to na_action
+#' @srrstats {G2.16} Any function may be passed to na_action
+#'
 #' @inheritParams yardstick::rmse
 #' @inheritParams spdep::geary.test
 #' @inheritParams ww_area_of_applicability
-#' @param wt A "listw" object, for instance as created with [ww_build_weights()].
-#' @param randomization variance of I calculated under the assumption of randomisation, if FALSE normality
+#' @param wt A `listw` object, for instance as created with [ww_build_weights()].
+#' For data.frame input, may also be a function that takes `data` and returns a
+#' `listw` object.
 #' @param ... Additional arguments passed to [spdep::geary.test()].
 #'
 #' @family autocorrelation metrics
@@ -24,9 +36,7 @@
 #' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
 #' guerry$predictions <- predict(guerry_lm, guerry)
 #'
-#' \dontrun{
-#' ww_global_geary(guerry, Crm_prs, predictions)
-#' }
+#' ww_global_geary_c(guerry, Crm_prs, predictions)
 #'
 #' @rdname global_geary_c
 #' @export

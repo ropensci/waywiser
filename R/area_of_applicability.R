@@ -416,7 +416,7 @@ create_aoa <- function(training, testing, importance, na_action, ..., include_di
 #' @srrstats {G1.4a} Internal function documentation
 #'
 #' @noRd
-check_di_testing <- function(training, testing, na_action = na.pass) {
+check_di_testing <- function(training, testing, na_action = stats::na.pass) {
 
   # If NULL, nothing to validate or re-order, so just return NULL
   if (is.null(testing)) return(NULL)
@@ -587,8 +587,6 @@ calc_di <- function(training, testing, d_bar) {
     dk <- FNN::knnx.dist(training, testing, 1)[, 1]
   }
 
-  if (missing(d_bar)) d_bar <- calc_d_bar(training)
-
   # Use d_bar to rescale dk from 2.3
   dk / d_bar
 
@@ -662,9 +660,13 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
   #' @srrstats {G2.10} Extraction is handled by [hardhat::forge()]
   new_data <- hardhat::forge(new_data, object$blueprint)
 
+  #' @srrstats {G2.13} Checking inputs prior to calculations
   new_data <- check_di_testing(object$transformed_training, new_data)
+  #' @srrstats {G2.13} Dealing with missing data
+  #' @srrstats {G2.15} Not assuming non-missingness
   existing_new_data <- complete.cases(new_data)
 
+  #' @srrstats {G2.13} Checking inputs prior to calculations
   check_di_columns_numeric(object$transformed_training, new_data)
 
   new_data <- standardize_and_weight(

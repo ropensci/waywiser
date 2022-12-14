@@ -58,7 +58,7 @@ guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
 guerry$predictions <- predict(guerry_lm, guerry)
 
 ww_local_geary_c(guerry, Crm_prs, predictions)
-ww_local_geary(guerry, Crm_prs, predictions)
+ww_local_geary_pvalue(guerry, Crm_prs, predictions)
 
 }
 \seealso{
