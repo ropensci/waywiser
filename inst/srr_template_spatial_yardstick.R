@@ -300,6 +300,8 @@ test_that("other generic srr standards", {
     )
   )
 
+  skip_on_cran()
+
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9b} Different seeds are equivalent:
