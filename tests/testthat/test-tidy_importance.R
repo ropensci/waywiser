@@ -18,3 +18,16 @@ test_that("tidy_importance is idempotent", {
   )
 
 })
+
+test_that("expected failures", {
+  expect_snapshot(
+    tidy_importance(list()),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    tidy_importance(data.frame()),
+    error = TRUE
+  )
+
+})
