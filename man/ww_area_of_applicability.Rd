@@ -111,7 +111,9 @@ determine if new data is within a model's area of applicability.
 This function calculates the "area of applicability" of a model, as
 introduced by Meyer and Pebesma (2021). While the initial paper introducing
 this method focused on spatial models, there is nothing inherently spatial
-about the method; it can be used with any type of data.
+about the method; it can be used with any type of data (and, because it does
+not care about the spatial arrangement of your data, can be used with 2D or
+3D spatial data, and with geographic or projected CRS).
 }
 \details{
 Predictions made on points "inside" the area of applicability should be as

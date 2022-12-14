@@ -122,7 +122,7 @@ instance, we can use the `tigris` package to download census block group
 boundaries, as well as county and county subdivision boundaries, for the state 
 of New York:
 
-```{r}
+```{r message=FALSE, results='hide'}
 suppressPackageStartupMessages(library(tigris))
 
 ny_block_groups <- block_groups("NY")

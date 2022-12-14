@@ -26,6 +26,7 @@
 #' @srrstats {G2.16} This function relies on yardstick's missingness handling.
 #'
 #' @inheritParams yardstick::rmse
+#' @inheritParams ww_area_of_applicability
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
@@ -69,16 +70,15 @@ ww_willmott_d <- new_numeric_metric(ww_willmott_d, direction = "maximize")
 ww_willmott_d.data.frame <- function(data,
                                      truth,
                                      estimate,
-                                     na_rm = TRUE,
+                                     na_action = na.fail,
                                      ...) {
-  metric_summarizer(
-    metric_nm = "willmott_d",
-    metric_fn = ww_willmott_d_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "willmott_d",
+    ...
   )
 }
 
@@ -86,7 +86,7 @@ ww_willmott_d.data.frame <- function(data,
 #' @export
 ww_willmott_d_vec <- function(truth,
                               estimate,
-                              na_rm = TRUE,
+                              na_action = na.fail,
                               ...) {
 
   ww_willmott_d_impl <- function(truth, estimate, ...) {
@@ -97,12 +97,11 @@ ww_willmott_d_vec <- function(truth,
     1 - (numerator / denominator)
   }
 
-  metric_vec_template(
-    metric_impl = ww_willmott_d_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_willmott_d_impl,
     ...
   )
 }
@@ -118,27 +117,26 @@ ww_willmott_dr <- new_numeric_metric(ww_willmott_dr, direction = "maximize")
 #' @rdname ww_willmott_d
 #' @export
 ww_willmott_dr.data.frame <- function(data,
-                                     truth,
-                                     estimate,
-                                     na_rm = TRUE,
-                                     ...) {
-  metric_summarizer(
-    metric_nm = "willmott_dr",
-    metric_fn = ww_willmott_dr_vec,
+                                      truth,
+                                      estimate,
+                                      na_action = na.fail,
+                                      ...) {
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "willmott_dr",
+    ...
   )
 }
 
 #' @rdname ww_willmott_d
 #' @export
 ww_willmott_dr_vec <- function(truth,
-                              estimate,
-                              na_rm = TRUE,
-                              ...) {
+                               estimate,
+                               na_action = na.fail,
+                               ...) {
 
   ww_willmott_dr_impl <- function(truth, estimate, ...) {
     term_1 <- sum(abs(estimate - truth))
@@ -151,12 +149,11 @@ ww_willmott_dr_vec <- function(truth,
     }
   }
 
-  metric_vec_template(
-    metric_impl = ww_willmott_dr_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_willmott_dr_impl,
     ...
   )
 }
@@ -172,18 +169,17 @@ ww_systematic_mse <- new_numeric_metric(ww_systematic_mse, direction = "minimize
 #' @rdname ww_willmott_d
 #' @export
 ww_systematic_mse.data.frame <- function(data,
-                                     truth,
-                                     estimate,
-                                     na_rm = TRUE,
-                                     ...) {
-  metric_summarizer(
-    metric_nm = "systematic_mse",
-    metric_fn = ww_systematic_mse_vec,
+                                         truth,
+                                         estimate,
+                                         na_action = na.fail,
+                                         ...) {
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "systematic_mse",
+    ...
   )
 }
 
@@ -191,20 +187,18 @@ ww_systematic_mse.data.frame <- function(data,
 #' @export
 ww_systematic_mse_vec <- function(truth,
                                   estimate,
-                                  na_rm = TRUE,
+                                  na_action = na.fail,
                                   ...) {
-  metric_vec_template(
-    metric_impl = ww_systematic_mse_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_systematic_mse_impl,
     ...
   )
 }
 
 ww_systematic_mse_impl <- function(truth, estimate, ...) {
-  check_truth_and_estimate(truth, estimate)
   dt <- data.frame(truth = truth, estimate = estimate)
   preds <- predict(stats::lm(truth ~ estimate, dt), dt)
 
@@ -224,16 +218,15 @@ ww_unsystematic_mse <- new_numeric_metric(ww_unsystematic_mse, direction = "mini
 ww_unsystematic_mse.data.frame <- function(data,
                                            truth,
                                            estimate,
-                                           na_rm = TRUE,
+                                           na_action = na.fail,
                                            ...) {
-  metric_summarizer(
-    metric_nm = "unsystematic_mse",
-    metric_fn = ww_unsystematic_mse_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "unsystematic_mse",
+    ...
   )
 }
 
@@ -241,20 +234,18 @@ ww_unsystematic_mse.data.frame <- function(data,
 #' @export
 ww_unsystematic_mse_vec <- function(truth,
                                     estimate,
-                                    na_rm = TRUE,
+                                    na_action = na.fail,
                                     ...) {
-  metric_vec_template(
-    metric_impl = ww_unsystematic_mse_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_unsystematic_mse_impl,
     ...
   )
 }
 
 ww_unsystematic_mse_impl <- function(truth, estimate, ...) {
-  check_truth_and_estimate(truth, estimate)
   dt <- data.frame(truth = truth, estimate = estimate)
   preds <- predict(stats::lm(truth ~ estimate, dt), dt)
 
@@ -272,38 +263,36 @@ ww_systematic_rmse <- new_numeric_metric(ww_systematic_rmse, direction = "minimi
 #' @rdname ww_willmott_d
 #' @export
 ww_systematic_rmse.data.frame <- function(data,
-                                         truth,
-                                         estimate,
-                                         na_rm = TRUE,
-                                         ...) {
-  metric_summarizer(
-    metric_nm = "systematic_rmse",
-    metric_fn = ww_systematic_rmse_vec,
+                                          truth,
+                                          estimate,
+                                          na_action = na.fail,
+                                          ...) {
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "systematic_rmse",
+    ...
   )
 }
 
 #' @rdname ww_willmott_d
 #' @export
 ww_systematic_rmse_vec <- function(truth,
-                                  estimate,
-                                  na_rm = TRUE,
-                                  ...) {
+                                   estimate,
+                                   na_action = na.fail,
+                                   ...) {
 
   ww_systematic_rmse_impl <- function(truth, estimate, ...) {
     sqrt(ww_systematic_mse_impl(truth, estimate, ...))
   }
 
-  metric_vec_template(
-    metric_impl = ww_systematic_rmse_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_systematic_rmse_impl,
     ...
   )
 }
@@ -319,64 +308,36 @@ ww_unsystematic_rmse <- new_numeric_metric(ww_unsystematic_rmse, direction = "mi
 #' @rdname ww_willmott_d
 #' @export
 ww_unsystematic_rmse.data.frame <- function(data,
-                                           truth,
-                                           estimate,
-                                           na_rm = TRUE,
-                                           ...) {
-  metric_summarizer(
-    metric_nm = "unsystematic_rmse",
-    metric_fn = ww_unsystematic_rmse_vec,
+                                            truth,
+                                            estimate,
+                                            na_action = na.fail,
+                                            ...) {
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "unsystematic_rmse",
+    ...
   )
 }
 
 #' @rdname ww_willmott_d
 #' @export
 ww_unsystematic_rmse_vec <- function(truth,
-                                    estimate,
-                                    na_rm = TRUE,
-                                    ...) {
+                                     estimate,
+                                     na_action = na.fail,
+                                     ...) {
 
   ww_unsystematic_rmse_impl <- function(truth, estimate, ...) {
     sqrt(ww_unsystematic_mse_impl(truth, estimate, ...))
   }
 
-  metric_vec_template(
-    metric_impl = ww_unsystematic_rmse_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_unsystematic_rmse_impl,
     ...
   )
-}
-
-#' Check to make sure truth and estimate are not all missing
-#'
-#' @srrstats {G5.8c} Checking for all missing input
-#' @srrstats {G1.4a} Documented internal functions
-#'
-#' @inheritParams yardstick::rmse
-#'
-#' @noRd
-check_truth_and_estimate <- function(truth, estimate) {
-  if (all(
-    is.na(truth) | is.nan(truth) | is.infinite(truth)
-  )) {
-    rlang::abort(
-      "No non-missing values were passed to `truth`."
-    )
-  }
-
-  if (all(
-    is.na(estimate) | is.nan(estimate) | is.infinite(estimate)
-  )) {
-    rlang::abort(
-      "No non-missing values were passed to `estimate`."
-    )
-  }
 }

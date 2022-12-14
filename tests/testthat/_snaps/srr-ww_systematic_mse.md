@@ -17,121 +17,147 @@
     Code
       ww_systematic_mse(char_df, x, y)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(truth = x, estimate = y, na_rm = na_rm)`.
-      Caused by error in `validate_class()`:
-      ! `estimate` should be a numeric but a character was supplied.
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! `estimate` must be numeric.
 
 ---
 
     Code
       ww_systematic_mse(char_df, y, x)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(truth = y, estimate = x, na_rm = na_rm)`.
-      Caused by error in `validate_class()`:
-      ! `truth` should be a numeric but a character was supplied.
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! `truth` must be numeric.
 
 ---
 
     Code
       ww_systematic_mse_vec(as.character(1:5), 1:4)
     Error <rlang_error>
-      `truth` should be a numeric but a character was supplied.
+      `truth` must be numeric.
 
 ---
 
     Code
       ww_systematic_mse_vec(1:5, as.character(1:4))
     Error <rlang_error>
-      `estimate` should be a numeric but a character was supplied.
+      `estimate` must be numeric.
 
 ---
 
     Code
       ww_systematic_mse(list_df, x, y)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(truth = x, estimate = y, na_rm = na_rm)`.
-      Caused by error in `validate_class()`:
-      ! `estimate` should be a numeric but a list was supplied.
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! `estimate` must be numeric.
 
 ---
 
     Code
       ww_systematic_mse(list_df, y, x)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(truth = y, estimate = x, na_rm = na_rm)`.
-      Caused by error in `validate_class()`:
-      ! `truth` should be a numeric but a list was supplied.
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! `truth` must be numeric.
 
 ---
 
     Code
-      call
-    Warning <simpleWarning>
-      restarting interrupted promise evaluation
+      ww_systematic_mse(missing_df, x, y)$.estimate
     Error <rlang_error>
-      No non-missing values were passed to `truth`.
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! Missing values in true values (`truth`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 
     Code
-      call
-    Warning <simpleWarning>
-      restarting interrupted promise evaluation
+      ww_systematic_mse(missing_df, y, x)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(truth = x, estimate = y, na_rm = na_rm)`.
-      Caused by error in `check_truth_and_estimate()`:
-      ! No non-missing values were passed to `truth`.
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! Missing values in true values (`truth`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 
     Code
-      call
-    Warning <simpleWarning>
-      restarting interrupted promise evaluation
+      ww_systematic_mse_vec(missing_df$y, missing_df$x)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(truth = y, estimate = x, na_rm = na_rm)`.
-      Caused by error in `check_truth_and_estimate()`:
-      ! No non-missing values were passed to `truth`.
+      Missing values in true values (`truth`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 
     Code
-      call
-    Warning <simpleWarning>
-      restarting interrupted promise evaluation
+      ww_systematic_mse_vec(missing_df$x, missing_df$y)
     Error <rlang_error>
-      No non-missing values were passed to `truth`.
+      Missing values in true values (`truth`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 
     Code
-      call
-    Warning <simpleWarning>
-      restarting interrupted promise evaluation
+      ww_systematic_mse_vec(numeric(), numeric())
     Error <rlang_error>
-      No non-missing values were passed to `truth`.
+      0 values were passed to `truth`.
 
 ---
 
     Code
-      call
-    Warning <simpleWarning>
-      restarting interrupted promise evaluation
+      ww_systematic_mse(empty_df, x, y)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(truth = x, estimate = y, na_rm = na_rm)`.
-      Caused by error in `check_truth_and_estimate()`:
-      ! No non-missing values were passed to `truth`.
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! 0 values were passed to `truth`.
 
 ---
 
     Code
-      call
-    Warning <simpleWarning>
-      restarting interrupted promise evaluation
+      ww_systematic_mse(empty_df, y, x)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(truth = y, estimate = x, na_rm = na_rm)`.
-      Caused by error in `check_truth_and_estimate()`:
-      ! No non-missing values were passed to `truth`.
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! 0 values were passed to `truth`.
+
+---
+
+    Code
+      ww_systematic_mse_vec(rep(NA_real_, 4), 4:1)
+    Error <rlang_error>
+      Missing values in true values (`truth`).
+      i Either process your data to fix the NA values or set `na_action`.
+
+---
+
+    Code
+      ww_systematic_mse_vec(1:4, rep(NA_real_, 4))
+    Error <rlang_error>
+      Missing values in estimated values (`estimate`).
+      i Either process your data to fix the NA values or set `na_action`.
+
+---
+
+    Code
+      ww_systematic_mse(all_na, x, y)
+    Error <rlang_error>
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! Missing values in true values (`truth`).
+      i Either process your data to fix the NA values or set `na_action`.
+
+---
+
+    Code
+      ww_systematic_mse(all_na, y, x)
+    Error <rlang_error>
+      Problem while computing `.estimate = metric_fn(...)`.
+      Caused by error in `yardstick_vec()`:
+      ! Missing values in estimated values (`estimate`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 

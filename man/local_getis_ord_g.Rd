@@ -3,48 +3,17 @@
 \name{ww_local_getis_ord_g}
 \alias{ww_local_getis_ord_g}
 \alias{ww_local_getis_ord_g_vec}
-\alias{ww_local_getis_ord_pvalue}
-\alias{ww_local_getis_ord_pvalue_vec}
-\alias{ww_local_getis_ord}
+\alias{ww_local_getis_ord_g_pvalue}
+\alias{ww_local_getis_ord_g_pvalue_vec}
 \title{Local Getis-Ord G and G* statistic}
 \usage{
 ww_local_getis_ord_g(data, ...)
 
-ww_local_getis_ord_g_vec(
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "two.sided",
-  nsim = 499,
-  na_rm = TRUE,
-  ...,
-  include_self = FALSE
-)
+ww_local_getis_ord_g_vec(truth, estimate, wt, na_action = na.fail, ...)
 
-ww_local_getis_ord_pvalue(data, ...)
+ww_local_getis_ord_g_pvalue(data, ...)
 
-ww_local_getis_ord_pvalue_vec(
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "two.sided",
-  nsim = 499,
-  na_rm = TRUE,
-  ...,
-  include_self = FALSE
-)
-
-ww_local_getis_ord(
-  data,
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "two.sided",
-  nsim = 499,
-  na_rm = TRUE,
-  ...,
-  include_self = FALSE
-)
+ww_local_getis_ord_g_pvalue_vec(truth, estimate, wt, na_action = na.fail, ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
@@ -64,17 +33,6 @@ specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
 \item{wt}{A "listw" object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.}
-
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or \code{"less"}.}
-
-\item{nsim}{default 499, number of conditonal permutation simulations}
-
-\item{na_rm}{A \code{logical} value indicating whether \code{NA}
-values should be stripped before the computation proceeds.}
-
-\item{include_self}{Include each region itself in its own list of neighbors?
-Only used when \code{wt} is \code{NULL}, and if \code{TRUE} means this function calculates
-G* instead of G.}
 }
 \value{
 A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
@@ -85,7 +43,6 @@ For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
 Calculate the local Getis-Ord G and G* statistic for model residuals.
 \code{ww_local_getis_ord_g()} returns the statistic itself, while
 \code{ww_local_getis_ord_pvalue()} returns the associated p value.
-\code{ww_local_getis_ord()} returns both.
 }
 \examples{
 guerry_lm <- lm(Crm_prs ~ Litercy, guerry)

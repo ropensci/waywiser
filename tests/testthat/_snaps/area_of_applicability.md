@@ -9,7 +9,7 @@
     Code
       ww_area_of_applicability(y ~ ., train, test, importance)
     Error <rlang_error>
-      Missing values in the training set data (either `x` or `data`).
+      Missing values in training (either `x` or `data`).
       i Either process your data to fix the NA values or set `na_action`.
 
 ---
@@ -27,7 +27,7 @@
     Code
       ww_area_of_applicability(train[2:11], test[2:11], importance)
     Error <rlang_error>
-      Missing values in the training set data (either `x` or `data`).
+      Missing values in training (either `x` or `data`).
       i Either process your data to fix the NA values or set `na_action`.
 
 ---
@@ -46,7 +46,7 @@
       ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]),
       importance)
     Error <rlang_error>
-      Missing values in the training set data (either `x` or `data`).
+      Missing values in training (either `x` or `data`).
       i Either process your data to fix the NA values or set `na_action`.
 
 ---
@@ -65,7 +65,7 @@
     Code
       ww_area_of_applicability(comb_rset_no_y, importance = importance)
     Error <rlang_error>
-      Missing values in the training set data (either `x` or `data`).
+      Missing values in training (either `x` or `data`).
       i Either process your data to fix the NA values or set `na_action`.
 
 ---
@@ -83,7 +83,7 @@
     Code
       ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance)
     Error <rlang_error>
-      Missing values in the training set data (either `x` or `data`).
+      Missing values in training (either `x` or `data`).
       i Either process your data to fix the NA values or set `na_action`.
 
 ---

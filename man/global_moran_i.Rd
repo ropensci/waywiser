@@ -5,20 +5,11 @@
 \alias{ww_global_moran_i_vec}
 \alias{ww_global_moran_pvalue}
 \alias{ww_global_moran_pvalue_vec}
-\alias{ww_global_moran}
 \title{Global Moran's I statistic}
 \usage{
 ww_global_moran_i(data, ...)
 
-ww_global_moran_i_vec(
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "greater",
-  randomization = TRUE,
-  na_rm = TRUE,
-  ...
-)
+ww_global_moran_i_vec(truth, estimate, wt = NULL, na_action = na.fail, ...)
 
 ww_global_moran_pvalue(data, ...)
 
@@ -26,20 +17,7 @@ ww_global_moran_pvalue_vec(
   truth,
   estimate,
   wt = NULL,
-  alternative = "greater",
-  randomization = TRUE,
-  na_rm = TRUE,
-  ...
-)
-
-ww_global_moran(
-  data,
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "greater",
-  randomization = TRUE,
-  na_rm = TRUE,
+  na_action = na.fail,
   ...
 )
 }
@@ -62,12 +40,16 @@ unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
 \item{wt}{A "listw" object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of greater (default), less or two.sided.}
+\item{na_action}{A function which indicates what should happen when the data
+(any of \code{x}, \code{data}, or \code{testing}) contain NAs. The default is \code{na.fail};
+you may wish to set it to \code{na.omit} or any of the functions from the "zoo"
+package. This function ignores the value of \code{options("na.action")} in order
+to make cross-computer (and cross-session) results more stable. Note that
+this argument only impacts fitting the area of applicability and has no
+impact on predictions. This argument must be of length 1; you cannot pass
+multiple functions to \code{na_action}.}
 
 \item{randomization}{variance of I calculated under the assumption of randomisation, if FALSE normality}
-
-\item{na_rm}{A \code{logical} value indicating whether \code{NA}
-values should be stripped before the computation proceeds.}
 }
 \value{
 A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
@@ -78,14 +60,12 @@ For \verb{_vec()} functions, a single value (or NA).
 Calculate the global Moran's I statistic for model residuals.
 \code{ww_global_moran_i()} returns the statistic itself, while
 \code{ww_global_moran_pvalue()} returns the associated p value.
-\code{ww_global_moran()} returns both.
 }
 \examples{
 guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
 guerry$predictions <- predict(guerry_lm, guerry)
 
 ww_global_moran_i(guerry, Crm_prs, predictions)
-ww_global_moran(guerry, Crm_prs, predictions)
 
 }
 \seealso{

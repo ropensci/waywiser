@@ -3,10 +3,10 @@
 #' Calculate the global Geary's C statistic for model residuals.
 #' `ww_global_geary_c()` returns the statistic itself, while
 #' `ww_global_geary_pvalue()` returns the associated p value.
-#' `ww_global_geary()` returns both.
 #'
 #' @inheritParams yardstick::rmse
 #' @inheritParams spdep::geary.test
+#' @inheritParams ww_area_of_applicability
 #' @param wt A "listw" object, for instance as created with [ww_build_weights()].
 #' @param randomization variance of I calculated under the assumption of randomisation, if FALSE normality
 #' @param ... Additional arguments passed to [spdep::geary.test()].
@@ -41,51 +41,22 @@ ww_global_geary_c.data.frame <- function(data,
                                          truth,
                                          estimate,
                                          wt = NULL,
-                                         alternative = "greater",
-                                         randomization = TRUE,
-                                         na_rm = TRUE,
+                                         na_action = na.fail,
                                          ...) {
-
-  if (is.null(wt)) {
-    wt <- ww_build_weights(data)
-  }
-  if (rlang::is_function(wt)) {
-    wt <- do.call(wt, list(data))
-  }
-
-  metric_summarizer(
-    metric_nm = "global_geary_c",
-    metric_fn = ww_global_geary_c_vec,
+  spatial_yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(
-      wt = wt,
-      alternative = alternative,
-      randomization = randomization,
-      ...
-    )
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    wt = wt,
+    na_action = na_action,
+    name = "global_geary_c",
+    ...
   )
 }
 
 #' @rdname global_geary_c
 #' @export
-ww_global_geary_c_vec <- function(truth,
-                                  estimate,
-                                  wt = NULL,
-                                  alternative = "greater",
-                                  randomization = TRUE,
-                                  na_rm = TRUE,
-                                  ...) {
-
-  if (!inherits(wt, "listw")) {
-    rlang::abort(
-      "`wt` must be a 'listw' object",
-      "i" = "You can create 'listw' objects using `build_weights()`"
-    )
-  }
-
+ww_global_geary_c_vec <- function(truth, estimate, wt, na_action = na.fail, ...) {
   ww_global_geary_c_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
@@ -99,14 +70,15 @@ ww_global_geary_c_vec <- function(truth,
     )$C
   }
 
-  metric_vec_template(
-    metric_impl = ww_global_geary_c_impl,
+  spatial_yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    wt = wt,
+    na_action = na_action,
+    impl = ww_global_geary_c_impl,
     ...
   )
+
 }
 
 #' @rdname global_geary_c
@@ -122,31 +94,16 @@ ww_global_geary_pvalue.data.frame <- function(data,
                                               truth,
                                               estimate,
                                               wt = NULL,
-                                              alternative = "greater",
-                                              randomization = TRUE,
-                                              na_rm = TRUE,
+                                              na_action = na.fail,
                                               ...) {
-
-  if (is.null(wt)) {
-    wt <- ww_build_weights(data)
-  }
-  if (rlang::is_function(wt)) {
-    wt <- do.call(wt, list(data))
-  }
-
-  metric_summarizer(
-    metric_nm = "global_geary_pvalue",
-    metric_fn = ww_global_geary_pvalue_vec,
+  spatial_yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(
-      wt = wt,
-      alternative = alternative,
-      randomization = randomization,
-      ...
-    )
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    wt = wt,
+    name = "global_geary_pvalue",
+    na_action = na_action,
+    ...
   )
 }
 
@@ -155,67 +112,29 @@ ww_global_geary_pvalue.data.frame <- function(data,
 ww_global_geary_pvalue_vec <- function(truth,
                                        estimate,
                                        wt = NULL,
-                                       alternative = "greater",
-                                       randomization = TRUE,
-                                       na_rm = TRUE,
+                                       na_action = na.fail,
                                        ...) {
-
-  if (!inherits(wt, "listw")) {
-    rlang::abort(
-      "`wt` must be a 'listw' object",
-      "i" = "You can create 'listw' objects using `build_weights()`"
-    )
-  }
 
   ww_global_geary_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
+    if (all(resid == 0)) {
+      return(NA_real_)
+    }
 
     spdep::geary.test(
       x = resid,
       listw = wt,
-      alternative = alternative,
-      randomisation = randomization,
       ...
     )$p.value
   }
 
-  metric_vec_template(
-    metric_impl = ww_global_geary_pvalue_impl,
+  spatial_yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
-    ...
-  )
-}
-
-#' @rdname global_geary_c
-#' @export
-ww_global_geary <- function(data,
-                            truth,
-                            estimate,
-                            wt = NULL,
-                            alternative = "greater",
-                            randomization = TRUE,
-                            na_rm = TRUE,
-                            ...) {
-
-  if (is.null(wt)) {
-    wt <- ww_build_weights(data)
-  }
-  if (rlang::is_function(wt)) {
-    wt <- do.call(wt, list(data))
-  }
-
-  metrics <- metric_set(ww_global_geary_c, ww_global_geary_pvalue)
-  metrics(
-    data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
     wt = wt,
-    alternative = alternative,
-    randomization = randomization,
-    na_rm = na_rm,
+    na_action = na_action,
+    impl = ww_global_geary_pvalue_impl,
     ...
   )
+
 }

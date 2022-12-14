@@ -1,4 +1,4 @@
-#' Agreement coefficient
+#' Agreement coefficients and related methods
 #'
 #' These functions calculate the agreement coefficient and mean product
 #' difference (MPD), as well as their systematic and unsystematic components,
@@ -28,6 +28,7 @@
 #' @srrstats {G2.16} This function relies on yardstick's missingness handling.
 #'
 #' @inheritParams yardstick::rmse
+#' @inheritParams ww_area_of_applicability
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
@@ -70,16 +71,15 @@ ww_agreement_coefficient <- new_numeric_metric(ww_agreement_coefficient, directi
 ww_agreement_coefficient.data.frame <- function(data,
                                                 truth,
                                                 estimate,
-                                                na_rm = TRUE,
+                                                na_action = na.fail,
                                                 ...) {
-  metric_summarizer(
-    metric_nm = "agreement_coefficient",
-    metric_fn = ww_agreement_coefficient_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "agreement_coefficient",
+    ...
   )
 }
 
@@ -87,7 +87,7 @@ ww_agreement_coefficient.data.frame <- function(data,
 #' @export
 ww_agreement_coefficient_vec <- function(truth,
                                          estimate,
-                                         na_rm = TRUE,
+                                         na_action = na.fail,
                                          ...) {
 
   ww_agreement_coefficient_impl <- function(truth, estimate, ...) {
@@ -96,12 +96,11 @@ ww_agreement_coefficient_vec <- function(truth,
     1 - est_SSD / est_SPOD
   }
 
-  metric_vec_template(
-    metric_impl = ww_agreement_coefficient_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_agreement_coefficient_impl,
     ...
   )
 }
@@ -119,16 +118,15 @@ ww_systematic_agreement_coefficient <- new_numeric_metric(ww_systematic_agreemen
 ww_systematic_agreement_coefficient.data.frame <- function(data,
                                                            truth,
                                                            estimate,
-                                                           na_rm = TRUE,
+                                                           na_action = na.fail,
                                                            ...) {
-  metric_summarizer(
-    metric_nm = "systematic_agreement_coefficient",
-    metric_fn = ww_systematic_agreement_coefficient_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "systematic_agreement_coefficient",
+    ...
   )
 }
 
@@ -136,19 +134,18 @@ ww_systematic_agreement_coefficient.data.frame <- function(data,
 #' @export
 ww_systematic_agreement_coefficient_vec <- function(truth,
                                                     estimate,
-                                                    na_rm = TRUE,
+                                                    na_action = na.fail,
                                                     ...) {
 
   ww_systematic_agreement_coefficient_impl <- function(truth, estimate, ...) {
     1 - (calc_spds(truth, estimate) / calc_spod(truth, estimate))
   }
 
-  metric_vec_template(
-    metric_impl = ww_systematic_agreement_coefficient_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_systematic_agreement_coefficient_impl,
     ...
   )
 }
@@ -166,16 +163,15 @@ ww_unsystematic_agreement_coefficient <- new_numeric_metric(ww_unsystematic_agre
 ww_unsystematic_agreement_coefficient.data.frame <- function(data,
                                                              truth,
                                                              estimate,
-                                                             na_rm = TRUE,
+                                                             na_action = na.fail,
                                                              ...) {
-  metric_summarizer(
-    metric_nm = "unsystematic_agreement_coefficient",
-    metric_fn = ww_unsystematic_agreement_coefficient_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "unsystematic_agreement_coefficient",
+    ...
   )
 }
 
@@ -183,19 +179,18 @@ ww_unsystematic_agreement_coefficient.data.frame <- function(data,
 #' @export
 ww_unsystematic_agreement_coefficient_vec <- function(truth,
                                                       estimate,
-                                                      na_rm = TRUE,
+                                                      na_action = na.fail,
                                                       ...) {
 
   ww_unsystematic_agreement_coefficient_impl <- function(truth, estimate, ...) {
     1 - (calc_spdu(truth, estimate) / calc_spod(truth, estimate))
   }
 
-  metric_vec_template(
-    metric_impl = ww_unsystematic_agreement_coefficient_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_unsystematic_agreement_coefficient_impl,
     ...
   )
 }
@@ -213,16 +208,15 @@ ww_unsystematic_mpd <- new_numeric_metric(ww_unsystematic_mpd, direction = "maxi
 ww_unsystematic_mpd.data.frame <- function(data,
                                            truth,
                                            estimate,
-                                           na_rm = TRUE,
+                                           na_action = na.fail,
                                            ...) {
-  metric_summarizer(
-    metric_nm = "unsystematic_mpd",
-    metric_fn = ww_unsystematic_mpd_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "unsystematic_mpd",
+    ...
   )
 }
 
@@ -230,14 +224,13 @@ ww_unsystematic_mpd.data.frame <- function(data,
 #' @export
 ww_unsystematic_mpd_vec <- function(truth,
                                     estimate,
-                                    na_rm = TRUE,
+                                    na_action = na.fail,
                                     ...) {
-  metric_vec_template(
-    metric_impl = ww_unsystematic_mpd_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_unsystematic_mpd_impl,
     ...
   )
 }
@@ -259,16 +252,15 @@ ww_systematic_mpd <- new_numeric_metric(ww_systematic_mpd, direction = "maximize
 ww_systematic_mpd.data.frame <- function(data,
                                          truth,
                                          estimate,
-                                         na_rm = TRUE,
+                                         na_action = na.fail,
                                          ...) {
-  metric_summarizer(
-    metric_nm = "systematic_mpd",
-    metric_fn = ww_systematic_mpd_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "systematic_mpd",
+    ...
   )
 }
 
@@ -276,14 +268,13 @@ ww_systematic_mpd.data.frame <- function(data,
 #' @export
 ww_systematic_mpd_vec <- function(truth,
                                   estimate,
-                                  na_rm = TRUE,
+                                  na_action = na.fail,
                                   ...) {
-  metric_vec_template(
-    metric_impl = ww_systematic_mpd_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_systematic_mpd_impl,
     ...
   )
 }
@@ -303,38 +294,36 @@ ww_unsystematic_rmpd <- new_numeric_metric(ww_unsystematic_rmpd, direction = "ma
 #' @rdname ww_agreement_coefficient
 #' @export
 ww_unsystematic_rmpd.data.frame <- function(data,
-                                           truth,
-                                           estimate,
-                                           na_rm = TRUE,
-                                           ...) {
-  metric_summarizer(
-    metric_nm = "unsystematic_rmpd",
-    metric_fn = ww_unsystematic_rmpd_vec,
+                                            truth,
+                                            estimate,
+                                            na_action = na.fail,
+                                            ...) {
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "unsystematic_rmpd",
+    ...
   )
 }
 
 #' @rdname ww_agreement_coefficient
 #' @export
 ww_unsystematic_rmpd_vec <- function(truth,
-                                    estimate,
-                                    na_rm = TRUE,
-                                    ...) {
+                                     estimate,
+                                     na_action = na.fail,
+                                     ...) {
 
   ww_unsystematic_rmpd_impl <- function(truth, estimate, ...) {
     sqrt(ww_unsystematic_mpd_impl(truth, estimate, ...))
   }
 
-  metric_vec_template(
-    metric_impl = ww_unsystematic_rmpd_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_unsystematic_rmpd_impl,
     ...
   )
 }
@@ -350,38 +339,36 @@ ww_systematic_rmpd <- new_numeric_metric(ww_systematic_rmpd, direction = "maximi
 #' @rdname ww_agreement_coefficient
 #' @export
 ww_systematic_rmpd.data.frame <- function(data,
-                                         truth,
-                                         estimate,
-                                         na_rm = TRUE,
-                                         ...) {
-  metric_summarizer(
-    metric_nm = "systematic_rmpd",
-    metric_fn = ww_systematic_rmpd_vec,
+                                          truth,
+                                          estimate,
+                                          na_action = na.fail,
+                                          ...) {
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "systematic_rmpd",
+    ...
   )
 }
 
 #' @rdname ww_agreement_coefficient
 #' @export
 ww_systematic_rmpd_vec <- function(truth,
-                                  estimate,
-                                  na_rm = TRUE,
-                                  ...) {
+                                   estimate,
+                                   na_action = na.fail,
+                                   ...) {
 
   ww_systematic_rmpd_impl <- function(truth, estimate, ...) {
     sqrt(ww_systematic_mpd_impl(truth, estimate, ...))
   }
 
-  metric_vec_template(
-    metric_impl = ww_systematic_rmpd_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_systematic_rmpd_impl,
     ...
   )
 }

@@ -379,6 +379,13 @@ create_aoa <- function(training, testing, importance, na_action, ..., include_di
   aoa$di <- calc_di(aoa$transformed_training, aoa$testing, aoa$d_bar)
   aoa$aoa_threshold <- calc_aoa(aoa$di)
 
+  if (isTRUE(all.equal(aoa$aoa_threshold, 0))) {
+    rlang::warn(
+      "The AOA threshold was 0, which is usually unexpected.",
+      i = "Did you accidentally pass the same data as testing and training?"
+    )
+  }
+
   aoa <- aoa[c(
     "transformed_training",
     "sds",
@@ -394,37 +401,6 @@ create_aoa <- function(training, testing, importance, na_action, ..., include_di
 
   do.call(hardhat::new_model, aoa)
 
-}
-
-#' Run `na_action` against data, with useful error messages if needed
-#'
-#' @param dat A data.frame
-#' @inheritParams rlang::abort
-#' @inheritParams ww_area_of_applicability
-#' @param where The name of the object that is being passed to `dat`
-#' @param where_longer The name of the argument that the user would have passed `dat` to.
-#'
-#' @return `do.call(na_action, list(dat))`
-#'
-#' @srrstats {G1.4a} Internal function documentation
-#'
-#' @noRd
-check_for_missing <- function(dat, na_action, where, where_longer, call = rlang::caller_env()) {
-  if (any(is.na(dat))) {
-    tryCatch(
-      dat <- do.call(na_action, list(dat)),
-      error = function(e) {
-        rlang::abort(
-          c(
-            glue::glue("Missing values in the {where} set data {where_longer}."),
-            i = "Either process your data to fix the NA values or set `na_action`."
-          ),
-          call = call
-        )
-      }
-    )
-  }
-  dat
 }
 
 #' Validate "testing" objects and reorder columns to match training data

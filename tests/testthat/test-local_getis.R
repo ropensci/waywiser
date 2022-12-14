@@ -1,10 +1,6 @@
 set.seed(123)
 test_that("Local Getis-Ord statistics are stable", {
 
- 
-
- 
-
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
@@ -23,16 +19,8 @@ test_that("Local Getis-Ord statistics are stable", {
   set.seed(123)
   expect_snapshot(
     {
-      df_local_i_p <- ww_local_getis_ord_pvalue(guerry_modeled, Crm_prs, predictions)
+      df_local_i_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, Crm_prs, predictions)
       df_local_i_p[1:3]
-    }
-  )
-
-  set.seed(123)
-  expect_snapshot(
-    {
-      df_local_i_both <- ww_local_getis_ord(guerry_modeled, Crm_prs, predictions)
-      df_local_i_both[1:3]
     }
   )
 
@@ -42,17 +30,7 @@ test_that("Local Getis-Ord statistics are stable", {
 
   set.seed(123)
   expect_snapshot(
-    (vec_local_i_p <- ww_local_getis_ord_pvalue_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
-  )
-
-  expect_identical(
-    df_local_i,
-    df_local_i_both[df_local_i_both$.metric == "local_getis_ord_g", ]
-  )
-
-  expect_identical(
-    df_local_i_p,
-    df_local_i_both[df_local_i_both$.metric == "local_getis_ord_g_pvalue", ]
+    (vec_local_i_p <- ww_local_getis_ord_g_pvalue_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
   )
 
   expect_identical(

@@ -241,11 +241,6 @@ test_that("normal use", {
 
 })
 
-test_that("CAST comparison", {
-  skip_if_not_installed("CAST")
-
-})
-
 test_that("`new_ww_area_of_applicability` arguments are assigned correctly", {
   x <- ww_area_of_applicability(y ~ ., train, test, importance)
 

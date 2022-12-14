@@ -22,7 +22,8 @@
 ---
 
     Code
-      df_local_i_p <- ww_local_getis_ord_pvalue(guerry_modeled, Crm_prs, predictions)
+      df_local_i_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, Crm_prs,
+        predictions)
       df_local_i_p[1:3]
     Output
       # A tibble: 85 x 3
@@ -39,27 +40,6 @@
        9 local_getis_ord_g_pvalue standard     0.361  
       10 local_getis_ord_g_pvalue standard     0.00787
       # ... with 75 more rows
-
----
-
-    Code
-      df_local_i_both <- ww_local_getis_ord(guerry_modeled, Crm_prs, predictions)
-      df_local_i_both[1:3]
-    Output
-      # A tibble: 170 x 3
-         .metric           .estimator .estimate
-         <chr>             <chr>          <dbl>
-       1 local_getis_ord_g standard       0.913
-       2 local_getis_ord_g standard       2.49 
-       3 local_getis_ord_g standard       2.15 
-       4 local_getis_ord_g standard      -1.58 
-       5 local_getis_ord_g standard      -1.19 
-       6 local_getis_ord_g standard      -1.68 
-       7 local_getis_ord_g standard       0.627
-       8 local_getis_ord_g standard      -1.60 
-       9 local_getis_ord_g standard       0.964
-      10 local_getis_ord_g standard      -2.71 
-      # ... with 160 more rows
 
 ---
 
@@ -86,7 +66,7 @@
 ---
 
     Code
-      (vec_local_i_p <- ww_local_getis_ord_pvalue_vec(guerry_modeled$Crm_prs,
+      (vec_local_i_p <- ww_local_getis_ord_g_pvalue_vec(guerry_modeled$Crm_prs,
       guerry_modeled$predictions, weights))
     Output
        [1] 0.338551650 0.017476897 0.046989319 0.136306243 0.252759855 0.094280941

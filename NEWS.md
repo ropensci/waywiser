@@ -1,5 +1,14 @@
 # waywiser (development version)
 
+* Removed combination functions -- `ww_global_geary`, `ww_global_moran`, 
+  `ww_local_geary`, `ww_local_moran`, `ww_local_getis_ord`. Use `metric_set()`
+  to combine functions instead.
+  
+* Renamed `ww_local_getis_ord_pvalue_vec()` and variants to 
+  `ww_local_getis_ord_g_pvalue_vec()`; this change allows internal functions to
+  work properly, and makes it easier for the output to indicate if the p-value
+  is associated with a g or g* value.
+
 * Added functions (primarily `ww_multi_scale()`) and a vignette for multi-scale 
   assessment of model predictions.
   

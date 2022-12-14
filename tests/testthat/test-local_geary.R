@@ -1,10 +1,6 @@
 set.seed(123)
 test_that("Local geary statistics are stable", {
 
- 
-
- 
-
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
@@ -28,14 +24,6 @@ test_that("Local geary statistics are stable", {
     }
   )
 
-  set.seed(123)
-  expect_snapshot(
-    {
-      df_local_c_both <- ww_local_geary(guerry_modeled, Crm_prs, predictions)
-      df_local_c_both[1:3]
-    }
-  )
-
   expect_snapshot(
     (vec_local_c <- ww_local_geary_c_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
   )
@@ -43,16 +31,6 @@ test_that("Local geary statistics are stable", {
   set.seed(123)
   expect_snapshot(
     (vec_local_c_p <- ww_local_geary_pvalue_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
-  )
-
-  expect_identical(
-    df_local_c,
-    df_local_c_both[df_local_c_both$.metric == "local_geary_c", ]
-  )
-
-  expect_identical(
-    df_local_c_p,
-    df_local_c_both[df_local_c_both$.metric == "local_geary_pvalue", ]
   )
 
   expect_identical(

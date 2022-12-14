@@ -80,108 +80,124 @@ test_that("srr: expected failures for ww_agreement_coefficient", {
   #' @srrstats {G2.15} Missingness is checked
   #' @srrstats {G2.14} Users can specify behavior with NA results
   #' @srrstats {G2.16} NaN is properly handled
-  #' @srrstats {G2.14b} Users can ignore NA:
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
+  #' Users can error:
+  expect_snapshot(
+    ww_agreement_coefficient(missing_df, x, y)$.estimate,
+    error = TRUE
+  )
+
+  #' Users can error:
+  expect_snapshot(
+    ww_agreement_coefficient(missing_df, y, x)$.estimate,
+    error = TRUE
+  )
+
+  #' Users can error:
+  expect_snapshot(
+    ww_agreement_coefficient_vec(missing_df$y, missing_df$x),
+    error = TRUE
+  )
+
+  #' Users can error:
+  expect_snapshot(
+    ww_agreement_coefficient_vec(missing_df$x, missing_df$y),
+    error = TRUE
+  )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_agreement_coefficient(missing_df, x, y, na_rm = FALSE)$.estimate,
+    ww_agreement_coefficient(missing_df, y, x, na_action = function(x) unlist(na.pass(x)))$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_agreement_coefficient(missing_df, y, x, na_rm = FALSE)$.estimate,
+    ww_agreement_coefficient(missing_df, x, y, na_action = function(x) unlist(na.pass(x)))$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_agreement_coefficient_vec(missing_df$x, missing_df$y, na_rm = FALSE),
+    ww_agreement_coefficient_vec(missing_df$y, missing_df$x, na_action = function(x) unlist(na.pass(x))),
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_agreement_coefficient_vec(missing_df$y, missing_df$x, na_rm = FALSE),
+    ww_agreement_coefficient_vec(missing_df$x, missing_df$y, na_action = function(x) unlist(na.pass(x))),
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can delete NA values:
   expect_no_error(
-    ww_agreement_coefficient(missing_df, x, y, na_rm = TRUE)
+    ww_agreement_coefficient(missing_df, x, y, na_action = na.omit)
   )
 
   #' @srrstats {G2.14b} Users can delete NA values:
   expect_no_error(
-    ww_agreement_coefficient(missing_df, y, x, na_rm = TRUE)
+    ww_agreement_coefficient(missing_df, y, x, na_action = na.omit)
   )
 
   #' @srrstats {G2.14b} Users can delete NA values:
   expect_no_error(
-    ww_agreement_coefficient_vec(missing_df$x, missing_df$y, na_rm = TRUE)
+    ww_agreement_coefficient_vec(missing_df$x, missing_df$y, na_action = na.omit)
   )
 
   #' @srrstats {G2.14b} Users can delete NA values:
   expect_no_error(
-    ww_agreement_coefficient_vec(missing_df$y, missing_df$x, na_rm = TRUE)
+    ww_agreement_coefficient_vec(missing_df$y, missing_df$x, na_action = na.omit)
   )
-
-  expect_error_or_missing <- function(call, value) {
-    tryCatch(
-      expect_error(call, NA),
-      expectation_success = function(e) expect_equal(call, value),
-      expectation_failure = function(e) expect_snapshot(call, error = TRUE)
-    )
-  }
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
-  expect_error_or_missing(
+  expect_snapshot(
     ww_agreement_coefficient_vec(numeric(), numeric()),
-    NaN
+    error = TRUE
   )
 
   empty_df <- tibble::tibble(x = numeric(), y = numeric())
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
-  expect_error_or_missing(
-    ww_agreement_coefficient(empty_df, x, y)$.estimate,
-    NaN
+  expect_snapshot(
+    ww_agreement_coefficient(empty_df, x, y),
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
-  expect_error_or_missing(
-    ww_agreement_coefficient(empty_df, y, x)$.estimate,
-    NaN
+  expect_snapshot(
+    ww_agreement_coefficient(empty_df, y, x),
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
-  expect_error_or_missing(
+  expect_snapshot(
     ww_agreement_coefficient_vec(rep(NA_real_, 4), 4:1),
-    NA_real_
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
-  expect_error_or_missing(
+  expect_snapshot(
     ww_agreement_coefficient_vec(1:4, rep(NA_real_, 4)),
-    NA_real_
+    error = TRUE
   )
 
   all_na <- tibble::tibble(x = rep(NA_real_, 4), y = 1:4)
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
-  expect_error_or_missing(
-    ww_agreement_coefficient(all_na, x, y)$.estimate,
-    NA_real_
+  expect_snapshot(
+    ww_agreement_coefficient(all_na, x, y),
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
-  expect_error_or_missing(
-    ww_agreement_coefficient(all_na, y, x)$.estimate,
-    NA_real_
+  expect_snapshot(
+    ww_agreement_coefficient(all_na, y, x),
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
@@ -212,15 +228,15 @@ test_that("other generic srr standards", {
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
     ww_agreement_coefficient(noised_df, x, y),
-    ww_agreement_coefficient(noised_df, x, y)
+    ww_agreement_coefficient(df, x, y)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
-    ww_agreement_coefficient(noised_df, x, y),
-    ww_agreement_coefficient(noised_df, x, y)
+    ww_agreement_coefficient(noised_df, y, x),
+    ww_agreement_coefficient(df, y, x)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -228,7 +244,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
     ww_agreement_coefficient_vec(noised_x, y),
-    ww_agreement_coefficient_vec(noised_x, y)
+    ww_agreement_coefficient_vec(x, y)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -236,7 +252,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
     ww_agreement_coefficient_vec(y, noised_x),
-    ww_agreement_coefficient_vec(y, noised_x)
+    ww_agreement_coefficient_vec(y, x)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.

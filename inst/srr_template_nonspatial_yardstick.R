@@ -77,108 +77,124 @@ test_that("srr: expected failures for {{{name}}}", {
   #' @srrstats {G2.15} Missingness is checked
   #' @srrstats {G2.14} Users can specify behavior with NA results
   #' @srrstats {G2.16} NaN is properly handled
-  #' @srrstats {G2.14b} Users can ignore NA:
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
+  #' Users can error:
+  expect_snapshot(
+    {{{name}}}(missing_df, x, y)$.estimate,
+    error = TRUE
+  )
+
+  #' Users can error:
+  expect_snapshot(
+    {{{name}}}(missing_df, y, x)$.estimate,
+    error = TRUE
+  )
+
+  #' Users can error:
+  expect_snapshot(
+    {{{name}}}_vec(missing_df$y, missing_df$x),
+    error = TRUE
+  )
+
+  #' Users can error:
+  expect_snapshot(
+    {{{name}}}_vec(missing_df$x, missing_df$y),
+    error = TRUE
+  )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    {{{name}}}(missing_df, x, y, na_rm = FALSE)$.estimate,
+    {{{name}}}(missing_df, y, x, na_action = function(x) unlist(na.pass(x)))$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    {{{name}}}(missing_df, y, x, na_rm = FALSE)$.estimate,
+    {{{name}}}(missing_df, x, y, na_action = function(x) unlist(na.pass(x)))$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    {{{name}}}_vec(missing_df$x, missing_df$y, na_rm = FALSE),
+    {{{name}}}_vec(missing_df$y, missing_df$x, na_action = function(x) unlist(na.pass(x))),
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    {{{name}}}_vec(missing_df$y, missing_df$x, na_rm = FALSE),
+    {{{name}}}_vec(missing_df$x, missing_df$y, na_action = function(x) unlist(na.pass(x))),
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can delete NA values:
   expect_no_error(
-    {{{name}}}(missing_df, x, y, na_rm = TRUE)
+    {{{name}}}(missing_df, x, y, na_action = na.omit)
   )
 
   #' @srrstats {G2.14b} Users can delete NA values:
   expect_no_error(
-    {{{name}}}(missing_df, y, x, na_rm = TRUE)
+    {{{name}}}(missing_df, y, x, na_action = na.omit)
   )
 
   #' @srrstats {G2.14b} Users can delete NA values:
   expect_no_error(
-    {{{name}}}_vec(missing_df$x, missing_df$y, na_rm = TRUE)
+    {{{name}}}_vec(missing_df$x, missing_df$y, na_action = na.omit)
   )
 
   #' @srrstats {G2.14b} Users can delete NA values:
   expect_no_error(
-    {{{name}}}_vec(missing_df$y, missing_df$x, na_rm = TRUE)
+    {{{name}}}_vec(missing_df$y, missing_df$x, na_action = na.omit)
   )
-
-  expect_error_or_missing <- function(call, value) {
-    tryCatch(
-      expect_error(call, NA),
-      expectation_success = function(e) expect_equal(call, value),
-      expectation_failure = function(e) expect_snapshot(call, error = TRUE)
-    )
-  }
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
-  expect_error_or_missing(
+  expect_snapshot(
     {{{name}}}_vec(numeric(), numeric()),
-    NaN
+    error = TRUE
   )
 
   empty_df <- tibble::tibble(x = numeric(), y = numeric())
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
-  expect_error_or_missing(
-    {{{name}}}(empty_df, x, y)$.estimate,
-    NaN
+  expect_snapshot(
+    {{{name}}}(empty_df, x, y),
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
-  expect_error_or_missing(
-    {{{name}}}(empty_df, y, x)$.estimate,
-    NaN
+  expect_snapshot(
+    {{{name}}}(empty_df, y, x),
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
-  expect_error_or_missing(
+  expect_snapshot(
     {{{name}}}_vec(rep(NA_real_, 4), 4:1),
-    NA_real_
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
-  expect_error_or_missing(
+  expect_snapshot(
     {{{name}}}_vec(1:4, rep(NA_real_, 4)),
-    NA_real_
+    error = TRUE
   )
 
   all_na <- tibble::tibble(x = rep(NA_real_, 4), y = 1:4)
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
-  expect_error_or_missing(
-    {{{name}}}(all_na, x, y)$.estimate,
-    NA_real_
+  expect_snapshot(
+    {{{name}}}(all_na, x, y),
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
-  expect_error_or_missing(
-    {{{name}}}(all_na, y, x)$.estimate,
-    NA_real_
+  expect_snapshot(
+    {{{name}}}(all_na, y, x),
+    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
@@ -209,15 +225,15 @@ test_that("other generic srr standards", {
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
     {{{name}}}(noised_df, x, y),
-    {{{name}}}(noised_df, x, y)
+    {{{name}}}(df, x, y)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
-    {{{name}}}(noised_df, x, y),
-    {{{name}}}(noised_df, x, y)
+    {{{name}}}(noised_df, y, x),
+    {{{name}}}(df, y, x)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -225,7 +241,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
     {{{name}}}_vec(noised_x, y),
-    {{{name}}}_vec(noised_x, y)
+    {{{name}}}_vec(x, y)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -233,7 +249,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
     {{{name}}}_vec(y, noised_x),
-    {{{name}}}_vec(y, noised_x)
+    {{{name}}}_vec(y, x)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.

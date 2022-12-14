@@ -112,3 +112,10 @@ grids <- list(
 ww_multi_scale(ames_sf, Sale_Price, predictions, grids = grids)
 \dontshow{\}) # examplesIf}
 }
+\references{
+Riemann, R., Wilson, B. T., Lister, A., and Parks, S. "An effective
+assessment protocol for continuous geospatial datasets of forest
+characteristics using USFS Forest Inventory and Analysis (FIA) data."
+Remote Sensing of Environment 114(10), pp 2337-2352,
+doi: 10.1016/j.rse.2010.05.010 .
+}
