@@ -83,3 +83,10 @@ test_that("ww_build_weights is stable", {
   )
 
 })
+
+test_that("expected_errors", {
+  expect_snapshot(
+    ww_agreement_coefficient_vec(1:5, c(1:4, NA), na_action = c(na.omit, na.pass)),
+    error = TRUE
+  )
+})

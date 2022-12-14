@@ -9,6 +9,7 @@
 #' @noRd
 
 tidy_importance <- function(importance, ...) {
+  #' @srrstats {G2.10} Ensuring standard handling of different inputs
   UseMethod("tidy_importance")
 }
 

@@ -20,6 +20,9 @@ test_that("tidy_importance is idempotent", {
 })
 
 test_that("expected failures", {
+  #' @srrstats {G5.2} Testing each error message,
+  #' @srrstats {G5.2a} with a unique message,
+  #' @srrstats {G5.2b} against expected outcomes
   expect_snapshot(
     tidy_importance(list()),
     error = TRUE
