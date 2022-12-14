@@ -15,7 +15,7 @@
 #' @srrstats {G2.15} Any function may be passed to na_action
 #' @srrstats {G2.16} Any function may be passed to na_action
 #'
-#' @inheritParams global_geary_c
+#' @inheritParams ww_global_geary_c
 #' @inheritParams spdep::localmoran
 #' @param ... Additional arguments passed to [spdep::localmoran()].
 #'
@@ -32,7 +32,7 @@
 #' guerry$predictions <- predict(guerry_lm, guerry)
 #'
 #' ww_local_moran_i(guerry, Crm_prs, predictions)
-#' ww_local_moran(guerry, Crm_prs, predictions)
+#' ww_local_moran_pvalue(guerry, Crm_prs, predictions)
 #'
 #' @rdname local_moran_i
 #' @export

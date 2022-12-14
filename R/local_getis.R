@@ -15,7 +15,7 @@
 #' @srrstats {G2.15} Any function may be passed to na_action
 #' @srrstats {G2.16} Any function may be passed to na_action
 #'
-#' @inheritParams global_geary_c
+#' @inheritParams ww_global_geary_c
 #' @inheritParams spdep::localG_perm
 #' @param ... Arguments passed to [spdep::localG_perm()]
 #'
