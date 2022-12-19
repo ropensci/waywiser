@@ -31,7 +31,7 @@ test_that("ww_build_neighbors is stable", {
   )
 
   expect_identical(
-    ww_build_neighbors(sf::st_polygon(), ww_build_neighbors(guerry)),
+    ww_build_neighbors(sf::st_sfc(), ww_build_neighbors(guerry)),
     ww_build_neighbors(guerry)
   )
 
