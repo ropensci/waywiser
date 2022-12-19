@@ -42,6 +42,12 @@ If you’ve found a bug, please file an issue that illustrates the bug with a mi
 *  We use [testthat](https://cran.r-project.org/package=testthat) for unit tests. 
    Contributions with test cases included are easier to accept.  
 
+### Extra Tests
+
+If your changes impact `ww_area_of_applicability()`, please note that there is an additional test which ensures waywiser's AOA calculations maintain parity with CAST, the original implementation. To run this test, set `Sys.setenv("waywiser_test_cast" = "true")`.
+
+Assuming you have CAST >= 0.7.1 and any version of caret installed, this flag will calculate an AOA using CAST and compare it against one calculated using waywiser. If you don't have these packages installed, the waywiser AOA will be compared against values calculated in the past using CAST.
+
 ## Code of Conduct
 
 Please note that the waywiser project is released with a

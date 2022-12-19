@@ -27,6 +27,14 @@
 #'
 #' @export
 ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env()) {
+
+  if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
+    rlang::abort(
+      "`data` must be an `sf` or `sfc` object.",
+      call = call
+    )
+  }
+
   data <- sf::st_geometry(data)
 
   type <- if (any(c("sfc_MULTIPOINT", "sfc_POINT") %in% class(data))) {
@@ -87,6 +95,23 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
 #'
 #' @export
 ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
+
+  if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
+    rlang::abort(
+      "`data` must be an `sf` or `sfc` object."
+    )
+  }
+
+  #' @srrstats {G2.0} Checking input lengths
+  #' @srrstats {G2.1} Checking input types
+  #' @srrstats {G2.2} Prohibiting multivariate input
+  if (length(k) > 1 || !rlang::is_integerish(k)) {
+    #' @srrstats {G2.0a} Secondary documentation
+    #' @srrstats {G2.1a} Secondary documentation
+    rlang::abort(
+      "`k` must be a single numeric integer."
+    )
+  }
 
   knn <- spdep::knearneigh(data, k, ...)
   spdep::knn2nb(knn, sym = sym)
@@ -154,7 +179,6 @@ ww_build_weights <- function(x, wt = NULL, include_self = FALSE, ...) {
   wt
 
 }
-
 
 #' Run `na_action` against data, with useful error messages if needed
 #'

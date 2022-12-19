@@ -4,10 +4,11 @@
 #' a `vi` object from the `vip` package.
 #' @inheritParams rlang::args_dots_empty
 #'
+#' @srrstats {G1.4a} Documented internal functions
+#'
 #' @return A data.frame with two columns, `term` and `estimate`.
 #'
 #' @noRd
-
 tidy_importance <- function(importance, ...) {
   #' @srrstats {G2.10} Ensuring standard handling of different inputs
   UseMethod("tidy_importance")

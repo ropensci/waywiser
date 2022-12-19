@@ -1,3 +1,21 @@
+#' Workhorse function handling yardstick metrics for the package
+#'
+#' @param name The human-understandable name of the metric, to return in the
+#' output data frame.
+#' @param metric_fun The name of the function to use to calculate the metric.
+#' @param na_rm Here for compatibility with yardstick; ignored.
+#' @inheritParams yardstick::rmse
+#' @inheritParams ww_area_of_applicability
+#' @inheritParams rlang::args_dots_empty
+#'
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @return A tibble with one row and three columns: `.metric`, containing `name`,
+#' `.estimator`, containing `standard`, and `.estimate`, the metric estimate.
+#' sf objects may also have a `geometry` column with the unioned geometry of
+#' inputs.
+#'
+#' @noRd
 #' @srrstats {G2.7} Due to relying on yardstick and dplyr, these functions only accept dataframes
 #' @srrstats {G2.8} Above enforced by method dispatch
 yardstick_df <- function(data, truth, estimate, na_action, name, metric_fun, ..., na_rm = FALSE) {
@@ -17,6 +35,24 @@ yardstick_df <- function(data, truth, estimate, na_action, name, metric_fun, ...
   )
 }
 
+#' Workhorse function handling spatial yardstick metrics for the package
+#'
+#' @inheritParams ww_global_geary_c
+#' @inheritParams yardstick::rmse
+#' @inheritParams ww_area_of_applicability
+#' @inheritParams rlang::args_dots_empty
+#' @inheritParams yardstick_df
+#'
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @return A tibble with one row and three columns: `.metric`, containing `name`,
+#' `.estimator`, containing `standard`, and `.estimate`, the metric estimate.
+#' sf objects may also have a `geometry` column with the unioned geometry of
+#' inputs.
+#'
+#' @noRd
+#' @srrstats {G2.7} Due to relying on yardstick and dplyr, these functions only accept dataframes
+#' @srrstats {G2.8} Above enforced by method dispatch
 spatial_yardstick_df <- function(data, truth, estimate, wt, na_action, name, ..., na_rm = FALSE) {
   if (is.null(wt)) {
     wt <- ww_build_weights(data)
@@ -45,7 +81,7 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_action, name, ...
   )
 }
 
-#' Return Sum of Potential Difference from Ji and Gallo (2006)
+#' Workhorse function powering yardstick metrics
 #'
 #' @inheritParams ww_global_geary_c
 #' @inheritParams yardstick::rmse
@@ -53,6 +89,8 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_action, name, ...
 #' @param na_rm Ignored; set `na_action` instead. Here for compatibility with
 #' [yardstick::metric_set()], but not accessible via exported functions.
 #' @srrstats {G1.4a} Documented internal functions
+#'
+#' @return A vector of metric estimates
 #'
 #' @noRd
 yardstick_vec <- function(truth, estimate, na_action, impl, wt = NULL, ..., na_rm = FALSE) {
@@ -137,6 +175,15 @@ yardstick_vec <- function(truth, estimate, na_action, impl, wt = NULL, ..., na_r
 
 }
 
+#' Workhorse function powering spatial yardstick metrics
+#'
+#' @inheritParams yardstick_vec
+#' @inheritParams spatial_yardstick_df
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @return A vector of metric estimates
+#'
+#' @noRd
 spatial_yardstick_vec <- function(truth, estimate, wt, na_action, impl, ..., na_rm = FALSE) {
   if (!inherits(wt, "listw")) {
     rlang::abort(

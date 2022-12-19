@@ -4,7 +4,7 @@
 \name{waywiser-package}
 \alias{waywiser}
 \alias{waywiser-package}
-\title{waywiser: Ergonomic Methods for Assessing 2D Spatial Models}
+\title{waywiser: Ergonomic Methods for Assessing Spatial Models}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 

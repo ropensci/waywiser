@@ -171,3 +171,10 @@
          n   nn S0       S1       S2
       W 85 7225 85 30.34284 343.0238
 
+# expected_errors
+
+    Code
+      ww_agreement_coefficient_vec(1:5, c(1:4, NA), na_action = c(na.omit, na.pass))
+    Error <rlang_error>
+      Only one value can be passed to na_action.
+

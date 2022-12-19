@@ -101,8 +101,6 @@
 #'
 #' @param ... Not currently used.
 #'
-#' @srrstats {G2.0a} Explicit documentation on input lengths
-#' @srrstats {G2.1a} Explicit documentation on input types
 #' @srrstats {G2.14} Users can pass any function to handle NA values
 #' @srrstats {G2.14a} Users can pass any function to handle NA values
 #' @srrstats {G2.14b} Users can pass any function to handle NA values
@@ -421,8 +419,7 @@ check_di_testing <- function(training, testing, na_action = stats::na.pass) {
   # If NULL, nothing to validate or re-order, so just return NULL
   if (is.null(testing)) return(NULL)
 
-  # Make sure that the testing set has the same columns, in the same order,
-  # as the original training data
+  #' @srrstats {G2.13} Checking for missing data
   testing <- check_for_missing(
     testing$predictors,
     na_action,
@@ -431,6 +428,8 @@ check_di_testing <- function(training, testing, na_action = stats::na.pass) {
     call = rlang::caller_env(2)
   )
 
+  # Make sure that the testing set has the same columns, in the same order,
+  # as the original training data
   if (!all(names(training) %in% names(testing))) {
     rlang::abort(
       "Some columns in `training` were not present in `testing` (or `new_data`)."

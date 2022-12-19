@@ -1,6 +1,6 @@
 Type: Package
 Package: waywiser
-Title: Ergonomic Methods for Assessing 2D Spatial Models
+Title: Ergonomic Methods for Assessing Spatial Models
 Version: 0.2.0.9000
 Authors@R: c(
     person("Michael", "Mahoney", , "mike.mahoney.218@gmail.com", role = c("aut", "cre"),
@@ -46,13 +46,15 @@ Imports:
     purrr,
     rlang,
     rsample,
-    sf,
-    spdep,
+    sf (>= 1.0-0),
+    spdep (>= 1.1-9),
     stats,
     tibble,
     yardstick
 Suggests: 
     applicable,
+    caret,
+    CAST,
     covr,
     ggplot2,
     knitr,

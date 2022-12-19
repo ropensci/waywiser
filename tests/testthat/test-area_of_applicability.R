@@ -278,3 +278,57 @@ test_that("`new_ww_area_of_applicability` arguments are assigned correctly", {
   expect_s3_class(x$blueprint, "hardhat_blueprint")
 })
 
+
+#' @srrstats {G5.4} Testing equivalence against CAST:
+#' @srrstats {G5.4b} Testing equivalence against CAST and stored values:
+#' @srrstats {G5.4c} Data is derived originally from CAST and associated paper
+test_that("ww_area_of_applicability() is close-enough to CAST", {
+  skip_on_cran()
+  #' @srrstats {G5.10} Flag to set extended tests
+  #' @srrstats {G5.11a} Skip with relevant message if not run
+  skip_if_not(Sys.getenv("waywiser_test_cast") == "true")
+  relevant_data <- head(as.data.frame(worldclim_simulation)[c(1:4, 6)], 1000)
+
+  # Changes in CAST 0.7.1 mean that thresholds can't be compared against earlier versions
+  if (rlang::is_installed("CAST", "0.7.1") &&
+      rlang::is_installed("caret")) {
+
+    withr::with_seed(
+      123,
+      model <- caret::train(
+        relevant_data[1:4],
+        relevant_data$response,
+        method="rf",
+        importance=TRUE,
+        #tuneGrid = expand.grid(mtry = c(2:length(names(relevant_data)))),
+        trControl = caret::trainControl(method="none",savePredictions = TRUE)
+      )
+    )
+
+    AOA <- CAST::aoa(relevant_data, model=model)
+    cast_threshold <- AOA$parameters$threshold[[1]]
+    importance <- data.frame(
+      term = rownames(caret::varImp(model)$importance),
+      estimate = caret::varImp(model, scale = FALSE)$importance[[1]]
+    )
+  } else {
+    splts <- readRDS("splts.rds")
+    cast_threshold <- 0.2184868
+    importance <- data.frame(
+      term = c("bio2", "bio10", "bio13", "bio19"),
+      estimate = c(50.68727, 57.66859, 62.81009, 48.72391)
+    )
+  }
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
+    ww_area_of_applicability(
+      response ~ .,
+      relevant_data,
+      importance = importance
+    )$aoa_threshold,
+    cast_threshold,
+    tolerance = 0.000001
+  )
+
+})

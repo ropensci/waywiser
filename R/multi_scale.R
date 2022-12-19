@@ -19,6 +19,15 @@
 #' then `cellsize` will be automatically adjusted to create the requested
 #' number of cells.
 #'
+#' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
+#' @srrstats {G2.10} Column extraction is properly handled within yardstick.
+#' @srrstats {G2.14} Any function may be passed to na_action
+#' @srrstats {G2.14a} Any function may be passed to na_action
+#' @srrstats {G2.14b} Any function may be passed to na_action
+#' @srrstats {G2.14c} Any function may be passed to na_action
+#' @srrstats {G2.15} Any function may be passed to na_action
+#' @srrstats {G2.16} Any function may be passed to na_action
+#'
 #' @param data A point geometry `sf` object containing the columns specified by
 #' the truth and estimate arguments.
 #' @inheritParams yardstick::rmse
@@ -93,7 +102,15 @@ ww_multi_scale <- function(
     aggregation_function = mean,
     autoexpand_grid = TRUE
 ) {
+  # Silence NSE-related NOTE in R CMD check
   .truth <- .estimate <- NULL
+
+  if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
+    rlang::abort(
+      "`data` must be an `sf` or `sfc` object.",
+      call = call
+    )
+  }
 
   geom_type <- unique(sf::st_geometry_type(data))
   if (!(length(geom_type) == 1 && geom_type == "POINT")) {
@@ -105,8 +122,8 @@ ww_multi_scale <- function(
     )
   }
 
+  #' @srrstats {G2.4} Accepting various input types
   if (inherits(metrics, "metric")) metrics <- list(metrics)
-
   if (!inherits(metrics, "metric_set")) {
     metrics <- do.call(yardstick::metric_set, metrics)
   }
@@ -225,6 +242,25 @@ ww_multi_scale <- function(
   )
 }
 
+
+#' Expand geographic bounding boxes slightly
+#'
+#' Because we're drawing straight lines on spheres when working with geographic
+#' coordinates, it's entirely possible to have points within a bounding box but
+#' outside of the straight lines between the corners. As this is almost never
+#' expected, this function adds a tiny fudge factor to bounding boxes in order
+#' to "catch" points.
+#'
+#' @param grid_box The output from [sf::st_bbox()]
+#' @param expansion The expansion factor: what fraction should each coordinate
+#' be adjusted by?
+#'
+#' @return A very slightly buffered bounding box
+#'
+#' @references
+#' https://github.com/ropensci/stplanr/pull/467
+#'
+#' @noRd
 expand_grid <- function(grid_box, expansion = 0.00001) {
   grid_box[1] <- grid_box[1] - abs(grid_box[1] * expansion)
   grid_box[2] <- grid_box[2] - abs(grid_box[2] * expansion)
@@ -233,6 +269,14 @@ expand_grid <- function(grid_box, expansion = 0.00001) {
   grid_box
 }
 
+#' Check if an sf object is in geographic coordinates
+#'
+#' This function adjusts [sf::st_is_longlat()] so that data without a CRS,
+#' such as simulated data on arbitrary grids, is treated as non-geographic.
+#'
+#' @inheritParams sf::st_is_longlat
+#'
+#' @noRd
 is_longlat <- function(x) {
   !(sf::st_crs(x) == sf::NA_crs_) && sf::st_is_longlat(x)
 }
