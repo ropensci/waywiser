@@ -58,7 +58,7 @@ jobs:
 
       - name: Update dependencies
         run: |
-          "update.packages(ask = FALSE, repos = 'https://cloud.r-project.org')"
+          update.packages(ask = FALSE, repos = 'https://cloud.r-project.org')
         shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
