@@ -178,3 +178,76 @@
         <chr>               <chr>          <dbl>                      <MULTIPOINT [°]>
       1 global_moran_pvalue standard          NA ((-41.18256 -22.75207), (-42.91933 -~
 
+# other generic srr standards
+
+    Code
+      withr::with_seed(123, ww_global_moran_pvalue(worldclim_loaded, bio13, bio19))
+    Output
+      # A tibble: 1 x 4
+        .metric             .estimator .estimate                                  geom
+        <chr>               <chr>          <dbl>                      <MULTIPOINT [°]>
+      1 global_moran_pvalue standard           0 ((-41.18256 -22.75207), (-42.91933 -~
+
+---
+
+    Code
+      withr::with_seed(123, ww_global_moran_pvalue(worldclim_loaded, bio13, bio19))
+    Output
+      # A tibble: 1 x 4
+        .metric             .estimator .estimate                                  geom
+        <chr>               <chr>          <dbl>                      <MULTIPOINT [°]>
+      1 global_moran_pvalue standard           0 ((-41.18256 -22.75207), (-42.91933 -~
+
+---
+
+    Code
+      withr::with_seed(123, ww_global_moran_pvalue_vec(worldclim_loaded$bio13,
+      worldclim_loaded$bio19, worldclim_weights))
+    Output
+      [1] 0
+
+---
+
+    Code
+      withr::with_seed(123, ww_global_moran_pvalue_vec(worldclim_loaded$bio13,
+      worldclim_loaded$bio19, worldclim_weights))
+    Output
+      [1] 0
+
+---
+
+    Code
+      withr::with_seed(123, ww_global_moran_pvalue(worldclim_loaded, bio13, bio19))
+    Output
+      # A tibble: 1 x 4
+        .metric             .estimator .estimate                                  geom
+        <chr>               <chr>          <dbl>                      <MULTIPOINT [°]>
+      1 global_moran_pvalue standard           0 ((-41.18256 -22.75207), (-42.91933 -~
+
+---
+
+    Code
+      withr::with_seed(123, ww_global_moran_pvalue(worldclim_loaded, bio13, bio19,
+        function(data) ww_build_weights(ww_make_point_neighbors(data, k = 5))))
+    Output
+      # A tibble: 1 x 4
+        .metric             .estimator .estimate                                  geom
+        <chr>               <chr>          <dbl>                      <MULTIPOINT [°]>
+      1 global_moran_pvalue standard           0 ((-41.18256 -22.75207), (-42.91933 -~
+
+---
+
+    Code
+      withr::with_seed(123, ww_global_moran_pvalue_vec(worldclim_loaded$bio13,
+      worldclim_loaded$bio19, other_weights))
+    Output
+      [1] 0
+
+---
+
+    Code
+      withr::with_seed(123, ww_global_moran_pvalue_vec(worldclim_loaded$bio13,
+      worldclim_loaded$bio19, other_weights))
+    Output
+      [1] 0
+

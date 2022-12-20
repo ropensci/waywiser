@@ -19,6 +19,11 @@
 #' @srrstats {G2.7} Due to relying on yardstick and dplyr, these functions only accept dataframes
 #' @srrstats {G2.8} Above enforced by method dispatch
 yardstick_df <- function(data, truth, estimate, na_action, name, metric_fun, ..., na_rm = FALSE) {
+
+  #' @srrstats {SP2.7} Standardized validation routine for yardstick metrics
+  #' @srrstats {SP2.8} Pre-processing routine for yardstick metrics
+  #' @srrstats {SP2.9} Retains relevant metadata
+
   if (missing(metric_fun)) metric_fun <- get(paste0("ww_", name, "_vec"))
   #' @srrstats {G2.10} Extraction handled by yardstick:
   metric_summarizer(
@@ -54,6 +59,12 @@ yardstick_df <- function(data, truth, estimate, na_action, name, metric_fun, ...
 #' @srrstats {G2.7} Due to relying on yardstick and dplyr, these functions only accept dataframes
 #' @srrstats {G2.8} Above enforced by method dispatch
 spatial_yardstick_df <- function(data, truth, estimate, wt, na_action, name, ..., na_rm = FALSE) {
+
+  #' @srrstats {SP2.7} Standardized validation routine for yardstick metrics
+  #' @srrstats {SP2.8} Pre-processing routine for yardstick metrics
+  #' @srrstats {SP2.9} Retains relevant metadata
+
+  #' @srrstats {SP3.0} Total user control over neighborhoods:
   if (is.null(wt)) {
     wt <- ww_build_weights(data)
   }
@@ -94,6 +105,10 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_action, name, ...
 #'
 #' @noRd
 yardstick_vec <- function(truth, estimate, na_action, impl, wt = NULL, ..., na_rm = FALSE) {
+
+  #' @srrstats {SP2.7} Standardized validation routine for yardstick metrics
+  #' @srrstats {SP2.8} Pre-processing routine for yardstick metrics
+  #' @srrstats {SP2.9} Retains relevant metadata
 
   #' @srrstats {G2.8} Ensuring all processing gets standardized inputs
   #' @srrstats {G2.1} Assertions on types of inputs
@@ -185,6 +200,9 @@ yardstick_vec <- function(truth, estimate, na_action, impl, wt = NULL, ..., na_r
 #'
 #' @noRd
 spatial_yardstick_vec <- function(truth, estimate, wt, na_action, impl, ..., na_rm = FALSE) {
+  #' @srrstats {SP2.7} Standardized validation routine for yardstick metrics
+  #' @srrstats {SP2.8} Pre-processing routine for yardstick metrics
+  #' @srrstats {SP2.9} Retains relevant metadata
   if (!inherits(wt, "listw")) {
     rlang::abort(
       c(

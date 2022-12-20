@@ -16,6 +16,9 @@
 #' area of applicability instead should be as accurate as predictions made on
 #' the assessment sets during cross-validation.
 #'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
+#'
 #' @section Differences from CAST:
 #' This implementation differs from
 #' Meyer and Pebesma (2021) (and therefore from CAST) when using cross-validated
@@ -56,6 +59,8 @@
 #' In practice, this means waywiser produces very slightly higher \eqn{\bar{d}}
 #' values than CAST and a slightly higher area of applicability threshold than
 #' CAST when using `rset` objects.
+#'
+#' @srrstats {SP2.6} Types and classes are documented.
 #'
 #' @param x Either a data frame, matrix, formula
 #' (specifying predictor terms on the right-hand side), recipe
@@ -120,6 +125,10 @@
 #' dummy variable. Having non-numeric predictors will cause this function to
 #' fail.
 #'
+#' @srrstats {SP4.0} Return is in a unique class-defined format
+#' @srrstats {SP4.0b} Return is in a unique class-defined format
+#' @srrstats {SP4.2} Type and class of return is documented
+#'
 #' @return
 #'
 #' A `ww_area_of_applicability` object, which can be used with [predict()] to
@@ -175,9 +184,15 @@ ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, .
   rlang::check_dots_empty()
   #' @srrstats {G2.8} Function converts to a standard input type
   #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   training <- hardhat::mold(x, NA_real_)
   #' @srrstats {G2.8} Function converts to a standard input type
   #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   if (!is.null(testing)) testing <- hardhat::mold(testing, NA_real_)
   create_aoa(training, testing, importance, ..., na_action = na_action)
 }
@@ -197,9 +212,15 @@ ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance
   }
   #' @srrstats {G2.8} Function converts to a standard input type
   #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   training <- hardhat::mold(x, data, blueprint = blueprint)
   #' @srrstats {G2.8} Function converts to a standard input type
   #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   if (!is.null(testing)) {
     testing <- hardhat::mold(x, testing, blueprint = blueprint)
   }
@@ -226,16 +247,28 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_actio
       if (identical(y, NA_real_)) {
         #' @srrstats {G2.8} Function converts to a standard input type
         #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+        #' @srrstats {SP2.7} Standard validation routines
+        #' @srrstats {SP2.8} Standard pre-processing routines
+        #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
         training <- hardhat::mold(training, y)
         #' @srrstats {G2.8} Function converts to a standard input type
         #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+        #' @srrstats {SP2.7} Standard validation routines
+        #' @srrstats {SP2.8} Standard pre-processing routines
+        #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
         testing <- hardhat::mold(testing, y)
       } else {
         #' @srrstats {G2.8} Function converts to a standard input type
         #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+        #' @srrstats {SP2.7} Standard validation routines
+        #' @srrstats {SP2.8} Standard pre-processing routines
+        #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
         training <- hardhat::mold(y, training)
         #' @srrstats {G2.8} Function converts to a standard input type
         #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
+        #' @srrstats {SP2.7} Standard validation routines
+        #' @srrstats {SP2.8} Standard pre-processing routines
+        #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
         testing <- hardhat::mold(y, testing)
       }
       create_aoa(
@@ -310,12 +343,18 @@ create_aoa <- function(training, testing, importance, na_action, ..., include_di
   #' @srrstats {G2.0} Checking univariate inputs
   #' @srrstats {G2.2} Restricting multivariate input
   #' @srrstats {G2.13} Checking inputs prior to calculations
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   if (length(na_action) != 1) {
     rlang::abort("Only one value can be passed to `na_action`.")
   }
 
   #' @srrstats {G2.13} Checking inputs prior to calculations
   #' @srrstats {G2.15} Enforcing no NAs are passed to base functions
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   aoa$training <- check_for_missing(
     aoa$training,
     na_action,
@@ -324,9 +363,15 @@ create_aoa <- function(training, testing, importance, na_action, ..., include_di
   )
 
   #' @srrstats {G2.13} Checking inputs prior to calculations
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   aoa$testing <- check_di_testing(aoa$training, testing, na_action)
 
   #' @srrstats {G2.13} Checking inputs prior to calculations
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   if (nrow(aoa$training) == 0) {
     rlang::abort(
       "0 rows were passed as training data."
@@ -334,6 +379,9 @@ create_aoa <- function(training, testing, importance, na_action, ..., include_di
   }
 
   #' @srrstats {G2.13} Checking inputs prior to calculations
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   if (!is.null(testing) && nrow(aoa$testing) == 0) {
     rlang::abort(
       "0 rows were passed as testing data."
@@ -341,9 +389,15 @@ create_aoa <- function(training, testing, importance, na_action, ..., include_di
   }
 
   #' @srrstats {G2.13} Checking inputs prior to calculations
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   check_di_columns_numeric(aoa$training, aoa$testing)
 
   #' @srrstats {G2.13} Checking inputs prior to calculations
+  #' @srrstats {SP2.7} Standard validation routines
+  #' @srrstats {SP2.8} Standard pre-processing routines
+  #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
   aoa$importance <- check_di_importance(aoa$training, importance)
 
   # 2.1 Standardization of predictor variables

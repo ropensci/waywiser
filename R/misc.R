@@ -28,6 +28,8 @@
 #' @export
 ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env()) {
 
+  #' @srrstats {SP2.0} Checking input data for spatial objects
+  #' @srrstats {SP2.0b} Will error on non-2d objects
   if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
     rlang::abort(
       "`data` must be an `sf` or `sfc` object.",
@@ -54,6 +56,10 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
     "point"
   }
 
+  #' @srrstats {SP3.0} User arguments are passed to neighborhoods
+  #' @srrstats {SP3.0a} User arguments are passed to neighborhoods
+  #' @srrstats {SP3.0b} User arguments are passed to neighborhoods
+  #' @srrstats {SP3.1} User arguments are passed to neighborhoods
   if (is.null(nb)) {
     nb <- switch(
       type,
@@ -113,6 +119,9 @@ ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
     )
   }
 
+  #' @srrstats {SP3.0} User arguments are passed to neighborhoods
+  #' @srrstats {SP3.0a} User arguments are passed to neighborhoods
+  #' @srrstats {SP3.0b} User arguments are passed to neighborhoods
   knn <- spdep::knearneigh(data, k, ...)
   spdep::knn2nb(knn, sym = sym)
 
@@ -133,6 +142,10 @@ ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
 #'
 #' @export
 ww_make_polygon_neighbors <- function(data, ...) {
+  #' @srrstats {SP3.0} User arguments are passed to neighborhoods
+  #' @srrstats {SP3.0a} User arguments are passed to neighborhoods
+  #' @srrstats {SP3.0b} User arguments are passed to neighborhoods
+  #' @srrstats {SP3.1} User arguments are passed to neighborhoods
   spdep::poly2nb(data, ...)
 }
 

@@ -287,6 +287,7 @@ test_that("ww_area_of_applicability() is close-enough to CAST", {
   #' @srrstats {G5.10} Flag to set extended tests
   #' @srrstats {G5.11a} Skip with relevant message if not run
   skip_if_not(Sys.getenv("waywiser_test_cast") == "true")
+  #' @srrstats {SP6.2} Testing with ~global data
   relevant_data <- head(as.data.frame(worldclim_simulation)[c(1:4, 6)], 1000)
 
   # Changes in CAST 0.7.1 mean that thresholds can't be compared against earlier versions
@@ -300,7 +301,6 @@ test_that("ww_area_of_applicability() is close-enough to CAST", {
         relevant_data$response,
         method="rf",
         importance=TRUE,
-        #tuneGrid = expand.grid(mtry = c(2:length(names(relevant_data)))),
         trControl = caret::trainControl(method="none",savePredictions = TRUE)
       )
     )
@@ -312,7 +312,6 @@ test_that("ww_area_of_applicability() is close-enough to CAST", {
       estimate = caret::varImp(model, scale = FALSE)$importance[[1]]
     )
   } else {
-    splts <- readRDS("splts.rds")
     cast_threshold <- 0.2184868
     importance <- data.frame(
       term = c("bio2", "bio10", "bio13", "bio19"),

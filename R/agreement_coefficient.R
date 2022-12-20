@@ -10,7 +10,12 @@
 #' not be a useful metric in all scenarios.
 #'
 #' Agreement coefficient values range from 0 to 1, with 1 indicating perfect
-#' agreement. `truth` and `estimate` must be the same length.
+#' agreement. `truth` and `estimate` must be the same length. This function is
+#' not explicitly spatial and as such can be applied to data with any number of
+#' dimensions and any coordinate reference system.
+#'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
 #'
 #' @srrstats {G1.4} roxygen2 documentation
 #' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
@@ -23,8 +28,13 @@
 #' @srrstats {G2.15} Any function may be passed to na_action
 #' @srrstats {G2.16} Any function may be passed to na_action
 #'
+#' @srrstats {SP2.6} Input type requirements are documented.
 #' @inheritParams yardstick::rmse
 #' @inheritParams ww_area_of_applicability
+#'
+#' @srrstats {SP4.0} Return values are of the same class as inputs
+#' @srrstats {SP4.0a} Return values are of the same class as inputs
+#' @srrstats {SP4.2} Returns are explicitly documented
 #'
 #' @return
 #' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.

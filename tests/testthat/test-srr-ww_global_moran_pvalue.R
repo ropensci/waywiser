@@ -250,6 +250,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     withr::with_seed(
       123,
@@ -264,6 +265,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     withr::with_seed(
       123,
@@ -278,6 +280,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     withr::with_seed(
       123,
@@ -292,6 +295,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     withr::with_seed(
       123,
@@ -308,6 +312,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9b} Different seeds are equivalent:
+  #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     withr::with_seed(
       123,
@@ -322,6 +327,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9b} Different seeds are equivalent:
+  #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     withr::with_seed(
       123,
@@ -336,6 +342,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9b} Different seeds are equivalent:
+  #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     withr::with_seed(
       123,
@@ -350,6 +357,7 @@ test_that("other generic srr standards", {
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9b} Different seeds are equivalent:
+  #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     withr::with_seed(
       123,
@@ -358,6 +366,140 @@ test_that("other generic srr standards", {
     withr::with_seed(
       1107,
       ww_global_moran_pvalue_vec(worldclim_predicted$predicted, worldclim_predicted$response, worldclim_weights)
+    )
+  )
+
+  guerry_modeled <- guerry
+  guerry_modeled$predictions <- predict(
+    lm(Crm_prs ~ Litercy, guerry),
+    guerry
+  )
+  guerry_modeled_geo <- sf::st_transform(guerry_modeled, 4326)
+  guerry_weights <- ww_build_weights(guerry)
+  guerry_weights_geo <- ww_build_weights(guerry_modeled_geo)
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP6.1} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.1b} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_equal(
+    ww_global_moran_pvalue(guerry_modeled, predictions, Crm_prs)$.estimate,
+    ww_global_moran_pvalue(guerry_modeled_geo, predictions, Crm_prs)$.estimate
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP6.1} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.1b} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_equal(
+    ww_global_moran_pvalue(guerry_modeled, Crm_prs, predictions)$.estimate,
+    ww_global_moran_pvalue(guerry_modeled_geo, Crm_prs, predictions)$.estimate
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP6.1} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.1b} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_equal(
+    ww_global_moran_pvalue_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, guerry_weights),
+    ww_global_moran_pvalue_vec(guerry_modeled_geo$Crm_prs, guerry_modeled_geo$predictions, guerry_weights_geo)
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP6.1} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.1b} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_equal(
+    ww_global_moran_pvalue_vec(guerry_modeled$predictions, guerry_modeled$Crm_prs, guerry_weights),
+    ww_global_moran_pvalue_vec(guerry_modeled_geo$predictions, guerry_modeled_geo$Crm_prs, guerry_weights_geo)
+  )
+
+  #' @srrstats {SP4.1} CRS (and therefore units) are preserved:
+  expect_identical(
+    sf::st_crs(ww_global_moran_pvalue(guerry_modeled, predictions, Crm_prs)$geometry),
+    sf::st_crs(guerry_modeled)
+  )
+
+  #' @srrstats {SP2.3} Testing with loaded sf objects:
+  worldclim_loaded <- sf::read_sf(
+    system.file("worldclim_simulation.gpkg", package = "waywiser")
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP2.3} Testing with loaded sf objects:
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_snapshot(
+    withr::with_seed(
+      123,
+      ww_global_moran_pvalue(worldclim_loaded, bio13, bio19)
+    )
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP2.3} Testing with loaded sf objects:
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_snapshot(
+    withr::with_seed(
+      123,
+      ww_global_moran_pvalue(worldclim_loaded, bio13, bio19)
+    )
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP2.3} Testing with loaded sf objects:
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_snapshot(
+    withr::with_seed(
+      123,
+      ww_global_moran_pvalue_vec(worldclim_loaded$bio13, worldclim_loaded$bio19, worldclim_weights)
+    )
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP2.3} Testing with loaded sf objects:
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_snapshot(
+    withr::with_seed(
+      123,
+      ww_global_moran_pvalue_vec(worldclim_loaded$bio13, worldclim_loaded$bio19, worldclim_weights)
+    )
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP2.3} Testing with loaded sf objects:
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_snapshot(
+    withr::with_seed(
+      123,
+      ww_global_moran_pvalue(worldclim_loaded, bio13, bio19)
+    )
+  )
+
+  other_weights <- ww_build_weights(ww_make_point_neighbors(worldclim_loaded, k = 5))
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP6.3} Testing alternative weights:
+  expect_snapshot(
+    withr::with_seed(
+      123,
+      ww_global_moran_pvalue(worldclim_loaded, bio13, bio19, function(data) ww_build_weights(ww_make_point_neighbors(data, k = 5)))
+    )
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP6.3} Testing alternative weights:
+  expect_snapshot(
+    withr::with_seed(
+      123,
+      ww_global_moran_pvalue_vec(worldclim_loaded$bio13, worldclim_loaded$bio19, other_weights)
+    )
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP6.3} Testing alternative weights:
+  expect_snapshot(
+    withr::with_seed(
+      123,
+      ww_global_moran_pvalue_vec(worldclim_loaded$bio13, worldclim_loaded$bio19, other_weights)
     )
   )
 
