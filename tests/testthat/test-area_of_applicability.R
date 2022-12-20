@@ -1,3 +1,4 @@
+skip_if_not(getRversion() >= numeric_version("4.0.0"))
 set.seed(123)
 skip_if_not(rlang::is_installed("vip"))
 train <- vip::gen_friedman(1000, seed = 101)
