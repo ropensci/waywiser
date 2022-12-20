@@ -107,13 +107,11 @@
 #' @srrstats {G2.14c} Users can pass any function to handle NA values
 #' @srrstats {G2.16}  Users can pass any preprocessing function
 #' @param na_action A function which indicates what should happen when the data
-#' (any of `x`, `data`, or `testing`) contain NAs. The default is `na.fail`;
-#' you may wish to set it to `na.omit` or any of the functions from the "zoo"
+#' contain NAs. The default is `na.fail`; you may wish to set it to `na.omit`
+#' or any of the functions from the "zoo"
 #' package. This function ignores the value of `options("na.action")` in order
-#' to make cross-computer (and cross-session) results more stable. Note that
-#' this argument only impacts fitting the area of applicability and has no
-#' impact on predictions. This argument must be of length 1; you cannot pass
-#' multiple functions to `na_action`.
+#' to make cross-computer (and cross-session) results more stable. This argument
+#' must be of length 1; you cannot pass multiple functions to `na_action`.
 #'
 #' @details
 #'
