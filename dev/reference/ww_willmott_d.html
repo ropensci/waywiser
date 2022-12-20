@@ -3,7 +3,7 @@
 which better differentiates between types and magnitudes of possible
 covariations. Additional functions calculate systematic and unsystematic
 components of MSE and RMSE; the sum of the systematic and unsystematic
-components of MSE equal total MSE (though the same is not true for RMSE)."><title>Willmott's d and related values — ww_willmott_d • waywiser</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Noto_Sans-0.4.4/font.css" rel="stylesheet"><link href="../deps/Patua_One-0.4.4/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Willmott's d and related values — ww_willmott_d"><meta property="og:description" content="These functions calculate Willmott's d value, a proposed replacement for R2
+components of MSE equal total MSE (though the same is not true for RMSE)."><title>Willmott's d and related values — ww_willmott_d • waywiser</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Noto_Sans-0.4.4/font.css" rel="stylesheet"><link href="../deps/Patua_One-0.4.4/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Willmott's d and related values — ww_willmott_d"><meta property="og:description" content="These functions calculate Willmott's d value, a proposed replacement for R2
 which better differentiates between types and magnitudes of possible
 covariations. Additional functions calculate systematic and unsystematic
 components of MSE and RMSE; the sum of the systematic and unsystematic
@@ -26,7 +26,10 @@ components of MSE equal total MSE (though the same is not true for RMSE)."><meta
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/waywiser.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
@@ -73,44 +76,44 @@ components of MSE equal total MSE (though the same is not true for RMSE).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ww_willmott_d</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for data.frame</span></span>
-<span><span class="fu">ww_willmott_d</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_willmott_d</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_willmott_d_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_willmott_d_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ww_willmott_dr</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for data.frame</span></span>
-<span><span class="fu">ww_willmott_dr</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_willmott_dr</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_willmott_dr_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_willmott_dr_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ww_systematic_mse</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for data.frame</span></span>
-<span><span class="fu">ww_systematic_mse</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_systematic_mse</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_systematic_mse_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_systematic_mse_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ww_unsystematic_mse</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for data.frame</span></span>
-<span><span class="fu">ww_unsystematic_mse</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_unsystematic_mse</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_unsystematic_mse_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_unsystematic_mse_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ww_systematic_rmse</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for data.frame</span></span>
-<span><span class="fu">ww_systematic_rmse</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_systematic_rmse</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_systematic_rmse_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_systematic_rmse_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ww_unsystematic_rmse</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for data.frame</span></span>
-<span><span class="fu">ww_unsystematic_rmse</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ww_unsystematic_rmse</span><span class="op">(</span><span class="va">data</span>, <span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ww_unsystematic_rmse_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ww_unsystematic_rmse_vec</span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, na_action <span class="op">=</span> <span class="va">na.fail</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -139,24 +142,31 @@ specified different ways but the primary method is to use an
 unquoted variable name. For <code>_vec()</code> functions, a <code>numeric</code> vector.</p></dd>
 
 
-<dt>na_rm</dt>
-<dd><p>A <code>logical</code> value indicating whether <code>NA</code>
-values should be stripped before the computation proceeds.</p></dd>
+<dt>na_action</dt>
+<dd><p>A function which indicates what should happen when the data
+contain NAs. The default is <code>na.fail</code>; you may wish to set it to <code>na.omit</code>
+or any of the functions from the "zoo"
+package. This function ignores the value of <code>options("na.action")</code> in order
+to make cross-computer (and cross-session) results more stable. This argument
+must be of length 1; you cannot pass multiple functions to <code>na_action</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A tibble with columns .metric, .estimator, and .estimate and <code>nrow(data)</code> rows of values.
+<p>A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
 For <code>_vec()</code> functions, a single value (or NA).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Values of d range from 0 to 1, with 1 indicating perfect agreement. Values of
-RMSE are in the same units as <code>truth</code> and <code>estimate</code>, while values of MSE are
-squared.</p>
+dr range from -1 to 1, with 1 similarly indicating perfect agreement. Values
+of RMSE are in the same units as <code>truth</code> and <code>estimate</code>, while values of MSE
+are in squared units. <code>truth</code> and <code>estimate</code> must be the same length. This
+function is not explicitly spatial and as such can be applied to data with
+any number of dimensions and any coordinate reference system.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -165,14 +175,21 @@ pp 184-194, doi: 10.1080/02723646.1981.10642213.</p>
 <p>Willmott, C. J. 1982. "Some Comments on the Evaluation of Model Performance".
 Bulletin of the American Meteorological Society 63(11), pp 1309-1313,
 doi: 10.1175/1520-0477(1982)063&lt;1309:SCOTEO&gt;2.0.CO;2.</p>
-<p>Wilmott, C. J., Robeson, S. M., and Matsuura, K. "A refined index of model
-perfomance". International Journal of Climatology 32, pp 2088-2094, doi:
+<p>Willmott, C. J., Robeson, S. M., and Matsuura, K. "A refined index of model
+performance". International Journal of Climatology 32, pp 2088-2094, doi:
 10.1002/joc.2419.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other agreement metrics: 
-<code><a href="ww_agreement_coefficient.html">ww_agreement_coefficient</a>()</code></p></div>
+<code><a href="ww_agreement_coefficient.html">ww_agreement_coefficient</a>()</code></p>
+<p>Other yardstick metrics: 
+<code><a href="ww_agreement_coefficient.html">ww_agreement_coefficient</a>()</code>,
+<code><a href="global_geary_c.html">ww_global_geary_c</a>()</code>,
+<code><a href="global_moran_i.html">ww_global_moran_i</a>()</code>,
+<code><a href="local_geary_c.html">ww_local_geary_c</a>()</code>,
+<code><a href="local_getis_ord_g.html">ww_local_getis_ord_g</a>()</code>,
+<code><a href="local_moran_i.html">ww_local_moran_i</a>()</code></p></div>
     </div>
 
     <div class="section level2">
@@ -198,7 +215,7 @@ perfomance". International Journal of Climatology 32, pp 2088-2094, doi:
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>

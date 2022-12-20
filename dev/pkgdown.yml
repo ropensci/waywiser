@@ -1,10 +1,11 @@
 pandoc: 2.19.2
-pkgdown: 2.0.6
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   multi-scale-assessment: multi-scale-assessment.html
   residual-autocorrelation: residual-autocorrelation.html
-last_built: 2022-12-10T02:05Z
+  waywiser: waywiser.html
+last_built: 2022-12-20T21:16Z
 urls:
   reference: https://mikemahoney218.github.io/waywiser/reference
   article: https://mikemahoney218.github.io/waywiser/articles
