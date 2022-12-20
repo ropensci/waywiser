@@ -92,6 +92,30 @@ test_that("expected errors", {
     ),
     error = TRUE
   )
+
+  expect_snapshot(
+    ww_multi_scale(
+      suppressWarnings(sf::st_centroid(guerry_modeled)),
+      Crm_prs,
+      predictions,
+      n = list(c(1, 1)),
+      na_action = c(na.omit, na.fail),
+      metrics = yardstick::rmse
+    ),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_multi_scale(
+      iris,
+      Sepal.Length,
+      Sepal.Width,
+      n = list(c(1, 1)),
+      metrics = yardstick::rmse
+    ),
+    error = TRUE
+  )
+
 })
 
 test_that("srr: expected failures for ww_multi_scale", {
@@ -252,8 +276,6 @@ test_that("other generic srr standards", {
     )
   )
 
-  skip_on_cran()
-
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9b} Different seeds are equivalent:
@@ -282,6 +304,56 @@ test_that("other generic srr standards", {
     )
   )
 
+  #' @srrstats {SP2.3} Testing that loading data is equivalent
+  expect_equal(
+    ww_multi_scale(
+      sf::st_read(
+        system.file("worldclim_simulation.gpkg", package = "waywiser")
+      ),
+      bio13,
+      bio19,
+      n = c(2, 4)
+    )$.estimate,
+    ww_multi_scale(worldclim_predicted, bio13, bio19, n = c(2, 4))$.estimate
+  )
 
+  #' @srrstats {SP4.1} CRS (and therefore units) is preserved
+  expect_identical(
+    sf::st_crs(
+      ww_multi_scale(worldclim_simulation, bio13, bio19, n = c(2, 4))$.grid[[1]]
+    ),
+    sf::st_crs(
+      worldclim_simulation
+    )
+  )
+
+  guerry_modeled <- suppressWarnings(sf::st_centroid(guerry))
+  guerry_modeled$predictions <- predict(
+    lm(Crm_prs ~ Litercy, guerry),
+    guerry
+  )
+  proj_grid <- sf::st_make_grid(guerry, n = 2)
+
+  guerry_modeled_geo <- sf::st_transform(guerry_modeled, 4326)
+  geo_grid <- sf::st_transform(proj_grid, 4326)
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP6.1} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.1b} Testing with both projected and geographic CRS
+  #' @srrstats {SP6.2} Testing with ~global data
+  expect_equal(
+    ww_multi_scale(
+      guerry_modeled,
+      predictions,
+      Crm_prs,
+      grids = list(proj_grid)
+    )$.estimate,
+    ww_multi_scale(
+      guerry_modeled_geo,
+      predictions,
+      Crm_prs,
+      grids = list(geo_grid)
+    )$.estimate
+  )
 })
 

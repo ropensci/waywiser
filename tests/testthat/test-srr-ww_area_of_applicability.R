@@ -315,5 +315,4 @@ test_that("other generic srr standards", {
       ww_area_of_applicability(comb_rset_no_y, importance = importance)
     )
   )
-
 })

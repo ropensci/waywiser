@@ -80,7 +80,7 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_action, name, ...
   }
 
   yardstick_df(
-    data = data,
+    data = as.data.frame(data),
     truth = {{ truth }},
     estimate = {{ estimate }},
     na_action = na_action,

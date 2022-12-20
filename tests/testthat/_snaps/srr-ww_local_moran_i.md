@@ -1711,19 +1711,19 @@
     Code
       ww_local_moran_i(worldclim_simulation, response, response)
     Output
-      # A tibble: 10,000 x 4
-         .metric       .estimator .estimate                                   geometry
-         <chr>         <chr>          <dbl>                           <MULTIPOINT [°]>
-       1 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
-       2 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
-       3 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
-       4 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
-       5 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
-       6 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
-       7 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
-       8 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
-       9 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
-      10 local_moran_i standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
+      # A tibble: 10,000 x 3
+         .metric       .estimator .estimate
+         <chr>         <chr>          <dbl>
+       1 local_moran_i standard         NaN
+       2 local_moran_i standard         NaN
+       3 local_moran_i standard         NaN
+       4 local_moran_i standard         NaN
+       5 local_moran_i standard         NaN
+       6 local_moran_i standard         NaN
+       7 local_moran_i standard         NaN
+       8 local_moran_i standard         NaN
+       9 local_moran_i standard         NaN
+      10 local_moran_i standard         NaN
       # ... with 9,990 more rows
 
 # other generic srr standards
@@ -1731,19 +1731,19 @@
     Code
       withr::with_seed(123, ww_local_moran_i(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric       .estimator .estimate                                       geom
-         <chr>         <chr>          <dbl>                           <MULTIPOINT [°]>
-       1 local_moran_i standard    0.0167   ((-41.18256 -22.75207), (-42.91933 -23.21~
-       2 local_moran_i standard    0.409    ((-41.18256 -22.75207), (-42.91933 -23.21~
-       3 local_moran_i standard    0.00614  ((-41.18256 -22.75207), (-42.91933 -23.21~
-       4 local_moran_i standard    0.00542  ((-41.18256 -22.75207), (-42.91933 -23.21~
-       5 local_moran_i standard    0.0120   ((-41.18256 -22.75207), (-42.91933 -23.21~
-       6 local_moran_i standard    4.87     ((-41.18256 -22.75207), (-42.91933 -23.21~
-       7 local_moran_i standard    1.79     ((-41.18256 -22.75207), (-42.91933 -23.21~
-       8 local_moran_i standard    0.000766 ((-41.18256 -22.75207), (-42.91933 -23.21~
-       9 local_moran_i standard    0.0513   ((-41.18256 -22.75207), (-42.91933 -23.21~
-      10 local_moran_i standard   -0.000120 ((-41.18256 -22.75207), (-42.91933 -23.21~
+      # A tibble: 10,000 x 3
+         .metric       .estimator .estimate
+         <chr>         <chr>          <dbl>
+       1 local_moran_i standard    0.0167  
+       2 local_moran_i standard    0.409   
+       3 local_moran_i standard    0.00614 
+       4 local_moran_i standard    0.00542 
+       5 local_moran_i standard    0.0120  
+       6 local_moran_i standard    4.87    
+       7 local_moran_i standard    1.79    
+       8 local_moran_i standard    0.000766
+       9 local_moran_i standard    0.0513  
+      10 local_moran_i standard   -0.000120
       # ... with 9,990 more rows
 
 ---
@@ -1751,19 +1751,19 @@
     Code
       withr::with_seed(123, ww_local_moran_i(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric       .estimator .estimate                                       geom
-         <chr>         <chr>          <dbl>                           <MULTIPOINT [°]>
-       1 local_moran_i standard    0.0167   ((-41.18256 -22.75207), (-42.91933 -23.21~
-       2 local_moran_i standard    0.409    ((-41.18256 -22.75207), (-42.91933 -23.21~
-       3 local_moran_i standard    0.00614  ((-41.18256 -22.75207), (-42.91933 -23.21~
-       4 local_moran_i standard    0.00542  ((-41.18256 -22.75207), (-42.91933 -23.21~
-       5 local_moran_i standard    0.0120   ((-41.18256 -22.75207), (-42.91933 -23.21~
-       6 local_moran_i standard    4.87     ((-41.18256 -22.75207), (-42.91933 -23.21~
-       7 local_moran_i standard    1.79     ((-41.18256 -22.75207), (-42.91933 -23.21~
-       8 local_moran_i standard    0.000766 ((-41.18256 -22.75207), (-42.91933 -23.21~
-       9 local_moran_i standard    0.0513   ((-41.18256 -22.75207), (-42.91933 -23.21~
-      10 local_moran_i standard   -0.000120 ((-41.18256 -22.75207), (-42.91933 -23.21~
+      # A tibble: 10,000 x 3
+         .metric       .estimator .estimate
+         <chr>         <chr>          <dbl>
+       1 local_moran_i standard    0.0167  
+       2 local_moran_i standard    0.409   
+       3 local_moran_i standard    0.00614 
+       4 local_moran_i standard    0.00542 
+       5 local_moran_i standard    0.0120  
+       6 local_moran_i standard    4.87    
+       7 local_moran_i standard    1.79    
+       8 local_moran_i standard    0.000766
+       9 local_moran_i standard    0.0513  
+      10 local_moran_i standard   -0.000120
       # ... with 9,990 more rows
 
 ---
@@ -9785,19 +9785,19 @@
     Code
       withr::with_seed(123, ww_local_moran_i(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric       .estimator .estimate                                       geom
-         <chr>         <chr>          <dbl>                           <MULTIPOINT [°]>
-       1 local_moran_i standard    0.0167   ((-41.18256 -22.75207), (-42.91933 -23.21~
-       2 local_moran_i standard    0.409    ((-41.18256 -22.75207), (-42.91933 -23.21~
-       3 local_moran_i standard    0.00614  ((-41.18256 -22.75207), (-42.91933 -23.21~
-       4 local_moran_i standard    0.00542  ((-41.18256 -22.75207), (-42.91933 -23.21~
-       5 local_moran_i standard    0.0120   ((-41.18256 -22.75207), (-42.91933 -23.21~
-       6 local_moran_i standard    4.87     ((-41.18256 -22.75207), (-42.91933 -23.21~
-       7 local_moran_i standard    1.79     ((-41.18256 -22.75207), (-42.91933 -23.21~
-       8 local_moran_i standard    0.000766 ((-41.18256 -22.75207), (-42.91933 -23.21~
-       9 local_moran_i standard    0.0513   ((-41.18256 -22.75207), (-42.91933 -23.21~
-      10 local_moran_i standard   -0.000120 ((-41.18256 -22.75207), (-42.91933 -23.21~
+      # A tibble: 10,000 x 3
+         .metric       .estimator .estimate
+         <chr>         <chr>          <dbl>
+       1 local_moran_i standard    0.0167  
+       2 local_moran_i standard    0.409   
+       3 local_moran_i standard    0.00614 
+       4 local_moran_i standard    0.00542 
+       5 local_moran_i standard    0.0120  
+       6 local_moran_i standard    4.87    
+       7 local_moran_i standard    1.79    
+       8 local_moran_i standard    0.000766
+       9 local_moran_i standard    0.0513  
+      10 local_moran_i standard   -0.000120
       # ... with 9,990 more rows
 
 ---
@@ -9806,19 +9806,19 @@
       withr::with_seed(123, ww_local_moran_i(worldclim_loaded, bio13, bio19, function(
         data) ww_build_weights(ww_make_point_neighbors(data, k = 5))))
     Output
-      # A tibble: 10,000 x 4
-         .metric       .estimator  .estimate                                      geom
-         <chr>         <chr>           <dbl>                          <MULTIPOINT [°]>
-       1 local_moran_i standard    0.0159    ((-41.18256 -22.75207), (-42.91933 -23.2~
-       2 local_moran_i standard    0.226     ((-41.18256 -22.75207), (-42.91933 -23.2~
-       3 local_moran_i standard    0.00650   ((-41.18256 -22.75207), (-42.91933 -23.2~
-       4 local_moran_i standard    0.00371   ((-41.18256 -22.75207), (-42.91933 -23.2~
-       5 local_moran_i standard    0.0114    ((-41.18256 -22.75207), (-42.91933 -23.2~
-       6 local_moran_i standard    5.11      ((-41.18256 -22.75207), (-42.91933 -23.2~
-       7 local_moran_i standard   -9.92      ((-41.18256 -22.75207), (-42.91933 -23.2~
-       8 local_moran_i standard    0.000238  ((-41.18256 -22.75207), (-42.91933 -23.2~
-       9 local_moran_i standard    0.0386    ((-41.18256 -22.75207), (-42.91933 -23.2~
-      10 local_moran_i standard    0.0000756 ((-41.18256 -22.75207), (-42.91933 -23.2~
+      # A tibble: 10,000 x 3
+         .metric       .estimator  .estimate
+         <chr>         <chr>           <dbl>
+       1 local_moran_i standard    0.0159   
+       2 local_moran_i standard    0.226    
+       3 local_moran_i standard    0.00650  
+       4 local_moran_i standard    0.00371  
+       5 local_moran_i standard    0.0114   
+       6 local_moran_i standard    5.11     
+       7 local_moran_i standard   -9.92     
+       8 local_moran_i standard    0.000238 
+       9 local_moran_i standard    0.0386   
+      10 local_moran_i standard    0.0000756
       # ... with 9,990 more rows
 
 ---

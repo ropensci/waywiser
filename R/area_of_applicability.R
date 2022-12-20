@@ -205,11 +205,13 @@ ww_area_of_applicability.matrix <- ww_area_of_applicability.data.frame
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance, ..., na_action = na.fail) {
   rlang::check_dots_empty()
+
   # This method is also used for recipes, which don't need blueprints:
   blueprint <- NULL
   if (inherits(x, "formula")) {
     blueprint <- hardhat::default_formula_blueprint(indicators = "none")
   }
+
   #' @srrstats {G2.8} Function converts to a standard input type
   #' @srrstats {G2.10} Extraction is handled by [hardhat::mold()]
   #' @srrstats {SP2.7} Standard validation routines
@@ -221,10 +223,30 @@ ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance
   #' @srrstats {SP2.7} Standard validation routines
   #' @srrstats {SP2.8} Standard pre-processing routines
   #' @srrstats {SP2.9} Pre-processing maintains the necessary metadata
+  processed_testing <- NULL
   if (!is.null(testing)) {
-    testing <- hardhat::mold(x, testing, blueprint = blueprint)
+    processed_testing <- hardhat::mold(x, testing, blueprint = blueprint)
   }
-  create_aoa(training, testing, importance, ..., na_action = na_action)
+
+
+  # Catch non-numeric, non-base classes
+  # cf https://github.com/tidymodels/hardhat/issues/219
+  if (any(
+    purrr::map_lgl(
+      as.data.frame(data)[names(training$predictors)],
+      function(x) !(inherits(x, "numeric") || inherits(x, "integer"))
+    ),
+    purrr::map_lgl(
+      as.data.frame(testing[names(processed_testing$predictors)]),
+      function(x) !(inherits(x, "numeric") || inherits(x, "integer"))
+    )
+  )) {
+    rlang::abort(
+      "All variables in `data` and `testing` must inherit either numeric or integer classes."
+    )
+  }
+
+  create_aoa(training, processed_testing, importance, ..., na_action = na_action)
 }
 
 #' @exportS3Method

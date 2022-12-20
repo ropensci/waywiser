@@ -19,7 +19,9 @@ ww_local_geary_pvalue_vec(truth, estimate, wt = NULL, na_action = na.fail, ...)
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
 and \code{estimate} arguments.}
 
-\item{...}{Additional arguments passed to \code{\link[spdep:localC]{spdep::localC_perm()}}.}
+\item{...}{Additional arguments passed to \code{\link[spdep:localC]{spdep::localC()}} (for
+\code{ww_local_geary_c()}) or \code{\link[spdep:localC]{spdep::localC_perm()}} (for
+\code{ww_local_geary_pvalue()}).}
 
 \item{truth}{The column identifier for the true results
 (that is \code{numeric}). This should be an unquoted column name although
@@ -37,23 +39,25 @@ For data.frame input, may also be a function that takes \code{data} and returns 
 \code{listw} object.}
 
 \item{na_action}{A function which indicates what should happen when the data
-(any of \code{x}, \code{data}, or \code{testing}) contain NAs. The default is \code{na.fail};
-you may wish to set it to \code{na.omit} or any of the functions from the "zoo"
+contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
+or any of the functions from the "zoo"
 package. This function ignores the value of \code{options("na.action")} in order
-to make cross-computer (and cross-session) results more stable. Note that
-this argument only impacts fitting the area of applicability and has no
-impact on predictions. This argument must be of length 1; you cannot pass
-multiple functions to \code{na_action}.}
+to make cross-computer (and cross-session) results more stable. This argument
+must be of length 1; you cannot pass multiple functions to \code{na_action}.}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
-For grouped data frames, the number of rows returned will be the same as the number of groups.
+A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)}
+rows of values.
 For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
 }
 \description{
 Calculate the local Geary's C statistic for model residuals.
 \code{ww_local_geary_c()} returns the statistic itself, while
 \code{ww_local_geary_pvalue()} returns the associated p value.
+}
+\details{
+These functions can be used for geographic or projected coordinate reference
+systems and expect 2D data.
 }
 \examples{
 guerry_lm <- lm(Crm_prs ~ Litercy, guerry)

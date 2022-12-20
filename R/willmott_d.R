@@ -9,7 +9,12 @@
 #' Values of d range from 0 to 1, with 1 indicating perfect agreement. Values of
 #' dr range from -1 to 1, with 1 similarly indicating perfect agreement. Values
 #' of RMSE are in the same units as `truth` and `estimate`, while values of MSE
-#' are in squared units. `truth` and `estimate` must be the same length.
+#' are in squared units. `truth` and `estimate` must be the same length. This
+#' function is not explicitly spatial and as such can be applied to data with
+#' any number of dimensions and any coordinate reference system.
+#'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
 #'
 #' @srrstats {G2.0a} Lengths documented above.
 #' @srrstats {G1.4} roxygen2 documentation
@@ -25,11 +30,15 @@
 #' @srrstats {G2.15} This function relies on yardstick's NA handling
 #' @srrstats {G2.16} This function relies on yardstick's missingness handling.
 #'
+#' @srrstats {SP2.6} Input type requirements are documented.
 #' @inheritParams yardstick::rmse
 #' @inheritParams ww_area_of_applicability
 #'
+#' @srrstats {SP4.0} Return values are of the same class as inputs
+#' @srrstats {SP4.0a} Return values are of the same class as inputs
+#' @srrstats {SP4.2} Returns are explicitly documented
 #' @return
-#' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
+#' A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For `_vec()` functions, a single value (or NA).
 #'

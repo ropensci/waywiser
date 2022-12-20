@@ -32,18 +32,21 @@
 #' @param wt A `listw` object, for instance as created with [ww_build_weights()].
 #' For data.frame input, may also be a function that takes `data` and returns a
 #' `listw` object.
-#' @param ... Additional arguments passed to [spdep::geary.test()].
+#' @param ... Additional arguments passed to [spdep::geary()] (for
+#' `ww_global_geary_c()`) or [spdep::geary.test()] (for
+#' `ww_global_geary_pvalue()`).
 #'
 #' @family autocorrelation metrics
 #' @family yardstick metrics
 #'
-#' @srrstats {SP4.0} Return values are of the same class as inputs
-#' @srrstats {SP4.0a} Return values are of the same class as inputs
+#' @srrstats {SP4.0} Return values are of a unique format
+#' @srrstats {SP4.0b} Return values are of a unique format
 #' @srrstats {SP4.2} Returns are explicitly documented
 #'
 #' @return
-#' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
-#' For grouped data frames, the number of rows returned will be the same as the number of groups.
+#' A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
+#' For grouped data frames, the number of rows returned will be the same as the
+#' number of groups.
 #' For `_vec()` functions, a single value (or NA).
 #'
 #' @examples

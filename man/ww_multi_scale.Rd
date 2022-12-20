@@ -11,6 +11,7 @@ ww_multi_scale(
   metrics = list(yardstick::rmse, yardstick::mae),
   grids = NULL,
   ...,
+  na_action = na.fail,
   aggregation_function = mean,
   autoexpand_grid = TRUE
 )
@@ -41,6 +42,13 @@ specifying polygon boundaries to use for assessments.}
 \strong{You almost certainly should provide these arguments as lists.}
 For instance, passing \code{n = list(c(1, 2))} will create a single 1x2 grid;
 passing \code{n = c(1, 2)} will create a 1x1 grid \emph{and} a 2x2 grid.}
+
+\item{na_action}{A function which indicates what should happen when the data
+contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
+or any of the functions from the "zoo"
+package. This function ignores the value of \code{options("na.action")} in order
+to make cross-computer (and cross-session) results more stable. This argument
+must be of length 1; you cannot pass multiple functions to \code{na_action}.}
 
 \item{aggregation_function}{The function to use to aggregate predictions and
 true values at various scales, by default \code{\link[=mean]{mean()}}. You can pass any function
@@ -82,6 +90,9 @@ is provided, this function will return as many blocks of size
 \code{cellsize} as fit inside the bounding box of \code{data}. If only \code{n} is provided,
 then \code{cellsize} will be automatically adjusted to create the requested
 number of cells.
+
+This function can be used for geographic or projected coordinate reference
+systems and expect 2D data.
 }
 \examples{
 \dontshow{if (rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

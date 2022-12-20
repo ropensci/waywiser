@@ -728,19 +728,19 @@
     Code
       ww_local_getis_ord_g(worldclim_simulation, response, response)
     Output
-      # A tibble: 10,000 x 4
-         .metric           .estimator .estimate                               geometry
-         <chr>             <chr>          <dbl>                       <MULTIPOINT [°]>
-       1 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
-       2 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
-       3 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
-       4 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
-       5 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
-       6 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
-       7 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
-       8 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
-       9 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
-      10 local_getis_ord_g standard         NaN ((-41.18256 -22.75207), (-42.91933 -2~
+      # A tibble: 10,000 x 3
+         .metric           .estimator .estimate
+         <chr>             <chr>          <dbl>
+       1 local_getis_ord_g standard         NaN
+       2 local_getis_ord_g standard         NaN
+       3 local_getis_ord_g standard         NaN
+       4 local_getis_ord_g standard         NaN
+       5 local_getis_ord_g standard         NaN
+       6 local_getis_ord_g standard         NaN
+       7 local_getis_ord_g standard         NaN
+       8 local_getis_ord_g standard         NaN
+       9 local_getis_ord_g standard         NaN
+      10 local_getis_ord_g standard         NaN
       # ... with 9,990 more rows
 
 # other generic srr standards
@@ -748,19 +748,19 @@
     Code
       withr::with_seed(123, ww_local_getis_ord_g(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric           .estimator .estimate                                   geom
-         <chr>             <chr>          <dbl>                       <MULTIPOINT [°]>
-       1 local_getis_ord_g standard      0.138  ((-41.18256 -22.75207), (-42.91933 -2~
-       2 local_getis_ord_g standard      0.798  ((-41.18256 -22.75207), (-42.91933 -2~
-       3 local_getis_ord_g standard     -0.0969 ((-41.18256 -22.75207), (-42.91933 -2~
-       4 local_getis_ord_g standard      0.0709 ((-41.18256 -22.75207), (-42.91933 -2~
-       5 local_getis_ord_g standard      0.121  ((-41.18256 -22.75207), (-42.91933 -2~
-       6 local_getis_ord_g standard     -2.21   ((-41.18256 -22.75207), (-42.91933 -2~
-       7 local_getis_ord_g standard      0.307  ((-41.18256 -22.75207), (-42.91933 -2~
-       8 local_getis_ord_g standard      0.0373 ((-41.18256 -22.75207), (-42.91933 -2~
-       9 local_getis_ord_g standard      0.272  ((-41.18256 -22.75207), (-42.91933 -2~
-      10 local_getis_ord_g standard      0.0653 ((-41.18256 -22.75207), (-42.91933 -2~
+      # A tibble: 10,000 x 3
+         .metric           .estimator .estimate
+         <chr>             <chr>          <dbl>
+       1 local_getis_ord_g standard      0.138 
+       2 local_getis_ord_g standard      0.798 
+       3 local_getis_ord_g standard     -0.0969
+       4 local_getis_ord_g standard      0.0709
+       5 local_getis_ord_g standard      0.121 
+       6 local_getis_ord_g standard     -2.21  
+       7 local_getis_ord_g standard      0.307 
+       8 local_getis_ord_g standard      0.0373
+       9 local_getis_ord_g standard      0.272 
+      10 local_getis_ord_g standard      0.0653
       # ... with 9,990 more rows
 
 ---
@@ -768,19 +768,19 @@
     Code
       withr::with_seed(123, ww_local_getis_ord_g(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric           .estimator .estimate                                   geom
-         <chr>             <chr>          <dbl>                       <MULTIPOINT [°]>
-       1 local_getis_ord_g standard      0.138  ((-41.18256 -22.75207), (-42.91933 -2~
-       2 local_getis_ord_g standard      0.798  ((-41.18256 -22.75207), (-42.91933 -2~
-       3 local_getis_ord_g standard     -0.0969 ((-41.18256 -22.75207), (-42.91933 -2~
-       4 local_getis_ord_g standard      0.0709 ((-41.18256 -22.75207), (-42.91933 -2~
-       5 local_getis_ord_g standard      0.121  ((-41.18256 -22.75207), (-42.91933 -2~
-       6 local_getis_ord_g standard     -2.21   ((-41.18256 -22.75207), (-42.91933 -2~
-       7 local_getis_ord_g standard      0.307  ((-41.18256 -22.75207), (-42.91933 -2~
-       8 local_getis_ord_g standard      0.0373 ((-41.18256 -22.75207), (-42.91933 -2~
-       9 local_getis_ord_g standard      0.272  ((-41.18256 -22.75207), (-42.91933 -2~
-      10 local_getis_ord_g standard      0.0653 ((-41.18256 -22.75207), (-42.91933 -2~
+      # A tibble: 10,000 x 3
+         .metric           .estimator .estimate
+         <chr>             <chr>          <dbl>
+       1 local_getis_ord_g standard      0.138 
+       2 local_getis_ord_g standard      0.798 
+       3 local_getis_ord_g standard     -0.0969
+       4 local_getis_ord_g standard      0.0709
+       5 local_getis_ord_g standard      0.121 
+       6 local_getis_ord_g standard     -2.21  
+       7 local_getis_ord_g standard      0.307 
+       8 local_getis_ord_g standard      0.0373
+       9 local_getis_ord_g standard      0.272 
+      10 local_getis_ord_g standard      0.0653
       # ... with 9,990 more rows
 
 ---
@@ -4802,19 +4802,19 @@
     Code
       withr::with_seed(123, ww_local_getis_ord_g(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric           .estimator .estimate                                   geom
-         <chr>             <chr>          <dbl>                       <MULTIPOINT [°]>
-       1 local_getis_ord_g standard      0.138  ((-41.18256 -22.75207), (-42.91933 -2~
-       2 local_getis_ord_g standard      0.798  ((-41.18256 -22.75207), (-42.91933 -2~
-       3 local_getis_ord_g standard     -0.0969 ((-41.18256 -22.75207), (-42.91933 -2~
-       4 local_getis_ord_g standard      0.0709 ((-41.18256 -22.75207), (-42.91933 -2~
-       5 local_getis_ord_g standard      0.121  ((-41.18256 -22.75207), (-42.91933 -2~
-       6 local_getis_ord_g standard     -2.21   ((-41.18256 -22.75207), (-42.91933 -2~
-       7 local_getis_ord_g standard      0.307  ((-41.18256 -22.75207), (-42.91933 -2~
-       8 local_getis_ord_g standard      0.0373 ((-41.18256 -22.75207), (-42.91933 -2~
-       9 local_getis_ord_g standard      0.272  ((-41.18256 -22.75207), (-42.91933 -2~
-      10 local_getis_ord_g standard      0.0653 ((-41.18256 -22.75207), (-42.91933 -2~
+      # A tibble: 10,000 x 3
+         .metric           .estimator .estimate
+         <chr>             <chr>          <dbl>
+       1 local_getis_ord_g standard      0.138 
+       2 local_getis_ord_g standard      0.798 
+       3 local_getis_ord_g standard     -0.0969
+       4 local_getis_ord_g standard      0.0709
+       5 local_getis_ord_g standard      0.121 
+       6 local_getis_ord_g standard     -2.21  
+       7 local_getis_ord_g standard      0.307 
+       8 local_getis_ord_g standard      0.0373
+       9 local_getis_ord_g standard      0.272 
+      10 local_getis_ord_g standard      0.0653
       # ... with 9,990 more rows
 
 ---
@@ -4823,19 +4823,19 @@
       withr::with_seed(123, ww_local_getis_ord_g(worldclim_loaded, bio13, bio19,
         function(data) ww_build_weights(ww_make_point_neighbors(data, k = 5))))
     Output
-      # A tibble: 10,000 x 4
-         .metric           .estimator .estimate                                   geom
-         <chr>             <chr>          <dbl>                       <MULTIPOINT [°]>
-       1 local_getis_ord_g standard      0.294  ((-41.18256 -22.75207), (-42.91933 -2~
-       2 local_getis_ord_g standard      0.984  ((-41.18256 -22.75207), (-42.91933 -2~
-       3 local_getis_ord_g standard     -0.229  ((-41.18256 -22.75207), (-42.91933 -2~
-       4 local_getis_ord_g standard      0.108  ((-41.18256 -22.75207), (-42.91933 -2~
-       5 local_getis_ord_g standard      0.259  ((-41.18256 -22.75207), (-42.91933 -2~
-       6 local_getis_ord_g standard     -5.18   ((-41.18256 -22.75207), (-42.91933 -2~
-       7 local_getis_ord_g standard     -3.81   ((-41.18256 -22.75207), (-42.91933 -2~
-       8 local_getis_ord_g standard      0.0259 ((-41.18256 -22.75207), (-42.91933 -2~
-       9 local_getis_ord_g standard      0.459  ((-41.18256 -22.75207), (-42.91933 -2~
-      10 local_getis_ord_g standard     -0.0917 ((-41.18256 -22.75207), (-42.91933 -2~
+      # A tibble: 10,000 x 3
+         .metric           .estimator .estimate
+         <chr>             <chr>          <dbl>
+       1 local_getis_ord_g standard      0.294 
+       2 local_getis_ord_g standard      0.984 
+       3 local_getis_ord_g standard     -0.229 
+       4 local_getis_ord_g standard      0.108 
+       5 local_getis_ord_g standard      0.259 
+       6 local_getis_ord_g standard     -5.18  
+       7 local_getis_ord_g standard     -3.81  
+       8 local_getis_ord_g standard      0.0259
+       9 local_getis_ord_g standard      0.459 
+      10 local_getis_ord_g standard     -0.0917
       # ... with 9,990 more rows
 
 ---

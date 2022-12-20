@@ -173,30 +173,30 @@
     Code
       ww_global_geary_c(worldclim_simulation, response, response)
     Output
-      # A tibble: 1 x 4
-        .metric        .estimator .estimate                                   geometry
-        <chr>          <chr>          <dbl>                           <MULTIPOINT [°]>
-      1 global_geary_c standard         NaN ((-41.18256 -22.75207), (-42.91933 -23.21~
+      # A tibble: 1 x 3
+        .metric        .estimator .estimate
+        <chr>          <chr>          <dbl>
+      1 global_geary_c standard         NaN
 
 # other generic srr standards
 
     Code
       withr::with_seed(123, ww_global_geary_c(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 1 x 4
-        .metric        .estimator .estimate                                       geom
-        <chr>          <chr>          <dbl>                           <MULTIPOINT [°]>
-      1 global_geary_c standard      0.0731 ((-41.18256 -22.75207), (-42.91933 -23.21~
+      # A tibble: 1 x 3
+        .metric        .estimator .estimate
+        <chr>          <chr>          <dbl>
+      1 global_geary_c standard      0.0731
 
 ---
 
     Code
       withr::with_seed(123, ww_global_geary_c(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 1 x 4
-        .metric        .estimator .estimate                                       geom
-        <chr>          <chr>          <dbl>                           <MULTIPOINT [°]>
-      1 global_geary_c standard      0.0731 ((-41.18256 -22.75207), (-42.91933 -23.21~
+      # A tibble: 1 x 3
+        .metric        .estimator .estimate
+        <chr>          <chr>          <dbl>
+      1 global_geary_c standard      0.0731
 
 ---
 
@@ -219,10 +219,10 @@
     Code
       withr::with_seed(123, ww_global_geary_c(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 1 x 4
-        .metric        .estimator .estimate                                       geom
-        <chr>          <chr>          <dbl>                           <MULTIPOINT [°]>
-      1 global_geary_c standard      0.0731 ((-41.18256 -22.75207), (-42.91933 -23.21~
+      # A tibble: 1 x 3
+        .metric        .estimator .estimate
+        <chr>          <chr>          <dbl>
+      1 global_geary_c standard      0.0731
 
 ---
 
@@ -230,10 +230,10 @@
       withr::with_seed(123, ww_global_geary_c(worldclim_loaded, bio13, bio19,
         function(data) ww_build_weights(ww_make_point_neighbors(data, k = 5))))
     Output
-      # A tibble: 1 x 4
-        .metric        .estimator .estimate                                       geom
-        <chr>          <chr>          <dbl>                           <MULTIPOINT [°]>
-      1 global_geary_c standard       0.155 ((-41.18256 -22.75207), (-42.91933 -23.21~
+      # A tibble: 1 x 3
+        .metric        .estimator .estimate
+        <chr>          <chr>          <dbl>
+      1 global_geary_c standard       0.155
 
 ---
 

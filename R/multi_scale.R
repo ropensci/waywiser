@@ -19,6 +19,12 @@
 #' then `cellsize` will be automatically adjusted to create the requested
 #' number of cells.
 #'
+#' This function can be used for geographic or projected coordinate reference
+#' systems and expect 2D data.
+#'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
+#'
 #' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
 #' @srrstats {G2.10} Column extraction is properly handled within yardstick.
 #' @srrstats {G2.14} Any function may be passed to na_action
@@ -28,6 +34,7 @@
 #' @srrstats {G2.15} Any function may be passed to na_action
 #' @srrstats {G2.16} Any function may be passed to na_action
 #'
+#' @srrstats {SP2.6} Input type requirements are documented.
 #' @param data A point geometry `sf` object containing the columns specified by
 #' the truth and estimate arguments.
 #' @inheritParams yardstick::rmse
@@ -49,6 +56,9 @@
 #' generated grids by a tiny factor to attempt to capture all observations.
 #' @inheritParams ww_area_of_applicability
 #'
+#' @srrstats {SP4.0} Outputs are in a unique format
+#' @srrstats {SP4.0b} Outputs are in a unique format
+#' @srrstats {SP4.2} Type and class of return values are documented
 #' @return A tibble with six columns: `.metric`, with the name
 #' of the metric that the row describes; `.estimator`, with the name of the
 #' estimator used, `.estimate`, with the output of the metric function;
@@ -107,10 +117,14 @@ ww_multi_scale <- function(
   # Silence NSE-related NOTE in R CMD check
   .truth <- .estimate <- NULL
 
+  #' @srrstats {SP2.0} Checking input data for spatial objects
+  #' @srrstats {SP2.0b} Will error on non-2d objects
+  #' @srrstats {SP2.7} Validating inputs
+  #' @srrstats {SP2.8} Pre-processing inputs
+  #' @srrstats {SP2.9} Relevant attributes are preserved
   if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
     rlang::abort(
-      "`data` must be an `sf` or `sfc` object.",
-      call = call
+      "`data` must be an `sf` or `sfc` object."
     )
   }
 

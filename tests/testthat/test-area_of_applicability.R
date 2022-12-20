@@ -278,21 +278,18 @@ test_that("`new_ww_area_of_applicability` arguments are assigned correctly", {
   expect_s3_class(x$blueprint, "hardhat_blueprint")
 })
 
-
 #' @srrstats {G5.4} Testing equivalence against CAST:
 #' @srrstats {G5.4b} Testing equivalence against CAST and stored values:
 #' @srrstats {G5.4c} Data is derived originally from CAST and associated paper
 test_that("ww_area_of_applicability() is close-enough to CAST", {
   skip_on_cran()
-  #' @srrstats {G5.10} Flag to set extended tests
-  #' @srrstats {G5.11a} Skip with relevant message if not run
-  skip_if_not(Sys.getenv("waywiser_test_cast") == "true")
   #' @srrstats {SP6.2} Testing with ~global data
   relevant_data <- head(as.data.frame(worldclim_simulation)[c(1:4, 6)], 1000)
 
   # Changes in CAST 0.7.1 mean that thresholds can't be compared against earlier versions
-  if (rlang::is_installed("CAST", "0.7.1") &&
-      rlang::is_installed("caret")) {
+  if (rlang::is_installed("CAST", version = "0.7.1") &&
+      rlang::is_installed("caret") &&
+      rlang::is_installed("randomforest")) {
 
     withr::with_seed(
       123,
@@ -330,4 +327,33 @@ test_that("ww_area_of_applicability() is close-enough to CAST", {
     tolerance = 0.000001
   )
 
+})
+
+test_that("loaded data is equivalent", {
+  importance <- data.frame(
+    term = c("bio2", "bio10", "bio13", "bio19"),
+    estimate = c(50.68727, 57.66859, 62.81009, 48.72391)
+  )
+  worldclim_loaded <- sf::st_read(
+    system.file("worldclim_simulation.gpkg", package = "waywiser")
+  )
+  names(worldclim_loaded) <- c(
+    head(names(worldclim_loaded), -1),
+    "geometry"
+  )
+  attr(worldclim_loaded, "sf_column") <- "geometry"
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP2.3} Testing with loaded data
+  expect_equal(
+    ww_area_of_applicability(
+      response ~ bio2 + bio10 + bio13 + bio19,
+      worldclim_loaded,
+      importance = importance
+    ),
+    ww_area_of_applicability(
+      response ~ bio2 + bio10 + bio13 + bio19,
+      worldclim_simulation,
+      importance = importance
+    )
+  )
 })

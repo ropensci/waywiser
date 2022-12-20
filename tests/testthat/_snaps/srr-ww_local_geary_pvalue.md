@@ -728,19 +728,19 @@
     Code
       ww_local_geary_pvalue(worldclim_simulation, response, response)
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator .estimate                              geometry
-         <chr>              <chr>          <dbl>                      <MULTIPOINT [°]>
-       1 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       2 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       3 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       4 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       5 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       6 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       7 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       8 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       9 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-      10 local_geary_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
+      # A tibble: 10,000 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_geary_pvalue standard         NaN
+       2 local_geary_pvalue standard         NaN
+       3 local_geary_pvalue standard         NaN
+       4 local_geary_pvalue standard         NaN
+       5 local_geary_pvalue standard         NaN
+       6 local_geary_pvalue standard         NaN
+       7 local_geary_pvalue standard         NaN
+       8 local_geary_pvalue standard         NaN
+       9 local_geary_pvalue standard         NaN
+      10 local_geary_pvalue standard         NaN
       # ... with 9,990 more rows
 
 # other generic srr standards
@@ -748,19 +748,19 @@
     Code
       withr::with_seed(123, ww_local_geary_pvalue(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator .estimate                                  geom
-         <chr>              <chr>          <dbl>                      <MULTIPOINT [°]>
-       1 local_geary_pvalue standard       0.765 ((-41.18256 -22.75207), (-42.91933 -~
-       2 local_geary_pvalue standard       0.794 ((-41.18256 -22.75207), (-42.91933 -~
-       3 local_geary_pvalue standard       0.687 ((-41.18256 -22.75207), (-42.91933 -~
-       4 local_geary_pvalue standard       0.767 ((-41.18256 -22.75207), (-42.91933 -~
-       5 local_geary_pvalue standard       0.691 ((-41.18256 -22.75207), (-42.91933 -~
-       6 local_geary_pvalue standard       0.122 ((-41.18256 -22.75207), (-42.91933 -~
-       7 local_geary_pvalue standard       0.759 ((-41.18256 -22.75207), (-42.91933 -~
-       8 local_geary_pvalue standard       0.731 ((-41.18256 -22.75207), (-42.91933 -~
-       9 local_geary_pvalue standard       0.774 ((-41.18256 -22.75207), (-42.91933 -~
-      10 local_geary_pvalue standard       0.686 ((-41.18256 -22.75207), (-42.91933 -~
+      # A tibble: 10,000 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_geary_pvalue standard       0.765
+       2 local_geary_pvalue standard       0.794
+       3 local_geary_pvalue standard       0.687
+       4 local_geary_pvalue standard       0.767
+       5 local_geary_pvalue standard       0.691
+       6 local_geary_pvalue standard       0.122
+       7 local_geary_pvalue standard       0.759
+       8 local_geary_pvalue standard       0.731
+       9 local_geary_pvalue standard       0.774
+      10 local_geary_pvalue standard       0.686
       # ... with 9,990 more rows
 
 ---
@@ -768,19 +768,19 @@
     Code
       withr::with_seed(123, ww_local_geary_pvalue(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator .estimate                                  geom
-         <chr>              <chr>          <dbl>                      <MULTIPOINT [°]>
-       1 local_geary_pvalue standard       0.765 ((-41.18256 -22.75207), (-42.91933 -~
-       2 local_geary_pvalue standard       0.794 ((-41.18256 -22.75207), (-42.91933 -~
-       3 local_geary_pvalue standard       0.687 ((-41.18256 -22.75207), (-42.91933 -~
-       4 local_geary_pvalue standard       0.767 ((-41.18256 -22.75207), (-42.91933 -~
-       5 local_geary_pvalue standard       0.691 ((-41.18256 -22.75207), (-42.91933 -~
-       6 local_geary_pvalue standard       0.122 ((-41.18256 -22.75207), (-42.91933 -~
-       7 local_geary_pvalue standard       0.759 ((-41.18256 -22.75207), (-42.91933 -~
-       8 local_geary_pvalue standard       0.731 ((-41.18256 -22.75207), (-42.91933 -~
-       9 local_geary_pvalue standard       0.774 ((-41.18256 -22.75207), (-42.91933 -~
-      10 local_geary_pvalue standard       0.686 ((-41.18256 -22.75207), (-42.91933 -~
+      # A tibble: 10,000 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_geary_pvalue standard       0.765
+       2 local_geary_pvalue standard       0.794
+       3 local_geary_pvalue standard       0.687
+       4 local_geary_pvalue standard       0.767
+       5 local_geary_pvalue standard       0.691
+       6 local_geary_pvalue standard       0.122
+       7 local_geary_pvalue standard       0.759
+       8 local_geary_pvalue standard       0.731
+       9 local_geary_pvalue standard       0.774
+      10 local_geary_pvalue standard       0.686
       # ... with 9,990 more rows
 
 ---
@@ -4802,19 +4802,19 @@
     Code
       withr::with_seed(123, ww_local_geary_pvalue(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator .estimate                                  geom
-         <chr>              <chr>          <dbl>                      <MULTIPOINT [°]>
-       1 local_geary_pvalue standard       0.765 ((-41.18256 -22.75207), (-42.91933 -~
-       2 local_geary_pvalue standard       0.794 ((-41.18256 -22.75207), (-42.91933 -~
-       3 local_geary_pvalue standard       0.687 ((-41.18256 -22.75207), (-42.91933 -~
-       4 local_geary_pvalue standard       0.767 ((-41.18256 -22.75207), (-42.91933 -~
-       5 local_geary_pvalue standard       0.691 ((-41.18256 -22.75207), (-42.91933 -~
-       6 local_geary_pvalue standard       0.122 ((-41.18256 -22.75207), (-42.91933 -~
-       7 local_geary_pvalue standard       0.759 ((-41.18256 -22.75207), (-42.91933 -~
-       8 local_geary_pvalue standard       0.731 ((-41.18256 -22.75207), (-42.91933 -~
-       9 local_geary_pvalue standard       0.774 ((-41.18256 -22.75207), (-42.91933 -~
-      10 local_geary_pvalue standard       0.686 ((-41.18256 -22.75207), (-42.91933 -~
+      # A tibble: 10,000 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_geary_pvalue standard       0.765
+       2 local_geary_pvalue standard       0.794
+       3 local_geary_pvalue standard       0.687
+       4 local_geary_pvalue standard       0.767
+       5 local_geary_pvalue standard       0.691
+       6 local_geary_pvalue standard       0.122
+       7 local_geary_pvalue standard       0.759
+       8 local_geary_pvalue standard       0.731
+       9 local_geary_pvalue standard       0.774
+      10 local_geary_pvalue standard       0.686
       # ... with 9,990 more rows
 
 ---
@@ -4823,19 +4823,19 @@
       withr::with_seed(123, ww_local_geary_pvalue(worldclim_loaded, bio13, bio19,
         function(data) ww_build_weights(ww_make_point_neighbors(data, k = 5))))
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator .estimate                                  geom
-         <chr>              <chr>          <dbl>                      <MULTIPOINT [°]>
-       1 local_geary_pvalue standard    5.31e- 1 ((-41.18256 -22.75207), (-42.91933 -~
-       2 local_geary_pvalue standard    4.63e- 1 ((-41.18256 -22.75207), (-42.91933 -~
-       3 local_geary_pvalue standard    4.60e- 1 ((-41.18256 -22.75207), (-42.91933 -~
-       4 local_geary_pvalue standard    4.55e- 1 ((-41.18256 -22.75207), (-42.91933 -~
-       5 local_geary_pvalue standard    4.81e- 1 ((-41.18256 -22.75207), (-42.91933 -~
-       6 local_geary_pvalue standard    7.21e- 4 ((-41.18256 -22.75207), (-42.91933 -~
-       7 local_geary_pvalue standard    4.19e-16 ((-41.18256 -22.75207), (-42.91933 -~
-       8 local_geary_pvalue standard    4.50e- 1 ((-41.18256 -22.75207), (-42.91933 -~
-       9 local_geary_pvalue standard    5.02e- 1 ((-41.18256 -22.75207), (-42.91933 -~
-      10 local_geary_pvalue standard    4.72e- 1 ((-41.18256 -22.75207), (-42.91933 -~
+      # A tibble: 10,000 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_geary_pvalue standard    5.31e- 1
+       2 local_geary_pvalue standard    4.63e- 1
+       3 local_geary_pvalue standard    4.60e- 1
+       4 local_geary_pvalue standard    4.55e- 1
+       5 local_geary_pvalue standard    4.81e- 1
+       6 local_geary_pvalue standard    7.21e- 4
+       7 local_geary_pvalue standard    4.19e-16
+       8 local_geary_pvalue standard    4.50e- 1
+       9 local_geary_pvalue standard    5.02e- 1
+      10 local_geary_pvalue standard    4.72e- 1
       # ... with 9,990 more rows
 
 ---

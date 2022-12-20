@@ -53,9 +53,11 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: any::rcmdcheck, CAST=?ignore-before-r=4.1.0
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
+        env:
+          _R_CHECK_FORCE_SUGGESTS_: false
         with:
           upload-snapshots: true

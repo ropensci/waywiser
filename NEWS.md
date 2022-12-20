@@ -1,5 +1,7 @@
 # waywiser (development version)
 
+* Yardstick metrics will no longer include geometry columns in their returns.
+
 * Removed combination functions -- `ww_global_geary`, `ww_global_moran`, 
   `ww_local_geary`, `ww_local_moran`, `ww_local_getis_ord`. Use `metric_set()`
   to combine functions instead.

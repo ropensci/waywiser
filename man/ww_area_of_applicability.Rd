@@ -84,13 +84,11 @@ must have a matching importance estimate, and all terms with importance
 estimates must be in the training data.}
 
 \item{na_action}{A function which indicates what should happen when the data
-(any of \code{x}, \code{data}, or \code{testing}) contain NAs. The default is \code{na.fail};
-you may wish to set it to \code{na.omit} or any of the functions from the "zoo"
+contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
+or any of the functions from the "zoo"
 package. This function ignores the value of \code{options("na.action")} in order
-to make cross-computer (and cross-session) results more stable. Note that
-this argument only impacts fitting the area of applicability and has no
-impact on predictions. This argument must be of length 1; you cannot pass
-multiple functions to \code{na_action}.}
+to make cross-computer (and cross-session) results more stable. This argument
+must be of length 1; you cannot pass multiple functions to \code{na_action}.}
 
 \item{data}{The data frame representing your "training" data, when using the
 formula or recipe methods.}

@@ -414,12 +414,6 @@ test_that("other generic srr standards", {
     ww_local_moran_pvalue_vec(guerry_modeled_geo$predictions, guerry_modeled_geo$Crm_prs, guerry_weights_geo)
   )
 
-  #' @srrstats {SP4.1} CRS (and therefore units) are preserved:
-  expect_identical(
-    sf::st_crs(ww_local_moran_pvalue(guerry_modeled, predictions, Crm_prs)$geometry),
-    sf::st_crs(guerry_modeled)
-  )
-
   #' @srrstats {SP2.3} Testing with loaded sf objects:
   worldclim_loaded <- sf::read_sf(
     system.file("worldclim_simulation.gpkg", package = "waywiser")

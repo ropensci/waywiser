@@ -75,16 +75,14 @@ specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
 \item{na_action}{A function which indicates what should happen when the data
-(any of \code{x}, \code{data}, or \code{testing}) contain NAs. The default is \code{na.fail};
-you may wish to set it to \code{na.omit} or any of the functions from the "zoo"
+contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
+or any of the functions from the "zoo"
 package. This function ignores the value of \code{options("na.action")} in order
-to make cross-computer (and cross-session) results more stable. Note that
-this argument only impacts fitting the area of applicability and has no
-impact on predictions. This argument must be of length 1; you cannot pass
-multiple functions to \code{na_action}.}
+to make cross-computer (and cross-session) results more stable. This argument
+must be of length 1; you cannot pass multiple functions to \code{na_action}.}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
+A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
 For \verb{_vec()} functions, a single value (or NA).
 }
@@ -99,7 +97,9 @@ components of MSE equal total MSE (though the same is not true for RMSE).
 Values of d range from 0 to 1, with 1 indicating perfect agreement. Values of
 dr range from -1 to 1, with 1 similarly indicating perfect agreement. Values
 of RMSE are in the same units as \code{truth} and \code{estimate}, while values of MSE
-are in squared units. \code{truth} and \code{estimate} must be the same length.
+are in squared units. \code{truth} and \code{estimate} must be the same length. This
+function is not explicitly spatial and as such can be applied to data with
+any number of dimensions and any coordinate reference system.
 }
 \examples{
 x <- c(6, 8, 9, 10, 11, 14)

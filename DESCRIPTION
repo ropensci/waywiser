@@ -50,6 +50,7 @@ Imports:
     spdep (>= 1.1-9),
     stats,
     tibble,
+    tidyselect,
     yardstick
 Suggests: 
     applicable,

@@ -1712,19 +1712,19 @@
     Code
       ww_local_moran_pvalue(worldclim_simulation, response, response)
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator .estimate                              geometry
-         <chr>              <chr>          <dbl>                      <MULTIPOINT [°]>
-       1 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       2 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       3 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       4 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       5 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       6 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       7 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       8 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-       9 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
-      10 local_moran_pvalue standard         NaN ((-41.18256 -22.75207), (-42.91933 -~
+      # A tibble: 10,000 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_moran_pvalue standard         NaN
+       2 local_moran_pvalue standard         NaN
+       3 local_moran_pvalue standard         NaN
+       4 local_moran_pvalue standard         NaN
+       5 local_moran_pvalue standard         NaN
+       6 local_moran_pvalue standard         NaN
+       7 local_moran_pvalue standard         NaN
+       8 local_moran_pvalue standard         NaN
+       9 local_moran_pvalue standard         NaN
+      10 local_moran_pvalue standard         NaN
       # ... with 9,990 more rows
 
 # other generic srr standards
@@ -1732,19 +1732,19 @@
     Code
       withr::with_seed(123, ww_local_moran_pvalue(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator .estimate                                  geom
-         <chr>              <chr>          <dbl>                      <MULTIPOINT [°]>
-       1 local_moran_pvalue standard      0.890  ((-41.18256 -22.75207), (-42.91933 -~
-       2 local_moran_pvalue standard      0.425  ((-41.18256 -22.75207), (-42.91933 -~
-       3 local_moran_pvalue standard      0.923  ((-41.18256 -22.75207), (-42.91933 -~
-       4 local_moran_pvalue standard      0.943  ((-41.18256 -22.75207), (-42.91933 -~
-       5 local_moran_pvalue standard      0.904  ((-41.18256 -22.75207), (-42.91933 -~
-       6 local_moran_pvalue standard      0.0273 ((-41.18256 -22.75207), (-42.91933 -~
-       7 local_moran_pvalue standard      0.759  ((-41.18256 -22.75207), (-42.91933 -~
-       8 local_moran_pvalue standard      0.970  ((-41.18256 -22.75207), (-42.91933 -~
-       9 local_moran_pvalue standard      0.785  ((-41.18256 -22.75207), (-42.91933 -~
-      10 local_moran_pvalue standard      0.948  ((-41.18256 -22.75207), (-42.91933 -~
+      # A tibble: 10,000 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_moran_pvalue standard      0.890 
+       2 local_moran_pvalue standard      0.425 
+       3 local_moran_pvalue standard      0.923 
+       4 local_moran_pvalue standard      0.943 
+       5 local_moran_pvalue standard      0.904 
+       6 local_moran_pvalue standard      0.0273
+       7 local_moran_pvalue standard      0.759 
+       8 local_moran_pvalue standard      0.970 
+       9 local_moran_pvalue standard      0.785 
+      10 local_moran_pvalue standard      0.948 
       # ... with 9,990 more rows
 
 ---
@@ -1752,19 +1752,19 @@
     Code
       withr::with_seed(123, ww_local_moran_pvalue(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator .estimate                                  geom
-         <chr>              <chr>          <dbl>                      <MULTIPOINT [°]>
-       1 local_moran_pvalue standard      0.890  ((-41.18256 -22.75207), (-42.91933 -~
-       2 local_moran_pvalue standard      0.425  ((-41.18256 -22.75207), (-42.91933 -~
-       3 local_moran_pvalue standard      0.923  ((-41.18256 -22.75207), (-42.91933 -~
-       4 local_moran_pvalue standard      0.943  ((-41.18256 -22.75207), (-42.91933 -~
-       5 local_moran_pvalue standard      0.904  ((-41.18256 -22.75207), (-42.91933 -~
-       6 local_moran_pvalue standard      0.0273 ((-41.18256 -22.75207), (-42.91933 -~
-       7 local_moran_pvalue standard      0.759  ((-41.18256 -22.75207), (-42.91933 -~
-       8 local_moran_pvalue standard      0.970  ((-41.18256 -22.75207), (-42.91933 -~
-       9 local_moran_pvalue standard      0.785  ((-41.18256 -22.75207), (-42.91933 -~
-      10 local_moran_pvalue standard      0.948  ((-41.18256 -22.75207), (-42.91933 -~
+      # A tibble: 10,000 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_moran_pvalue standard      0.890 
+       2 local_moran_pvalue standard      0.425 
+       3 local_moran_pvalue standard      0.923 
+       4 local_moran_pvalue standard      0.943 
+       5 local_moran_pvalue standard      0.904 
+       6 local_moran_pvalue standard      0.0273
+       7 local_moran_pvalue standard      0.759 
+       8 local_moran_pvalue standard      0.970 
+       9 local_moran_pvalue standard      0.785 
+      10 local_moran_pvalue standard      0.948 
       # ... with 9,990 more rows
 
 ---
@@ -8454,19 +8454,19 @@
     Code
       withr::with_seed(123, ww_local_moran_pvalue(worldclim_loaded, bio13, bio19))
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator .estimate                                  geom
-         <chr>              <chr>          <dbl>                      <MULTIPOINT [°]>
-       1 local_moran_pvalue standard      0.890  ((-41.18256 -22.75207), (-42.91933 -~
-       2 local_moran_pvalue standard      0.425  ((-41.18256 -22.75207), (-42.91933 -~
-       3 local_moran_pvalue standard      0.923  ((-41.18256 -22.75207), (-42.91933 -~
-       4 local_moran_pvalue standard      0.943  ((-41.18256 -22.75207), (-42.91933 -~
-       5 local_moran_pvalue standard      0.904  ((-41.18256 -22.75207), (-42.91933 -~
-       6 local_moran_pvalue standard      0.0273 ((-41.18256 -22.75207), (-42.91933 -~
-       7 local_moran_pvalue standard      0.759  ((-41.18256 -22.75207), (-42.91933 -~
-       8 local_moran_pvalue standard      0.970  ((-41.18256 -22.75207), (-42.91933 -~
-       9 local_moran_pvalue standard      0.785  ((-41.18256 -22.75207), (-42.91933 -~
-      10 local_moran_pvalue standard      0.948  ((-41.18256 -22.75207), (-42.91933 -~
+      # A tibble: 10,000 x 3
+         .metric            .estimator .estimate
+         <chr>              <chr>          <dbl>
+       1 local_moran_pvalue standard      0.890 
+       2 local_moran_pvalue standard      0.425 
+       3 local_moran_pvalue standard      0.923 
+       4 local_moran_pvalue standard      0.943 
+       5 local_moran_pvalue standard      0.904 
+       6 local_moran_pvalue standard      0.0273
+       7 local_moran_pvalue standard      0.759 
+       8 local_moran_pvalue standard      0.970 
+       9 local_moran_pvalue standard      0.785 
+      10 local_moran_pvalue standard      0.948 
       # ... with 9,990 more rows
 
 ---
@@ -8475,19 +8475,19 @@
       withr::with_seed(123, ww_local_moran_pvalue(worldclim_loaded, bio13, bio19,
         function(data) ww_build_weights(ww_make_point_neighbors(data, k = 5))))
     Output
-      # A tibble: 10,000 x 4
-         .metric            .estimator   .estimate                                geom
-         <chr>              <chr>            <dbl>                    <MULTIPOINT [°]>
-       1 local_moran_pvalue standard   0.769       ((-41.18256 -22.75207), (-42.91933~
-       2 local_moran_pvalue standard   0.325       ((-41.18256 -22.75207), (-42.91933~
-       3 local_moran_pvalue standard   0.819       ((-41.18256 -22.75207), (-42.91933~
-       4 local_moran_pvalue standard   0.914       ((-41.18256 -22.75207), (-42.91933~
-       5 local_moran_pvalue standard   0.796       ((-41.18256 -22.75207), (-42.91933~
-       6 local_moran_pvalue standard   0.000000221 ((-41.18256 -22.75207), (-42.91933~
-       7 local_moran_pvalue standard   0.000142    ((-41.18256 -22.75207), (-42.91933~
-       8 local_moran_pvalue standard   0.979       ((-41.18256 -22.75207), (-42.91933~
-       9 local_moran_pvalue standard   0.646       ((-41.18256 -22.75207), (-42.91933~
-      10 local_moran_pvalue standard   0.927       ((-41.18256 -22.75207), (-42.91933~
+      # A tibble: 10,000 x 3
+         .metric            .estimator   .estimate
+         <chr>              <chr>            <dbl>
+       1 local_moran_pvalue standard   0.769      
+       2 local_moran_pvalue standard   0.325      
+       3 local_moran_pvalue standard   0.819      
+       4 local_moran_pvalue standard   0.914      
+       5 local_moran_pvalue standard   0.796      
+       6 local_moran_pvalue standard   0.000000221
+       7 local_moran_pvalue standard   0.000142   
+       8 local_moran_pvalue standard   0.979      
+       9 local_moran_pvalue standard   0.646      
+      10 local_moran_pvalue standard   0.927      
       # ... with 9,990 more rows
 
 ---

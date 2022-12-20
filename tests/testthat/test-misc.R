@@ -89,4 +89,20 @@ test_that("expected_errors", {
     ww_agreement_coefficient_vec(1:5, c(1:4, NA), na_action = c(na.omit, na.pass)),
     error = TRUE
   )
+
+  expect_snapshot(
+    ww_build_neighbors(as.data.frame(guerry)),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_make_point_neighbors(as.data.frame(guerry)),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_make_point_neighbors(guerry, k = c(1, 5)),
+    error = TRUE
+  )
+
 })

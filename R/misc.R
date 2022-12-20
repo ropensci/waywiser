@@ -1,5 +1,11 @@
 #' Make 'nb' objects from sf objects
 #'
+#' These functions can be used for geographic or projected coordinate reference
+#' systems and expect 2D data.
+#'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
+#'
 #' @details
 #' When `nb = NULL`, the method used to create neighbors from `data` is
 #' dependent on what geometry type `data` is:
@@ -13,6 +19,11 @@
 #' + If `nb = NULL` and `data` is any other geometry type, the "nb" object will
 #' be created using the centroids of the data as points, with a warning.
 #'
+#' @srrstats {SP2.6} Input type requirements are documented.
+#' @srrstats {SP3.0} Users are given total control over weights.
+#' @srrstats {SP3.0a} Users are given total control over weights.
+#' @srrstats {SP3.0b} Users are given total control over weights.
+#' @srrstats {SP3.1} Users are given total control over weights.
 #' @param ... Arguments passed to the neighbor-creating function.
 #' @param data An sf object (of class "sf" or "sfc").
 #' @param nb An object of class "nb" (in which case it will be returned
@@ -23,6 +34,9 @@
 #' @examples
 #' ww_build_neighbors(guerry)
 #'
+#' @srrstats {SP4.0} Outputs are in a unique format
+#' @srrstats {SP4.0b} Outputs are in a unique format
+#' @srrstats {SP4.2} Type and class of return values are documented
 #' @return An object of class "nb".
 #'
 #' @export
@@ -30,6 +44,9 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
 
   #' @srrstats {SP2.0} Checking input data for spatial objects
   #' @srrstats {SP2.0b} Will error on non-2d objects
+  #' @srrstats {SP2.7} Validating inputs
+  #' @srrstats {SP2.8} Pre-processing inputs
+  #' @srrstats {SP2.9} Relevant attributes are preserved
   if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
     rlang::abort(
       "`data` must be an `sf` or `sfc` object.",
@@ -88,12 +105,26 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
 #' This function uses [spdep::knearneigh()] and [spdep::knn2nb()] to
 #' create a "nb" neighbors list.
 #'
+#' These functions can be used for geographic or projected coordinate reference
+#' systems and expect 2D data.
+#'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
+#'
+#' @srrstats {SP2.6} Input type requirements are documented.
+#' @srrstats {SP3.0} Users are given total control over weights.
+#' @srrstats {SP3.0a} Users are given total control over weights.
+#' @srrstats {SP3.0b} Users are given total control over weights.
+#' @srrstats {SP3.1} Users are given total control over weights.
 #' @param data An `sfc_POINT` or `sfc_MULTIPOINT` object.
 #' @param k How many nearest neighbors to use in [spdep::knearneigh()].
 #' @param sym Force the output neighbors list (from [spdep::knn2nb()]) to
 #' symmetry.
 #' @param ... Other arguments passed to [spdep::knearneigh()].
 #'
+#' @srrstats {SP4.0} Outputs are in a unique format
+#' @srrstats {SP4.0b} Outputs are in a unique format
+#' @srrstats {SP4.2} Type and class of return values are documented
 #' @return An object of class "nb"
 #'
 #' @examples
@@ -102,6 +133,11 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
 #' @export
 ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
 
+  #' @srrstats {SP2.0} Checking input data for spatial objects
+  #' @srrstats {SP2.0b} Will error on non-2d objects
+  #' @srrstats {SP2.7} Validating inputs
+  #' @srrstats {SP2.8} Pre-processing inputs
+  #' @srrstats {SP2.9} Relevant attributes are preserved
   if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
     rlang::abort(
       "`data` must be an `sf` or `sfc` object."
@@ -132,9 +168,23 @@ ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
 #' This function is an extremely thin wrapper around [spdep::poly2nb()],
 #' renamed to use the waywiser "ww" prefix.
 #'
+#' These functions can be used for geographic or projected coordinate reference
+#' systems and expect 2D data.
+#'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
+#'
+#' @srrstats {SP2.6} Input type requirements are documented.
+#' @srrstats {SP3.0} Users are given total control over weights.
+#' @srrstats {SP3.0a} Users are given total control over weights.
+#' @srrstats {SP3.0b} Users are given total control over weights.
+#' @srrstats {SP3.1} Users are given total control over weights.
 #' @param data An `sfc_POLYGON` or `sfc_MULTIPOLYGON` object.
 #' @param ... Additional arguments passed to [spdep::poly2nb()].
 #'
+#' @srrstats {SP4.0} Outputs are in a unique format
+#' @srrstats {SP4.0b} Outputs are in a unique format
+#' @srrstats {SP4.2} Type and class of return values are documented
 #' @return An object of class "nb"
 #'
 #' @examples
@@ -151,6 +201,17 @@ ww_make_polygon_neighbors <- function(data, ...) {
 
 #' Build "listw" objects of spatial weights
 #'
+#' These functions can be used for geographic or projected coordinate reference
+#' systems and expect 2D data.
+#'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
+#'
+#' @srrstats {SP2.6} Input type requirements are documented.
+#' @srrstats {SP3.0} Users are given total control over weights.
+#' @srrstats {SP3.0a} Users are given total control over weights.
+#' @srrstats {SP3.0b} Users are given total control over weights.
+#' @srrstats {SP3.1} Users are given total control over weights.
 #' @param x Either an sf object or a "nb" neighbors list object.
 #' If an sf object, will be converted into a neighbors list via
 #' [ww_build_neighbors()].
@@ -160,6 +221,9 @@ ww_make_polygon_neighbors <- function(data, ...) {
 #' @param include_self Include each region itself in its own list of neighbors?
 #' @param ... Arguments passed to the weight constructing function.
 #'
+#' @srrstats {SP4.0} Outputs are in a unique format
+#' @srrstats {SP4.0b} Outputs are in a unique format
+#' @srrstats {SP4.2} Type and class of return values are documented
 #' @return A `listw` object.
 #'
 #' @examples
