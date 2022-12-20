@@ -233,11 +233,11 @@ ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance
   # cf https://github.com/tidymodels/hardhat/issues/219
   if (any(
     purrr::map_lgl(
-      as.data.frame(data)[names(training$predictors)],
+      as.data.frame(data)[names(data) %in% names(training$predictors)],
       function(x) !(inherits(x, "numeric") || inherits(x, "integer"))
     ),
     purrr::map_lgl(
-      as.data.frame(testing[names(processed_testing$predictors)]),
+      as.data.frame(testing)[names(testing) %in% names(processed_testing$predictors)],
       function(x) !(inherits(x, "numeric") || inherits(x, "integer"))
     )
   )) {

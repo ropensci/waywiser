@@ -47,6 +47,21 @@
       ww_multi_scale is currently only implemented for point geometries.
       i Consider casting your data to points.
 
+---
+
+    Code
+      ww_multi_scale(suppressWarnings(sf::st_centroid(guerry_modeled)), Crm_prs,
+      predictions, n = list(c(1, 1)), na_action = c(na.omit, na.fail), metrics = yardstick::rmse)
+    Error <rlang_error>
+      Only one value can be passed to `na_action`.
+
+---
+
+    Code
+      ww_multi_scale(iris, Sepal.Length, Sepal.Width, n = list(c(1, 1)), metrics = yardstick::rmse)
+    Error <rlang_error>
+      `data` must be an `sf` or `sfc` object.
+
 # srr: expected failures for ww_multi_scale
 
     Code

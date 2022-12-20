@@ -41,6 +41,8 @@ test_that("Local Moran statistics are stable", {
     vec_local_i_p
   )
 
+  #' @srrstats {G5.4} Testing against spdep
+  #' @srrstats {G5.5} Run with a consistent seed
   set.seed(123)
   spdep_output <- spdep::localmoran(resid, weights)
 

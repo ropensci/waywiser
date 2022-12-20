@@ -108,19 +108,19 @@ guerry_predicted <- guerry
 guerry_predicted$predictions <- predict(crime_model, guerry)
 
 ww_local_moran_i(guerry_predicted, Crm_prs, predictions)
-#> # A tibble: 85 × 4
-#>    .metric       .estimator .estimate                                   geometry
-#>    <chr>         <chr>          <dbl>                         <MULTIPOLYGON [m]>
-#>  1 local_moran_i standard      0.548  (((381847 1762775, 381116 1763059, 379972…
-#>  2 local_moran_i standard      0.943  (((381847 1762775, 381116 1763059, 379972…
-#>  3 local_moran_i standard      0.636  (((381847 1762775, 381116 1763059, 379972…
-#>  4 local_moran_i standard      0.700  (((381847 1762775, 381116 1763059, 379972…
-#>  5 local_moran_i standard      0.137  (((381847 1762775, 381116 1763059, 379972…
-#>  6 local_moran_i standard      0.917  (((381847 1762775, 381116 1763059, 379972…
-#>  7 local_moran_i standard      0.900  (((381847 1762775, 381116 1763059, 379972…
-#>  8 local_moran_i standard      1.79   (((381847 1762775, 381116 1763059, 379972…
-#>  9 local_moran_i standard      0.0208 (((381847 1762775, 381116 1763059, 379972…
-#> 10 local_moran_i standard      0.750  (((381847 1762775, 381116 1763059, 379972…
+#> # A tibble: 85 × 3
+#>    .metric       .estimator .estimate
+#>    <chr>         <chr>          <dbl>
+#>  1 local_moran_i standard      0.548 
+#>  2 local_moran_i standard      0.943 
+#>  3 local_moran_i standard      0.636 
+#>  4 local_moran_i standard      0.700 
+#>  5 local_moran_i standard      0.137 
+#>  6 local_moran_i standard      0.917 
+#>  7 local_moran_i standard      0.900 
+#>  8 local_moran_i standard      1.79  
+#>  9 local_moran_i standard      0.0208
+#> 10 local_moran_i standard      0.750 
 #> # … with 75 more rows
 ```
 
@@ -139,6 +139,7 @@ crime_model_aoa <- ww_area_of_applicability(
   guerry_test,
   importance = vip::vi_model(crime_model)
 )
+#> Warning: The AOA threshold was 0, which is usually unexpected.
 
 guerry_aoa <- cbind(
   guerry,
@@ -152,10 +153,10 @@ plot(guerry_aoa["aoa"])
 
 We can see that two areas are outside our model’s area of applicability,
 meaning that we probably can’t trust our model when extrapolating into
-those regions\!
+those regions!
 
 For more information, check out [the documentation
-website\!](https://mikemahoney218.github.io/waywiser/)
+website!](https://mikemahoney218.github.io/waywiser/)
 
 ## Citing waywiser
 
@@ -184,10 +185,10 @@ This project is released with a [Contributor Code of
 Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 
-  - If you think you have encountered a bug, please [submit an
-    issue](https://github.com/mikemahoney218/waywiser).
+- If you think you have encountered a bug, please [submit an
+  issue](https://github.com/mikemahoney218/waywiser).
 
-  - Please include a
-    [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
-    (a minimal, reproducible example) to clearly communicate about your
-    code.
+- Please include a
+  [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+  (a minimal, reproducible example) to clearly communicate about your
+  code.

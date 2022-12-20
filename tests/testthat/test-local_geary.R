@@ -43,6 +43,8 @@ test_that("Local geary statistics are stable", {
     vec_local_c_p
   )
 
+  #' @srrstats {G5.4} Testing against spdep
+  #' @srrstats {G5.5} Run with a consistent seed
   set.seed(123)
   spdep_output <- spdep::localC_perm(resid, weights)
 

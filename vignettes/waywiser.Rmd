@@ -1,0 +1,174 @@
+---
+title: "Assessing Models with Waywiser"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Assessing Models with Waywiser}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = rlang::is_installed("vip")
+)
+```
+
+The waywiser package aims to be an ergonomic toolbox providing a consistent user 
+interface for assessing spatial models. To that end, waywiser does three main 
+things:
+
+1. Provides new [yardstick](https://yardstick.tidymodels.org/) extensions, 
+   making it easier to use performance metrics from the spatial modeling 
+   literature via a standardized API.
+2. Provides a new function, `ww_multi_scale()`, which makes it easy to see how
+   model performance metrics change when predictions are aggregated to various
+   scales.
+3. Provides an implementation of the 
+   [area of applicability from Meyer and Pebesma 2021](https://doi.org/10.1111/2041-210X.13650),
+   extending this tool to work with tidymodels infrastructure.
+
+This vignette will walk through each of these goals in turn. Before we do that, 
+let's set up the data we'll use in examples:
+
+```{r setup}
+library(waywiser)
+
+worldclim_model <- lm(
+  response ~ bio2 + bio10 + bio13 + bio19, 
+  worldclim_simulation
+)
+
+worldclim_simulation$predictions <- predict(
+  worldclim_model,
+  worldclim_simulation
+)
+
+head(worldclim_simulation)
+```
+
+## Yardstick Extensions
+
+First and foremost, waywiser provides a host of new yardstick metrics to provide
+a standardized interface for various performance metrics.
+
+All of these functions work more or less the same way: you provide your data,
+the names of your "true" values and predicted values, and get back a 
+standardized output format. As usual with yardstick, that output can either be
+a tibble or a vector output. For instance, if we want to calculate the agreement
+coefficient from [Ji and Gallo 2006](https://doi.org/10.14358/PERS.72.7.823):
+
+```{r}
+ww_agreement_coefficient(
+  worldclim_simulation,
+  truth = response,
+  estimate = predictions
+)
+
+ww_agreement_coefficient_vec(
+  truth = worldclim_simulation$response,
+  estimate = worldclim_simulation$predictions
+)
+```
+
+Some of these additional metrics are implemented by wrapping functions from the
+[spdep](https://r-spatial.github.io/spdep/) package:
+
+```{r}
+ww_global_geary_c(
+  worldclim_simulation,
+  truth = response,
+  estimate = predictions
+)
+```
+
+These functions rely on calculating the spatial neighbors of each observation.
+The waywiser package will automatically use `ww_build_weights()` to calculate
+these, if not provided, but this is often not desirable. For that reason, these
+functions all have a `wt` argument, which can take either pre-calculated weights
+or a function that will create spatial weights:
+
+```{r}
+ww_global_geary_c(
+  worldclim_simulation,
+  truth = response,
+  estimate = predictions,
+  wt = ww_build_weights(worldclim_simulation)
+)
+
+ww_global_geary_c(
+  worldclim_simulation,
+  truth = response,
+  estimate = predictions,
+  wt = ww_build_weights
+)
+```
+
+Because these are yardstick metrics, they can be used with 
+`yardstick::metric_set()` and other tidymodels infrastructure:
+
+```{r}
+yardstick::metric_set(
+  ww_agreement_coefficient,
+  ww_global_geary_c
+)(worldclim_simulation,
+  truth = response,
+  estimate = predictions)
+```
+
+## Multi-scale model assessment
+
+A common pattern with spatial models is that you need to predict observation
+units -- pixels of a raster or individual points -- which will be aggregated to
+arbitrary scales, such as towns or parcel boundaries. Because errors can be
+spatially distributed, or can either compound or counteract each other when 
+aggregated, [some assessment protocols](https://doi.org/10.1016/j.rse.2010.05.010)
+recommend assessing model predictions aggregated to multiple scales.
+
+The `ww_multi_scale()` function helps automate this process. The interface for
+this function works similarly to that for yardstick metrics -- you provide your
+data, your true values, and your estimate -- except you also must provide 
+instructions for how to aggregate your data. This can take the form of providing
+information on how to build standardized grids, by passing arguments that will
+be used by `sf::st_make_grid()`, or by passing polygons directly:
+
+```{r}
+ww_multi_scale(
+  worldclim_simulation,
+  truth = response,
+  estimate = predictions,
+  metrics = list(ww_agreement_coefficient, yardstick::rmse),
+  n = list(2, 4)
+)
+
+grid <- sf::st_make_grid(n = 2)
+ww_multi_scale(
+  worldclim_simulation,
+  truth = response,
+  estimate = predictions,
+  metrics = list(ww_agreement_coefficient, yardstick::rmse),
+  grids = list(grid)
+)
+```
+
+## Area of Applicability
+
+Last but not least, we can also see if there's any areas in our data that are 
+too different from our training data for us to safely predict on, which fall 
+outside the "area of applicability" defined by 
+[Meyer and Pebesma (2021)](https://doi.org/10.1111/2041-210X.13650):
+
+```{r}
+worldclim_aoa <- ww_area_of_applicability(
+  response ~ bio2 + bio10 + bio13 + bio19,
+  worldclim_simulation,
+  importance = vip::vi_model(worldclim_model)
+)
+
+worldclim_aoa
+```
+
+The objects returned by `ww_area_of_applicability()` are models in their own 
+right, which can be used by functions such as `predict()` to calculate if new
+observations are in the area of applicability of a model. 

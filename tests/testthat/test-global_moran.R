@@ -40,6 +40,8 @@ test_that("Global Moran statistics are stable", {
     vec_global_i_p
   )
 
+  #' @srrstats {G5.4} Testing against spdep
+  #' @srrstats {G5.5} Run with a consistent seed
   set.seed(123)
   spdep_output <- spdep::moran.test(resid, weights)
 

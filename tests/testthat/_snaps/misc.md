@@ -178,3 +178,24 @@
     Error <rlang_error>
       Only one value can be passed to na_action.
 
+---
+
+    Code
+      ww_build_neighbors(as.data.frame(guerry))
+    Error <rlang_error>
+      `data` must be an `sf` or `sfc` object.
+
+---
+
+    Code
+      ww_make_point_neighbors(as.data.frame(guerry))
+    Error <rlang_error>
+      `data` must be an `sf` or `sfc` object.
+
+---
+
+    Code
+      ww_make_point_neighbors(guerry, k = c(1, 5))
+    Error <rlang_error>
+      `k` must be a single numeric integer.
+

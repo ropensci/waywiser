@@ -37,7 +37,7 @@ yardstick_df <- function(data, truth, estimate, na_action, name, metric_fun, ...
       na_action = na_action,
       ...
     )
-  )
+  )[c(".metric", ".estimator", ".estimate")]
 }
 
 #' Workhorse function handling spatial yardstick metrics for the package

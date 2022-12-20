@@ -48,6 +48,8 @@ test_that("Local Getis-Ord statistics are stable", {
     as.vector(spdep::localG(resid, weights))
   )
 
+  #' @srrstats {G5.4} Testing against spdep
+  #' @srrstats {G5.5} Run with a consistent seed
   set.seed(123)
   spdep_output <- spdep::localG_perm(resid, weights)
 
@@ -107,6 +109,8 @@ test_that("Local Getis-Ord statistics are stable", {
     as.vector(spdep::localG(resid, weights))
   )
 
+  #' @srrstats {G5.4} Testing against spdep
+  #' @srrstats {G5.5} Run with a consistent seed
   set.seed(123)
   spdep_output <- spdep::localG_perm(resid, weights)
 
