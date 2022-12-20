@@ -22,13 +22,13 @@ Description: Assessing predictive models of spatial data can be challenging,
     ('Moran' (1950) <doi:10.2307/2332142>), Geary's C 
     ('Geary' (1954) <doi:10.2307/2986645>), Getis-Ord's G
     ('Ord' and 'Getis' (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>),
-    agreement coefficients from Ji and Gallo (2006) 
-    (<doi: 10.14358/PERS.72.7.823>), agreement metrics from Willmott (1981)
-    (<doi: 10.1080/02723646.1981.10642213>) and Willmott et al. (2012)
-    (<doi: 10.1002/joc.2419), an implementation of the area of applicability 
+    agreement coefficients from 'Ji' and Gallo (2006) 
+    (<doi: 10.14358/PERS.72.7.823>), agreement metrics from 'Willmott' (1981)
+    (<doi: 10.1080/02723646.1981.10642213>) and 'Willmott' 'et' 'al'. (2012)
+    (<doi: 10.1002/joc.2419>), an implementation of the area of applicability 
     methodology from 'Meyer' and 'Pebesma' (2021) 
     (<doi:10.1111/2041-210X.13650>), and an implementation of
-    multi-scale assessment as described in 'Riemann' et al. (2010)
+    multi-scale assessment as described in 'Riemann' 'et' 'al'. (2010)
     (<doi:10.1016/j.rse.2010.05.010>).
 License: MIT + file LICENSE
 URL: https://github.com/mikemahoney218/waywiser,
