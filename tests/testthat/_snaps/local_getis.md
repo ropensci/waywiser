@@ -22,7 +22,8 @@
 ---
 
     Code
-      df_local_i_p <- ww_local_getis_ord_pvalue(guerry_modeled, Crm_prs, predictions)
+      df_local_i_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, Crm_prs,
+        predictions)
       df_local_i_p[1:3]
     Output
       # A tibble: 85 x 3
@@ -39,27 +40,6 @@
        9 local_getis_ord_g_pvalue standard     0.361  
       10 local_getis_ord_g_pvalue standard     0.00787
       # ... with 75 more rows
-
----
-
-    Code
-      df_local_i_both <- ww_local_getis_ord(guerry_modeled, Crm_prs, predictions)
-      df_local_i_both[1:3]
-    Output
-      # A tibble: 170 x 3
-         .metric           .estimator .estimate
-         <chr>             <chr>          <dbl>
-       1 local_getis_ord_g standard       0.913
-       2 local_getis_ord_g standard       2.49 
-       3 local_getis_ord_g standard       2.15 
-       4 local_getis_ord_g standard      -1.58 
-       5 local_getis_ord_g standard      -1.19 
-       6 local_getis_ord_g standard      -1.68 
-       7 local_getis_ord_g standard       0.627
-       8 local_getis_ord_g standard      -1.60 
-       9 local_getis_ord_g standard       0.964
-      10 local_getis_ord_g standard      -2.71 
-      # ... with 160 more rows
 
 ---
 
@@ -86,7 +66,7 @@
 ---
 
     Code
-      (vec_local_i_p <- ww_local_getis_ord_pvalue_vec(guerry_modeled$Crm_prs,
+      (vec_local_i_p <- ww_local_getis_ord_g_pvalue_vec(guerry_modeled$Crm_prs,
       guerry_modeled$predictions, weights))
     Output
        [1] 0.338551650 0.017476897 0.046989319 0.136306243 0.252759855 0.094280941
@@ -104,4 +84,94 @@
       [73] 0.718377209 0.944328466 0.556059177 0.167383256 0.060941608 0.081390165
       [79] 0.130453836 0.012380565 0.707571437 0.277582701 0.190935930 0.922672415
       [85] 0.296789212
+
+---
+
+    Code
+      df_local_i <- ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions,
+        weights)
+      df_local_i[1:3]
+    Output
+      # A tibble: 85 x 3
+         .metric               .estimator .estimate
+         <chr>                 <chr>          <dbl>
+       1 local_getis_ord_gstar standard       1.35 
+       2 local_getis_ord_gstar standard       2.64 
+       3 local_getis_ord_gstar standard       2.33 
+       4 local_getis_ord_gstar standard      -1.84 
+       5 local_getis_ord_gstar standard      -1.19 
+       6 local_getis_ord_gstar standard      -2.06 
+       7 local_getis_ord_gstar standard       1.58 
+       8 local_getis_ord_gstar standard      -2.32 
+       9 local_getis_ord_gstar standard       0.880
+      10 local_getis_ord_gstar standard      -2.74 
+      # ... with 75 more rows
+
+---
+
+    Code
+      df_local_i_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, Crm_prs,
+        predictions, weights)
+      df_local_i_p[1:3]
+    Output
+      # A tibble: 85 x 3
+         .metric                      .estimator .estimate
+         <chr>                        <chr>          <dbl>
+       1 local_getis_ord_gstar_pvalue standard     0.156  
+       2 local_getis_ord_gstar_pvalue standard     0.0116 
+       3 local_getis_ord_gstar_pvalue standard     0.0344 
+       4 local_getis_ord_gstar_pvalue standard     0.0673 
+       5 local_getis_ord_gstar_pvalue standard     0.237  
+       6 local_getis_ord_gstar_pvalue standard     0.0381 
+       7 local_getis_ord_gstar_pvalue standard     0.111  
+       8 local_getis_ord_gstar_pvalue standard     0.0150 
+       9 local_getis_ord_gstar_pvalue standard     0.358  
+      10 local_getis_ord_gstar_pvalue standard     0.00806
+      # ... with 75 more rows
+
+---
+
+    Code
+      (vec_local_i <- ww_local_getis_ord_g_vec(guerry_modeled$Crm_prs, guerry_modeled$
+        predictions, weights))
+    Output
+       [1]  1.35371776  2.64470358  2.33101218 -1.83696218 -1.19214894 -2.06145107
+       [7]  1.58230958 -2.31764702  0.88028873 -2.74035690 -3.39292895 -1.87812026
+      [13]  0.85856419 -2.81583254 -0.31227470  0.49524512  2.24081985 -0.51676147
+      [19]  2.00481255  1.63825389  1.39112875 -0.55103244  0.08003347 -1.97182396
+      [25]  0.11106013  0.56430623  1.71460247 -3.33281642 -2.22026799 -0.98578659
+      [31]  0.30960568 -2.34956428  2.25994512  1.20029086  1.79507717 -0.29168508
+      [37]  1.78306056  0.01327693  1.48600121  0.13091399 -1.40966303  0.93339994
+      [43]  0.02027691 -1.82812173 -0.79364697 -2.75575017  1.26343283  1.74008875
+      [49]  1.69116164  1.14388681  3.09199200 -0.26702307  1.66914599  1.42530173
+      [55] -0.65613591  1.62256416  2.11228076  0.90733590  1.93759338  1.91124325
+      [61]  0.92968354 -1.01687632 -0.94802983 -2.54791742 -1.35286802 -1.66942606
+      [67]  1.40993406  1.10799183  2.75546130  2.26572376 -0.86272825  1.07976560
+      [73] -0.21434998 -0.43824366  0.43342398  2.13948993 -2.14931849 -2.06450852
+      [79] -1.88711642 -2.74970443  0.42882579  0.82915623  1.17030359  0.01011938
+      [85]  0.90033560
+
+---
+
+    Code
+      (vec_local_i_p <- ww_local_getis_ord_g_pvalue_vec(guerry_modeled$Crm_prs,
+      guerry_modeled$predictions, weights))
+    Output
+       [1] 0.1556270646 0.0116447985 0.0343579054 0.0672754947 0.2371234223
+       [6] 0.0381479713 0.1108946596 0.0149709233 0.3578951630 0.0080552150
+      [11] 0.0007852371 0.0632757613 0.4155364917 0.0018566935 0.7748476149
+      [16] 0.6703539478 0.0383894035 0.6078981653 0.0510351305 0.0908735217
+      [21] 0.1605734984 0.6215092414 0.9515965060 0.0611221274 0.9740911085
+      [26] 0.5902312324 0.0632866881 0.0010014584 0.0232834875 0.3722611128
+      [31] 0.7079512526 0.0160720461 0.0333995324 0.2343415826 0.0920927654
+      [36] 0.7876002799 0.0744825253 0.9279237088 0.1415173480 0.9105761435
+      [41] 0.2014059458 0.3790312576 0.9827714916 0.0610703741 0.4812254025
+      [46] 0.0038315923 0.2254361953 0.0702185668 0.1167672206 0.2575250718
+      [51] 0.0025167455 0.8330098136 0.1081071310 0.1524809981 0.4978473731
+      [56] 0.1345782976 0.0448982231 0.3929008371 0.0554530884 0.0629719885
+      [61] 0.3952931115 0.2720290994 0.3470507086 0.0131916927 0.2057211749
+      [66] 0.0964464799 0.1585356769 0.2943535581 0.0110636471 0.0169802716
+      [71] 0.3753718675 0.2844121482 0.8707429756 0.6780737931 0.6536939343
+      [76] 0.0321287255 0.0348083487 0.0369507015 0.0469535215 0.0070540349
+      [81] 0.7239024648 0.3958549621 0.2822598709 0.9346564649 0.4346557937
 

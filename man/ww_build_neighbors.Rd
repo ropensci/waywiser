@@ -33,7 +33,8 @@ For more information about error calls, see \ifelse{html}{\link[rlang:topic-erro
 An object of class "nb".
 }
 \description{
-Make 'nb' objects from sf objects
+These functions can be used for geographic or projected coordinate reference
+systems and expect 2D data.
 }
 \details{
 When \code{nb = NULL}, the method used to create neighbors from \code{data} is
@@ -48,4 +49,8 @@ using \code{\link[=ww_make_polygon_neighbors]{ww_make_polygon_neighbors()}}.
 \item If \code{nb = NULL} and \code{data} is any other geometry type, the "nb" object will
 be created using the centroids of the data as points, with a warning.
 }
+}
+\examples{
+ww_build_neighbors(guerry)
+
 }

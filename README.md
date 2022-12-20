@@ -6,20 +6,29 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/mikemahoney218/waywiser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mikemahoney218/waywiser/actions/workflows/R-CMD-check.yaml)
+[![License:
+MIT](https://img.shields.io/badge/license-MIT-green)](https://choosealicense.com/licenses/mit/)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-![CRAN status](https://www.r-pkg.org/badges/version/waywiser) [![Codecov
-test
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Codecov test
 coverage](https://codecov.io/gh/mikemahoney218/waywiser/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mikemahoney218/waywiser?branch=main)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/waywiser)](https://CRAN.R-project.org/package=waywiser)
 <!-- badges: end -->
 
 “Waywiser” is an old-timey name for a [surveyor’s
 wheel](https://en.wikipedia.org/wiki/Surveyor%27s_wheel), a device that
 makes measuring long distances easier than with measurement tools like a
 ruler or yardstick. The waywiser R package makes it easier to measure
-the performance of models fit to spatial data by providing ergonomic
-tools to assess the spatial dependence of model residuals, to assess
-model predictions across multiple scales, and to calculate the area of
+the performance of models fit to 2D spatial data by implementing a
+number of well-established assessment methods in a consistent, ergonomic
+toolbox; features include new
+[yardstick](https://yardstick.tidymodels.org/) metrics for measuring
+agreement and spatial autocorrelation, functions to assess model
+predictions across multiple scales, and methods to calculate the area of
 applicability of a model.
 
 ## Installation
@@ -35,7 +44,7 @@ You can install the development version of waywiser from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mikemahoney218/waywiser")
+remotes::install_github("mikemahoney218/waywiser")
 ```
 
 ## Example
@@ -99,19 +108,19 @@ guerry_predicted <- guerry
 guerry_predicted$predictions <- predict(crime_model, guerry)
 
 ww_local_moran_i(guerry_predicted, Crm_prs, predictions)
-#> # A tibble: 85 × 4
-#>    .metric       .estimator .estimate                                   geometry
-#>    <chr>         <chr>          <dbl>                         <MULTIPOLYGON [m]>
-#>  1 local_moran_i standard      0.548  (((381847 1762775, 381116 1763059, 379972…
-#>  2 local_moran_i standard      0.943  (((381847 1762775, 381116 1763059, 379972…
-#>  3 local_moran_i standard      0.636  (((381847 1762775, 381116 1763059, 379972…
-#>  4 local_moran_i standard      0.700  (((381847 1762775, 381116 1763059, 379972…
-#>  5 local_moran_i standard      0.137  (((381847 1762775, 381116 1763059, 379972…
-#>  6 local_moran_i standard      0.917  (((381847 1762775, 381116 1763059, 379972…
-#>  7 local_moran_i standard      0.900  (((381847 1762775, 381116 1763059, 379972…
-#>  8 local_moran_i standard      1.79   (((381847 1762775, 381116 1763059, 379972…
-#>  9 local_moran_i standard      0.0208 (((381847 1762775, 381116 1763059, 379972…
-#> 10 local_moran_i standard      0.750  (((381847 1762775, 381116 1763059, 379972…
+#> # A tibble: 85 × 3
+#>    .metric       .estimator .estimate
+#>    <chr>         <chr>          <dbl>
+#>  1 local_moran_i standard      0.548 
+#>  2 local_moran_i standard      0.943 
+#>  3 local_moran_i standard      0.636 
+#>  4 local_moran_i standard      0.700 
+#>  5 local_moran_i standard      0.137 
+#>  6 local_moran_i standard      0.917 
+#>  7 local_moran_i standard      0.900 
+#>  8 local_moran_i standard      1.79  
+#>  9 local_moran_i standard      0.0208
+#> 10 local_moran_i standard      0.750 
 #> # … with 75 more rows
 ```
 
@@ -130,6 +139,7 @@ crime_model_aoa <- ww_area_of_applicability(
   guerry_test,
   importance = vip::vi_model(crime_model)
 )
+#> Warning: The AOA threshold was 0, which is usually unexpected.
 
 guerry_aoa <- cbind(
   guerry,
@@ -144,6 +154,30 @@ plot(guerry_aoa["aoa"])
 We can see that two areas are outside our model’s area of applicability,
 meaning that we probably can’t trust our model when extrapolating into
 those regions!
+
+For more information, check out [the documentation
+website!](https://mikemahoney218.github.io/waywiser/)
+
+## Citing waywiser
+
+To cite waywiser in publications please use:
+
+> Mahoney, M. J. (2022). waywiser: Ergonomic Methods for Assessing
+> Spatial Models. R package version 0.2.0,
+> <https://CRAN.R-project.org/package=waywiser>.
+
+A BibTeX entry for LaTeX users is
+
+``` bibtex
+
+  @Manual{,
+    title = {{waywiser}: Ergonomic Methods for Assessing Spatial Models},
+    author = {Michael Mahoney},
+    year = 2022,
+    note = {R package version 0.2.0},
+    url = {https://CRAN.R-project.org/package=waywiser},
+  }
+```
 
 ## Contributing
 

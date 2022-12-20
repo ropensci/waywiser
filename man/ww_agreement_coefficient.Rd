@@ -22,49 +22,71 @@
 \alias{ww_systematic_rmpd}
 \alias{ww_systematic_rmpd.data.frame}
 \alias{ww_systematic_rmpd_vec}
-\title{Agreement coefficient}
+\title{Agreement coefficients and related methods}
 \usage{
 ww_agreement_coefficient(data, ...)
 
-\method{ww_agreement_coefficient}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+\method{ww_agreement_coefficient}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
 
-ww_agreement_coefficient_vec(truth, estimate, na_rm = TRUE, ...)
+ww_agreement_coefficient_vec(truth, estimate, na_action = na.fail, ...)
 
 ww_systematic_agreement_coefficient(data, ...)
 
-\method{ww_systematic_agreement_coefficient}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+\method{ww_systematic_agreement_coefficient}{data.frame}(
+  data,
+  truth,
+  estimate,
+  na_action = na.fail,
+  ...
+)
 
-ww_systematic_agreement_coefficient_vec(truth, estimate, na_rm = TRUE, ...)
+ww_systematic_agreement_coefficient_vec(
+  truth,
+  estimate,
+  na_action = na.fail,
+  ...
+)
 
 ww_unsystematic_agreement_coefficient(data, ...)
 
-\method{ww_unsystematic_agreement_coefficient}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+\method{ww_unsystematic_agreement_coefficient}{data.frame}(
+  data,
+  truth,
+  estimate,
+  na_action = na.fail,
+  ...
+)
 
-ww_unsystematic_agreement_coefficient_vec(truth, estimate, na_rm = TRUE, ...)
+ww_unsystematic_agreement_coefficient_vec(
+  truth,
+  estimate,
+  na_action = na.fail,
+  ...
+)
 
 ww_unsystematic_mpd(data, ...)
 
-\method{ww_unsystematic_mpd}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+\method{ww_unsystematic_mpd}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
 
-ww_unsystematic_mpd_vec(truth, estimate, na_rm = TRUE, ...)
+ww_unsystematic_mpd_vec(truth, estimate, na_action = na.fail, ...)
 
 ww_systematic_mpd(data, ...)
 
-\method{ww_systematic_mpd}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+\method{ww_systematic_mpd}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
 
-ww_systematic_mpd_vec(truth, estimate, na_rm = TRUE, ...)
+ww_systematic_mpd_vec(truth, estimate, na_action = na.fail, ...)
 
 ww_unsystematic_rmpd(data, ...)
 
-\method{ww_unsystematic_rmpd}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+\method{ww_unsystematic_rmpd}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
 
-ww_unsystematic_rmpd_vec(truth, estimate, na_rm = TRUE, ...)
+ww_unsystematic_rmpd_vec(truth, estimate, na_action = na.fail, ...)
 
 ww_systematic_rmpd(data, ...)
 
-\method{ww_systematic_rmpd}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+\method{ww_systematic_rmpd}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
 
-ww_systematic_rmpd_vec(truth, estimate, na_rm = TRUE, ...)
+ww_systematic_rmpd_vec(truth, estimate, na_action = na.fail, ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
@@ -83,26 +105,33 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{na_rm}{A \code{logical} value indicating whether \code{NA}
-values should be stripped before the computation proceeds.}
+\item{na_action}{A function which indicates what should happen when the data
+contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
+or any of the functions from the "zoo"
+package. This function ignores the value of \code{options("na.action")} in order
+to make cross-computer (and cross-session) results more stable. This argument
+must be of length 1; you cannot pass multiple functions to \code{na_action}.}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
+A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
 For \verb{_vec()} functions, a single value (or NA).
 }
 \description{
-These functions calculate the agreement coefficient and related measures from
-Ji and Gallo (2006). Agreement coefficients provides a useful measurement of
-agreement between two data sets which is bounded, symmetrical, and can be
-decomposed into systematic and unsystematic components;
+These functions calculate the agreement coefficient and mean product
+difference (MPD), as well as their systematic and unsystematic components,
+from Ji and Gallo (2006). Agreement coefficients provides a useful
+measurement of agreement between two data sets which is bounded, symmetrical,
+and can be decomposed into systematic and unsystematic components;
 however, it assumes a linear relationship between the two data sets and
 treats both "truth" and "estimate" as being of equal quality, and as such may
 not be a useful metric in all scenarios.
 }
 \details{
 Agreement coefficient values range from 0 to 1, with 1 indicating perfect
-agreement.
+agreement. \code{truth} and \code{estimate} must be the same length. This function is
+not explicitly spatial and as such can be applied to data with any number of
+dimensions and any coordinate reference system.
 }
 \examples{
 # Calculated values match Ji and Gallo 2006:
@@ -126,5 +155,14 @@ doi: 10.14358/PERS.72.7.823.
 \seealso{
 Other agreement metrics: 
 \code{\link{ww_willmott_d}()}
+
+Other yardstick metrics: 
+\code{\link{ww_global_geary_c}()},
+\code{\link{ww_global_moran_i}()},
+\code{\link{ww_local_geary_c}()},
+\code{\link{ww_local_getis_ord_g}()},
+\code{\link{ww_local_moran_i}()},
+\code{\link{ww_willmott_d}()}
 }
 \concept{agreement metrics}
+\concept{yardstick metrics}

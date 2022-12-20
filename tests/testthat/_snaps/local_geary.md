@@ -43,27 +43,6 @@
 ---
 
     Code
-      df_local_c_both <- ww_local_geary(guerry_modeled, Crm_prs, predictions)
-      df_local_c_both[1:3]
-    Output
-      # A tibble: 170 x 3
-         .metric       .estimator .estimate
-         <chr>         <chr>          <dbl>
-       1 local_geary_c standard       0.981
-       2 local_geary_c standard       0.836
-       3 local_geary_c standard       0.707
-       4 local_geary_c standard       0.108
-       5 local_geary_c standard       0.264
-       6 local_geary_c standard       1.36 
-       7 local_geary_c standard       3.64 
-       8 local_geary_c standard       1.57 
-       9 local_geary_c standard       0.867
-      10 local_geary_c standard       0.737
-      # ... with 160 more rows
-
----
-
-    Code
       (vec_local_c <- ww_local_geary_c_vec(guerry_modeled$Crm_prs, guerry_modeled$
         predictions, weights))
     Output

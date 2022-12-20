@@ -5,41 +5,23 @@
 \alias{ww_local_geary_c_vec}
 \alias{ww_local_geary_pvalue}
 \alias{ww_local_geary_pvalue_vec}
-\alias{ww_local_geary}
 \title{Local Geary's C statistic}
 \usage{
 ww_local_geary_c(data, ...)
 
-ww_local_geary_c_vec(truth, estimate, wt, na_rm = TRUE, ...)
+ww_local_geary_c_vec(truth, estimate, wt, na_action = na.fail, ...)
 
 ww_local_geary_pvalue(data, ...)
 
-ww_local_geary_pvalue_vec(
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "two.sided",
-  nsim = 499,
-  na_rm = TRUE,
-  ...
-)
-
-ww_local_geary(
-  data,
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "two.sided",
-  nsim = 499,
-  na_rm = TRUE,
-  ...
-)
+ww_local_geary_pvalue_vec(truth, estimate, wt = NULL, na_action = na.fail, ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
 and \code{estimate} arguments.}
 
-\item{...}{Additional arguments passed to \code{\link[spdep:localC]{spdep::localC_perm()}}.}
+\item{...}{Additional arguments passed to \code{\link[spdep:localC]{spdep::localC()}} (for
+\code{ww_local_geary_c()}) or \code{\link[spdep:localC]{spdep::localC_perm()}} (for
+\code{ww_local_geary_pvalue()}).}
 
 \item{truth}{The column identifier for the true results
 (that is \code{numeric}). This should be an unquoted column name although
@@ -52,34 +34,53 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{wt}{A "listw" object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.}
+\item{wt}{A \code{listw} object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.
+For data.frame input, may also be a function that takes \code{data} and returns a
+\code{listw} object.}
 
-\item{na_rm}{A \code{logical} value indicating whether \code{NA}
-values should be stripped before the computation proceeds.}
-
-\item{alternative}{A character defining the alternative hypothesis. Must be one of \code{"two.sided"}, \code{"less"} or \code{"greater"}.}
-
-\item{nsim}{The number of simulations to be used for permutation test.}
+\item{na_action}{A function which indicates what should happen when the data
+contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
+or any of the functions from the "zoo"
+package. This function ignores the value of \code{options("na.action")} in order
+to make cross-computer (and cross-session) results more stable. This argument
+must be of length 1; you cannot pass multiple functions to \code{na_action}.}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
-For grouped data frames, the number of rows returned will be the same as the number of groups.
+A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)}
+rows of values.
 For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
 }
 \description{
 Calculate the local Geary's C statistic for model residuals.
 \code{ww_local_geary_c()} returns the statistic itself, while
 \code{ww_local_geary_pvalue()} returns the associated p value.
-\code{ww_local_geary()} returns both.
+}
+\details{
+These functions can be used for geographic or projected coordinate reference
+systems and expect 2D data.
 }
 \examples{
-
-
-
 guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
 guerry$predictions <- predict(guerry_lm, guerry)
 
 ww_local_geary_c(guerry, Crm_prs, predictions)
-ww_local_geary(guerry, Crm_prs, predictions)
+ww_local_geary_pvalue(guerry, Crm_prs, predictions)
 
 }
+\seealso{
+Other autocorrelation metrics: 
+\code{\link{ww_global_geary_c}()},
+\code{\link{ww_global_moran_i}()},
+\code{\link{ww_local_getis_ord_g}()},
+\code{\link{ww_local_moran_i}()}
+
+Other yardstick metrics: 
+\code{\link{ww_agreement_coefficient}()},
+\code{\link{ww_global_geary_c}()},
+\code{\link{ww_global_moran_i}()},
+\code{\link{ww_local_getis_ord_g}()},
+\code{\link{ww_local_moran_i}()},
+\code{\link{ww_willmott_d}()}
+}
+\concept{autocorrelation metrics}
+\concept{yardstick metrics}

@@ -17,13 +17,17 @@ Description: Assessing predictive models of spatial data can be challenging,
     data. Methods are provided for assessing models fit to spatial data, 
     including approaches for measuring the spatial structure of model errors,
     assessing model predictions at multiple spatial scales, and evaluating where 
-    predictions can be made safely. Methods areparticularly useful for models 
+    predictions can be made safely. Methods are particularly useful for models 
     fit using the 'tidymodels' framework. Methods include Moran's I
     ('Moran' (1950) <doi:10.2307/2332142>), Geary's C 
     ('Geary' (1954) <doi:10.2307/2986645>), Getis-Ord's G
     ('Ord' and 'Getis' (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>),
-    an implementation of the area of applicability methodology from 'Meyer' and 
-    'Pebesma' (2021) (<doi:10.1111/2041-210X.13650>), and an implementation of
+    agreement coefficients from Ji and Gallo (2006) 
+    (<doi: 10.14358/PERS.72.7.823>), agreement metrics from Willmott (1981)
+    (<doi: 10.1080/02723646.1981.10642213>) and Willmott et al. (2012)
+    (<doi: 10.1002/joc.2419), an implementation of the area of applicability 
+    methodology from 'Meyer' and 'Pebesma' (2021) 
+    (<doi:10.1111/2041-210X.13650>), and an implementation of
     multi-scale assessment as described in 'Riemann' et al. (2010)
     (<doi:10.1016/j.rse.2010.05.010>).
 License: MIT + file LICENSE
@@ -42,13 +46,16 @@ Imports:
     purrr,
     rlang,
     rsample,
-    sf,
-    spdep,
+    sf (>= 1.0-0),
+    spdep (>= 1.1-9),
     stats,
     tibble,
+    tidyselect,
     yardstick
 Suggests: 
     applicable,
+    caret,
+    CAST,
     covr,
     ggplot2,
     knitr,
@@ -61,12 +68,14 @@ Suggests:
     tidymodels,
     tidyr,
     tigris,
-    vip
+    vip,
+    whisker,
+    withr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8
 LazyData: true
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "srr::srr_stats_roclet"))
+RoxygenNote: 7.2.3
 Language: en-US
 VignetteBuilder: knitr

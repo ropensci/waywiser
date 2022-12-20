@@ -5,40 +5,15 @@
 \alias{ww_local_moran_i_vec}
 \alias{ww_local_moran_pvalue}
 \alias{ww_local_moran_pvalue_vec}
-\alias{ww_local_moran}
 \title{Local Moran's I statistic}
 \usage{
 ww_local_moran_i(data, ...)
 
-ww_local_moran_i_vec(
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "two.sided",
-  na_rm = TRUE,
-  ...
-)
+ww_local_moran_i_vec(truth, estimate, wt, na_action = na.fail, ...)
 
 ww_local_moran_pvalue(data, ...)
 
-ww_local_moran_pvalue_vec(
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "two.sided",
-  na_rm = TRUE,
-  ...
-)
-
-ww_local_moran(
-  data,
-  truth,
-  estimate,
-  wt = NULL,
-  alternative = "two.sided",
-  na_rm = TRUE,
-  ...
-)
+ww_local_moran_pvalue_vec(truth, estimate, wt = NULL, na_action = na.fail, ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
@@ -57,32 +32,53 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{wt}{A "listw" object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.}
+\item{wt}{A \code{listw} object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.
+For data.frame input, may also be a function that takes \code{data} and returns a
+\code{listw} object.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of greater, less or two.sided (default).}
-
-\item{na_rm}{A \code{logical} value indicating whether \code{NA}
-values should be stripped before the computation proceeds.}
+\item{na_action}{A function which indicates what should happen when the data
+contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
+or any of the functions from the "zoo"
+package. This function ignores the value of \code{options("na.action")} in order
+to make cross-computer (and cross-session) results more stable. This argument
+must be of length 1; you cannot pass multiple functions to \code{na_action}.}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)} rows of values.
-For grouped data frames, the number of rows returned will be the same as the number of groups.
+A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)}
+rows of values.
 For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
 }
 \description{
 Calculate the local Moran's I statistic for model residuals.
 \code{ww_local_moran_i()} returns the statistic itself, while
 \code{ww_local_moran_pvalue()} returns the associated p value.
-\code{ww_local_moran()} returns both.
+}
+\details{
+These functions can be used for geographic or projected coordinate reference
+systems and expect 2D data.
 }
 \examples{
-
-
-
 guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
 guerry$predictions <- predict(guerry_lm, guerry)
 
 ww_local_moran_i(guerry, Crm_prs, predictions)
-ww_local_moran(guerry, Crm_prs, predictions)
+ww_local_moran_pvalue(guerry, Crm_prs, predictions)
 
 }
+\seealso{
+Other autocorrelation metrics: 
+\code{\link{ww_global_geary_c}()},
+\code{\link{ww_global_moran_i}()},
+\code{\link{ww_local_geary_c}()},
+\code{\link{ww_local_getis_ord_g}()}
+
+Other yardstick metrics: 
+\code{\link{ww_agreement_coefficient}()},
+\code{\link{ww_global_geary_c}()},
+\code{\link{ww_global_moran_i}()},
+\code{\link{ww_local_geary_c}()},
+\code{\link{ww_local_getis_ord_g}()},
+\code{\link{ww_willmott_d}()}
+}
+\concept{autocorrelation metrics}
+\concept{yardstick metrics}

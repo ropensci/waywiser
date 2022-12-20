@@ -23,18 +23,6 @@
 ---
 
     Code
-      df_global_c_both <- ww_global_geary(guerry_modeled, Crm_prs, predictions)
-      df_global_c_both[1:3]
-    Output
-      # A tibble: 2 x 3
-        .metric             .estimator .estimate
-        <chr>               <chr>          <dbl>
-      1 global_geary_c      standard    5.65e- 1
-      2 global_geary_pvalue standard    7.55e-10
-
----
-
-    Code
       (vec_global_c <- ww_global_geary_c_vec(guerry_modeled$Crm_prs, guerry_modeled$
         predictions, weights))
     Output

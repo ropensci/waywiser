@@ -5,6 +5,8 @@
 #'
 #' Sf object, units in m. EPSG 27572: NTF (Paris) / Lambert zone II.
 #'
+#' @srrstats {G5.0} Standard data set with known properties.
+#'
 #' @format An sf data frame with 85 rows, 23 variables, and a geometry column:
 #' \describe{
 #' \item{	dept	}{	Department ID: Standard numbers for the departments 	}
@@ -53,6 +55,8 @@
 #' The original data is derived from the Forest Inventory and Analysis program,
 #' implemented by the US Department of Agriculture's Forest Service.
 #'
+#' @srrstats {G5.1} Data used to test the package is exported.
+#'
 #' @format An sf object using EPSG 5070: NAD83 / Conus Albers (in meters), with 5,303 rows and 5 columns:
 #' \describe{
 #' \item{yr}{The year measurements were taken.}
@@ -65,3 +69,24 @@
 #' @source
 #' Tidymodels team, "Multi-scale Assessment". Retrieved 30 November 2022. Available at \url{https://www.tidymodels.org/learn/work/multi-scale/}
 "ny_trees"
+
+#' Simulated data based on WorldClim Bioclimatic variables
+#'
+#' This data is adapted from the CAST vignette
+#' `vignette("cast02-AOA-tutorial", package = "CAST")`.
+#' The original data is derived from the Worldclim global climate variables/
+#'
+#' @srrstats {G5.1} Data used to test the package is exported.
+#'
+#' @format An sf object with 10,000 rows and 6 columns:
+#' \describe{
+#' \item{bio2}{Mean Diurnal Range (Mean of monthly (max temp - min temp))}
+#' \item{bio10}{Mean Temperature of Warmest Quarter}
+#' \item{bio13}{Precipitation of Wettest Month}
+#' \item{bio19}{Precipitation of Coldest Quarter}
+#' \item{geometry}{The location of the sampled point.}
+#' \item{response}{A virtual species distribution, generated using the `generateSpFromPCA()` function from the `virtualspecies` package.}
+#' }
+#'
+#' @source \url{https://www.worldclim.org}
+"worldclim_simulation"

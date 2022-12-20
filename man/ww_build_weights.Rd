@@ -23,5 +23,10 @@ weights will be constructed via \code{\link[spdep:nb2listw]{spdep::nb2listw()}}.
 A \code{listw} object.
 }
 \description{
-Build "listw" objects of spatial weights
+These functions can be used for geographic or projected coordinate reference
+systems and expect 2D data.
+}
+\examples{
+ww_build_weights(guerry)
+
 }

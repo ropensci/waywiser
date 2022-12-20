@@ -1,25 +1,51 @@
-#' Agreement coefficient
+#' Agreement coefficients and related methods
 #'
-#' These functions calculate the agreement coefficient and related measures from
-#' Ji and Gallo (2006). Agreement coefficients provides a useful measurement of
-#' agreement between two data sets which is bounded, symmetrical, and can be
-#' decomposed into systematic and unsystematic components;
+#' These functions calculate the agreement coefficient and mean product
+#' difference (MPD), as well as their systematic and unsystematic components,
+#' from Ji and Gallo (2006). Agreement coefficients provides a useful
+#' measurement of agreement between two data sets which is bounded, symmetrical,
+#' and can be decomposed into systematic and unsystematic components;
 #' however, it assumes a linear relationship between the two data sets and
 #' treats both "truth" and "estimate" as being of equal quality, and as such may
 #' not be a useful metric in all scenarios.
 #'
 #' Agreement coefficient values range from 0 to 1, with 1 indicating perfect
-#' agreement.
+#' agreement. `truth` and `estimate` must be the same length. This function is
+#' not explicitly spatial and as such can be applied to data with any number of
+#' dimensions and any coordinate reference system.
 #'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
+#'
+#' @srrstats {G1.4} roxygen2 documentation
+#' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
+#' @srrstats {G2.8} Method dispatch enforces data.frame inputs
+#' @srrstats {G2.10} Column extraction is properly handled within yardstick.
+#' @srrstats {G2.14} Any function may be passed to na_action
+#' @srrstats {G2.14a} Any function may be passed to na_action
+#' @srrstats {G2.14b} Any function may be passed to na_action
+#' @srrstats {G2.14c} Any function may be passed to na_action
+#' @srrstats {G2.15} Any function may be passed to na_action
+#' @srrstats {G2.16} Any function may be passed to na_action
+#'
+#' @srrstats {SP2.6} Input type requirements are documented.
 #' @inheritParams yardstick::rmse
+#' @inheritParams ww_area_of_applicability
+#'
+#' @srrstats {SP4.0} Return values are of the same class as inputs
+#' @srrstats {SP4.0a} Return values are of the same class as inputs
+#' @srrstats {SP4.2} Returns are explicitly documented
 #'
 #' @return
-#' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
+#' A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For `_vec()` functions, a single value (or NA).
 #'
 #' @family agreement metrics
+#' @family yardstick metrics
 #'
+#' @srrstats {G5.1} Testing data is below.
+#' @srrstats {G5.4c} Testing data is from the original paper.
 #' @examples
 #' # Calculated values match Ji and Gallo 2006:
 #' x <- c(6, 8, 9, 10, 11, 14)
@@ -33,6 +59,7 @@
 #' ww_systematic_rmpd_vec(x, y)
 #' ww_unsystematic_rmpd_vec(x, y)
 #'
+#' @srrstats {G1.0} Reference for these methods:
 #' @references
 #' Ji, L. and Gallo, K. 2006. "An Agreement Coefficient for Image Comparison."
 #' Photogrammetric Engineering & Remote Sensing 72(7), pp 823–833,
@@ -50,16 +77,15 @@ ww_agreement_coefficient <- new_numeric_metric(ww_agreement_coefficient, directi
 ww_agreement_coefficient.data.frame <- function(data,
                                                 truth,
                                                 estimate,
-                                                na_rm = TRUE,
+                                                na_action = na.fail,
                                                 ...) {
-  metric_summarizer(
-    metric_nm = "agreement_coefficient",
-    metric_fn = ww_agreement_coefficient_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "agreement_coefficient",
+    ...
   )
 }
 
@@ -67,24 +93,20 @@ ww_agreement_coefficient.data.frame <- function(data,
 #' @export
 ww_agreement_coefficient_vec <- function(truth,
                                          estimate,
-                                         na_rm = TRUE,
+                                         na_action = na.fail,
                                          ...) {
 
   ww_agreement_coefficient_impl <- function(truth, estimate, ...) {
-
-
     est_SSD <- calc_ssd(truth, estimate)
     est_SPOD <- calc_spod(truth, estimate)
-
     1 - est_SSD / est_SPOD
   }
 
-  metric_vec_template(
-    metric_impl = ww_agreement_coefficient_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_agreement_coefficient_impl,
     ...
   )
 }
@@ -102,16 +124,15 @@ ww_systematic_agreement_coefficient <- new_numeric_metric(ww_systematic_agreemen
 ww_systematic_agreement_coefficient.data.frame <- function(data,
                                                            truth,
                                                            estimate,
-                                                           na_rm = TRUE,
+                                                           na_action = na.fail,
                                                            ...) {
-  metric_summarizer(
-    metric_nm = "systematic_agreement_coefficient",
-    metric_fn = ww_systematic_agreement_coefficient_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "systematic_agreement_coefficient",
+    ...
   )
 }
 
@@ -119,19 +140,18 @@ ww_systematic_agreement_coefficient.data.frame <- function(data,
 #' @export
 ww_systematic_agreement_coefficient_vec <- function(truth,
                                                     estimate,
-                                                    na_rm = TRUE,
+                                                    na_action = na.fail,
                                                     ...) {
 
   ww_systematic_agreement_coefficient_impl <- function(truth, estimate, ...) {
     1 - (calc_spds(truth, estimate) / calc_spod(truth, estimate))
   }
 
-  metric_vec_template(
-    metric_impl = ww_systematic_agreement_coefficient_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_systematic_agreement_coefficient_impl,
     ...
   )
 }
@@ -149,16 +169,15 @@ ww_unsystematic_agreement_coefficient <- new_numeric_metric(ww_unsystematic_agre
 ww_unsystematic_agreement_coefficient.data.frame <- function(data,
                                                              truth,
                                                              estimate,
-                                                             na_rm = TRUE,
+                                                             na_action = na.fail,
                                                              ...) {
-  metric_summarizer(
-    metric_nm = "unsystematic_agreement_coefficient",
-    metric_fn = ww_unsystematic_agreement_coefficient_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "unsystematic_agreement_coefficient",
+    ...
   )
 }
 
@@ -166,19 +185,18 @@ ww_unsystematic_agreement_coefficient.data.frame <- function(data,
 #' @export
 ww_unsystematic_agreement_coefficient_vec <- function(truth,
                                                       estimate,
-                                                      na_rm = TRUE,
+                                                      na_action = na.fail,
                                                       ...) {
 
   ww_unsystematic_agreement_coefficient_impl <- function(truth, estimate, ...) {
     1 - (calc_spdu(truth, estimate) / calc_spod(truth, estimate))
   }
 
-  metric_vec_template(
-    metric_impl = ww_unsystematic_agreement_coefficient_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_unsystematic_agreement_coefficient_impl,
     ...
   )
 }
@@ -196,16 +214,15 @@ ww_unsystematic_mpd <- new_numeric_metric(ww_unsystematic_mpd, direction = "maxi
 ww_unsystematic_mpd.data.frame <- function(data,
                                            truth,
                                            estimate,
-                                           na_rm = TRUE,
+                                           na_action = na.fail,
                                            ...) {
-  metric_summarizer(
-    metric_nm = "unsystematic_mpd",
-    metric_fn = ww_unsystematic_mpd_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "unsystematic_mpd",
+    ...
   )
 }
 
@@ -213,14 +230,13 @@ ww_unsystematic_mpd.data.frame <- function(data,
 #' @export
 ww_unsystematic_mpd_vec <- function(truth,
                                     estimate,
-                                    na_rm = TRUE,
+                                    na_action = na.fail,
                                     ...) {
-  metric_vec_template(
-    metric_impl = ww_unsystematic_mpd_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_unsystematic_mpd_impl,
     ...
   )
 }
@@ -242,16 +258,15 @@ ww_systematic_mpd <- new_numeric_metric(ww_systematic_mpd, direction = "maximize
 ww_systematic_mpd.data.frame <- function(data,
                                          truth,
                                          estimate,
-                                         na_rm = TRUE,
+                                         na_action = na.fail,
                                          ...) {
-  metric_summarizer(
-    metric_nm = "systematic_mpd",
-    metric_fn = ww_systematic_mpd_vec,
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "systematic_mpd",
+    ...
   )
 }
 
@@ -259,14 +274,13 @@ ww_systematic_mpd.data.frame <- function(data,
 #' @export
 ww_systematic_mpd_vec <- function(truth,
                                   estimate,
-                                  na_rm = TRUE,
+                                  na_action = na.fail,
                                   ...) {
-  metric_vec_template(
-    metric_impl = ww_systematic_mpd_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_systematic_mpd_impl,
     ...
   )
 }
@@ -286,38 +300,36 @@ ww_unsystematic_rmpd <- new_numeric_metric(ww_unsystematic_rmpd, direction = "ma
 #' @rdname ww_agreement_coefficient
 #' @export
 ww_unsystematic_rmpd.data.frame <- function(data,
-                                           truth,
-                                           estimate,
-                                           na_rm = TRUE,
-                                           ...) {
-  metric_summarizer(
-    metric_nm = "unsystematic_rmpd",
-    metric_fn = ww_unsystematic_rmpd_vec,
+                                            truth,
+                                            estimate,
+                                            na_action = na.fail,
+                                            ...) {
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "unsystematic_rmpd",
+    ...
   )
 }
 
 #' @rdname ww_agreement_coefficient
 #' @export
 ww_unsystematic_rmpd_vec <- function(truth,
-                                    estimate,
-                                    na_rm = TRUE,
-                                    ...) {
+                                     estimate,
+                                     na_action = na.fail,
+                                     ...) {
 
   ww_unsystematic_rmpd_impl <- function(truth, estimate, ...) {
     sqrt(ww_unsystematic_mpd_impl(truth, estimate, ...))
   }
 
-  metric_vec_template(
-    metric_impl = ww_unsystematic_rmpd_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_unsystematic_rmpd_impl,
     ...
   )
 }
@@ -333,44 +345,54 @@ ww_systematic_rmpd <- new_numeric_metric(ww_systematic_rmpd, direction = "maximi
 #' @rdname ww_agreement_coefficient
 #' @export
 ww_systematic_rmpd.data.frame <- function(data,
-                                         truth,
-                                         estimate,
-                                         na_rm = TRUE,
-                                         ...) {
-  metric_summarizer(
-    metric_nm = "systematic_rmpd",
-    metric_fn = ww_systematic_rmpd_vec,
+                                          truth,
+                                          estimate,
+                                          na_action = na.fail,
+                                          ...) {
+  yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(...)
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    na_action = na_action,
+    name = "systematic_rmpd",
+    ...
   )
 }
 
 #' @rdname ww_agreement_coefficient
 #' @export
 ww_systematic_rmpd_vec <- function(truth,
-                                  estimate,
-                                  na_rm = TRUE,
-                                  ...) {
+                                   estimate,
+                                   na_action = na.fail,
+                                   ...) {
 
   ww_systematic_rmpd_impl <- function(truth, estimate, ...) {
     sqrt(ww_systematic_mpd_impl(truth, estimate, ...))
   }
 
-  metric_vec_template(
-    metric_impl = ww_systematic_rmpd_impl,
+  yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    na_action = na_action,
+    impl = ww_systematic_rmpd_impl,
     ...
   )
 }
 
+#' Return the sum of squared differences
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 calc_ssd <- function(truth, estimate) sum((truth - estimate)^2)
 
+#' Return Sum of Potential Difference from Ji and Gallo (2006)
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 calc_spod <- function(truth, estimate) {
   mean_truth <- mean(truth)
   mean_estimate <- mean(estimate)
@@ -381,6 +403,12 @@ calc_spod <- function(truth, estimate) {
   )
 }
 
+#' Return the coefficients of the GMFR line from Ji and Gallo (2006)
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 gmfr <- function(truth, estimate) {
   mean_truth <- mean(truth)
   mean_estimate <- mean(estimate)
@@ -402,6 +430,12 @@ gmfr <- function(truth, estimate) {
   )
 }
 
+#' Return the unsystematic sum product-difference from Ji and Gallo (2006)
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 calc_spdu <- function(truth, estimate) {
   mean_truth <- mean(truth)
   mean_estimate <- mean(estimate)
@@ -420,6 +454,12 @@ calc_spdu <- function(truth, estimate) {
   )
 }
 
+#' Return the systematic sum product-difference from Ji and Gallo (2006)
+#'
+#' @inheritParams yardstick::rmse
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @noRd
 calc_spds <- function(truth, estimate) {
   est_spdu <- calc_spdu(truth, estimate)
   est_ssd <- calc_ssd(truth, estimate)

@@ -26,6 +26,11 @@ jobs:
           extra-packages: any::covr
           needs: coverage
 
+      - name: Update dependencies
+        run: |
+          install.packages("purrr", repos = 'https://cloud.r-project.org')
+        shell: Rscript {0}
+
       - name: Test coverage
         run: covr::codecov(quiet = FALSE)
         shell: Rscript {0}

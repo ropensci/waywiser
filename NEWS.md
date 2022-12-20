@@ -1,5 +1,16 @@
 # waywiser (development version)
 
+* Yardstick metrics will no longer include geometry columns in their returns.
+
+* Removed combination functions -- `ww_global_geary`, `ww_global_moran`, 
+  `ww_local_geary`, `ww_local_moran`, `ww_local_getis_ord`. Use `metric_set()`
+  to combine functions instead.
+  
+* Renamed `ww_local_getis_ord_pvalue_vec()` and variants to 
+  `ww_local_getis_ord_g_pvalue_vec()`; this change allows internal functions to
+  work properly, and makes it easier for the output to indicate if the p-value
+  is associated with a g or g* value.
+
 * Added functions (primarily `ww_multi_scale()`) and a vignette for multi-scale 
   assessment of model predictions.
   
@@ -7,7 +18,12 @@
   spatial dependency in model residuals.
   
 * Added functions to calculate metrics from Ji and Gallo (2006) and Willmott
-  (1981): `ww_agreement_coefficient()`, `ww_systematic_agreement_coefficient()`, `ww_unsystematic_agreement_coefficient()`, `ww_unsystematic_mpd(),`, `ww_systematic_mpd()`, `ww_unsystematic_rmpd()`, `ww_systematic_rmpd()`, `ww_willmott_d()`, `ww_systematic_mse()`, `ww_unsystematic_mse()`, `ww_systematic_rmse()`, `ww_unsystematic_rmse()`.
+  (1981, 1982, 2012): `ww_agreement_coefficient()`, 
+  `ww_systematic_agreement_coefficient()`, 
+  `ww_unsystematic_agreement_coefficient()`, `ww_unsystematic_mpd(),`,
+  `ww_systematic_mpd()`, `ww_unsystematic_rmpd()`, `ww_systematic_rmpd()`,
+  `ww_willmott_d()`, `ww_willmott_dr()`, `ww_systematic_mse()`, 
+  `ww_unsystematic_mse()`, `ww_systematic_rmse()`, `ww_unsystematic_rmse()`.
 
 * Added a dependency on FNN.
 

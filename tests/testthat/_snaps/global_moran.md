@@ -23,18 +23,6 @@
 ---
 
     Code
-      df_global_i_both <- ww_global_moran(guerry_modeled, Crm_prs, predictions)
-      df_global_i_both[1:3]
-    Output
-      # A tibble: 2 x 3
-        .metric             .estimator .estimate
-        <chr>               <chr>          <dbl>
-      1 global_moran_i      standard    4.12e- 1
-      2 global_moran_pvalue standard    7.23e-10
-
----
-
-    Code
       (vec_global_i <- ww_global_moran_i_vec(guerry_modeled$Crm_prs, guerry_modeled$
         predictions, weights))
     Output

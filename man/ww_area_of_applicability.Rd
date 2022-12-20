@@ -75,7 +75,8 @@ applicability.}
 \item A data.frame with two columns: \code{term}, containing the names of each
 variable in the training and testing data, and \code{estimate}, containing
 the (raw or scaled) feature importance for each variable.
-\item An object of class \code{vi} with at least two columns, \code{Variable} and \code{Importance}.
+\item An object of class \code{vi} with at least two columns, \code{Variable} and
+\code{Importance}.
 }
 
 All variables in the training data (\code{x} or \code{data}, depending on the context)
@@ -83,12 +84,11 @@ must have a matching importance estimate, and all terms with importance
 estimates must be in the training data.}
 
 \item{na_action}{A function which indicates what should happen when the data
-(any of \code{x}, \code{data}, or \code{testing}) contain NAs. The default is \code{na.fail};
-you may wish to set it to \code{na.omit} or any of the functions from the "zoo"
+contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
+or any of the functions from the "zoo"
 package. This function ignores the value of \code{options("na.action")} in order
-to make cross-computer (and cross-session) results more stable. Note that
-this argument only impacts fitting the area of applicability and has no
-impact on predictions.}
+to make cross-computer (and cross-session) results more stable. This argument
+must be of length 1; you cannot pass multiple functions to \code{na_action}.}
 
 \item{data}{The data frame representing your "training" data, when using the
 formula or recipe methods.}
@@ -109,7 +109,9 @@ determine if new data is within a model's area of applicability.
 This function calculates the "area of applicability" of a model, as
 introduced by Meyer and Pebesma (2021). While the initial paper introducing
 this method focused on spatial models, there is nothing inherently spatial
-about the method; it can be used with any type of data.
+about the method; it can be used with any type of data (and, because it does
+not care about the spatial arrangement of your data, can be used with 2D or
+3D spatial data, and with geographic or projected CRS).
 }
 \details{
 Predictions made on points "inside" the area of applicability should be as

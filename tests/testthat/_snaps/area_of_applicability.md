@@ -6,8 +6,11 @@
 
 # NAs are handled
 
-    Missing values in the training set data (either `x` or `data`).
-    i Either process your data to fix the NA values or set `na_action`.
+    Code
+      ww_area_of_applicability(y ~ ., train, test, importance)
+    Error <rlang_error>
+      Missing values in training (either `x` or `data`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 
@@ -21,8 +24,11 @@
 
 ---
 
-    Missing values in the training set data (either `x` or `data`).
-    i Either process your data to fix the NA values or set `na_action`.
+    Code
+      ww_area_of_applicability(train[2:11], test[2:11], importance)
+    Error <rlang_error>
+      Missing values in training (either `x` or `data`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 
@@ -36,8 +42,12 @@
 
 ---
 
-    Missing values in the training set data (either `x` or `data`).
-    i Either process your data to fix the NA values or set `na_action`.
+    Code
+      ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]),
+      importance)
+    Error <rlang_error>
+      Missing values in training (either `x` or `data`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 
@@ -52,8 +62,13 @@
 
 ---
 
-    Missing values in the training set data (either `x` or `data`).
-    i Either process your data to fix the NA values or set `na_action`.
+    Code
+      ww_area_of_applicability(comb_rset_no_y, importance = importance)
+    Error <rlang_error>
+      i In index: 1.
+      Caused by error in `create_aoa()`:
+      ! Missing values in training (either `x` or `data`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 
@@ -67,8 +82,13 @@
 
 ---
 
-    Missing values in the training set data (either `x` or `data`).
-    i Either process your data to fix the NA values or set `na_action`.
+    Code
+      ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance)
+    Error <rlang_error>
+      i In index: 1.
+      Caused by error in `create_aoa()`:
+      ! Missing values in training (either `x` or `data`).
+      i Either process your data to fix the NA values or set `na_action`.
 
 ---
 
@@ -101,6 +121,35 @@
        9  0.134  TRUE 
       10  0.177  TRUE 
       # ... with 290 more rows
+
+# Expected errors
+
+    Code
+      ww_area_of_applicability(y ~ ., train, test[1:10], importance)
+    Error <rlang_error>
+      Some columns in `training` were not present in `testing` (or `new_data`).
+
+---
+
+    Code
+      ww_area_of_applicability(y ~ ., train, test, na_action = c(na.omit, na.pass),
+      importance)
+    Error <rlang_error>
+      Only one value can be passed to `na_action`.
+
+---
+
+    Code
+      ww_area_of_applicability(y ~ ., train, test, head(importance, -1))
+    Error <rlang_error>
+      All predictors must have an importance value in `importance`.
+
+---
+
+    Code
+      ww_area_of_applicability(y ~ ., train[1:10], test[1:10], importance)
+    Error <rlang_error>
+      All variables with an importance value in `importance` must be included as predictors.
 
 # normal use
 
@@ -1613,5 +1662,5 @@
          Intercept: FALSE 
       Novel Levels: FALSE 
        Composition: tibble 
-        Indicators: traditional 
+        Indicators: none 
 

@@ -43,27 +43,6 @@
 ---
 
     Code
-      df_local_i_both <- ww_local_moran(guerry_modeled, Crm_prs, predictions)
-      df_local_i_both[1:3]
-    Output
-      # A tibble: 170 x 3
-         .metric       .estimator .estimate
-         <chr>         <chr>          <dbl>
-       1 local_moran_i standard      0.530 
-       2 local_moran_i standard      0.858 
-       3 local_moran_i standard      0.759 
-       4 local_moran_i standard      0.732 
-       5 local_moran_i standard      0.207 
-       6 local_moran_i standard      0.860 
-       7 local_moran_i standard      0.692 
-       8 local_moran_i standard      1.69  
-       9 local_moran_i standard     -0.0109
-      10 local_moran_i standard      0.710 
-      # ... with 160 more rows
-
----
-
-    Code
       (vec_local_i <- ww_local_moran_i_vec(guerry_modeled$Crm_prs, guerry_modeled$
         predictions, weights))
     Output

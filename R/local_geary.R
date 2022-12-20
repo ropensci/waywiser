@@ -3,27 +3,53 @@
 #' Calculate the local Geary's C statistic for model residuals.
 #' `ww_local_geary_c()` returns the statistic itself, while
 #' `ww_local_geary_pvalue()` returns the associated p value.
-#' `ww_local_geary()` returns both.
 #'
-#' @inheritParams yardstick::rmse
+#' These functions can be used for geographic or projected coordinate reference
+#' systems and expect 2D data.
+#'
+#' @srrstats {SP1.0} Domain of applicability specified above.
+#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
+#'
+#' @srrstats {G1.4} roxygen2 documentation
+#' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
+#' @srrstats {G2.8} Method dispatch enforces data.frame inputs
+#' @srrstats {G2.10} Column extraction is properly handled within yardstick.
+#' @srrstats {G2.14} Any function may be passed to na_action
+#' @srrstats {G2.14a} Any function may be passed to na_action
+#' @srrstats {G2.14b} Any function may be passed to na_action
+#' @srrstats {G2.14c} Any function may be passed to na_action
+#' @srrstats {G2.15} Any function may be passed to na_action
+#' @srrstats {G2.16} Any function may be passed to na_action
+#'
+#' @srrstats {SP2.6} Input type requirements are documented.
+#' @srrstats {SP3.0} Users are given total control over weights.
+#' @srrstats {SP3.0a} Users are given total control over weights.
+#' @srrstats {SP3.0b} Users are given total control over weights.
+#' @srrstats {SP3.1} Users are given total control over weights.
+#' @inheritParams ww_global_geary_c
 #' @inheritParams spdep::localC_perm
-#' @param wt A "listw" object, for instance as created with [ww_build_weights()].
-#' @param ... Additional arguments passed to [spdep::localC_perm()].
+#' @param ... Additional arguments passed to [spdep::localC()] (for
+#' `ww_local_geary_c()`) or [spdep::localC_perm()] (for
+#' `ww_local_geary_pvalue()`).
+#'
+#' @srrstats {SP4.0} Return values are of a unique format
+#' @srrstats {SP4.0b} Return values are of a unique format
+#' @srrstats {SP4.2} Returns are explicitly documented
 #'
 #' @return
-#' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)` rows of values.
-#' For grouped data frames, the number of rows returned will be the same as the number of groups.
+#' A tibble with columns .metric, .estimator, and .estimate and `nrow(data)`
+#' rows of values.
 #' For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
 #'
+#' @family autocorrelation metrics
+#' @family yardstick metrics
+#'
 #' @examples
-#'
-#'
-#'
 #' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
 #' guerry$predictions <- predict(guerry_lm, guerry)
 #'
 #' ww_local_geary_c(guerry, Crm_prs, predictions)
-#' ww_local_geary(guerry, Crm_prs, predictions)
+#' ww_local_geary_pvalue(guerry, Crm_prs, predictions)
 #'
 #' @rdname local_geary_c
 #' @export
@@ -34,51 +60,26 @@ ww_local_geary_c <- function(data, ...) {
 ww_local_geary_c <- new_numeric_metric(ww_local_geary_c, direction = "zero")
 
 #' @export
-ww_local_geary_c.data.frame <- function(data,
-                                        truth,
-                                        estimate,
-                                        wt = NULL,
-                                        na_rm = TRUE,
-                                        ...) {
-
-  if (is.null(wt)) {
-    wt <- ww_build_weights(data)
-  }
-  if (rlang::is_function(wt)) {
-    wt <- do.call(wt, list(data))
-  }
-
-  metric_summarizer(
-    metric_nm = "local_geary_c",
-    metric_fn = ww_local_geary_c_vec,
+ww_local_geary_c.data.frame  <- function(data,
+                                         truth,
+                                         estimate,
+                                         wt = NULL,
+                                         na_action = na.fail,
+                                         ...) {
+  spatial_yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(
-      wt = wt,
-      ...
-    )
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    wt = wt,
+    na_action = na_action,
+    name = "local_geary_c",
+    ...
   )
 }
 
 #' @rdname local_geary_c
 #' @export
-ww_local_geary_c_vec <- function(truth,
-                                 estimate,
-                                 wt,
-                                 na_rm = TRUE,
-                                 ...) {
-
-  if (!inherits(wt, "listw")) {
-    rlang::abort(
-      "`wt` must be a 'listw' object",
-      "i" = "You can create 'listw' objects using `build_weights()`"
-    )
-  }
-
-  dots <- list(...)
-  dots <- dots$zero.policy
+ww_local_geary_c_vec <- function(truth, estimate, wt, na_action = na.fail, ...) {
 
   ww_local_geary_c_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
@@ -86,17 +87,15 @@ ww_local_geary_c_vec <- function(truth,
     spdep::localC(
       x = resid,
       listw = wt,
-      zero.policy = dots
+      ...
     )
-
   }
-
-  metric_vec_template(
-    metric_impl = ww_local_geary_c_impl,
+  spatial_yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
+    wt = wt,
+    na_action = na_action,
+    impl = ww_local_geary_c_impl,
     ...
   )
 }
@@ -114,31 +113,16 @@ ww_local_geary_pvalue.data.frame <- function(data,
                                              truth,
                                              estimate,
                                              wt = NULL,
-                                             alternative = "two.sided",
-                                             nsim = 499,
-                                             na_rm = TRUE,
+                                             na_action = na.fail,
                                              ...) {
-
-  if (is.null(wt)) {
-    wt <- ww_build_weights(data)
-  }
-  if (rlang::is_function(wt)) {
-    wt <- do.call(wt, list(data))
-  }
-
-  metric_summarizer(
-    metric_nm = "local_geary_pvalue",
-    metric_fn = ww_local_geary_pvalue_vec,
+  spatial_yardstick_df(
     data = data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
-    na_rm = na_rm,
-    metric_fn_options = list(
-      wt = wt,
-      alternative = alternative,
-      nsim = nsim,
-      ...
-    )
+    truth = {{ truth }},
+    estimate = {{ estimate }},
+    wt = wt,
+    name = "local_geary_pvalue",
+    na_action = na_action,
+    ...
   )
 }
 
@@ -147,26 +131,14 @@ ww_local_geary_pvalue.data.frame <- function(data,
 ww_local_geary_pvalue_vec <- function(truth,
                                       estimate,
                                       wt = NULL,
-                                      alternative = "two.sided",
-                                      nsim = 499,
-                                      na_rm = TRUE,
+                                      na_action = na.fail,
                                       ...) {
-
-  if (!inherits(wt, "listw")) {
-    rlang::abort(
-      "`wt` must be a 'listw' object",
-      "i" = "You can create 'listw' objects using `build_weights()`"
-    )
-  }
-
   ww_local_geary_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
     out <- spdep::localC_perm(
       x = resid,
       listw = wt,
-      alternative = alternative,
-      nsim = nsim,
       ...
     )
 
@@ -174,44 +146,12 @@ ww_local_geary_pvalue_vec <- function(truth,
       attr(out, "pseudo-p")[, 4]
     )
   }
-
-  metric_vec_template(
-    metric_impl = ww_local_geary_pvalue_impl,
+  spatial_yardstick_vec(
     truth = truth,
     estimate = estimate,
-    na_rm = na_rm,
-    cls = "numeric",
-    ...
-  )
-}
-
-#' @rdname local_geary_c
-#' @export
-ww_local_geary <- function(data,
-                           truth,
-                           estimate,
-                           wt = NULL,
-                           alternative = "two.sided",
-                           nsim = 499,
-                           na_rm = TRUE,
-                           ...) {
-
-  if (is.null(wt)) {
-    wt <- ww_build_weights(data)
-  }
-  if (rlang::is_function(wt)) {
-    wt <- do.call(wt, list(data))
-  }
-
-  metrics <- metric_set(ww_local_geary_c, ww_local_geary_pvalue)
-  metrics(
-    data,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
     wt = wt,
-    alternative = alternative,
-    nsim = nsim,
-    na_rm = na_rm,
+    na_action = na_action,
+    impl = ww_local_geary_pvalue_impl,
     ...
   )
 }

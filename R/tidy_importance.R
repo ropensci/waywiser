@@ -1,9 +1,21 @@
-
+#' Convert various "importance" tibbles into standardized input formats
+#'
+#' @param importance Either a data.frame with columns "term" and "estimate", or
+#' a `vi` object from the `vip` package.
+#' @inheritParams rlang::args_dots_empty
+#'
+#' @srrstats {G1.4a} Documented internal functions
+#'
+#' @return A data.frame with two columns, `term` and `estimate`.
+#'
+#' @noRd
 tidy_importance <- function(importance, ...) {
+  #' @srrstats {G2.10} Ensuring standard handling of different inputs
   UseMethod("tidy_importance")
 }
 
 tidy_importance.vi <- function(importance, ...) {
+  rlang::check_dots_empty()
   data.frame(
     term = importance[["Variable"]],
     estimate = importance[["Importance"]]
@@ -11,6 +23,7 @@ tidy_importance.vi <- function(importance, ...) {
 }
 
 tidy_importance.data.frame <- function(importance, ...) {
+  rlang::check_dots_empty()
   if (!all(c("term", "estimate") %in% names(importance))) {
     rlang::abort(
       "'term' and 'estimate' must be columns in `importance`",

@@ -23,3 +23,11 @@ An object of class "nb"
 This function uses \code{\link[spdep:knearneigh]{spdep::knearneigh()}} and \code{\link[spdep:knn2nb]{spdep::knn2nb()}} to
 create a "nb" neighbors list.
 }
+\details{
+These functions can be used for geographic or projected coordinate reference
+systems and expect 2D data.
+}
+\examples{
+ww_make_point_neighbors(ny_trees)
+
+}

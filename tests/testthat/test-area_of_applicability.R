@@ -1,3 +1,4 @@
+skip_if_not(getRversion() >= numeric_version("4.0.0"))
 set.seed(123)
 skip_if_not(rlang::is_installed("vip"))
 train <- vip::gen_friedman(1000, seed = 101)
@@ -30,9 +31,11 @@ test_that("`ww_area_of_applicability` is not defined for vectors", {
 })
 
 test_that("`ww_area_of_applicability` finds 0 distance between identical data", {
-
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
-    ww_area_of_applicability(y ~ ., train, train, importance)$aoa_threshold,
+    suppressWarnings(
+      ww_area_of_applicability(y ~ ., train, train, importance)$aoa_threshold
+    ),
     0,
     tolerance = 1e-7
   )
@@ -67,7 +70,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
     head(methods[[2]], -1)
   )
 
-  expect_identical(
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
     predict(methods[[1]], test),
     predict(methods[[2]], test)
   )
@@ -77,7 +81,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
     head(methods[[3]], -1)
   )
 
-  expect_identical(
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
     predict(methods[[2]], test),
     predict(methods[[3]], test)
   )
@@ -85,7 +90,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
   # Comparing rset method to the others --
   # because here we calculate our training data on the entire thing
   # the training, means, sds slots are all different
-  expect_identical(
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
     methods[[3]]$aoa_threshold,
     methods[[4]]$aoa_threshold
   )
@@ -101,7 +107,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
     head(methods[[5]], -1)
   )
 
-  expect_identical(
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
     predict(methods[[4]], test),
     predict(methods[[5]], test)
   )
@@ -111,11 +118,13 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
 
 test_that("`ww_area_of_applicability` can handle different column orders", {
 
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
     ww_area_of_applicability(train[2:11], test[11:2], importance)$aoa_threshold
   )
 
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
     ww_area_of_applicability(train[11:2], test[2:11], importance)$aoa_threshold
@@ -132,42 +141,61 @@ test_that("NAs are handled", {
   comb_rset_no_y <- rsample::make_splits(train[2:11], test[2:11])
   comb_rset_no_y <- rsample::manual_rset(list(comb_rset_no_y), "Fold1")
 
-  expect_snapshot_error(
-    ww_area_of_applicability(y ~ ., train, test, importance)
+  #' @srrstats {G2.14a} Users can error on NA:
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train, test, importance),
+    error = TRUE
   )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit)
   )
 
-  expect_snapshot_error(
-    ww_area_of_applicability(train[2:11], test[2:11], importance)
+  #' @srrstats {G2.14a} Users can error on NA:
+  expect_snapshot(
+    ww_area_of_applicability(train[2:11], test[2:11], importance),
+    error = TRUE
   )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(train[2:11], test[2:11], importance, na_action = na.omit)
   )
 
-  expect_snapshot_error(
-    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance)
+  #' @srrstats {G2.14a} Users can error on NA:
+  expect_snapshot(
+    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance),
+    error = TRUE
   )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance, na_action = na.omit)
   )
 
-  expect_snapshot_error(
-    ww_area_of_applicability(comb_rset_no_y, importance = importance)
+  #' @srrstats {G2.14a} Users can error on NA:
+  expect_snapshot(
+    ww_area_of_applicability(comb_rset_no_y, importance = importance),
+    error = TRUE
   )
+
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(comb_rset_no_y, importance = importance, na_action = na.omit)
   )
 
+  #' @srrstats {G2.14a} Users can error on NA:
   skip_if_not_installed("recipes")
-  expect_snapshot_error(
+  expect_snapshot(
     ww_area_of_applicability(
       comb_rset,
       recipes::recipe(y ~ ., train),
       importance = importance
-    )
+    ),
+    error = TRUE
   )
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     ww_area_of_applicability(
       comb_rset,
@@ -177,6 +205,7 @@ test_that("NAs are handled", {
     )
   )
 
+  #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     predict(
       ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit),
@@ -184,6 +213,28 @@ test_that("NAs are handled", {
     )
   )
 
+})
+
+test_that("Expected errors", {
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train, test[1:10], importance),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train, test, na_action = c(na.omit, na.pass), importance),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train, test, head(importance, -1)),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_area_of_applicability(y ~ ., train[1:10], test[1:10], importance),
+    error = TRUE
+  )
 })
 
 skip_if_not(rlang::is_installed("vip"))
@@ -228,3 +279,82 @@ test_that("`new_ww_area_of_applicability` arguments are assigned correctly", {
   expect_s3_class(x$blueprint, "hardhat_blueprint")
 })
 
+#' @srrstats {G5.4} Testing equivalence against CAST:
+#' @srrstats {G5.4b} Testing equivalence against CAST and stored values:
+#' @srrstats {G5.4c} Data is derived originally from CAST and associated paper
+test_that("ww_area_of_applicability() is close-enough to CAST", {
+  skip_on_cran()
+  #' @srrstats {SP6.2} Testing with ~global data
+  relevant_data <- head(as.data.frame(worldclim_simulation)[c(1:4, 6)], 1000)
+
+  # Changes in CAST 0.7.1 mean that thresholds can't be compared against earlier versions
+  if (rlang::is_installed("CAST", version = "0.7.1") &&
+      rlang::is_installed("caret") &&
+      rlang::is_installed("randomforest")) {
+
+    withr::with_seed(
+      123,
+      model <- caret::train(
+        relevant_data[1:4],
+        relevant_data$response,
+        method="rf",
+        importance=TRUE,
+        trControl = caret::trainControl(method="none",savePredictions = TRUE)
+      )
+    )
+
+    AOA <- CAST::aoa(relevant_data, model=model)
+    cast_threshold <- AOA$parameters$threshold[[1]]
+    importance <- data.frame(
+      term = rownames(caret::varImp(model)$importance),
+      estimate = caret::varImp(model, scale = FALSE)$importance[[1]]
+    )
+  } else {
+    cast_threshold <- 0.2184868
+    importance <- data.frame(
+      term = c("bio2", "bio10", "bio13", "bio19"),
+      estimate = c(50.68727, 57.66859, 62.81009, 48.72391)
+    )
+  }
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
+    ww_area_of_applicability(
+      response ~ .,
+      relevant_data,
+      importance = importance
+    )$aoa_threshold,
+    cast_threshold,
+    tolerance = 0.000001
+  )
+
+})
+
+test_that("loaded data is equivalent", {
+  importance <- data.frame(
+    term = c("bio2", "bio10", "bio13", "bio19"),
+    estimate = c(50.68727, 57.66859, 62.81009, 48.72391)
+  )
+  worldclim_loaded <- sf::st_read(
+    system.file("worldclim_simulation.gpkg", package = "waywiser")
+  )
+  names(worldclim_loaded) <- c(
+    head(names(worldclim_loaded), -1),
+    "geometry"
+  )
+  attr(worldclim_loaded, "sf_column") <- "geometry"
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {SP2.3} Testing with loaded data
+  expect_equal(
+    ww_area_of_applicability(
+      response ~ bio2 + bio10 + bio13 + bio19,
+      worldclim_loaded,
+      importance = importance
+    ),
+    ww_area_of_applicability(
+      response ~ bio2 + bio10 + bio13 + bio19,
+      worldclim_simulation,
+      importance = importance
+    )
+  )
+})
