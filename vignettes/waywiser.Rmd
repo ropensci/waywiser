@@ -142,7 +142,7 @@ ww_multi_scale(
   n = list(2, 4)
 )
 
-grid <- sf::st_make_grid(n = 2)
+grid <- sf::st_make_grid(worldclim_simulation, n = 2)
 ww_multi_scale(
   worldclim_simulation,
   truth = response,
