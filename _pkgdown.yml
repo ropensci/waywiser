@@ -16,8 +16,9 @@ authors:
     href: https://www.rstudio.com
     html: <img src='https://www.tidyverse.org/rstudio-logo.svg' alt='RStudio' width='72' />
 
-development:
-  mode: auto
+# Disable the development site while going through review
+# development:
+#  mode: auto
 
 figures:
   fig.width: 8
