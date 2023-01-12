@@ -11,6 +11,11 @@
 #' @srrstats {G2.4c} There are no places necessitating automated coercion.
 #' @srrstats {G2.4d} There are no places necessitating automated coercion.
 #' @srrstats {G2.4e} There are no places necessitating automated coercion.
+#' @srrstats {SP2.1} This package does not use sp, rather uses sf.
+#' @srrstats {SP2.2} This package relies upon sf for classes throughout, for maximum compatibility.
+#' @srrstats {SP2.2a} Documentation extensively uses sf and shows that outputs are sf objects.
+#' @srrstats {SP2.2b} Tests rely extensively upon sf objects.
+#'
 #'
 #' @noRd
 NULL
