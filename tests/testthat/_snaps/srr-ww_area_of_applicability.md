@@ -16,7 +16,7 @@
 
     Code
       ww_area_of_applicability(comb_rset_no_y, importance = importance)
-    Error <rlang_error>
+    Error <purrr_error_indexed>
       i In index: 1.
       Caused by error in `purrr::map()`:
       ! All predictors must be numeric.
@@ -39,7 +39,7 @@
 
     Code
       ww_area_of_applicability(comb_rset_no_y, importance = importance)
-    Error <rlang_error>
+    Error <purrr_error_indexed>
       i In index: 1.
       Caused by error in `purrr::map()`:
       ! All predictors must be numeric.
@@ -142,7 +142,7 @@
 
     Code
       ww_area_of_applicability(comb_rset_no_y_train_na, importance = importance)
-    Error <rlang_error>
+    Error <purrr_error_indexed>
       i In index: 1.
       Caused by error in `create_aoa()`:
       ! Missing values in training (either `x` or `data`).
@@ -152,7 +152,7 @@
 
     Code
       ww_area_of_applicability(comb_rset_no_y, comb_rset_no_y_test_na, importance)
-    Error <rlang_error>
+    Error <purrr_error_indexed>
       i In index: 1.
       Caused by error in `purrr::map()`:
       ! All predictors must be numeric.
