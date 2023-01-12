@@ -19,6 +19,18 @@
     <loc>https://mikemahoney218.github.io/waywiser/SUPPORT.html</loc>
   </url>
   <url>
+    <loc>https://mikemahoney218.github.io/waywiser/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/articles/multi-scale-assessment.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/articles/residual-autocorrelation.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/articles/waywiser.html</loc>
+  </url>
+  <url>
     <loc>https://mikemahoney218.github.io/waywiser/authors.html</loc>
   </url>
   <url>
@@ -34,6 +46,9 @@
     <loc>https://mikemahoney218.github.io/waywiser/reference/global_moran_i.html</loc>
   </url>
   <url>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/guerry.html</loc>
+  </url>
+  <url>
     <loc>https://mikemahoney218.github.io/waywiser/reference/index.html</loc>
   </url>
   <url>
@@ -46,6 +61,9 @@
     <loc>https://mikemahoney218.github.io/waywiser/reference/local_moran_i.html</loc>
   </url>
   <url>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/ny_trees.html</loc>
+  </url>
+  <url>
     <loc>https://mikemahoney218.github.io/waywiser/reference/predict.ww_area_of_applicability.html</loc>
   </url>
   <url>
@@ -53,6 +71,12 @@
   </url>
   <url>
     <loc>https://mikemahoney218.github.io/waywiser/reference/waywiser-package.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/worldclim_simulation.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/ww_agreement_coefficient.html</loc>
   </url>
   <url>
     <loc>https://mikemahoney218.github.io/waywiser/reference/ww_area_of_applicability.html</loc>
@@ -68,5 +92,11 @@
   </url>
   <url>
     <loc>https://mikemahoney218.github.io/waywiser/reference/ww_make_polygon_neighbors.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/ww_multi_scale.html</loc>
+  </url>
+  <url>
+    <loc>https://mikemahoney218.github.io/waywiser/reference/ww_willmott_d.html</loc>
   </url>
 </urlset>
