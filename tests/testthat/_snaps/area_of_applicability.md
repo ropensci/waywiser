@@ -64,7 +64,7 @@
 
     Code
       ww_area_of_applicability(comb_rset_no_y, importance = importance)
-    Error <rlang_error>
+    Error <purrr_error_indexed>
       i In index: 1.
       Caused by error in `create_aoa()`:
       ! Missing values in training (either `x` or `data`).
@@ -84,7 +84,7 @@
 
     Code
       ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance)
-    Error <rlang_error>
+    Error <purrr_error_indexed>
       i In index: 1.
       Caused by error in `create_aoa()`:
       ! Missing values in training (either `x` or `data`).
