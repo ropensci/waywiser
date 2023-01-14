@@ -17,6 +17,8 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 coverage](https://codecov.io/gh/mikemahoney218/waywiser/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mikemahoney218/waywiser?branch=main)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/waywiser)](https://CRAN.R-project.org/package=waywiser)
+[![Status at rOpenSci Software Peer
+Review](https://badges.ropensci.org/571_status.svg)](https://github.com/ropensci/software-review/issues/571)
 <!-- badges: end -->
 
 “Waywiser” is an old-timey name for a [surveyor’s
@@ -147,6 +149,10 @@ guerry_aoa <- cbind(
 )
 
 plot(guerry_aoa["aoa"])
+#> Warning in seq.default(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], :
+#> partial argument match of 'length' to 'length.out'
+#> Warning in plot.default(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE, :
+#> partial argument match of 't' to 'type'
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />

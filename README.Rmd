@@ -24,6 +24,7 @@ theme_set(theme_minimal())
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test coverage](https://codecov.io/gh/mikemahoney218/waywiser/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mikemahoney218/waywiser?branch=main)
 [![CRAN status](https://www.r-pkg.org/badges/version/waywiser)](https://CRAN.R-project.org/package=waywiser)
+[![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/571_status.svg)](https://github.com/ropensci/software-review/issues/571)
 <!-- badges: end -->
 
 "Waywiser" is an old-timey name for a 
