@@ -27,7 +27,7 @@
       Problem while computing `.estimate = metric_fn(...)`.
       Caused by error in `spatial_yardstick_vec()`:
       ! `wt` must be a 'listw' object
-      i You can create 'listw' objects using `build_weights()`
+      i You can create 'listw' objects using `ww_build_weights()`
 
 ---
 

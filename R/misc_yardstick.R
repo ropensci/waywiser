@@ -207,7 +207,7 @@ spatial_yardstick_vec <- function(truth, estimate, wt, na_action, impl, ..., na_
     rlang::abort(
       c(
         "`wt` must be a 'listw' object",
-        "i" = "You can create 'listw' objects using `build_weights()`"
+        "i" = "You can create 'listw' objects using `ww_build_weights()`"
       )
     )
   }
