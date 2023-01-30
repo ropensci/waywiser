@@ -40,11 +40,20 @@
 #' @family yardstick metrics
 #'
 #' @examples
-#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
-#' guerry$predictions <- predict(guerry_lm, guerry)
+#' guerry_model <- guerry
+#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry_model)
+#' guerry_model$predictions <- predict(guerry_lm, guerry_model)
 #'
-#' ww_local_moran_i(guerry, Crm_prs, predictions)
-#' ww_local_moran_pvalue(guerry, Crm_prs, predictions)
+#' ww_local_moran_i(guerry_model, Crm_prs, predictions)
+#' ww_local_moran_pvalue(guerry_model, Crm_prs, predictions)
+#'
+#' @references
+#' Anselin, L. 1995. Local indicators of spatial association, Geographical
+#' Analysis, 27, pp 93–115. doi: 10.1111/j.1538-4632.1995.tb00338.x.
+#'
+#' Sokal, R. R, Oden, N. L. and Thomson, B. A. 1998. Local Spatial
+#' Autocorrelation in a Biological Model. Geographical Analysis, 30, pp 331–354.
+#' doi: 10.1111/j.1538-4632.1998.tb00406.x
 #'
 #' @rdname local_moran_i
 #' @export

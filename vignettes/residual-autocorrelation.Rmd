@@ -86,7 +86,7 @@ guerry %>%
   ggplot(aes(fill = .estimate)) +
   geom_sf() + 
   scale_fill_gradient2(
-    "Moran's I", 
+    "Local Moran", 
     low = "#018571", 
     mid = "white", 
     high = "#A6611A"

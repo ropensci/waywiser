@@ -42,10 +42,18 @@
 #' @inherit ww_global_geary_c return
 #'
 #' @examples
-#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
-#' guerry$predictions <- predict(guerry_lm, guerry)
+#' guerry_model <- guerry
+#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry_model)
+#' guerry_model$predictions <- predict(guerry_lm, guerry_model)
 #'
-#' ww_global_moran_i(guerry, Crm_prs, predictions)
+#' ww_global_moran_i(guerry_model, Crm_prs, predictions)
+#' ww_global_moran_pvalue(guerry_model, Crm_prs, predictions)
+#'
+#' @references
+#' Moran, P.A.P. (1950). "Notes on Continuous Stochastic Phenomena." Biometrika,
+#' 37(1/2), pp 17. doi: 10.2307/2332142
+#'
+#' Cliff, A. D., Ord, J. K. 1981 Spatial processes, Pion, p. 17.
 #'
 #' @rdname global_moran_i
 #' @export

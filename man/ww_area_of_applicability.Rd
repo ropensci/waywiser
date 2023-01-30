@@ -188,6 +188,14 @@ importance <- vip::vi_permute(
 
 aoa <- ww_area_of_applicability(y ~ ., train, test, importance = importance)
 predict(aoa, test)
+
+# Equivalent methods for calculating AOA:
+ww_area_of_applicability(train[2:11], test[2:11], importance)
+ww_area_of_applicability(
+  as.matrix(train[2:11]),
+  as.matrix(test[2:11]),
+  importance
+)
 \dontshow{\}) # examplesIf}
 }
 \references{

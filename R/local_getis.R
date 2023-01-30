@@ -42,11 +42,17 @@
 #' @family yardstick metrics
 #'
 #' @examples
-#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
-#' guerry$predictions <- predict(guerry_lm, guerry)
+#' guerry_model <- guerry
+#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry_model)
+#' guerry_model$predictions <- predict(guerry_lm, guerry_model)
 #'
-#' ww_local_getis_ord_g(guerry, Crm_prs, predictions)
-#' ww_local_getis_ord_g_pvalue(guerry, Crm_prs, predictions)
+#' ww_local_getis_ord_g(guerry_model, Crm_prs, predictions)
+#' ww_local_getis_ord_g_pvalue(guerry_model, Crm_prs, predictions)
+#'
+#' @references
+#' Ord, J. K. and Getis, A. 1995. Local spatial autocorrelation statistics:
+#' distributional issues and an application. Geographical Analysis, 27, 286–306.
+#' doi: 10.1111/j.1538-4632.1995.tb00912.x
 #'
 #' @rdname local_getis_ord_g
 #' @export

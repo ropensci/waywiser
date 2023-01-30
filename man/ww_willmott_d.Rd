@@ -106,8 +106,11 @@ x <- c(6, 8, 9, 10, 11, 14)
 y <- c(2, 3, 5, 5, 6, 8)
 
 ww_willmott_d_vec(x, y)
+ww_willmott_dr_vec(x, y)
 ww_systematic_mse_vec(x, y)
 ww_unsystematic_mse_vec(x, y)
+ww_systematic_rmse_vec(x, y)
+ww_unsystematic_rmse_vec(x, y)
 
 }
 \references{

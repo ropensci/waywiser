@@ -13,3 +13,4 @@
 ^vignettes/articles$
 ^codemeta\.json$
 ^CITATION\.cff$
+^paper$

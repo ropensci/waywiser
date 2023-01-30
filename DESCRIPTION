@@ -58,6 +58,7 @@ Suggests:
     CAST,
     covr,
     ggplot2,
+    kableExtra,
     knitr,
     modeldata,
     recipes,

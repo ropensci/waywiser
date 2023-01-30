@@ -50,11 +50,18 @@
 #' For `_vec()` functions, a single value (or NA).
 #'
 #' @examples
+#' guerry_model <- guerry
+#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry_model)
+#' guerry_model$predictions <- predict(guerry_lm, guerry_model)
 #'
-#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
-#' guerry$predictions <- predict(guerry_lm, guerry)
+#' ww_global_geary_c(guerry_model, Crm_prs, predictions)
+#' ww_global_geary_pvalue(guerry_model, Crm_prs, predictions)
 #'
-#' ww_global_geary_c(guerry, Crm_prs, predictions)
+#' @references
+#' Geary, R. C. (1954). "The Contiguity Ratio and Statistical Mapping". The
+#' Incorporated Statistician. 5 (3): 115–145. doi:10.2307/2986645.
+#'
+#' Cliff, A. D., Ord, J. K. 1981 Spatial processes, Pion, p. 17.
 #'
 #' @rdname global_geary_c
 #' @export
