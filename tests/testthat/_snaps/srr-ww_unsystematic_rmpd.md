@@ -17,7 +17,7 @@
     Code
       ww_unsystematic_rmpd(char_df, x, y)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
 
@@ -26,7 +26,7 @@
     Code
       ww_unsystematic_rmpd(char_df, y, x)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
 
@@ -49,7 +49,7 @@
     Code
       ww_unsystematic_rmpd(list_df, x, y)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
 
@@ -58,7 +58,7 @@
     Code
       ww_unsystematic_rmpd(list_df, y, x)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
 
@@ -67,7 +67,7 @@
     Code
       ww_unsystematic_rmpd(missing_df, x, y)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! Missing values in true values (`truth`).
       i Either process your data to fix the NA values or set `na_action`.
@@ -77,7 +77,7 @@
     Code
       ww_unsystematic_rmpd(missing_df, y, x)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! Missing values in true values (`truth`).
       i Either process your data to fix the NA values or set `na_action`.
@@ -110,7 +110,7 @@
     Code
       ww_unsystematic_rmpd(empty_df, x, y)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! 0 values were passed to `truth`.
 
@@ -119,7 +119,7 @@
     Code
       ww_unsystematic_rmpd(empty_df, y, x)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! 0 values were passed to `truth`.
 
@@ -144,7 +144,7 @@
     Code
       ww_unsystematic_rmpd(all_na, x, y)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! Missing values in true values (`truth`).
       i Either process your data to fix the NA values or set `na_action`.
@@ -154,7 +154,7 @@
     Code
       ww_unsystematic_rmpd(all_na, y, x)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! Missing values in estimated values (`estimate`).
       i Either process your data to fix the NA values or set `na_action`.

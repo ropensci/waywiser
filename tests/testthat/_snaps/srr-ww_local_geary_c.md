@@ -19,7 +19,7 @@
     Code
       ww_local_geary_c(worldclim_predicted, predicted, response)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
 
@@ -28,7 +28,7 @@
     Code
       ww_local_geary_c(worldclim_predicted, response, predicted)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
 
@@ -53,7 +53,7 @@
     Code
       ww_local_geary_c(worldclim_predicted, response, predicted)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
 
@@ -62,7 +62,7 @@
     Code
       ww_local_geary_c(worldclim_predicted, predicted, response)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
 
@@ -71,7 +71,7 @@
     Code
       ww_local_geary_c(worldclim_predicted, predicted, response)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! Missing values in estimated values (`estimate`).
       i Either process your data to fix the NA values or set `na_action`.
@@ -81,7 +81,7 @@
     Code
       ww_local_geary_c(worldclim_predicted, response, predicted)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! Missing values in true values (`truth`).
       i Either process your data to fix the NA values or set `na_action`.
@@ -117,7 +117,7 @@
       ww_local_geary_c(head(worldclim_predicted, 0), response, predicted, structure(
         list(), class = "listw"))
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! 0 values were passed to `truth`.
 
@@ -127,7 +127,7 @@
       ww_local_geary_c(head(worldclim_predicted, 0), predicted, response, structure(
         list(), class = "listw"))
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! 0 values were passed to `truth`.
 
@@ -144,7 +144,7 @@
     Code
       ww_local_geary_c(worldclim_predicted, response, predicted)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! Missing values in true values (`truth`).
       i Either process your data to fix the NA values or set `na_action`.
@@ -154,7 +154,7 @@
     Code
       ww_local_geary_c(worldclim_predicted, predicted, response)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! Missing values in estimated values (`estimate`).
       i Either process your data to fix the NA values or set `na_action`.
@@ -726,6 +726,12 @@
 
     Code
       ww_local_geary_c(worldclim_simulation, response, response)
+    Warning <lifecycle_warning_deprecated>
+      Returning more (or less) than 1 row per `summarise()` group was deprecated in dplyr 1.1.0.
+      i Please use `reframe()` instead.
+      i When switching from `summarise()` to `reframe()`, remember that `reframe()` always returns an ungrouped data frame and adjust accordingly.
+      i The deprecated feature was likely used in the yardstick package.
+        Please report the issue at <https://github.com/tidymodels/yardstick/issues>.
     Output
       # A tibble: 10,000 x 3
          .metric       .estimator .estimate

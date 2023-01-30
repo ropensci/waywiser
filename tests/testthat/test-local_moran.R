@@ -33,12 +33,12 @@ test_that("Local Moran statistics are stable", {
 
   expect_identical(
     df_local_i$.estimate,
-    vec_local_i
+    as.vector(vec_local_i)
   )
 
   expect_identical(
     df_local_i_p$.estimate,
-    vec_local_i_p
+    as.vector(vec_local_i_p)
   )
 
   #' @srrstats {G5.4} Testing against spdep

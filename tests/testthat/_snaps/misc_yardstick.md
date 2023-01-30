@@ -24,7 +24,7 @@
     Code
       ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions, wt = list())
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = metric_fn(...)`.
       Caused by error in `spatial_yardstick_vec()`:
       ! `wt` must be a 'listw' object
       i You can create 'listw' objects using `ww_build_weights()`
