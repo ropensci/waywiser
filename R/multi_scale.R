@@ -78,7 +78,6 @@
 #'   Sale_Price,
 #'   predictions,
 #'   n = list(
-#'     c(20, 20),
 #'     c(10, 10),
 #'     c(1, 1)
 #'   ),
@@ -88,7 +87,6 @@
 #' # or, mostly equivalently
 #' # (there will be a slight difference due to `autoexpand_grid = TRUE`)
 #' grids <- list(
-#'   sf::st_make_grid(ames_sf, n = c(20, 20), square = FALSE),
 #'   sf::st_make_grid(ames_sf, n = c(10, 10), square = FALSE),
 #'   sf::st_make_grid(ames_sf, n = c(1, 1), square = FALSE)
 #' )

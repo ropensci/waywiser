@@ -112,6 +112,14 @@ ww_unsystematic_mse_vec(x, y)
 ww_systematic_rmse_vec(x, y)
 ww_unsystematic_rmse_vec(x, y)
 
+example_df <- data.frame(x = x, y = y)
+ww_willmott_d(example_df, x, y)
+ww_willmott_dr(example_df, x, y)
+ww_systematic_mse(example_df, x, y)
+ww_unsystematic_mse(example_df, x, y)
+ww_systematic_rmse(example_df, x, y)
+ww_unsystematic_rmse(example_df, x, y)
+
 }
 \references{
 Willmott, C. J. 1981. "On the Validation of Models". Physical Geography 2(2),

@@ -49,6 +49,19 @@
 #' ww_global_moran_i(guerry_model, Crm_prs, predictions)
 #' ww_global_moran_pvalue(guerry_model, Crm_prs, predictions)
 #'
+#' wt <- ww_build_weights(guerry_model)
+#'
+#' ww_global_moran_i_vec(
+#'   guerry_model$Crm_prs,
+#'   guerry_model$predictions,
+#'   wt = wt
+#' )
+#' ww_global_moran_pvalue_vec(
+#'   guerry_model$Crm_prs,
+#'   guerry_model$predictions,
+#'   wt = wt
+#' )
+#'
 #' @references
 #' Moran, P.A.P. (1950). "Notes on Continuous Stochastic Phenomena." Biometrika,
 #' 37(1/2), pp 17. doi: 10.2307/2332142

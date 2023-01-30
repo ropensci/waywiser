@@ -67,6 +67,19 @@ guerry_model$predictions <- predict(guerry_lm, guerry_model)
 ww_local_getis_ord_g(guerry_model, Crm_prs, predictions)
 ww_local_getis_ord_g_pvalue(guerry_model, Crm_prs, predictions)
 
+wt <- ww_build_weights(guerry_model)
+
+ww_local_getis_ord_g_vec(
+  guerry_model$Crm_prs,
+  guerry_model$predictions,
+  wt = wt
+)
+ww_local_getis_ord_g_pvalue_vec(
+  guerry_model$Crm_prs,
+  guerry_model$predictions,
+  wt = wt
+)
+
 }
 \references{
 Ord, J. K. and Getis, A. 1995. Local spatial autocorrelation statistics:

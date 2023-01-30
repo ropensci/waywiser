@@ -65,6 +65,19 @@ guerry_model$predictions <- predict(guerry_lm, guerry_model)
 ww_local_moran_i(guerry_model, Crm_prs, predictions)
 ww_local_moran_pvalue(guerry_model, Crm_prs, predictions)
 
+wt <- ww_build_weights(guerry_model)
+
+ww_local_moran_i_vec(
+  guerry_model$Crm_prs,
+  guerry_model$predictions,
+  wt = wt
+)
+ww_local_moran_pvalue_vec(
+  guerry_model$Crm_prs,
+  guerry_model$predictions,
+  wt = wt
+)
+
 }
 \references{
 Anselin, L. 1995. Local indicators of spatial association, Geographical

@@ -74,6 +74,19 @@ guerry_model$predictions <- predict(guerry_lm, guerry_model)
 ww_global_geary_c(guerry_model, Crm_prs, predictions)
 ww_global_geary_pvalue(guerry_model, Crm_prs, predictions)
 
+wt <- ww_build_weights(guerry_model)
+
+ww_global_geary_c_vec(
+  guerry_model$Crm_prs,
+  guerry_model$predictions,
+  wt = wt
+)
+ww_global_geary_pvalue_vec(
+  guerry_model$Crm_prs,
+  guerry_model$predictions,
+  wt = wt
+)
+
 }
 \references{
 Geary, R. C. (1954). "The Contiguity Ratio and Statistical Mapping". The
