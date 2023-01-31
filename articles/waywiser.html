@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Noto_Sans-0.4.4/font.css" rel="stylesheet">
-<link href="../deps/Patua_One-0.4.4/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Noto_Sans-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/Patua_One-0.4.5/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Assessing Models with Waywiser">
@@ -81,7 +81,7 @@
 
 
 
-
+<script src="waywiser_files/kePrint-0.0.1/kePrint.js"></script><link href="waywiser_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Assessing Models with Waywiser</h1>
@@ -287,6 +287,191 @@ on, which fall outside the “area of applicability” defined by <a href="https
 models in their own right, which can be used by functions such as
 <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> to calculate if new observations are in the area
 of applicability of a model.</p>
+</div>
+<div class="section level2">
+<h2 id="feature-matrix">Feature Matrix<a class="anchor" aria-label="anchor" href="#feature-matrix"></a>
+</h2>
+<p>Below is a table of the major statistical functions waywiser
+provides, alongside brief descriptions and journal references for each.
+For a complete list of package functions, check out the <a href="https://mikemahoney218.github.io/waywiser/reference/index.html">package
+reference page</a>.</p>
+<table class="table table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+<th style="text-align:left;">
+Category
+</th>
+<th style="text-align:left;">
+Reference
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+ww_area_of_applicability()
+</td>
+<td style="text-align:left;">
+Calculate the ‘area of applicability’ of a model
+</td>
+<td style="text-align:left;">
+AOA
+</td>
+<td style="text-align:left;">
+H. Meyer and E. Pebesma. 2021. Predicting into unknown space? Estimating
+the area of applicability of spatial prediction models, Methods in
+Ecology and Evolution 12(9), pp 1620 - 1633, doi:
+10.1111/2041-210X.13650.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ww_multi_scale()
+</td>
+<td style="text-align:left;">
+Calculate model metrics for predictions aggregated to multiple levels
+</td>
+<td style="text-align:left;">
+Multi-scale assessment
+</td>
+<td style="text-align:left;">
+Riemann, R., Wilson, B. T., Lister, A., and Parks, S. (2010) An
+effective assessment protocol for continuous geospatial datasets of
+forest characteristics using USFS Forest Inventory and Analysis (FIA)
+data. Remote Sensing of Environment 114(10), pp 2337-2352, doi:
+10.1016/j.rse.2010.05.010.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ww_global_moran_i() (plus _vec and _pvalue variants)
+</td>
+<td style="text-align:left;">
+Calculate Moran’s I
+</td>
+<td style="text-align:left;">
+Spatial yardstick metrics
+</td>
+<td style="text-align:left;">
+Moran, P.A.P. (1950). Notes on Continuous Stochastic Phenomena.
+Biometrika, 37(1/2), pp 17. doi: 10.2307/2332142; Cliff, A. D., Ord, J.
+K. 1981 Spatial processes, Pion, p. 17.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ww_local_moran_i() (plus _vec and _pvalue variants)
+</td>
+<td style="text-align:left;">
+Calculate local Moran’s I (Anselin’s LISA)
+</td>
+<td style="text-align:left;">
+Spatial yardstick metrics
+</td>
+<td style="text-align:left;">
+Anselin, L. 1995. Local indicators of spatial association, Geographical
+Analysis, 27, pp 93–115. doi: 10.1111/j.1538-4632.1995.tb00338.x. Sokal,
+R. R, Oden, N. L. and Thomson, B. A. 1998. Local Spatial Autocorrelation
+in a Biological Model. Geographical Analysis, 30, pp 331–354. doi:
+10.1111/j.1538-4632.1998.tb00406.x
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ww_global_geary_c() (plus _vec and _pvalue variants)
+</td>
+<td style="text-align:left;">
+Calculate Geary’s C
+</td>
+<td style="text-align:left;">
+Spatial yardstick metrics
+</td>
+<td style="text-align:left;">
+Geary, R. C. (1954). The Contiguity Ratio and Statistical Mapping. The
+Incorporated Statistician. 5 (3): 115–145. doi: 10.2307/2986645; Cliff,
+A. D., Ord, J. K. 1981 Spatial processes, Pion, p. 17.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ww_local_geary_c() (plus _vec and _pvalue variants)
+</td>
+<td style="text-align:left;">
+Calculate local Geary’s C
+</td>
+<td style="text-align:left;">
+Spatial yardstick metrics
+</td>
+<td style="text-align:left;">
+Anselin, L. 1995. Local indicators of spatial association, Geographical
+Analysis, 27, pp 93–115. doi: 10.1111/j.1538-4632.1995.tb00338.x.
+Anselin, L. 2019. A Local Indicator of Multivariate Spatial Association:
+Extending Geary’s C. Geographical Analysis, 51, pp 133-150. doi:
+10.1111/gean.12164
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ww_local_getis_ord_g() (plus _vec and _pvalue variants)
+</td>
+<td style="text-align:left;">
+Calculate local Getis-Ord G and G*
+</td>
+<td style="text-align:left;">
+Spatial yardstick metrics
+</td>
+<td style="text-align:left;">
+Ord, J. K. and Getis, A. 1995. Local spatial autocorrelation statistics:
+distributional issues and an application. Geographical Analysis, 27,
+286–306. doi: 10.1111/j.1538-4632.1995.tb00912.x
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ww_agreement_coefficient(), ww_systematic_agreement_coefficient(),
+ww_systematic_mpd(), ww_systematic_rmpd() (plus unsystematic and _vec
+variants)
+</td>
+<td style="text-align:left;">
+Calculate agreement coefficients and related metrics
+</td>
+<td style="text-align:left;">
+Yardstick metrics
+</td>
+<td style="text-align:left;">
+Ji, L. and Gallo, K. 2006. An Agreement Coefficient for Image
+Comparison. Photogrammetric Engineering &amp; Remote Sensing 72(7), pp
+823–833, doi: 10.14358/PERS.72.7.823.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ww_willmott_d(), ww_willmott_dr(), ww_systematic_mse(),
+ww_systematic_rmse() (plus unsystematic and _vec variants)
+</td>
+<td style="text-align:left;">
+Calculate Willmott’s d and related metrics
+</td>
+<td style="text-align:left;">
+Yardstick metrics
+</td>
+<td style="text-align:left;">
+Willmott, C. J. 1981. On the Validation of Models. Physical Geography
+2(2), pp 184-194, doi: 10.1080/02723646.1981.10642213; Willmott, C. J.
+1982. Some Comments on the Evaluation of Model Performance. Bulletin of
+the American Meteorological Society 63(11), pp 1309-1313, doi:
+10.1175/1520-0477(1982)063&lt;1309:SCOTEO&gt;2.0.CO;2.; Willmott, C. J.,
+Robeson, S. M., and Matsuura, K. A refined index of model performance.
+International Journal of Climatology 32, pp 2088-2094, doi:
+10.1002/joc.2419.
+</td>
+</tr>
+</tbody>
+</table>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
