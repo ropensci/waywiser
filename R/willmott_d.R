@@ -51,8 +51,19 @@
 #' y <- c(2, 3, 5, 5, 6, 8)
 #'
 #' ww_willmott_d_vec(x, y)
+#' ww_willmott_dr_vec(x, y)
 #' ww_systematic_mse_vec(x, y)
 #' ww_unsystematic_mse_vec(x, y)
+#' ww_systematic_rmse_vec(x, y)
+#' ww_unsystematic_rmse_vec(x, y)
+#'
+#' example_df <- data.frame(x = x, y = y)
+#' ww_willmott_d(example_df, x, y)
+#' ww_willmott_dr(example_df, x, y)
+#' ww_systematic_mse(example_df, x, y)
+#' ww_unsystematic_mse(example_df, x, y)
+#' ww_systematic_rmse(example_df, x, y)
+#' ww_unsystematic_rmse(example_df, x, y)
 #'
 #' @srrstats {G1.0} Reference for these methods:
 #' @references

@@ -67,11 +67,32 @@ These functions can be used for geographic or projected coordinate reference
 systems and expect 2D data.
 }
 \examples{
-guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
-guerry$predictions <- predict(guerry_lm, guerry)
+guerry_model <- guerry
+guerry_lm <- lm(Crm_prs ~ Litercy, guerry_model)
+guerry_model$predictions <- predict(guerry_lm, guerry_model)
 
-ww_global_moran_i(guerry, Crm_prs, predictions)
+ww_global_moran_i(guerry_model, Crm_prs, predictions)
+ww_global_moran_pvalue(guerry_model, Crm_prs, predictions)
 
+wt <- ww_build_weights(guerry_model)
+
+ww_global_moran_i_vec(
+  guerry_model$Crm_prs,
+  guerry_model$predictions,
+  wt = wt
+)
+ww_global_moran_pvalue_vec(
+  guerry_model$Crm_prs,
+  guerry_model$predictions,
+  wt = wt
+)
+
+}
+\references{
+Moran, P.A.P. (1950). "Notes on Continuous Stochastic Phenomena." Biometrika,
+37(1/2), pp 17. doi: 10.2307/2332142
+
+Cliff, A. D., Ord, J. K. 1981 Spatial processes, Pion, p. 17.
 }
 \seealso{
 Other autocorrelation metrics: 

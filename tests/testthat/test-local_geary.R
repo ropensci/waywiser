@@ -1,5 +1,5 @@
-set.seed(123)
 test_that("Local geary statistics are stable", {
+  set.seed(123)
 
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)

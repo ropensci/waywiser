@@ -59,6 +59,15 @@
 #' ww_systematic_rmpd_vec(x, y)
 #' ww_unsystematic_rmpd_vec(x, y)
 #'
+#' example_df <- data.frame(x = x, y = y)
+#' ww_agreement_coefficient(example_df, x, y)
+#' ww_systematic_agreement_coefficient(example_df, x, y)
+#' ww_unsystematic_agreement_coefficient(example_df, x, y)
+#' ww_systematic_mpd(example_df, x, y)
+#' ww_unsystematic_mpd(example_df, x, y)
+#' ww_systematic_rmpd(example_df, x, y)
+#' ww_unsystematic_rmpd(example_df, x, y)
+#'
 #' @srrstats {G1.0} Reference for these methods:
 #' @references
 #' Ji, L. and Gallo, K. 2006. "An Agreement Coefficient for Image Comparison."

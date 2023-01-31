@@ -45,11 +45,33 @@
 #' @family yardstick metrics
 #'
 #' @examples
-#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry)
-#' guerry$predictions <- predict(guerry_lm, guerry)
+#' guerry_model <- guerry
+#' guerry_lm <- lm(Crm_prs ~ Litercy, guerry_model)
+#' guerry_model$predictions <- predict(guerry_lm, guerry_model)
 #'
-#' ww_local_geary_c(guerry, Crm_prs, predictions)
-#' ww_local_geary_pvalue(guerry, Crm_prs, predictions)
+#' ww_local_geary_c(guerry_model, Crm_prs, predictions)
+#' ww_local_geary_pvalue(guerry_model, Crm_prs, predictions)
+#'
+#' wt <- ww_build_weights(guerry_model)
+#'
+#' ww_local_geary_c_vec(
+#'   guerry_model$Crm_prs,
+#'   guerry_model$predictions,
+#'   wt = wt
+#' )
+#' ww_local_geary_pvalue_vec(
+#'   guerry_model$Crm_prs,
+#'   guerry_model$predictions,
+#'   wt = wt
+#' )
+#'
+#' @references
+#' Anselin, L. 1995. Local indicators of spatial association, Geographical
+#' Analysis, 27, pp 93–115. doi: 10.1111/j.1538-4632.1995.tb00338.x.
+#'
+#' Anselin, L. 2019. A Local Indicator of Multivariate Spatial Association:
+#' Extending Geary's C. Geographical Analysis, 51, pp 133-150.
+#' doi: 10.1111/gean.12164
 #'
 #' @rdname local_geary_c
 #' @export

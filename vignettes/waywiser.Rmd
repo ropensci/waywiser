@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = rlang::is_installed("vip")
+  eval = rlang::is_installed("vip") && rlang::is_installed("kableExtra")
 )
 ```
 
@@ -172,3 +172,30 @@ worldclim_aoa
 The objects returned by `ww_area_of_applicability()` are models in their own 
 right, which can be used by functions such as `predict()` to calculate if new
 observations are in the area of applicability of a model. 
+
+## Feature Matrix
+
+Below is a table of the major statistical functions waywiser provides, alongside 
+brief descriptions and journal references for each. For a complete list of 
+package functions, check out the [package reference page](https://mikemahoney218.github.io/waywiser/reference/index.html).
+
+```{r echo=FALSE}
+funs <- tibble::tribble(
+  ~ "Function", ~ "Description", ~ "Category", ~ "Reference",
+  "ww_area_of_applicability()", "Calculate the 'area of applicability' of a model", "AOA", "H. Meyer and E. Pebesma. 2021. Predicting into unknown space? Estimating the area of applicability of spatial prediction models, Methods in Ecology and Evolution 12(9), pp 1620 - 1633, doi: 10.1111/2041-210X.13650.",
+  "ww_multi_scale()", "Calculate model metrics for predictions aggregated to multiple levels", "Multi-scale assessment", "Riemann, R., Wilson, B. T., Lister, A., and Parks, S. (2010) An effective assessment protocol for continuous geospatial datasets of forest characteristics using USFS Forest Inventory and Analysis (FIA) data. Remote Sensing of Environment 114(10), pp 2337-2352, doi: 10.1016/j.rse.2010.05.010.",
+  "ww_global_moran_i() (plus _vec and _pvalue variants)", "Calculate Moran's I", "Spatial yardstick metrics", "Moran, P.A.P. (1950). Notes on Continuous Stochastic Phenomena. Biometrika, 37(1/2), pp 17. doi: 10.2307/2332142; Cliff, A. D., Ord, J. K. 1981 Spatial processes, Pion, p. 17.",
+  "ww_local_moran_i() (plus _vec and _pvalue variants)", "Calculate local Moran's I (Anselin's LISA)", "Spatial yardstick metrics", "Anselin, L. 1995. Local indicators of spatial association, Geographical Analysis, 27, pp 93–115. doi: 10.1111/j.1538-4632.1995.tb00338.x. Sokal, R. R, Oden, N. L. and Thomson, B. A. 1998. Local Spatial Autocorrelation in a Biological Model. Geographical Analysis, 30, pp 331–354. doi: 10.1111/j.1538-4632.1998.tb00406.x",
+  "ww_global_geary_c() (plus _vec and _pvalue variants)", "Calculate Geary's C", "Spatial yardstick metrics", "Geary, R. C. (1954). The Contiguity Ratio and Statistical Mapping. The Incorporated Statistician. 5 (3): 115–145. doi: 10.2307/2986645; Cliff, A. D., Ord, J. K. 1981 Spatial processes, Pion, p. 17.",
+  "ww_local_geary_c() (plus _vec and _pvalue variants)", "Calculate local Geary's C", "Spatial yardstick metrics", "Anselin, L. 1995. Local indicators of spatial association, Geographical Analysis, 27, pp 93–115. doi: 10.1111/j.1538-4632.1995.tb00338.x. Anselin, L. 2019. A Local Indicator of Multivariate Spatial Association: Extending Geary's C. Geographical Analysis, 51, pp 133-150. doi: 10.1111/gean.12164",
+  "ww_local_getis_ord_g() (plus _vec and _pvalue variants)", "Calculate local Getis-Ord G and G*", "Spatial yardstick metrics", "Ord, J. K. and Getis, A. 1995. Local spatial autocorrelation statistics: distributional issues and an application. Geographical Analysis, 27, 286–306. doi: 10.1111/j.1538-4632.1995.tb00912.x",
+  "ww_agreement_coefficient(), ww_systematic_agreement_coefficient(), ww_systematic_mpd(), ww_systematic_rmpd() (plus unsystematic and _vec variants)", "Calculate agreement coefficients and related metrics", "Yardstick metrics", "Ji, L. and Gallo, K. 2006. An Agreement Coefficient for Image Comparison. Photogrammetric Engineering & Remote Sensing 72(7), pp 823–833, doi: 10.14358/PERS.72.7.823.",
+  "ww_willmott_d(), ww_willmott_dr(), ww_systematic_mse(), ww_systematic_rmse() (plus unsystematic and _vec variants)", "Calculate Willmott's d and related metrics", "Yardstick metrics", "Willmott, C. J. 1981. On the Validation of Models. Physical Geography 2(2), pp 184-194, doi: 10.1080/02723646.1981.10642213; Willmott, C. J. 1982. Some Comments on the Evaluation of Model Performance. Bulletin of the American Meteorological Society 63(11), pp 1309-1313, doi: 10.1175/1520-0477(1982)063<1309:SCOTEO>2.0.CO;2.; Willmott, C. J., Robeson, S. M., and Matsuura, K. A refined index of model performance. International Journal of Climatology 32, pp 2088-2094, doi: 10.1002/joc.2419.",
+)
+
+kableExtra::kable_styling(
+  kableExtra::kbl(funs),
+  bootstrap_options = c("striped", "hover")
+)
+```
+
