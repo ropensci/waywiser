@@ -53,6 +53,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/Feature-Matrix.html">Feature Matrix</a>
     <a class="dropdown-item" href="../articles/multi-scale-assessment.html">Multi-scale model assessment</a>
     <a class="dropdown-item" href="../articles/residual-autocorrelation.html">Calculating residual spatial autocorrelation</a>
   </div>
@@ -81,7 +82,7 @@
 
 
 
-<script src="waywiser_files/kePrint-0.0.1/kePrint.js"></script><link href="waywiser_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Assessing Models with Waywiser</h1>
@@ -108,33 +109,43 @@ from Meyer and Pebesma 2021</a>, extending this tool to work with
 tidymodels infrastructure.</li>
 </ol>
 <p>This vignette will walk through each of these goals in turn. Before
-we do that, let’s set up the data we’ll use in examples:</p>
+we do that, let’s set up the data we’ll use in examples. We’ll be using
+simulated data based on <a href="https://www.worldclim.org/" class="external-link">Worldclim</a> variables; our
+predictors here represent temperature and precipitation values at
+sampled locations, while, our response represents a virtual species
+distribution:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mikemahoney218/waywiser" class="external-link">waywiser</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1107</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">worldclim_training</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">worldclim_simulation</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span><span class="va">worldclim_testing</span> <span class="op">&lt;-</span> <span class="va">worldclim_simulation</span><span class="op">[</span><span class="op">-</span><span class="va">worldclim_training</span>, <span class="op">]</span></span>
+<span><span class="va">worldclim_training</span> <span class="op">&lt;-</span> <span class="va">worldclim_simulation</span><span class="op">[</span><span class="va">worldclim_training</span>, <span class="op">]</span></span>
+<span></span>
 <span></span>
 <span><span class="va">worldclim_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span></span>
 <span>  <span class="va">response</span> <span class="op">~</span> <span class="va">bio2</span> <span class="op">+</span> <span class="va">bio10</span> <span class="op">+</span> <span class="va">bio13</span> <span class="op">+</span> <span class="va">bio19</span>, </span>
-<span>  <span class="va">worldclim_simulation</span></span>
+<span>  <span class="va">worldclim_training</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">worldclim_simulation</span><span class="op">$</span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span></span>
+<span><span class="va">worldclim_testing</span><span class="op">$</span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span></span>
 <span>  <span class="va">worldclim_model</span>,</span>
-<span>  <span class="va">worldclim_simulation</span></span>
+<span>  <span class="va">worldclim_testing</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">worldclim_simulation</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">worldclim_testing</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 6 features and 6 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: -76.77327 ymin: -28.37814 xmax: 135.1108 ymax: 82.8109</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -156.2436 ymin: 3.924933 xmax: 52.85843 ymax: 48.72934</span></span>
 <span><span class="co">#&gt; CRS:           +proj=longlat +datum=WGS84 +no_defs</span></span>
-<span><span class="co">#&gt;   bio2 bio10 bio13 bio19                    geometry   response predictions</span></span>
-<span><span class="co">#&gt; 1   66     0    22    24    POINT (-42.8052 82.8109) 0.32833495   0.4290463</span></span>
-<span><span class="co">#&gt; 2  111   148   130    62   POINT (135.1108 54.12693) 0.47211614   0.4230675</span></span>
-<span><span class="co">#&gt; 3  135   279    28    63  POINT (120.6066 -28.37814) 0.56919133   0.5216524</span></span>
-<span><span class="co">#&gt; 4   66   -16    28    38  POINT (-34.46038 82.05372) 0.29898889   0.4300780</span></span>
-<span><span class="co">#&gt; 5  114   127     6    12 POINT (-69.94962 -26.10663) 0.77835080   0.5477976</span></span>
-<span><span class="co">#&gt; 6  104   155   272   690  POINT (-76.77327 2.443002) 0.02898094   0.1904173</span></span></code></pre></div>
+<span><span class="co">#&gt;      bio2 bio10 bio13 bio19                   geometry   response predictions</span></span>
+<span><span class="co">#&gt; 8001  150   256    12    32   POINT (36.1216 30.23658) 0.65981755  0.60203146</span></span>
+<span><span class="co">#&gt; 8002   85   248    82   196 POINT (-156.2436 19.73569) 0.30859908  0.30053636</span></span>
+<span><span class="co">#&gt; 8003  178   275    56    33 POINT (-103.2796 31.85488) 0.47365646  0.65660673</span></span>
+<span><span class="co">#&gt; 8004  100   200    74    99  POINT (20.64971 47.14207) 0.47266462  0.39658926</span></span>
+<span><span class="co">#&gt; 8005   68   262   296   746 POINT (-81.33804 3.924933) 0.00863417 -0.01075431</span></span>
+<span><span class="co">#&gt; 8006  112   241    21    48  POINT (52.85843 48.72934) 0.63255439  0.46702575</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="yardstick-extensions">Yardstick Extensions<a class="anchor" aria-label="anchor" href="#yardstick-extensions"></a>
 </h2>
@@ -147,32 +158,32 @@ can either be a tibble or a vector output. For instance, if we want to
 calculate the agreement coefficient from <a href="https://doi.org/10.14358/PERS.72.7.823" class="external-link">Ji and Gallo 2006</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ww_agreement_coefficient.html">ww_agreement_coefficient</a></span><span class="op">(</span></span>
-<span>  <span class="va">worldclim_simulation</span>,</span>
+<span>  <span class="va">worldclim_testing</span>,</span>
 <span>  truth <span class="op">=</span> <span class="va">response</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="va">predictions</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;   .metric               .estimator .estimate</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard       0.664</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard       0.675</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/ww_agreement_coefficient.html">ww_agreement_coefficient_vec</a></span><span class="op">(</span></span>
-<span>  truth <span class="op">=</span> <span class="va">worldclim_simulation</span><span class="op">$</span><span class="va">response</span>,</span>
-<span>  estimate <span class="op">=</span> <span class="va">worldclim_simulation</span><span class="op">$</span><span class="va">predictions</span></span>
+<span>  truth <span class="op">=</span> <span class="va">worldclim_testing</span><span class="op">$</span><span class="va">response</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="va">worldclim_testing</span><span class="op">$</span><span class="va">predictions</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.6643328</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.6753398</span></span></code></pre></div>
 <p>Some of these additional metrics are implemented by wrapping
 functions from the <a href="https://r-spatial.github.io/spdep/" class="external-link">spdep</a> package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/global_geary_c.html">ww_global_geary_c</a></span><span class="op">(</span></span>
-<span>  <span class="va">worldclim_simulation</span>,</span>
+<span>  <span class="va">worldclim_testing</span>,</span>
 <span>  truth <span class="op">=</span> <span class="va">response</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="va">predictions</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;   .metric        .estimator .estimate</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> global_geary_c standard      0.062<span style="text-decoration: underline;">1</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> global_geary_c standard       0.166</span></span></code></pre></div>
 <p>These functions rely on calculating the spatial neighbors of each
 observation. The waywiser package will automatically use
 <code><a href="../reference/ww_build_weights.html">ww_build_weights()</a></code> to calculate these, if not provided, but
@@ -181,18 +192,18 @@ this is often not desirable. For that reason, these functions all have a
 or a function that will create spatial weights:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/global_geary_c.html">ww_global_geary_c</a></span><span class="op">(</span></span>
-<span>  <span class="va">worldclim_simulation</span>,</span>
+<span>  <span class="va">worldclim_testing</span>,</span>
 <span>  truth <span class="op">=</span> <span class="va">response</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="va">predictions</span>,</span>
-<span>  wt <span class="op">=</span> <span class="fu"><a href="../reference/ww_build_weights.html">ww_build_weights</a></span><span class="op">(</span><span class="va">worldclim_simulation</span><span class="op">)</span></span>
+<span>  wt <span class="op">=</span> <span class="fu"><a href="../reference/ww_build_weights.html">ww_build_weights</a></span><span class="op">(</span><span class="va">worldclim_testing</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;   .metric        .estimator .estimate</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> global_geary_c standard      0.062<span style="text-decoration: underline;">1</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> global_geary_c standard       0.166</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/global_geary_c.html">ww_global_geary_c</a></span><span class="op">(</span></span>
-<span>  <span class="va">worldclim_simulation</span>,</span>
+<span>  <span class="va">worldclim_testing</span>,</span>
 <span>  truth <span class="op">=</span> <span class="va">response</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="va">predictions</span>,</span>
 <span>  wt <span class="op">=</span> <span class="va">ww_build_weights</span></span>
@@ -200,7 +211,7 @@ or a function that will create spatial weights:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;   .metric        .estimator .estimate</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> global_geary_c standard      0.062<span style="text-decoration: underline;">1</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> global_geary_c standard       0.166</span></span></code></pre></div>
 <p>Because these are yardstick metrics, they can be used with
 <code><a href="https://yardstick.tidymodels.org/reference/metric_set.html" class="external-link">yardstick::metric_set()</a></code> and other tidymodels
 infrastructure:</p>
@@ -208,14 +219,14 @@ infrastructure:</p>
 <code class="sourceCode R"><span><span class="fu">yardstick</span><span class="fu">::</span><span class="fu"><a href="https://yardstick.tidymodels.org/reference/metric_set.html" class="external-link">metric_set</a></span><span class="op">(</span></span>
 <span>  <span class="va">ww_agreement_coefficient</span>,</span>
 <span>  <span class="va">ww_global_geary_c</span></span>
-<span><span class="op">)</span><span class="op">(</span><span class="va">worldclim_simulation</span>,</span>
+<span><span class="op">)</span><span class="op">(</span><span class="va">worldclim_testing</span>,</span>
 <span>  truth <span class="op">=</span> <span class="va">response</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="va">predictions</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
 <span><span class="co">#&gt;   .metric               .estimator .estimate</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard      0.664 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> global_geary_c        standard      0.062<span style="text-decoration: underline;">1</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard       0.675</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> global_geary_c        standard       0.166</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="multi-scale-model-assessment">Multi-scale model assessment<a class="anchor" aria-label="anchor" href="#multi-scale-model-assessment"></a>
@@ -231,38 +242,48 @@ multiple scales.</p>
 process. The interface for this function works similarly to that for
 yardstick metrics – you provide your data, your true values, and your
 estimate – except you also must provide instructions for how to
-aggregate your data. This can take the form of providing information on
-how to build standardized grids, by passing arguments that will be used
-by <code><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">sf::st_make_grid()</a></code>, or by passing polygons directly:</p>
+aggregate your data. You can do this by passing arguments that will be
+used by <code><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">sf::st_make_grid()</a></code>; for instance, we can use the
+<code>n</code> argument to control how many polygons our grid has in the
+x and y directions.</p>
+<p>Note that each element of argument vector is used to make a separate
+grid – so, for instance, passing <code>n = c(2, 4)</code> will result in
+one 2-by-2 grid and one 4-by-4 grid, because <code>n[[1]]</code> is 2
+and <code>n[[2]]</code> is 4. If we actually wanted to create a 2-by-4
+grid, by passing <code><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">sf::st_make_grid()</a></code> the argument
+<code>n = c(2, 4)</code>, we need to wrap that vector in a list so that
+running <code>n[[1]]</code> returns <code>c(2, 4)</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ww_multi_scale.html">ww_multi_scale</a></span><span class="op">(</span></span>
-<span>  <span class="va">worldclim_simulation</span>,</span>
+<span>  <span class="va">worldclim_testing</span>,</span>
 <span>  truth <span class="op">=</span> <span class="va">response</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="va">predictions</span>,</span>
 <span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ww_agreement_coefficient</span>, <span class="fu">yardstick</span><span class="fu">::</span><span class="va"><a href="https://yardstick.tidymodels.org/reference/rmse.html" class="external-link">rmse</a></span><span class="op">)</span>,</span>
-<span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 6</span></span></span>
 <span><span class="co">#&gt;   .metric               .estimator .estimate .grid_args       .grid  .notes  </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard      0.187  <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rmse                  standard      0.033<span style="text-decoration: underline;">0</span> <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> agreement_coefficient standard      0.852  <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rmse                  standard      0.050<span style="text-decoration: underline;">2</span> <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span>
-<span></span>
-<span><span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span><span class="va">worldclim_simulation</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard      0.202  <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rmse                  standard      0.039<span style="text-decoration: underline;">1</span> <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span></code></pre></div>
+<p>You can also pass polygons directly, if you have pre-defined grids
+you’d like to use:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span><span class="va">worldclim_testing</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/ww_multi_scale.html">ww_multi_scale</a></span><span class="op">(</span></span>
-<span>  <span class="va">worldclim_simulation</span>,</span>
+<span>  <span class="va">worldclim_testing</span>,</span>
 <span>  truth <span class="op">=</span> <span class="va">response</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="va">predictions</span>,</span>
 <span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ww_agreement_coefficient</span>, <span class="fu">yardstick</span><span class="fu">::</span><span class="va"><a href="https://yardstick.tidymodels.org/reference/rmse.html" class="external-link">rmse</a></span><span class="op">)</span>,</span>
 <span>  grids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Some observations were not within any grid cell, and as such were not used in any assessments.</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> See the `.notes` column for details.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 6</span></span></span>
 <span><span class="co">#&gt;   .metric               .estimator .estimate .grid_args       .grid  .notes  </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard      0.183  <span style="color: #949494;">&lt;tibble [0 × 0]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rmse                  standard      0.032<span style="text-decoration: underline;">9</span> <span style="color: #949494;">&lt;tibble [0 × 0]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard      0.150  <span style="color: #949494;">&lt;tibble [0 × 0]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rmse                  standard      0.041<span style="text-decoration: underline;">8</span> <span style="color: #949494;">&lt;tibble [0 × 0]&gt;</span> &lt;sf&gt;   &lt;tibble&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="area-of-applicability">Area of Applicability<a class="anchor" aria-label="anchor" href="#area-of-applicability"></a>
@@ -270,11 +291,19 @@ by <code><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" cl
 <p>Last but not least, we can also see if there’s any areas in our data
 that are too different from our training data for us to safely predict
 on, which fall outside the “area of applicability” defined by <a href="https://doi.org/10.1111/2041-210X.13650" class="external-link">Meyer and Pebesma
-(2021)</a>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+(2021)</a>. This approach looks at how similar the predictor values of
+new data are to the data you used to train your data, with each
+predictor weighted by how important it is to your model.</p>
+<p>In order to calculate your area of applicability, you can pass
+<code><a href="../reference/ww_area_of_applicability.html">ww_area_of_applicability()</a></code> information about which of your
+variables are used as predictors in your model, your training data, and
+the importance scores for each of your variables. Out of the box,
+waywiser should work with any of the importance score-calculating
+functions from the vip package:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">worldclim_aoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ww_area_of_applicability.html">ww_area_of_applicability</a></span><span class="op">(</span></span>
 <span>  <span class="va">response</span> <span class="op">~</span> <span class="va">bio2</span> <span class="op">+</span> <span class="va">bio10</span> <span class="op">+</span> <span class="va">bio13</span> <span class="op">+</span> <span class="va">bio19</span>,</span>
-<span>  <span class="va">worldclim_simulation</span>,</span>
+<span>  <span class="va">worldclim_training</span>,</span>
 <span>  importance <span class="op">=</span> <span class="fu">vip</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/vip/man/vi_model.html" class="external-link">vi_model</a></span><span class="op">(</span><span class="va">worldclim_model</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -282,196 +311,53 @@ on, which fall outside the “area of applicability” defined by <a href="https
 <span><span class="co">#&gt; # Predictors:</span></span>
 <span><span class="co">#&gt;    4</span></span>
 <span><span class="co">#&gt; Area-of-applicability threshold:</span></span>
-<span><span class="co">#&gt;    0.0915347</span></span></code></pre></div>
+<span><span class="co">#&gt;    0.1038107</span></span></code></pre></div>
+<p>You can also pass a data.frame with columns named “term” and
+“estimate” (containing the name of each term, or predictor, and their
+estimated importance) rather than using the vip package if that’s more
+convenient.</p>
 <p>The objects returned by <code><a href="../reference/ww_area_of_applicability.html">ww_area_of_applicability()</a></code> are
 models in their own right, which can be used by functions such as
 <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> to calculate if new observations are in the area
 of applicability of a model.</p>
-</div>
-<div class="section level2">
-<h2 id="feature-matrix">Feature Matrix<a class="anchor" aria-label="anchor" href="#feature-matrix"></a>
-</h2>
-<p>Below is a table of the major statistical functions waywiser
-provides, alongside brief descriptions and journal references for each.
-For a complete list of package functions, check out the <a href="https://mikemahoney218.github.io/waywiser/reference/index.html">package
-reference page</a>.</p>
-<table class="table table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;">
-Function
-</th>
-<th style="text-align:left;">
-Description
-</th>
-<th style="text-align:left;">
-Category
-</th>
-<th style="text-align:left;">
-Reference
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-ww_area_of_applicability()
-</td>
-<td style="text-align:left;">
-Calculate the ‘area of applicability’ of a model
-</td>
-<td style="text-align:left;">
-AOA
-</td>
-<td style="text-align:left;">
-H. Meyer and E. Pebesma. 2021. Predicting into unknown space? Estimating
-the area of applicability of spatial prediction models, Methods in
-Ecology and Evolution 12(9), pp 1620 - 1633, doi:
-10.1111/2041-210X.13650.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ww_multi_scale()
-</td>
-<td style="text-align:left;">
-Calculate model metrics for predictions aggregated to multiple levels
-</td>
-<td style="text-align:left;">
-Multi-scale assessment
-</td>
-<td style="text-align:left;">
-Riemann, R., Wilson, B. T., Lister, A., and Parks, S. (2010) An
-effective assessment protocol for continuous geospatial datasets of
-forest characteristics using USFS Forest Inventory and Analysis (FIA)
-data. Remote Sensing of Environment 114(10), pp 2337-2352, doi:
-10.1016/j.rse.2010.05.010.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ww_global_moran_i() (plus _vec and _pvalue variants)
-</td>
-<td style="text-align:left;">
-Calculate Moran’s I
-</td>
-<td style="text-align:left;">
-Spatial yardstick metrics
-</td>
-<td style="text-align:left;">
-Moran, P.A.P. (1950). Notes on Continuous Stochastic Phenomena.
-Biometrika, 37(1/2), pp 17. doi: 10.2307/2332142; Cliff, A. D., Ord, J.
-K. 1981 Spatial processes, Pion, p. 17.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ww_local_moran_i() (plus _vec and _pvalue variants)
-</td>
-<td style="text-align:left;">
-Calculate local Moran’s I (Anselin’s LISA)
-</td>
-<td style="text-align:left;">
-Spatial yardstick metrics
-</td>
-<td style="text-align:left;">
-Anselin, L. 1995. Local indicators of spatial association, Geographical
-Analysis, 27, pp 93–115. doi: 10.1111/j.1538-4632.1995.tb00338.x. Sokal,
-R. R, Oden, N. L. and Thomson, B. A. 1998. Local Spatial Autocorrelation
-in a Biological Model. Geographical Analysis, 30, pp 331–354. doi:
-10.1111/j.1538-4632.1998.tb00406.x
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ww_global_geary_c() (plus _vec and _pvalue variants)
-</td>
-<td style="text-align:left;">
-Calculate Geary’s C
-</td>
-<td style="text-align:left;">
-Spatial yardstick metrics
-</td>
-<td style="text-align:left;">
-Geary, R. C. (1954). The Contiguity Ratio and Statistical Mapping. The
-Incorporated Statistician. 5 (3): 115–145. doi: 10.2307/2986645; Cliff,
-A. D., Ord, J. K. 1981 Spatial processes, Pion, p. 17.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ww_local_geary_c() (plus _vec and _pvalue variants)
-</td>
-<td style="text-align:left;">
-Calculate local Geary’s C
-</td>
-<td style="text-align:left;">
-Spatial yardstick metrics
-</td>
-<td style="text-align:left;">
-Anselin, L. 1995. Local indicators of spatial association, Geographical
-Analysis, 27, pp 93–115. doi: 10.1111/j.1538-4632.1995.tb00338.x.
-Anselin, L. 2019. A Local Indicator of Multivariate Spatial Association:
-Extending Geary’s C. Geographical Analysis, 51, pp 133-150. doi:
-10.1111/gean.12164
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ww_local_getis_ord_g() (plus _vec and _pvalue variants)
-</td>
-<td style="text-align:left;">
-Calculate local Getis-Ord G and G*
-</td>
-<td style="text-align:left;">
-Spatial yardstick metrics
-</td>
-<td style="text-align:left;">
-Ord, J. K. and Getis, A. 1995. Local spatial autocorrelation statistics:
-distributional issues and an application. Geographical Analysis, 27,
-286–306. doi: 10.1111/j.1538-4632.1995.tb00912.x
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ww_agreement_coefficient(), ww_systematic_agreement_coefficient(),
-ww_systematic_mpd(), ww_systematic_rmpd() (plus unsystematic and _vec
-variants)
-</td>
-<td style="text-align:left;">
-Calculate agreement coefficients and related metrics
-</td>
-<td style="text-align:left;">
-Yardstick metrics
-</td>
-<td style="text-align:left;">
-Ji, L. and Gallo, K. 2006. An Agreement Coefficient for Image
-Comparison. Photogrammetric Engineering &amp; Remote Sensing 72(7), pp
-823–833, doi: 10.14358/PERS.72.7.823.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ww_willmott_d(), ww_willmott_dr(), ww_systematic_mse(),
-ww_systematic_rmse() (plus unsystematic and _vec variants)
-</td>
-<td style="text-align:left;">
-Calculate Willmott’s d and related metrics
-</td>
-<td style="text-align:left;">
-Yardstick metrics
-</td>
-<td style="text-align:left;">
-Willmott, C. J. 1981. On the Validation of Models. Physical Geography
-2(2), pp 184-194, doi: 10.1080/02723646.1981.10642213; Willmott, C. J.
-1982. Some Comments on the Evaluation of Model Performance. Bulletin of
-the American Meteorological Society 63(11), pp 1309-1313, doi:
-10.1175/1520-0477(1982)063&lt;1309:SCOTEO&gt;2.0.CO;2.; Willmott, C. J.,
-Robeson, S. M., and Matsuura, K. A refined index of model performance.
-International Journal of Climatology 32, pp 2088-2094, doi:
-10.1002/joc.2419.
-</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">worldclim_testing</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span>
+<span>  <span class="va">worldclim_testing</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">worldclim_aoa</span>, <span class="va">worldclim_testing</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">worldclim_testing</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Simple feature collection with 6 features and 8 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POINT</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -156.2436 ymin: 3.924933 xmax: 52.85843 ymax: 48.72934</span></span>
+<span><span class="co">#&gt; CRS:           +proj=longlat +datum=WGS84 +no_defs</span></span>
+<span><span class="co">#&gt;      bio2 bio10 bio13 bio19   response predictions         di  aoa</span></span>
+<span><span class="co">#&gt; 8001  150   256    12    32 0.65981755  0.60203146 0.03315007 TRUE</span></span>
+<span><span class="co">#&gt; 8002   85   248    82   196 0.30859908  0.30053636 0.08787721 TRUE</span></span>
+<span><span class="co">#&gt; 8003  178   275    56    33 0.47365646  0.65660673 0.04132990 TRUE</span></span>
+<span><span class="co">#&gt; 8004  100   200    74    99 0.47266462  0.39658926 0.04877910 TRUE</span></span>
+<span><span class="co">#&gt; 8005   68   262   296   746 0.00863417 -0.01075431 0.00000000 TRUE</span></span>
+<span><span class="co">#&gt; 8006  112   241    21    48 0.63255439  0.46702575 0.00000000 TRUE</span></span>
+<span><span class="co">#&gt;                        geometry</span></span>
+<span><span class="co">#&gt; 8001   POINT (36.1216 30.23658)</span></span>
+<span><span class="co">#&gt; 8002 POINT (-156.2436 19.73569)</span></span>
+<span><span class="co">#&gt; 8003 POINT (-103.2796 31.85488)</span></span>
+<span><span class="co">#&gt; 8004  POINT (20.64971 47.14207)</span></span>
+<span><span class="co">#&gt; 8005 POINT (-81.33804 3.924933)</span></span>
+<span><span class="co">#&gt; 8006  POINT (52.85843 48.72934)</span></span></code></pre></div>
+<p>The predict function returns the “distance index”, or “di”, for each
+observation: a score of how far away the observation is, in predictor
+space, from your training data. Points with a “di” higher than a set
+threshold are “outside” the area of applicability. We can visualize our
+test set here to see that our model often, but not always, performs
+worse on observations with a higher “di”:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">worldclim_testing</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">di</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">response</span> <span class="op">-</span> <span class="va">predictions</span><span class="op">)</span>, color <span class="op">=</span> <span class="va">aoa</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span></code></pre></div>
+<p><img src="waywiser_files/figure-html/unnamed-chunk-10-1.png" width="768"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
