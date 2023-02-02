@@ -54,6 +54,9 @@ For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
 Calculate the local Getis-Ord G and G* statistic for model residuals.
 \code{ww_local_getis_ord_g()} returns the statistic itself, while
 \code{ww_local_getis_ord_pvalue()} returns the associated p value.
+These functions are meant to help assess model predictions, for instance by
+identifying clusters of higher residuals than expected. For statistical
+testing and inference applications, use \code{\link[spdep:localG]{spdep::localG_perm()}} instead.
 }
 \details{
 These functions can be used for geographic or projected coordinate reference

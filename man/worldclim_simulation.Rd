@@ -24,6 +24,6 @@ worldclim_simulation
 \description{
 This data is adapted from the CAST vignette
 \code{vignette("cast02-AOA-tutorial", package = "CAST")}.
-The original data is derived from the Worldclim global climate variables/
+The original data is derived from the Worldclim global climate variables.
 }
 \keyword{datasets}

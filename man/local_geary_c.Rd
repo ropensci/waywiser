@@ -54,6 +54,9 @@ For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
 Calculate the local Geary's C statistic for model residuals.
 \code{ww_local_geary_c()} returns the statistic itself, while
 \code{ww_local_geary_pvalue()} returns the associated p value.
+These functions are meant to help assess model predictions, for instance by
+identifying clusters of higher residuals than expected. For statistical
+testing and inference applications, use \code{\link[spdep:localC]{spdep::localC_perm()}} instead.
 }
 \details{
 These functions can be used for geographic or projected coordinate reference

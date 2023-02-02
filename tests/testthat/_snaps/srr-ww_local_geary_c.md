@@ -726,12 +726,6 @@
 
     Code
       ww_local_geary_c(worldclim_simulation, response, response)
-    Warning <lifecycle_warning_deprecated>
-      Returning more (or less) than 1 row per `summarise()` group was deprecated in dplyr 1.1.0.
-      i Please use `reframe()` instead.
-      i When switching from `summarise()` to `reframe()`, remember that `reframe()` always returns an ungrouped data frame and adjust accordingly.
-      i The deprecated feature was likely used in the yardstick package.
-        Please report the issue at <https://github.com/tidymodels/yardstick/issues>.
     Output
       # A tibble: 10,000 x 3
          .metric       .estimator .estimate

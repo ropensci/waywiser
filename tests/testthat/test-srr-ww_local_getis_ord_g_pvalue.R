@@ -2,6 +2,7 @@
 # Please edit inst/srr_template_spatial_yardstick.R instead
 
 test_that("srr: expected failures for ww_local_getis_ord_g_pvalue", {
+  trip_dplyr_warning()
   worldclim_predicted <- worldclim_simulation
   worldclim_predicted$predicted <- predict(
     lm(response ~ bio2 * bio10 * bio13 * bio19, data = worldclim_simulation),
@@ -229,6 +230,7 @@ test_that("srr: expected failures for ww_local_getis_ord_g_pvalue", {
 })
 
 test_that("other generic srr standards", {
+  trip_dplyr_warning()
   skip_if_not_installed("withr")
   worldclim_predicted <- worldclim_simulation
   worldclim_predicted$predicted <- predict(
