@@ -1,5 +1,6 @@
 test_that("ww_multi_scale", {
   skip_if_not_installed("modeldata")
+  trip_dplyr_warning()
   data(ames, package = "modeldata")
   ames_sf <- sf::st_as_sf(ames, coords = c("Longitude", "Latitude"), crs = 4326)
   ames_model <- lm(Sale_Price ~ Lot_Area, data = ames_sf)
@@ -78,6 +79,7 @@ test_that("ww_multi_scale", {
 })
 
 test_that("expected errors", {
+  trip_dplyr_warning()
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
@@ -119,6 +121,7 @@ test_that("expected errors", {
 })
 
 test_that("srr: expected failures for ww_multi_scale", {
+  trip_dplyr_warning()
   worldclim_predicted <- worldclim_simulation
   worldclim_predicted$predicted <- predict(
     lm(response ~ bio2 * bio10 * bio13 * bio19, data = worldclim_simulation),
@@ -233,6 +236,7 @@ test_that("srr: expected failures for ww_multi_scale", {
 
 test_that("other generic srr standards", {
   skip_if_not_installed("withr")
+  trip_dplyr_warning()
   worldclim_predicted <- worldclim_simulation
   worldclim_predicted$predicted <- predict(
     lm(response ~ bio2 * bio10 * bio13 * bio19, data = worldclim_simulation),

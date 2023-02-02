@@ -1,4 +1,5 @@
 test_that("Local geary statistics are stable", {
+  trip_dplyr_warning()
   set.seed(123)
 
   guerry_modeled <- guerry

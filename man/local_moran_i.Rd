@@ -52,6 +52,9 @@ For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
 Calculate the local Moran's I statistic for model residuals.
 \code{ww_local_moran_i()} returns the statistic itself, while
 \code{ww_local_moran_pvalue()} returns the associated p value.
+These functions are meant to help assess model predictions, for instance by
+identifying clusters of higher residuals than expected. For statistical
+testing and inference applications, use \code{\link[spdep:localmoran]{spdep::localmoran_perm()}} instead.
 }
 \details{
 These functions can be used for geographic or projected coordinate reference

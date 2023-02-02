@@ -74,7 +74,7 @@
 #'
 #' This data is adapted from the CAST vignette
 #' `vignette("cast02-AOA-tutorial", package = "CAST")`.
-#' The original data is derived from the Worldclim global climate variables/
+#' The original data is derived from the Worldclim global climate variables.
 #'
 #' @srrstats {G5.1} Data used to test the package is exported.
 #'

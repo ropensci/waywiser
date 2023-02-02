@@ -61,6 +61,10 @@ For \verb{_vec()} functions, a single value (or NA).
 Calculate the global Moran's I statistic for model residuals.
 \code{ww_global_moran_i()} returns the statistic itself, while
 \code{ww_global_moran_pvalue()} returns the associated p value.
+These functions are meant to help assess model predictions, for instance by
+identifying if there are clusters of higher residuals than expected. For
+statistical testing and inference applications, use
+\code{\link[spdep:moran.test]{spdep::moran.test()}} instead.
 }
 \details{
 These functions can be used for geographic or projected coordinate reference
