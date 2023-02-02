@@ -1,4 +1,5 @@
 test_that("agreement coefficients match Ji and Gallo", {
+  trip_dplyr_warning()
   #' @srrstats {G5.7} Algorithm performs as expected
   x <- c(6, 8, 9, 10, 11, 14)
   y <- c(2, 3, 5, 5, 6, 8)
@@ -62,6 +63,7 @@ test_that("agreement coefficients match Ji and Gallo", {
 })
 
 test_that("agreement coefficients are the same across methods", {
+  trip_dplyr_warning()
   x <- c(6, 8, 9, 10, 11, 14)
   y <- c(2, 3, 5, 5, 6, 8)
   df <- data.frame(x = x, y = y)

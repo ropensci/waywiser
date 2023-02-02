@@ -1,6 +1,6 @@
 set.seed(123)
 test_that("Local Moran statistics are stable", {
-
+  trip_dplyr_warning()
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
