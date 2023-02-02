@@ -30,9 +30,9 @@ jobs:
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
           - {os: ubuntu-latest,   r: 'oldrel-2'}
-          - {os: ubuntu-latest,   r: 'oldrel-3'}
           # Uncomment this in 2023 (once current R is >= 4.3)
-          # The package requires R 3.6, I don't really remember why
+#          - {os: ubuntu-latest,   r: 'oldrel-3'}
+          # Uncomment this in 2024 (once current R is >= 4.4)
 #          - {os: ubuntu-latest,   r: 'oldrel-4'}
 
     env:
