@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = rlang::is_installed("vip") && rlang::is_installed("kableExtra")
+  eval = rlang::is_installed("vip") && rlang::is_installed("ggplot2")
 )
 ```
 
@@ -224,7 +224,7 @@ from your training data. Points with a "di" higher than a set threshold are
 that our model often, but not always, performs worse on observations with a 
 higher "di":
 
-```{r eval=rlang::is_installed('ggplot2')}
+```{r}
 library(ggplot2)
 
 ggplot(worldclim_testing, aes(di, abs(response - predictions), color = aoa)) + 
