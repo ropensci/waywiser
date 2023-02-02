@@ -26,7 +26,7 @@ yardstick_df <- function(data, truth, estimate, na_action, name, metric_fun, ...
 
   if (missing(metric_fun)) metric_fun <- get(paste0("ww_", name, "_vec"))
   #' @srrstats {G2.10} Extraction handled by yardstick:
-  metric_summarizer(
+  out <- metric_summarizer(
     metric_nm = name,
     metric_fn = metric_fun,
     data = data,
@@ -37,7 +37,13 @@ yardstick_df <- function(data, truth, estimate, na_action, name, metric_fun, ...
       na_action = na_action,
       ...
     )
-  )[c(".metric", ".estimator", ".estimate")]
+  )
+
+  if (inherits(out, "sf")) {
+    sf::st_geometry(out) <- NULL
+  }
+
+  out
 }
 
 #' Workhorse function handling spatial yardstick metrics for the package
