@@ -253,14 +253,21 @@ ww_multi_scale <- function(
   grid_intersections <- purrr::map(
     grid_intersections,
     function(idx_list) {
-      purrr::map_dfr(
+      out <- purrr::map_dfr(
         idx_list,
         function(idx) dplyr::summarise(
           data[idx, , drop = FALSE],
           .truth = rlang::exec(aggregation_function, {{ truth }}),
-          .estimate = rlang::exec(aggregation_function, {{ estimate }})
+          .estimate = rlang::exec(aggregation_function, {{ estimate }}),
+          .groups = "keep"
         )
       )
+
+      if (dplyr::is_grouped_df(data)) {
+        dplyr::group_by(out, !!! dplyr::groups(data))
+      } else {
+        out
+      }
     }
   )
 
