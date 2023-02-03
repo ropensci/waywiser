@@ -162,10 +162,10 @@ calculate the agreement coefficient from <a href="https://doi.org/10.14358/PERS.
 <span>  truth <span class="op">=</span> <span class="va">response</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="va">predictions</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
-<span><span class="co">#&gt;   .metric               .estimator .estimate</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard       0.675</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">#&gt;   .metric               .estimator .estimate                            geometry</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;MULTIPOINT [°]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard       0.675 ((-42.42282 -18.98316), (-42.34674…</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/ww_agreement_coefficient.html">ww_agreement_coefficient_vec</a></span><span class="op">(</span></span>
 <span>  truth <span class="op">=</span> <span class="va">worldclim_testing</span><span class="op">$</span><span class="va">response</span>,</span>
@@ -222,11 +222,11 @@ infrastructure:</p>
 <span><span class="op">)</span><span class="op">(</span><span class="va">worldclim_testing</span>,</span>
 <span>  truth <span class="op">=</span> <span class="va">response</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="va">predictions</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
-<span><span class="co">#&gt;   .metric               .estimator .estimate</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard       0.675</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> global_geary_c        standard       0.166</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
+<span><span class="co">#&gt;   .metric               .estimator .estimate                            geometry</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;MULTIPOINT [°]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> agreement_coefficient standard       0.675 ((-42.42282 -18.98316), (-42.34674…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> global_geary_c        standard       0.166                               EMPTY</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="multi-scale-model-assessment">Multi-scale model assessment<a class="anchor" aria-label="anchor" href="#multi-scale-model-assessment"></a>

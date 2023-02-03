@@ -200,16 +200,16 @@ doi: 10.1111/gean.12164</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 85 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .metric            .estimator .estimate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_geary_pvalue standard       0.239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_geary_pvalue standard       0.226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_geary_pvalue standard       0.146</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_geary_pvalue standard       0.110</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_geary_pvalue standard       0.293</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_geary_pvalue standard       0.176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_geary_pvalue standard       0.437</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_geary_pvalue standard       0.214</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_geary_pvalue standard       0.779</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_geary_pvalue standard       0.463</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> local_geary_pvalue standard       0.207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> local_geary_pvalue standard       0.259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> local_geary_pvalue standard       0.159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> local_geary_pvalue standard       0.134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> local_geary_pvalue standard       0.284</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> local_geary_pvalue standard       0.159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> local_geary_pvalue standard       0.443</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> local_geary_pvalue standard       0.164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> local_geary_pvalue standard       0.783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> local_geary_pvalue standard       0.446</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 75 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">wt</span> <span class="op">&lt;-</span> <span class="fu"><a href="ww_build_weights.html">ww_build_weights</a></span><span class="op">(</span><span class="va">guerry_model</span><span class="op">)</span></span></span>
@@ -239,21 +239,21 @@ doi: 10.1111/gean.12164</p>
 <span class="r-in"><span>  <span class="va">guerry_model</span><span class="op">$</span><span class="va">predictions</span>,</span></span>
 <span class="r-in"><span>  wt <span class="op">=</span> <span class="va">wt</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.22331239 0.21121455 0.16896705 0.14689257 0.30838735 0.16055805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.41968560 0.17020703 0.81721029 0.40319566 0.02177796 0.18473809</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.33139312 0.85042387 0.54761183 0.18292745 0.77002037 0.53794544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.07685010 0.17456744 0.53587300 0.79102244 0.64903503 0.12765440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.85946942 0.99436944 0.19409902 0.06934011 0.64710126 0.12866705</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] 0.20147897 0.14691555 0.43715729 0.57893954 0.09400427 0.89127914</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] 0.35731396 0.26491209 0.85044707 0.84320021 0.61074861 0.51872201</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43] 0.16654902 0.19533850 0.82760728 0.07189348 0.21866348 0.17226551</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49] 0.12913268 0.23462353 0.06002064 0.70502415 0.44700046 0.24759309</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [55] 0.89811350 0.17669820 0.20779198 0.61713826 0.22368311 0.94774580</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61] 0.26619903 0.21679945 0.32128703 0.19540896 0.57219445 0.36448010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [67] 0.63456722 0.78986065 0.01939319 0.08374316 0.48289397 0.13232134</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [73] 0.39312239 0.52464465 0.53101339 0.08892712 0.12046129 0.32264320</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [79] 0.16818155 0.05913256 0.29480730 0.47206085 0.09275400 0.92693560</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [85] 0.98676396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.18904248 0.22046501 0.18398893 0.11214775 0.29826279 0.15190811</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.43993555 0.16339218 0.78647329 0.43402713 0.02011737 0.16626856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.28301553 0.91215907 0.53761422 0.17279004 0.74713119 0.58717383</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.09280984 0.17816890 0.50881366 0.73912158 0.65457989 0.12369744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.88050224 0.97825910 0.21315173 0.08240886 0.62563957 0.14927360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] 0.16729551 0.13975825 0.41368435 0.56269553 0.07450678 0.79822829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] 0.39255004 0.28765980 0.79949105 0.83474279 0.65243406 0.56673133</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43] 0.17954093 0.20477114 0.80363564 0.06247550 0.25489531 0.18043862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [49] 0.15667777 0.18884807 0.04231823 0.75856765 0.43645623 0.26466664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [55] 0.99050114 0.16366210 0.18784964 0.63131308 0.24753965 0.99157032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [61] 0.29503309 0.23773132 0.29902705 0.21059268 0.51234585 0.31865387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [67] 0.72717802 0.75148142 0.01819353 0.09139179 0.53690549 0.17941448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [73] 0.35138704 0.58539378 0.56309639 0.07775559 0.09279701 0.32450004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [79] 0.18423160 0.06158892 0.31659937 0.48867591 0.06390712 0.92995134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [85] 0.94403518</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
