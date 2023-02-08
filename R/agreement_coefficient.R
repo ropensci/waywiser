@@ -410,24 +410,8 @@ calc_spod <- function(truth, estimate) {
 #'
 #' @noRd
 gmfr <- function(truth, estimate) {
-  mean_truth <- mean(truth)
-  mean_estimate <- mean(estimate)
-
-  correlation_sign <- sign(stats::cor(truth, estimate))
-
-  b <- sqrt(
-    sum((truth - mean_truth)^2) /
-      sum((estimate - mean_estimate)^2)
-  )
-
-  b <- abs(b) * correlation_sign
-
-  a <- mean_truth - (b * mean_estimate)
-
-  list(
-    a = a,
-    b = b
-  )
+  corsign <- as.integer(sign(stats::cor(truth, estimate)))
+  gmfr_rust(truth, estimate, corsign)
 }
 
 #' Return the unsystematic sum product-difference from Ji and Gallo (2006)
@@ -443,10 +427,10 @@ calc_spdu <- function(truth, estimate) {
   gmfr_predict_truth <- gmfr(truth, estimate)
   gmfr_predict_estimate <- gmfr(estimate, truth)
 
-  predicted_truth <- gmfr_predict_truth$a +
-    (gmfr_predict_truth$b * estimate)
-  predicted_estimate <- gmfr_predict_estimate$a +
-    (gmfr_predict_estimate$b * truth)
+  predicted_truth <- gmfr_predict_truth[[1]] +
+    (gmfr_predict_truth[[2]] * estimate)
+  predicted_estimate <- gmfr_predict_estimate[[1]] +
+    (gmfr_predict_estimate[[2]] * truth)
 
   sum(
     abs(estimate - predicted_estimate) *

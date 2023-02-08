@@ -1,5 +1,5 @@
 #' srr_stats
-#' @srrstatsVerbose TRUE
+#' @srrstatsVerbose FALSE
 #'
 #' @srrstats {G1.1} The third is mentioned in the README.
 #' @srrstats {G1.2} Included in CONTRIBUTING.md
