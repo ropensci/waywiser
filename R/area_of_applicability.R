@@ -99,14 +99,13 @@
 #' must have a matching importance estimate, and all terms with importance
 #' estimates must be in the training data.
 #'
-#' @param ... Not currently used.
+#' @param na_rm A logical of length 1, indicating whether observations (in both
+#' training and testing) with `NA` values in predictors should be removed. Only
+#' predictor variables are considered, and this value has no impact on
+#' predictions (where `NA` values produce `NA` predictions). If `na_rm = FALSE`
+#' and `NA` values are found, this function returns an error.
 #'
-#' @param na_action A function which indicates what should happen when the data
-#' contain NAs. The default is `na.fail`; you may wish to set it to `na.omit`
-#' or any of the functions from the "zoo"
-#' package. This function ignores the value of `options("na.action")` in order
-#' to make cross-computer (and cross-session) results more stable. This argument
-#' must be of length 1; you cannot pass multiple functions to `na_action`.
+#' @param ... Not currently used.
 #'
 #' @details
 #'
@@ -171,11 +170,11 @@ ww_area_of_applicability.default <- function(x, ...) {
 
 #' @exportS3Method
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, ..., na_action = na.fail) {
+ww_area_of_applicability.data.frame <- function(x, testing = NULL, importance, ..., na_rm = FALSE) {
   rlang::check_dots_empty()
   training <- hardhat::mold(x, NA_real_)
   if (!is.null(testing)) testing <- hardhat::mold(testing, NA_real_)
-  create_aoa(training, testing, importance, ..., na_action = na_action)
+  create_aoa(training, testing, importance, ..., na_rm = na_rm)
 }
 
 #' @exportS3Method
@@ -184,7 +183,7 @@ ww_area_of_applicability.matrix <- ww_area_of_applicability.data.frame
 
 #' @exportS3Method
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance, ..., na_action = na.fail) {
+ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance, ..., na_rm = FALSE) {
   rlang::check_dots_empty()
 
   # This method is also used for recipes, which don't need blueprints:
@@ -217,7 +216,7 @@ ww_area_of_applicability.formula <- function(x, data, testing = NULL, importance
     )
   }
 
-  create_aoa(training, processed_testing, importance, ..., na_action = na_action)
+  create_aoa(training, processed_testing, importance, ..., na_rm = na_rm)
 }
 
 #' @exportS3Method
@@ -226,7 +225,7 @@ ww_area_of_applicability.recipe <- ww_area_of_applicability.formula
 
 #' @exportS3Method
 #' @rdname ww_area_of_applicability
-ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_action = na.fail) {
+ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_rm = FALSE) {
   rlang::check_dots_empty()
 
   if (missing(y) || identical(y, NULL) || identical(y, NA)) y <- NA_real_
@@ -249,26 +248,19 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_actio
         testing,
         importance,
         include_di = TRUE,
-        na_action = na_action
+        na_rm = na_rm
       )
     }
   )
 
   aoa <- aoa_calcs[[1]]
   training <- if (identical(y, NA_real_)) {
-    check_for_missing(
-      hardhat::mold(x$splits[[1]]$data, NA_real_)$predictors,
-      na_action,
-      "training",
-      "(`x`)"
-    )
+    hardhat::mold(x$splits[[1]]$data, NA_real_)$predictors
   } else {
-    check_for_missing(
-      hardhat::mold(y, x$splits[[1]]$data)$predictors,
-      na_action,
-      "training",
-      "(`x`)"
-    )
+    hardhat::mold(y, x$splits[[1]]$data)$predictors
+  }
+  if (na_rm) {
+    training <- training[complete_cases(training), , drop = FALSE]
   }
   aoa$sds <- purrr::map_dbl(training, stats::sd)
   aoa$means <- purrr::map_dbl(training, mean)
@@ -303,25 +295,29 @@ ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_actio
 #' determine if new data is within a model's area of applicability.
 #'
 #' @noRd
-create_aoa <- function(training, testing, importance, na_action, ..., include_di = FALSE) {
+create_aoa <- function(training, testing, importance, na_rm, ..., include_di = FALSE) {
   aoa <- list(
     training = training$predictors,
     class = "ww_area_of_applicability",
     blueprint = training$blueprint
   )
 
-  if (length(na_action) != 1) {
-    rlang::abort("Only one value can be passed to `na_action`.")
+  if (length(na_rm) != 1) {
+    rlang::abort("Only one value can be passed to `na_rm`.")
   }
 
-  aoa$training <- check_for_missing(
-    aoa$training,
-    na_action,
-    "training",
-    "(either `x` or `data`)"
-  )
+  if (na_rm) {
+    aoa$training <- aoa$training[complete_cases(aoa$training), , drop = FALSE]
+  } else if (yardstick::yardstick_any_missing(aoa$training, NULL, NULL)) {
+    rlang::abort(
+      c(
+        "Missing values in training data.",
+        i = "Either process your data to fix NA values, or set `na_rm = TRUE`."
+      )
+    )
+  }
 
-  aoa$testing <- check_di_testing(aoa$training, testing, na_action)
+  aoa$testing <- check_di_testing(aoa$training, testing, na_rm)
 
   if (nrow(aoa$training) == 0) {
     rlang::abort(
@@ -403,18 +399,23 @@ create_aoa <- function(training, testing, importance, na_action, ..., include_di
 #' @return `testing`, with columns re-ordered to match `training`
 #'
 #' @noRd
-check_di_testing <- function(training, testing, na_action = stats::na.pass) {
+check_di_testing <- function(training, testing, na_rm = FALSE) {
 
   # If NULL, nothing to validate or re-order, so just return NULL
   if (is.null(testing)) return(NULL)
 
-  testing <- check_for_missing(
-    testing$predictors,
-    na_action,
-    "testing",
-    "(`testing` or `new_data`)",
-    call = rlang::caller_env(2)
-  )
+  testing <- testing$predictors
+
+  if (!is.na(na_rm) && na_rm) {
+    testing <- testing[complete_cases(testing), , drop = FALSE]
+  } else if (!is.na(na_rm) && yardstick::yardstick_any_missing(testing, NULL, NULL)) {
+    rlang::abort(
+      c(
+        "Missing values in testing data.",
+        i = "Either process your data to fix NA values, or set `na_rm = TRUE`."
+      )
+    )
+  }
 
   # Make sure that the testing set has the same columns, in the same order,
   # as the original training data
@@ -630,7 +631,7 @@ calc_aoa <- function(di) {
 predict.ww_area_of_applicability <- function(object, new_data, ...) {
   new_data <- hardhat::forge(new_data, object$blueprint)
 
-  new_data <- check_di_testing(object$transformed_training, new_data)
+  new_data <- check_di_testing(object$transformed_training, new_data, NA)
   existing_new_data <- complete.cases(new_data)
 
   check_di_columns_numeric(object$transformed_training, new_data)

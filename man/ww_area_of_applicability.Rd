@@ -11,21 +11,9 @@
 \usage{
 ww_area_of_applicability(x, ...)
 
-\method{ww_area_of_applicability}{data.frame}(
-  x,
-  testing = NULL,
-  importance,
-  ...,
-  na_action = na.fail
-)
+\method{ww_area_of_applicability}{data.frame}(x, testing = NULL, importance, ..., na_rm = FALSE)
 
-\method{ww_area_of_applicability}{matrix}(
-  x,
-  testing = NULL,
-  importance,
-  ...,
-  na_action = na.fail
-)
+\method{ww_area_of_applicability}{matrix}(x, testing = NULL, importance, ..., na_rm = FALSE)
 
 \method{ww_area_of_applicability}{formula}(
   x,
@@ -33,7 +21,7 @@ ww_area_of_applicability(x, ...)
   testing = NULL,
   importance,
   ...,
-  na_action = na.fail
+  na_rm = FALSE
 )
 
 \method{ww_area_of_applicability}{recipe}(
@@ -42,10 +30,10 @@ ww_area_of_applicability(x, ...)
   testing = NULL,
   importance,
   ...,
-  na_action = na.fail
+  na_rm = FALSE
 )
 
-\method{ww_area_of_applicability}{rset}(x, y = NULL, importance, ..., na_action = na.fail)
+\method{ww_area_of_applicability}{rset}(x, y = NULL, importance, ..., na_rm = FALSE)
 }
 \arguments{
 \item{x}{Either a data frame, matrix, formula
@@ -82,12 +70,11 @@ All variables in the training data (`x` or `data`, depending on the context)
 must have a matching importance estimate, and all terms with importance
 estimates must be in the training data.}
 
-\item{na_action}{A function which indicates what should happen when the data
-contain NAs. The default is `na.fail`; you may wish to set it to `na.omit`
-or any of the functions from the "zoo"
-package. This function ignores the value of `options("na.action")` in order
-to make cross-computer (and cross-session) results more stable. This argument
-must be of length 1; you cannot pass multiple functions to `na_action`.}
+\item{na_rm}{A logical of length 1, indicating whether observations (in both
+training and testing) with `NA` values in predictors should be removed. Only
+predictor variables are considered, and this value has no impact on
+predictions (where `NA` values produce `NA` predictions). If `na_rm = FALSE`
+and `NA` values are found, this function returns an error.}
 
 \item{data}{The data frame representing your "training" data, when using the
 formula or recipe methods.}

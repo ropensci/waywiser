@@ -145,7 +145,7 @@ test_that("NAs are handled", {
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
-    ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit)
+    ww_area_of_applicability(y ~ ., train, test, importance, na_rm = TRUE)
   )
 
   #' @srrstats {G2.14a} Users can error on NA:
@@ -156,7 +156,7 @@ test_that("NAs are handled", {
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
-    ww_area_of_applicability(train[2:11], test[2:11], importance, na_action = na.omit)
+    ww_area_of_applicability(train[2:11], test[2:11], importance, na_rm = TRUE)
   )
 
   #' @srrstats {G2.14a} Users can error on NA:
@@ -167,7 +167,7 @@ test_that("NAs are handled", {
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
-    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance, na_action = na.omit)
+    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance, na_rm = TRUE)
   )
 
   #' @srrstats {G2.14a} Users can error on NA:
@@ -178,7 +178,7 @@ test_that("NAs are handled", {
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
-    ww_area_of_applicability(comb_rset_no_y, importance = importance, na_action = na.omit)
+    ww_area_of_applicability(comb_rset_no_y, importance = importance, na_rm = TRUE)
   )
 
   #' @srrstats {G2.14a} Users can error on NA:
@@ -197,14 +197,14 @@ test_that("NAs are handled", {
       comb_rset,
       recipes::recipe(y ~ ., train),
       importance = importance,
-      na_action = na.omit
+      na_rm = TRUE
     )
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     predict(
-      ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit),
+      ww_area_of_applicability(y ~ ., train, test, importance, na_rm = TRUE),
       test
     )
   )
@@ -218,7 +218,7 @@ test_that("Expected errors", {
   )
 
   expect_snapshot(
-    ww_area_of_applicability(y ~ ., train, test, na_action = c(na.omit, na.pass), importance),
+    ww_area_of_applicability(y ~ ., train, test, na_rm = c(TRUE, FALSE), importance),
     error = TRUE
   )
 

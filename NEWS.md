@@ -36,6 +36,9 @@
 * Changed a call in `ww_area_of_applicability()` to use FNN for nearest 
   neighbors, rather than fields. This sped up prediction by a _lot_.
   
+* The `na_action` argument to `ww_area_of_applicability()` has been replaced by
+  `na_rm`, with a default value of `FALSE`. 
+  
 * `na_rm` is now `TRUE` by default for non-spatial-autocorrelation functions.
   NA values will cause spatial-autocorrelation functions to fail with an error.
 

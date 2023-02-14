@@ -9,13 +9,13 @@
     Code
       ww_area_of_applicability(y ~ ., train, test, importance)
     Error <rlang_error>
-      Missing values in training (either `x` or `data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in training data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
     Code
-      ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit)
+      ww_area_of_applicability(y ~ ., train, test, importance, na_rm = TRUE)
     Output
       # Predictors:
          10
@@ -27,13 +27,13 @@
     Code
       ww_area_of_applicability(train[2:11], test[2:11], importance)
     Error <rlang_error>
-      Missing values in training (either `x` or `data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in training data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
     Code
-      ww_area_of_applicability(train[2:11], test[2:11], importance, na_action = na.omit)
+      ww_area_of_applicability(train[2:11], test[2:11], importance, na_rm = TRUE)
     Output
       # Predictors:
          10
@@ -46,14 +46,14 @@
       ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]),
       importance)
     Error <rlang_error>
-      Missing values in training (either `x` or `data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in training data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
     Code
       ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]),
-      importance, na_action = na.omit)
+      importance, na_rm = TRUE)
     Output
       # Predictors:
          10
@@ -67,13 +67,13 @@
     Error <purrr_error_indexed>
       i In index: 1.
       Caused by error in `create_aoa()`:
-      ! Missing values in training (either `x` or `data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      ! Missing values in training data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
     Code
-      ww_area_of_applicability(comb_rset_no_y, importance = importance, na_action = na.omit)
+      ww_area_of_applicability(comb_rset_no_y, importance = importance, na_rm = TRUE)
     Output
       # Predictors:
          10
@@ -87,14 +87,14 @@
     Error <purrr_error_indexed>
       i In index: 1.
       Caused by error in `create_aoa()`:
-      ! Missing values in training (either `x` or `data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      ! Missing values in training data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
     Code
       ww_area_of_applicability(comb_rset, recipes::recipe(y ~ ., train), importance = importance,
-      na_action = na.omit)
+      na_rm = TRUE)
     Output
       # Predictors:
          10
@@ -104,7 +104,7 @@
 ---
 
     Code
-      predict(ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit),
+      predict(ww_area_of_applicability(y ~ ., train, test, importance, na_rm = TRUE),
       test)
     Output
       # A tibble: 300 x 2
@@ -132,10 +132,9 @@
 ---
 
     Code
-      ww_area_of_applicability(y ~ ., train, test, na_action = c(na.omit, na.pass),
-      importance)
+      ww_area_of_applicability(y ~ ., train, test, na_rm = c(TRUE, FALSE), importance)
     Error <rlang_error>
-      Only one value can be passed to `na_action`.
+      Only one value can be passed to `na_rm`.
 
 ---
 
