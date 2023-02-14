@@ -187,42 +187,6 @@ ww_build_weights <- function(x, wt = NULL, include_self = FALSE, ...) {
 
 }
 
-#' Run `na_action` against data, with useful error messages if needed
-#'
-#' @param dat A data.frame
-#' @inheritParams rlang::abort
-#' @inheritParams ww_area_of_applicability
-#' @param where The name of the object that is being passed to `dat`
-#' @param where_longer The name of the argument that the user would have passed `dat` to.
-#'
-#' @return `do.call(na_action, list(dat))`
-#'
-#' @noRd
-check_for_missing <- function(dat, na_action, where, where_longer, call = rlang::caller_env()) {
-
-  if (length(na_action) != 1) {
-    rlang::abort(
-      "Only one value can be passed to na_action."
-    )
-  }
-
-  if (any(is.na(dat))) {
-    tryCatch(
-      dat <- do.call(na_action, list(dat)),
-      error = function(e) {
-        rlang::abort(
-          c(
-            glue::glue("Missing values in {where} {where_longer}."),
-            i = "Either process your data to fix the NA values or set `na_action`."
-          ),
-          call = call
-        )
-      }
-    )
-  }
-  dat
-}
-
 complete_cases <- function(data_frame) {
   if (!identical(data_frame, NULL) && nrow(data_frame) > 0) {
     stats::complete.cases(data_frame)
