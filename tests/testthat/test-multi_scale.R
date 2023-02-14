@@ -1,6 +1,5 @@
 test_that("ww_multi_scale", {
   skip_if_not_installed("modeldata")
-  trip_dplyr_warning()
   data(ames, package = "modeldata")
   ames_sf <- sf::st_as_sf(ames, coords = c("Longitude", "Latitude"), crs = 4326)
   ames_model <- lm(Sale_Price ~ Lot_Area, data = ames_sf)
@@ -79,7 +78,6 @@ test_that("ww_multi_scale", {
 })
 
 test_that("expected errors", {
-  trip_dplyr_warning()
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
@@ -101,7 +99,7 @@ test_that("expected errors", {
       Crm_prs,
       predictions,
       n = list(c(1, 1)),
-      na_action = c(na.omit, na.fail),
+      na_rm = c(TRUE, FALSE),
       metrics = yardstick::rmse
     ),
     error = TRUE
@@ -121,7 +119,6 @@ test_that("expected errors", {
 })
 
 test_that("srr: expected failures for ww_multi_scale", {
-  trip_dplyr_warning()
   worldclim_predicted <- worldclim_simulation
   worldclim_predicted$predicted <- predict(
     lm(response ~ bio2 * bio10 * bio13 * bio19, data = worldclim_simulation),
@@ -174,27 +171,25 @@ test_that("srr: expected failures for ww_multi_scale", {
   #' @srrstats {G2.15} Missingness is checked
   #' @srrstats {G2.14} Users can specify behavior with NA results
   #' @srrstats {G2.16} NaN is properly handled
-  #' Users can error:
+  #' Default removes NA:
   worldclim_predicted$response[4] <- NA_real_
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, predicted, response),
-    error = TRUE
+    ww_multi_scale(worldclim_predicted, predicted, response, n = 2)
   )
 
-  #' Users can error:
+  # Default removes NA:
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, response, predicted),
-    error = TRUE
+    ww_multi_scale(worldclim_predicted, response, predicted, n = 2),
   )
 
-  #' @srrstats {G2.14b} Users can ignore NA:
+  # Or return NA:
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, predicted, response, na_action = function(x) unlist(na.pass(x)), n = c(2, 4))
+    ww_multi_scale(worldclim_predicted, predicted, response, n = 2, na_rm = FALSE)
   )
 
-  #' @srrstats {G2.14b} Users can ignore NA:
+  # Or return NA:
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, response, predicted, na_action = function(x) unlist(na.pass(x)), n = c(2, 4)),
+    ww_multi_scale(worldclim_predicted, response, predicted, n = 2, na_rm = FALSE),
   )
 
   #' @srrstats {G5.8} Edge condition tests
@@ -216,14 +211,12 @@ test_that("srr: expected failures for ww_multi_scale", {
   #' @srrstats {G5.8c} All-NA:
   expect_snapshot(
     ww_multi_scale(worldclim_predicted, response, predicted, n = c(2, 4)),
-    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
   expect_snapshot(
     ww_multi_scale(worldclim_predicted, predicted, response, n = c(2, 4)),
-    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
@@ -236,7 +229,6 @@ test_that("srr: expected failures for ww_multi_scale", {
 
 test_that("other generic srr standards", {
   skip_if_not_installed("withr")
-  trip_dplyr_warning()
   worldclim_predicted <- worldclim_simulation
   worldclim_predicted$predicted <- predict(
     lm(response ~ bio2 * bio10 * bio13 * bio19, data = worldclim_simulation),

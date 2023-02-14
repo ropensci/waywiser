@@ -9,19 +9,19 @@
 \usage{
 ww_local_getis_ord_g(data, ...)
 
-ww_local_getis_ord_g_vec(truth, estimate, wt, na_action = na.fail, ...)
+ww_local_getis_ord_g_vec(truth, estimate, wt, na_rm = FALSE, ...)
 
 ww_local_getis_ord_g_pvalue(data, ...)
 
-ww_local_getis_ord_g_pvalue_vec(truth, estimate, wt, na_action = na.fail, ...)
+ww_local_getis_ord_g_pvalue_vec(truth, estimate, wt, na_rm = FALSE, ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
 and \code{estimate} arguments.}
 
-\item{...}{Additional arguments passed to \code{\link[spdep:localG]{spdep::localG()}} (for
-\code{ww_local_getis_ord_g()}) or \code{\link[spdep:localG]{spdep::localG_perm()}} (for
-\code{ww_local_getis_ord_pvalue()}).}
+\item{...}{Additional arguments passed to [spdep::localG()] (for
+`ww_local_getis_ord_g()`) or [spdep::localG_perm()] (for
+`ww_local_getis_ord_pvalue()`).}
 
 \item{truth}{The column identifier for the true results
 (that is \code{numeric}). This should be an unquoted column name although
@@ -34,29 +34,25 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{wt}{A \code{listw} object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.
-For data.frame input, may also be a function that takes \code{data} and returns a
-\code{listw} object.}
+\item{wt}{A `listw` object, for instance as created with [ww_build_weights()].
+For data.frame input, may also be a function that takes `data` and returns a
+`listw` object.}
 
-\item{na_action}{A function which indicates what should happen when the data
-contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
-or any of the functions from the "zoo"
-package. This function ignores the value of \code{options("na.action")} in order
-to make cross-computer (and cross-session) results more stable. This argument
-must be of length 1; you cannot pass multiple functions to \code{na_action}.}
+\item{na_rm}{A \code{logical} value indicating whether \code{NA}
+values should be stripped before the computation proceeds.}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)}
+A tibble with columns .metric, .estimator, and .estimate and `nrow(data)`
 rows of values.
-For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
+For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
 }
 \description{
 Calculate the local Getis-Ord G and G* statistic for model residuals.
-\code{ww_local_getis_ord_g()} returns the statistic itself, while
-\code{ww_local_getis_ord_pvalue()} returns the associated p value.
+`ww_local_getis_ord_g()` returns the statistic itself, while
+`ww_local_getis_ord_pvalue()` returns the associated p value.
 These functions are meant to help assess model predictions, for instance by
 identifying clusters of higher residuals than expected. For statistical
-testing and inference applications, use \code{\link[spdep:localG]{spdep::localG_perm()}} instead.
+testing and inference applications, use [spdep::localG_perm()] instead.
 }
 \details{
 These functions can be used for geographic or projected coordinate reference

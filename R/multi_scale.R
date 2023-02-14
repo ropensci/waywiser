@@ -22,19 +22,6 @@
 #' This function can be used for geographic or projected coordinate reference
 #' systems and expect 2D data.
 #'
-#' @srrstats {SP1.0} Domain of applicability specified above.
-#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
-#'
-#' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
-#' @srrstats {G2.10} Column extraction is properly handled within yardstick.
-#' @srrstats {G2.14} Any function may be passed to na_action
-#' @srrstats {G2.14a} Any function may be passed to na_action
-#' @srrstats {G2.14b} Any function may be passed to na_action
-#' @srrstats {G2.14c} Any function may be passed to na_action
-#' @srrstats {G2.15} Any function may be passed to na_action
-#' @srrstats {G2.16} Any function may be passed to na_action
-#'
-#' @srrstats {SP2.6} Input type requirements are documented.
 #' @param data A point geometry `sf` object containing the columns specified by
 #' the truth and estimate arguments.
 #' @inheritParams yardstick::rmse
@@ -56,9 +43,6 @@
 #' generated grids by a tiny factor to attempt to capture all observations.
 #' @inheritParams ww_area_of_applicability
 #'
-#' @srrstats {SP4.0} Outputs are in a unique format
-#' @srrstats {SP4.0b} Outputs are in a unique format
-#' @srrstats {SP4.2} Type and class of return values are documented
 #' @return A tibble with six columns: `.metric`, with the name
 #' of the metric that the row describes; `.estimator`, with the name of the
 #' estimator used, `.estimate`, with the output of the metric function;
@@ -92,7 +76,6 @@
 #' )
 #' ww_multi_scale(ames_sf, Sale_Price, predictions, grids = grids)
 #'
-#' @srrstats {G1.0} Reference for these methods:
 #' @references
 #' Riemann, R., Wilson, B. T., Lister, A., and Parks, S. (2010). "An effective
 #' assessment protocol for continuous geospatial datasets of forest
@@ -108,28 +91,22 @@ ww_multi_scale <- function(
     metrics = list(yardstick::rmse, yardstick::mae),
     grids = NULL,
     ...,
-    na_action = na.fail,
+    na_rm = TRUE,
     aggregation_function = mean,
     autoexpand_grid = TRUE
 ) {
   # Silence NSE-related NOTE in R CMD check
   .truth <- .estimate <- NULL
 
-  #' @srrstats {SP2.0} Checking input data for spatial objects
-  #' @srrstats {SP2.0b} Will error on non-2d objects
-  #' @srrstats {SP2.7} Validating inputs
-  #' @srrstats {SP2.8} Pre-processing inputs
-  #' @srrstats {SP2.9} Relevant attributes are preserved
   if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
     rlang::abort(
       "`data` must be an `sf` or `sfc` object."
     )
   }
 
-  #' @srrstats {G2.13} Checking inputs prior to calculations
   if (nrow(data) == 0) {
     rlang::abort(
-      "0 rows were passed as training data."
+      "0 rows were passed to `data`."
     )
   }
 
@@ -143,14 +120,10 @@ ww_multi_scale <- function(
     )
   }
 
-  #' @srrstats {G2.0} Checking univariate inputs
-  #' @srrstats {G2.2} Restricting multivariate input
-  #' @srrstats {G2.13} Checking inputs prior to calculations
-  if (length(na_action) != 1) {
-    rlang::abort("Only one value can be passed to `na_action`.")
+  if (length(na_rm) != 1 || !is.logical(na_rm)) {
+    rlang::abort("Only one logical value can be passed to `na_rm`.")
   }
 
-  #' @srrstats {G2.4} Accepting various input types
   if (inherits(metrics, "metric")) metrics <- list(metrics)
   if (!inherits(metrics, "metric_set")) {
     metrics <- do.call(yardstick::metric_set, metrics)
@@ -166,20 +139,6 @@ ww_multi_scale <- function(
   if (!is.numeric(data[[estimate_var]])) {
     rlang::abort("`estimate` must be numeric.")
   }
-
-  data[[truth_var]] <- check_for_missing(
-    data[[truth_var]],
-    na_action,
-    "`truth`",
-    glue::glue("('{names(truth_var)}')")
-  )
-
-  data[[estimate_var]] <- check_for_missing(
-    data[[estimate_var]],
-    na_action,
-    "`estimate`",
-    glue::glue("('{names(estimate_var)}')")
-  )
 
   if (missing(grids)) {
     grid_args <- rlang::list2(...)
@@ -286,7 +245,7 @@ ww_multi_scale <- function(
       .notes = .notes
     ),
     function(dat, grid, grid_arg, .notes) {
-      out <- metrics(dat, .truth, .estimate)
+      out <- metrics(dat, .truth, .estimate, na_rm = na_rm)
       out[attr(out, "sf_column")] <- NULL
       out$.grid_args <- list(grid_args[grid_arg, ])
       out$.grid <- list(

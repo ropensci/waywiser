@@ -24,7 +24,7 @@
     Code
       ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions, wt = list())
     Error <rlang_error>
-      i In argument: `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = fn(...)`.
       Caused by error in `spatial_yardstick_vec()`:
       ! `wt` must be a 'listw' object
       i You can create 'listw' objects using `ww_build_weights()`
@@ -62,7 +62,7 @@
     Code
       ww_local_getis_ord_g_vec(crm, numeric(), structure(list(), class = "listw"))
     Error <rlang_error>
-      0 values were passed to `estimate`.
+      Length of `truth` (85) and `estimate` (0) must match.
 
 ---
 
@@ -70,7 +70,8 @@
       ww_local_getis_ord_g_vec(crm, prd, structure(list(), class = "listw"),
       na_action = na.omit)
     Error <rlang_error>
-      `truth` and `estimate` were not the same length as `wt$neighbours` after running `na_action`.
+      Missing values in data.
+      i waywiser can't handle missing data for functions that use spatial weights.
 
 ---
 
@@ -78,5 +79,6 @@
       withr::with_seed(123, ww_local_getis_ord_g_vec(crm, prd, structure(list(),
       class = "listw"), na_action = function(x) runif(sample(1:100, sample(1:100, 1)))))
     Error <rlang_error>
-      `truth` and `estimate` were not the same length after running `na_action`.
+      Missing values in data.
+      i waywiser can't handle missing data for functions that use spatial weights.
 

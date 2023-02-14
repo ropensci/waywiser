@@ -9,7 +9,7 @@ An sf data frame with 85 rows, 23 variables, and a geometry column:
 \describe{
 \item{	dept	}{	Department ID: Standard numbers for the departments 	}
 \item{	Region	}{	Region of France ('N'='North', 'S'='South', 'E'='East', 'W'='West', 'C'='Central').  Corsica is coded as NA.	}
-\item{	Dprtmnt	}{	Department name: Departments are named according to usage in 1830, but without accents. A factor with levels \emph{Ain} \emph{Aisne} \emph{Allier} ... \emph{Vosges Yonne} 	}
+\item{	Dprtmnt	}{	Department name: Departments are named according to usage in 1830, but without accents. A factor with levels *Ain* *Aisne* *Allier* ... *Vosges Yonne* 	}
 \item{	Crm_prs	}{	Population per Crime against persons.	}
 \item{	Crm_prp	}{	Population per Crime against property.	}
 \item{	Litercy	}{	Percent of military conscripts who can read and write.	}
@@ -34,11 +34,11 @@ An sf data frame with 85 rows, 23 variables, and a geometry column:
 }
 \source{
 \itemize{
-\item{Angeville, A. (1836). Essai sur la Statistique de la Population française Paris: F. Doufour.}
-\item{Guerry, A.-M. (1833). Essai sur la statistique morale de la France Paris: Crochard. English translation: Hugh P. Whitt and Victor W. Reinking, Lewiston, N.Y. : Edwin Mellen Press, 2002.}
-\item{Parent-Duchatelet, A. (1836). De la prostitution dans la ville de Paris, 3rd ed, 1857, p. 32, 36}
+  \item{Angeville, A. (1836). Essai sur la Statistique de la Population française Paris: F. Doufour.}
+  \item{Guerry, A.-M. (1833). Essai sur la statistique morale de la France Paris: Crochard. English translation: Hugh P. Whitt and Victor W. Reinking, Lewiston, N.Y. : Edwin Mellen Press, 2002.}
+  \item{Parent-Duchatelet, A. (1836). De la prostitution dans la ville de Paris, 3rd ed, 1857, p. 32, 36}
 }
-\url{https://geodacenter.github.io/data-and-lab/Guerry/}
+  \url{https://geodacenter.github.io/data-and-lab/Guerry/}
 }
 \usage{
 guerry

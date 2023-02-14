@@ -13,6 +13,7 @@ nonspatial_yardstick <- c(
   "ww_unsystematic_rmpd",
   "ww_systematic_rmpd",
   "ww_willmott_d",
+  "ww_willmott_d1",
   "ww_willmott_dr",
   "ww_systematic_mse",
   "ww_unsystematic_mse",

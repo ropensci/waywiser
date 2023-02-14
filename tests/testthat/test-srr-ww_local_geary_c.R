@@ -2,7 +2,6 @@
 # Please edit inst/srr_template_spatial_yardstick.R instead
 
 test_that("srr: expected failures for ww_local_geary_c", {
-  trip_dplyr_warning()
   worldclim_predicted <- worldclim_simulation
   worldclim_predicted$predicted <- predict(
     lm(response ~ bio2 * bio10 * bio13 * bio19, data = worldclim_simulation),
@@ -132,38 +131,6 @@ test_that("srr: expected failures for ww_local_geary_c", {
     error = TRUE
   )
 
-  #' @srrstats {G2.14b} Users can ignore NA:
-  expect_identical(
-    ww_local_geary_c(worldclim_predicted, predicted, response, na_action = function(x) unlist(na.pass(x)))$.estimate,
-    NA_real_
-  )
-
-  #' @srrstats {G2.14b} Users can ignore NA:
-  expect_identical(
-    ww_local_geary_c(worldclim_predicted, response, predicted, na_action = function(x) unlist(na.pass(x)))$.estimate,
-    NA_real_
-  )
-
-  #' @srrstats {G2.14b} Users can ignore NA:
-  expect_identical(
-    ww_local_geary_c_vec(worldclim_predicted$predicted, worldclim_predicted$response, worldclim_weights, na_action = function(x) unlist(na.pass(x))),
-    NA_real_
-  )
-
-  #' @srrstats {G2.14b} Users can ignore NA:
-  expect_identical(
-    ww_local_geary_c_vec(worldclim_predicted$response, worldclim_predicted$predicted, worldclim_weights, na_action = function(x) unlist(na.pass(x))),
-    NA_real_
-  )
-
-  expect_error_or_missing <- function(call, value) {
-    tryCatch(
-      expect_error(call, NA),
-      expectation_success = function(e) expect_equal(call, value),
-      expectation_failure = function(e) expect_snapshot(call, error = TRUE)
-    )
-  }
-
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
   expect_snapshot(
@@ -191,13 +158,6 @@ test_that("srr: expected failures for ww_local_geary_c", {
   expect_snapshot(
     ww_local_geary_c_vec(NA_real_, NA_real_, structure(list(neighbours = 1), class = "listw")),
     error = TRUE
-  )
-
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-NA:
-  expect_equal(
-    ww_local_geary_c_vec(NA_real_, NA_real_, structure(list(neighbours = 1), class = "listw"), na_action = na.pass),
-    NA_real_
   )
 
   worldclim_predicted$response <- NA_real_
@@ -230,7 +190,6 @@ test_that("srr: expected failures for ww_local_geary_c", {
 })
 
 test_that("other generic srr standards", {
-  trip_dplyr_warning()
   skip_if_not_installed("withr")
   worldclim_predicted <- worldclim_simulation
   worldclim_predicted$predicted <- predict(

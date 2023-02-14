@@ -81,72 +81,48 @@ test_that("srr: expected failures for ww_unsystematic_mse", {
   #' @srrstats {G2.14} Users can specify behavior with NA results
   #' @srrstats {G2.16} NaN is properly handled
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
-  #' Users can error:
+  #' Users can remove NA:
   expect_snapshot(
     ww_unsystematic_mse(missing_df, x, y)$.estimate,
-    error = TRUE
   )
 
-  #' Users can error:
+  #' Users can remove NA:
   expect_snapshot(
     ww_unsystematic_mse(missing_df, y, x)$.estimate,
-    error = TRUE
   )
 
-  #' Users can error:
+  #' Users can remove NA:
   expect_snapshot(
     ww_unsystematic_mse_vec(missing_df$y, missing_df$x),
-    error = TRUE
   )
 
-  #' Users can error:
+  #' Users can remove NA:
   expect_snapshot(
     ww_unsystematic_mse_vec(missing_df$x, missing_df$y),
-    error = TRUE
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mse(missing_df, y, x, na_action = function(x) unlist(na.pass(x)))$.estimate,
+    ww_unsystematic_mse(missing_df, y, x, na_rm = FALSE)$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mse(missing_df, x, y, na_action = function(x) unlist(na.pass(x)))$.estimate,
+    ww_unsystematic_mse(missing_df, x, y, na_rm = FALSE)$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mse_vec(missing_df$y, missing_df$x, na_action = function(x) unlist(na.pass(x))),
+    ww_unsystematic_mse_vec(missing_df$y, missing_df$x, na_rm = FALSE),
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mse_vec(missing_df$x, missing_df$y, na_action = function(x) unlist(na.pass(x))),
+    ww_unsystematic_mse_vec(missing_df$x, missing_df$y, na_rm = FALSE),
     NA_real_
-  )
-
-  #' @srrstats {G2.14b} Users can delete NA values:
-  expect_no_error(
-    ww_unsystematic_mse(missing_df, x, y, na_action = na.omit)
-  )
-
-  #' @srrstats {G2.14b} Users can delete NA values:
-  expect_no_error(
-    ww_unsystematic_mse(missing_df, y, x, na_action = na.omit)
-  )
-
-  #' @srrstats {G2.14b} Users can delete NA values:
-  expect_no_error(
-    ww_unsystematic_mse_vec(missing_df$x, missing_df$y, na_action = na.omit)
-  )
-
-  #' @srrstats {G2.14b} Users can delete NA values:
-  expect_no_error(
-    ww_unsystematic_mse_vec(missing_df$y, missing_df$x, na_action = na.omit)
   )
 
   #' @srrstats {G5.8} Edge condition tests

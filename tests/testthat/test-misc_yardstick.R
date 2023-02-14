@@ -1,5 +1,4 @@
 test_that("passing functions to build weights", {
-  trip_dplyr_warning()
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
@@ -13,7 +12,6 @@ test_that("passing functions to build weights", {
 })
 
 test_that("edge cases", {
-  trip_dplyr_warning()
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)

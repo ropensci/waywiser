@@ -1,14 +1,14 @@
 # This file was generated, do not edit by hand
 # Please edit inst/srr_template_nonspatial_yardstick.R instead
 
-test_that("srr: expected failures for ww_unsystematic_mpd", {
+test_that("srr: expected failures for ww_willmott_d1", {
   # Note that this test isn't applicable to data-frame input, which enforces
   # constant column lengths
   #' @srrstats {G5.2} Testing errors
   #' @srrstats {G5.2b} Testing errors
   #' @srrstats {G2.0} Truth and estimate are equal in length:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(1:5, 1:4),
+    ww_willmott_d1_vec(1:5, 1:4),
     error = TRUE
   )
 
@@ -16,7 +16,7 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   #' @srrstats {G5.2b} Testing errors
   #' @srrstats {G2.0} Truth and estimate are equal in length:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(1:4, 1:5),
+    ww_willmott_d1_vec(1:4, 1:5),
     error = TRUE
   )
 
@@ -26,7 +26,7 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   #' @srrstats {G5.8b} Data of unsupported types
   #' @srrstats {G2.1} Truth and estimate are numeric:
   expect_snapshot(
-    ww_unsystematic_mpd(char_df, x, y),
+    ww_willmott_d1(char_df, x, y),
     error = TRUE
   )
 
@@ -35,7 +35,7 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   #' @srrstats {G5.8b} Data of unsupported types
   #' @srrstats {G2.1} Truth and estimate are numeric:
   expect_snapshot(
-    ww_unsystematic_mpd(char_df, y, x),
+    ww_willmott_d1(char_df, y, x),
     error = TRUE
   )
 
@@ -44,7 +44,7 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   #' @srrstats {G5.8b} Data of unsupported types
   #' @srrstats {G2.1} Truth and estimate are numeric:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(as.character(1:5), 1:4),
+    ww_willmott_d1_vec(as.character(1:5), 1:4),
     error = TRUE
   )
 
@@ -53,7 +53,7 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   #' @srrstats {G5.8b} Data of unsupported types
   #' @srrstats {G2.1} Truth and estimate are numeric:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(1:5, as.character(1:4)),
+    ww_willmott_d1_vec(1:5, as.character(1:4)),
     error = TRUE
   )
 
@@ -63,7 +63,7 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   #' @srrstats {G5.8b} Data of unsupported types
   #' @srrstats {G2.12} List column inputs fail:
   expect_snapshot(
-    ww_unsystematic_mpd(list_df, x, y),
+    ww_willmott_d1(list_df, x, y),
     error = TRUE
   )
 
@@ -72,7 +72,7 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   #' @srrstats {G5.8b} Data of unsupported types
   #' @srrstats {G2.12} List column inputs fail:
   expect_snapshot(
-    ww_unsystematic_mpd(list_df, y, x),
+    ww_willmott_d1(list_df, y, x),
     error = TRUE
   )
 
@@ -83,52 +83,52 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
   #' Users can remove NA:
   expect_snapshot(
-    ww_unsystematic_mpd(missing_df, x, y)$.estimate,
+    ww_willmott_d1(missing_df, x, y)$.estimate,
   )
 
   #' Users can remove NA:
   expect_snapshot(
-    ww_unsystematic_mpd(missing_df, y, x)$.estimate,
+    ww_willmott_d1(missing_df, y, x)$.estimate,
   )
 
   #' Users can remove NA:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(missing_df$y, missing_df$x),
+    ww_willmott_d1_vec(missing_df$y, missing_df$x),
   )
 
   #' Users can remove NA:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(missing_df$x, missing_df$y),
+    ww_willmott_d1_vec(missing_df$x, missing_df$y),
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mpd(missing_df, y, x, na_rm = FALSE)$.estimate,
+    ww_willmott_d1(missing_df, y, x, na_rm = FALSE)$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mpd(missing_df, x, y, na_rm = FALSE)$.estimate,
+    ww_willmott_d1(missing_df, x, y, na_rm = FALSE)$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mpd_vec(missing_df$y, missing_df$x, na_rm = FALSE),
+    ww_willmott_d1_vec(missing_df$y, missing_df$x, na_rm = FALSE),
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mpd_vec(missing_df$x, missing_df$y, na_rm = FALSE),
+    ww_willmott_d1_vec(missing_df$x, missing_df$y, na_rm = FALSE),
     NA_real_
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(numeric(), numeric()),
+    ww_willmott_d1_vec(numeric(), numeric()),
     error = TRUE
   )
 
@@ -136,28 +136,28 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
   expect_snapshot(
-    ww_unsystematic_mpd(empty_df, x, y),
+    ww_willmott_d1(empty_df, x, y),
     error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
   expect_snapshot(
-    ww_unsystematic_mpd(empty_df, y, x),
+    ww_willmott_d1(empty_df, y, x),
     error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(rep(NA_real_, 4), 4:1),
+    ww_willmott_d1_vec(rep(NA_real_, 4), 4:1),
     error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(1:4, rep(NA_real_, 4)),
+    ww_willmott_d1_vec(1:4, rep(NA_real_, 4)),
     error = TRUE
   )
 
@@ -165,28 +165,28 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
   expect_snapshot(
-    ww_unsystematic_mpd(all_na, x, y),
+    ww_willmott_d1(all_na, x, y),
     error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
   expect_snapshot(
-    ww_unsystematic_mpd(all_na, y, x),
+    ww_willmott_d1(all_na, y, x),
     error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-identical:
   expect_snapshot(
-    ww_unsystematic_mpd_vec(1:4, 1:4)
+    ww_willmott_d1_vec(1:4, 1:4)
   )
 
   all_identical <- tibble::tibble(x = 1:4, y = 1:4)
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-identical:
   expect_snapshot(
-    ww_unsystematic_mpd(all_identical, x, y)
+    ww_willmott_d1(all_identical, x, y)
   )
 
 })
@@ -203,32 +203,32 @@ test_that("other generic srr standards", {
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
-    ww_unsystematic_mpd(noised_df, x, y),
-    ww_unsystematic_mpd(df, x, y)
+    ww_willmott_d1(noised_df, x, y),
+    ww_willmott_d1(df, x, y)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
-    ww_unsystematic_mpd(noised_df, y, x),
-    ww_unsystematic_mpd(df, y, x)
+    ww_willmott_d1(noised_df, y, x),
+    ww_willmott_d1(df, y, x)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
-    ww_unsystematic_mpd_vec(noised_x, y),
-    ww_unsystematic_mpd_vec(x, y)
+    ww_willmott_d1_vec(noised_x, y),
+    ww_willmott_d1_vec(x, y)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
   #' @srrstats {G5.9a} Trivial noise doesn't change results:
   expect_equal(
-    ww_unsystematic_mpd_vec(y, noised_x),
-    ww_unsystematic_mpd_vec(y, x)
+    ww_willmott_d1_vec(y, noised_x),
+    ww_willmott_d1_vec(y, x)
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -237,11 +237,11 @@ test_that("other generic srr standards", {
   expect_equal(
     withr::with_seed(
       123,
-      ww_unsystematic_mpd(df, x, y)
+      ww_willmott_d1(df, x, y)
     ),
     withr::with_seed(
       1107,
-      ww_unsystematic_mpd(df, x, y)
+      ww_willmott_d1(df, x, y)
     )
   )
 
@@ -251,11 +251,11 @@ test_that("other generic srr standards", {
   expect_equal(
     withr::with_seed(
       123,
-      ww_unsystematic_mpd(df, y, x)
+      ww_willmott_d1(df, y, x)
     ),
     withr::with_seed(
       1107,
-      ww_unsystematic_mpd(df, y, x)
+      ww_willmott_d1(df, y, x)
     )
   )
 
@@ -265,11 +265,11 @@ test_that("other generic srr standards", {
   expect_equal(
     withr::with_seed(
       123,
-      ww_unsystematic_mpd_vec(x, y)
+      ww_willmott_d1_vec(x, y)
     ),
     withr::with_seed(
       1107,
-      ww_unsystematic_mpd_vec(x, y)
+      ww_willmott_d1_vec(x, y)
     )
   )
 
@@ -279,11 +279,11 @@ test_that("other generic srr standards", {
   expect_equal(
     withr::with_seed(
       123,
-      ww_unsystematic_mpd_vec(y, x)
+      ww_willmott_d1_vec(y, x)
     ),
     withr::with_seed(
       1107,
-      ww_unsystematic_mpd_vec(y, x)
+      ww_willmott_d1_vec(y, x)
     )
   )
 

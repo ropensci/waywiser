@@ -37,7 +37,7 @@ BugReports: https://github.com/mikemahoney218/waywiser/issues
 Depends: 
     R (>= 4.0)
 Imports: 
-    dplyr,
+    dplyr (>= 1.1.0),
     fields,
     FNN,
     glue,
@@ -51,7 +51,7 @@ Imports:
     stats,
     tibble,
     tidyselect,
-    yardstick
+    yardstick (> 1.1.0)
 Suggests: 
     applicable,
     caret,
@@ -76,7 +76,6 @@ Config/testthat/parallel: true
 Config/Needs/website: kableExtra
 Encoding: UTF-8
 LazyData: true
-Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "srr::srr_stats_roclet"))
 RoxygenNote: 7.2.3
 Language: en-US
 VignetteBuilder: knitr

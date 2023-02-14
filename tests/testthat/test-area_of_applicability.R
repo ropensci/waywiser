@@ -18,7 +18,6 @@ importance <- vip::vi_permute(
 )
 
 test_that("`ww_area_of_applicability` is properly classed", {
-  trip_dplyr_warning()
   model <- ww_area_of_applicability(y ~ ., train, test, importance)
   expect_s3_class(model, "ww_area_of_applicability")
   expect_s3_class(model, "hardhat_model")
@@ -26,14 +25,12 @@ test_that("`ww_area_of_applicability` is properly classed", {
 
 
 test_that("`ww_area_of_applicability` is not defined for vectors", {
-  trip_dplyr_warning()
   expect_snapshot_error(
     ww_area_of_applicability(mtcars$mpg)
   )
 })
 
 test_that("`ww_area_of_applicability` finds 0 distance between identical data", {
-  trip_dplyr_warning()
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
     suppressWarnings(
@@ -46,7 +43,6 @@ test_that("`ww_area_of_applicability` finds 0 distance between identical data", 
 })
 
 test_that("`ww_area_of_applicability` works with or without a testing set", {
-  trip_dplyr_warning()
   expect_error(
     ww_area_of_applicability(y ~ ., train, test, importance),
     NA
@@ -60,7 +56,6 @@ test_that("`ww_area_of_applicability` works with or without a testing set", {
 })
 
 test_that("`ww_area_of_applicability` methods are equivalent", {
-  trip_dplyr_warning()
   methods <- list(
     ww_area_of_applicability(y ~ ., train, test, importance),
     ww_area_of_applicability(train[2:11], test[2:11], importance),
@@ -120,7 +115,6 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
 })
 
 test_that("`ww_area_of_applicability` can handle different column orders", {
-  trip_dplyr_warning()
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
@@ -136,7 +130,6 @@ test_that("`ww_area_of_applicability` can handle different column orders", {
 })
 
 test_that("NAs are handled", {
-  trip_dplyr_warning()
   train[1, 2] <- NA
   test[1, 2] <- NA
   comb_rset <- rsample::make_splits(train, test)
@@ -219,7 +212,6 @@ test_that("NAs are handled", {
 })
 
 test_that("Expected errors", {
-  trip_dplyr_warning()
   expect_snapshot(
     ww_area_of_applicability(y ~ ., train, test[1:10], importance),
     error = TRUE
@@ -256,7 +248,6 @@ importance <- vip::vi_permute(
 aoa <- ww_area_of_applicability(y ~ ., train, test, importance)
 
 test_that("normal use", {
-  trip_dplyr_warning()
   expect_snapshot(
     predict(aoa, test)
   )
@@ -269,7 +260,6 @@ test_that("normal use", {
 })
 
 test_that("`new_ww_area_of_applicability` arguments are assigned correctly", {
-  trip_dplyr_warning()
   x <- ww_area_of_applicability(y ~ ., train, test, importance)
 
   skip_on_os("mac")
@@ -289,7 +279,6 @@ test_that("`new_ww_area_of_applicability` arguments are assigned correctly", {
 #' @srrstats {G5.4c} Data is derived originally from CAST and associated paper
 test_that("ww_area_of_applicability() is close-enough to CAST", {
   skip_on_cran()
-  trip_dplyr_warning()
   #' @srrstats {SP6.2} Testing with ~global data
   relevant_data <- head(as.data.frame(worldclim_simulation)[c(1:4, 6)], 1000)
 
@@ -337,7 +326,6 @@ test_that("ww_area_of_applicability() is close-enough to CAST", {
 })
 
 test_that("loaded data is equivalent", {
-  trip_dplyr_warning()
   importance <- data.frame(
     term = c("bio2", "bio10", "bio13", "bio19"),
     estimate = c(50.68727, 57.66859, 62.81009, 48.72391)
