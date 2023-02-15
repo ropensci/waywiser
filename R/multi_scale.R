@@ -115,13 +115,15 @@ ww_multi_scale <- function(
     rlang::abort("Only one logical value can be passed to `na_rm`.")
   }
 
-  x <- list()
-  class(x) <- class(data)
-  UseMethod("ww_multi_scale", x)
+  if (is.null(data)) {
+    UseMethod("ww_multi_scale", truth)
+  } else {
+    UseMethod("ww_multi_scale", data)
+  }
 }
 
 #' @exportS3Method
-ww_multi_scale.NULL <- function(
+ww_multi_scale.SpatRaster <- function(
     data = NULL,
     truth,
     estimate,
