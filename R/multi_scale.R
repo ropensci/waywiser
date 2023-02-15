@@ -63,8 +63,8 @@
 #' estimator used, `.estimate`, with the output of the metric function;
 #' `.grid_args`, with the arguments passed to [sf::st_make_grid()] via `...`
 #' (if any), `.grid`, containing the grids used to aggregate predictions,
-#' and `.notes`, which will indicate any observations which were not used in
-#' a given assessment.
+#' and `.notes`, which (if `data` is an `sf` object) will indicate any
+#' observations which were not used in a given assessment.
 #'
 #' @examplesIf rlang::is_installed("modeldata")
 #' data(ames, package = "modeldata")
