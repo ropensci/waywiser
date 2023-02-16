@@ -375,6 +375,31 @@ test_that("raster method works", {
     ww_multi_scale(truth = r1, estimate = r1, metrics = yardstick::rmse, n = 1)$.estimate,
     0
   )
+
+  # built-in functions
+  expect_identical(
+    ww_multi_scale(
+      truth = r1,
+      estimate = r2,
+      metrics = yardstick::rmse,
+      aggregation_function = "median",
+      n = 1
+    )$.estimate,
+    1
+  )
+
+  # R functions
+  expect_identical(
+    ww_multi_scale(
+      truth = r1,
+      estimate = r2,
+      metrics = yardstick::rmse,
+      aggregation_function = stats::weighted.mean,
+      n = 1
+    )$.estimate,
+    1
+  )
+
 })
 
 test_that("raster method is equivalent", {
