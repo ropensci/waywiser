@@ -131,3 +131,31 @@ guerry %>%
 ```
 
 This makes it easy to see what areas are poorly represented by our model (which have the highest local Moran values), which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we're working with.
+
+Other functions in waywiser will allow you to calculate the p-value associated with spatial autocorrelation metrics. You can calculate these alongside the autocorrelation metrics themselves using `yardstick::metric_set()`:
+
+```{r}
+moran <- yardstick::metric_set(
+  ww_global_moran_i,
+  ww_global_moran_pvalue
+)
+
+guerry %>%
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  moran(Crm_prs, pred)
+```
+
+These functions can also be used on their own to help qualitatively identify regions of concern, which may be poorly represented by your model:
+
+```{r 2023_02_21-guerryp, fig.width=8}
+guerry %>%
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .)),
+         .estimate = ww_local_moran_pvalue_vec(Crm_prs, pred, weights)) %>% 
+  sf::st_as_sf() %>% 
+  ggplot(aes(fill = .estimate < 0.01)) +
+  geom_sf() + 
+  scale_fill_discrete("Local Moran p-value < 0.01?") + 
+  theme(legend.position = "bottom")
+```
+
+This can help identify new predictor variables or other promising refinements to a model during the iterative process of model development. You shouldn't report p-values without other context as results of your model, but this approach can help qualitatively assess a model during the development process. To use these tests for inference, consider using functions from spdep directly; each autocorrelation function in waywiser links to the spdep function it wraps from its documentation.
