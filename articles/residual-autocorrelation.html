@@ -294,6 +294,45 @@ geometries easier:</p>
 model (which have the highest local Moran values), which might lead us
 to identify ways to improve our model or help us identify caveats and
 limitations of the models we’re working with.</p>
+<p>Other functions in waywiser will allow you to calculate the p-value
+associated with spatial autocorrelation metrics. You can calculate these
+alongside the autocorrelation metrics themselves using
+<code><a href="https://yardstick.tidymodels.org/reference/metric_set.html" class="external-link">yardstick::metric_set()</a></code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">moran</span> <span class="op">&lt;-</span> <span class="fu">yardstick</span><span class="fu">::</span><span class="fu"><a href="https://yardstick.tidymodels.org/reference/metric_set.html" class="external-link">metric_set</a></span><span class="op">(</span></span>
+<span>  <span class="va">ww_global_moran_i</span>,</span>
+<span>  <span class="va">ww_global_moran_pvalue</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Crm_prs</span> <span class="op">~</span> <span class="va">Litercy</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu">moran</span><span class="op">(</span><span class="va">Crm_prs</span>, <span class="va">pred</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
+<span><span class="co">#&gt;   .metric             .estimator .estimate</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> global_moran_i      standard    4.12<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> global_moran_pvalue standard    7.23<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span></span></span></code></pre></div>
+<p>These functions can also be used on their own to help qualitatively
+identify regions of concern, which may be poorly represented by your
+model:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">guerry</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Crm_prs</span> <span class="op">~</span> <span class="va">Litercy</span>, <span class="va">.</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         .estimate <span class="op">=</span> <span class="fu"><a href="../reference/local_moran_i.html">ww_local_moran_pvalue_vec</a></span><span class="op">(</span><span class="va">Crm_prs</span>, <span class="va">pred</span>, <span class="va">weights</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">.estimate</span> <span class="op">&lt;</span> <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_fill_discrete</a></span><span class="op">(</span><span class="st">"Local Moran p-value &lt; 0.01?"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="residual-autocorrelation_files/figure-html/2023_02_21-guerryp-1.png" width="768"></p>
+<p>This can help identify new predictor variables or other promising
+refinements to a model during the iterative process of model
+development. You shouldn’t report p-values without other context as
+results of your model, but this approach can help qualitatively assess a
+model during the development process. To use these tests for inference,
+consider using functions from spdep directly; each autocorrelation
+function in waywiser links to the spdep function it wraps from its
+documentation.</p>
   </main>
 </div>
 
