@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# waywiser <a href="https://docs.ropensci.org/waywiser"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# waywiser <a href="https://docs.ropensci.org/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 
@@ -118,7 +118,7 @@ ww_local_moran_i(guerry_predicted, Crm_prs, predictions)
 #> ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
 #>   always returns an ungrouped data frame and adjust accordingly.
 #> ℹ The deprecated feature was likely used in the yardstick package.
-#>   Please report the issue at <]8;;https://github.com/tidymodels/yardstick/issueshttps://github.com/tidymodels/yardstick/issues]8;;>.
+#>   Please report the issue at <https://github.com/tidymodels/yardstick/issues>.
 #> # A tibble: 85 × 3
 #>    .metric       .estimator .estimate
 #>    <chr>         <chr>          <dbl>
@@ -164,10 +164,10 @@ plot(guerry_aoa["aoa"])
 
 We can see that two areas are outside our model’s area of applicability,
 meaning that we probably can’t trust our model when extrapolating into
-those regions!
+those regions\!
 
 For more information, check out [the documentation
-website!](https://docs.ropensci.org/waywiser)
+website\!](https://docs.ropensci.org/waywiser/)
 
 ## Citing waywiser
 
@@ -196,10 +196,10 @@ Please note that this package is released with a [Contributor Code of
 Conduct](https://ropensci.org/code-of-conduct/). By contributing to this
 project, you agree to abide by its terms.
 
-- If you think you have encountered a bug, please [submit an
-  issue](https://github.com/ropensci/waywiser).
+  - If you think you have encountered a bug, please [submit an
+    issue](https://github.com/ropensci/waywiser).
 
-- Please include a
-  [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
-  (a minimal, reproducible example) to clearly communicate about your
-  code.
+  - Please include a
+    [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+    (a minimal, reproducible example) to clearly communicate about your
+    code.
