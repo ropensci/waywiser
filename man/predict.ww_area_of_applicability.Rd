@@ -19,7 +19,7 @@ A tibble of predictions, with two columns: `di`, numeric, contains the
 contains whether a row is inside (`TRUE`) or outside (`FALSE`) the area of
 applicability.
 
-Note that this function is often called using [raster::predict()] or
+Note that this function is often called using
 [terra::predict()], in which case `aoa` will be converted to numeric
 implicitly; `1` values correspond to cells "inside" the area of applicability
 and `0` corresponds to cells "outside" the AOA.
