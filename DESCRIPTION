@@ -82,3 +82,5 @@ LazyData: true
 RoxygenNote: 7.2.3
 Language: en-US
 VignetteBuilder: knitr
+Remotes:
+    tidymodels/yardstick
