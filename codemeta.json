@@ -2,11 +2,11 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "waywiser",
-  "description": "Assessing predictive models of spatial data can be challenging, both because these models are typically built for extrapolating outside the original region represented by training data and due to potential spatially structured errors, with \"hot spots\" of higher than expected error clustered geographically due to spatial structure in the underlying data. Methods are provided for assessing models fit to spatial data, including approaches for measuring the spatial structure of model errors, assessing model predictions at multiple spatial scales, and evaluating where predictions can be made safely. Methods areparticularly useful for models fit using the 'tidymodels' framework. Methods include Moran's I ('Moran' (1950) <doi:10.2307/2332142>), Geary's C ('Geary' (1954) <doi:10.2307/2986645>), Getis-Ord's G ('Ord' and 'Getis' (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>), an implementation of the area of applicability methodology from 'Meyer' and 'Pebesma' (2021) (<doi:10.1111/2041-210X.13650>), and an implementation of multi-scale assessment as described in 'Riemann' et al. (2010) (<doi:10.1016/j.rse.2010.05.010>).",
+  "description": "Assessing predictive models of spatial data can be challenging, both because these models are typically built for extrapolating outside the original region represented by training data and due to potential spatially structured errors, with \"hot spots\" of higher than expected error clustered geographically due to spatial structure in the underlying data. Methods are provided for assessing models fit to spatial data, including approaches for measuring the spatial structure of model errors, assessing model predictions at multiple spatial scales, and evaluating where predictions can be made safely. Methods are particularly useful for models fit using the 'tidymodels' framework. Methods include Moran's I ('Moran' (1950) <doi:10.2307/2332142>), Geary's C ('Geary' (1954) <doi:10.2307/2986645>), Getis-Ord's G ('Ord' and 'Getis' (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>), agreement coefficients from 'Ji' and Gallo (2006) (<doi: 10.14358/PERS.72.7.823>), agreement metrics from 'Willmott' (1981) (<doi: 10.1080/02723646.1981.10642213>) and 'Willmott' 'et' 'al'. (2012) (<doi: 10.1002/joc.2419>), an implementation of the area of applicability methodology from 'Meyer' and 'Pebesma' (2021) (<doi:10.1111/2041-210X.13650>), and an implementation of multi-scale assessment as described in 'Riemann' 'et' 'al'. (2010) (<doi:10.1016/j.rse.2010.05.010>).",
   "name": "waywiser: Ergonomic Methods for Assessing Spatial Models",
-  "relatedLink": "https://mikemahoney218.github.io/waywiser/",
-  "codeRepository": "https://github.com/mikemahoney218/waywiser",
-  "issueTracker": "https://github.com/mikemahoney218/waywiser/issues",
+  "relatedLink": ["https://docs.ropensci.org/waywiser", "https://CRAN.R-project.org/package=waywiser"],
+  "codeRepository": "https://github.com/ropensci/waywiser",
+  "issueTracker": "https://github.com/ropensci/waywiser/issues",
   "license": "https://spdx.org/licenses/MIT",
   "version": "0.2.0.9000",
   "programmingLanguage": {
@@ -72,6 +72,30 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=applicable"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "caret",
+      "name": "caret",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=caret"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "CAST",
+      "name": "CAST",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=CAST"
     },
     {
       "@type": "SoftwareApplication",
@@ -229,6 +253,30 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=vip"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "whisker",
+      "name": "whisker",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=whisker"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "withr",
+      "name": "withr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=withr"
     }
   ],
   "softwareRequirements": {
@@ -236,7 +284,7 @@
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
-      "version": ">= 3.6"
+      "version": ">= 4.0"
     },
     "2": {
       "@type": "SoftwareApplication",
@@ -350,6 +398,7 @@
       "@type": "SoftwareApplication",
       "identifier": "sf",
       "name": "sf",
+      "version": ">= 1.0-0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -362,6 +411,7 @@
       "@type": "SoftwareApplication",
       "identifier": "spdep",
       "name": "spdep",
+      "version": ">= 1.1-9",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -389,6 +439,18 @@
     },
     "15": {
       "@type": "SoftwareApplication",
+      "identifier": "tidyselect",
+      "name": "tidyselect",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyselect"
+    },
+    "16": {
+      "@type": "SoftwareApplication",
       "identifier": "yardstick",
       "name": "yardstick",
       "provider": {
@@ -401,10 +463,30 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "905.086KB",
-  "releaseNotes": "https://github.com/mikemahoney218/waywiser/blob/master/NEWS.md",
-  "readme": "https://github.com/mikemahoney218/waywiser/blob/main/README.md",
-  "contIntegration": ["https://github.com/mikemahoney218/waywiser/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/mikemahoney218/waywiser?branch=main"],
-  "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html#experimental",
+  "fileSize": "10709.331KB",
+  "citation": [
+    {
+      "@type": "SoftwareSourceCode",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Michael",
+          "familyName": "Mahoney"
+        }
+      ],
+      "name": "{waywiser}: Ergonomic Methods for Assessing Spatial Models",
+      "url": "https://CRAN.R-project.org/package=waywiser",
+      "description": "R package version 0.2.0.9000"
+    }
+  ],
+  "releaseNotes": "https://github.com/ropensci/waywiser/blob/master/NEWS.md",
+  "readme": "https://github.com/ropensci/waywiser/blob/main/README.md",
+  "contIntegration": ["https://github.com/ropensci/waywiser/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/ropensci/waywiser?branch=main"],
+  "developmentStatus": ["https://lifecycle.r-lib.org/articles/stages.html#maturing", "https://www.repostatus.org/#active"],
+  "review": {
+    "@type": "Review",
+    "url": "https://github.com/ropensci/software-review/issues/571",
+    "provider": "https://ropensci.org"
+  },
   "keywords": ["cran", "r", "r-package", "spatial", "spatial-analysis", "tidymodels", "tidyverse"]
 }

@@ -13,9 +13,9 @@ Assessing predictive models of spatial data can be challenging, both because the
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/mikemahoney218/waywiser}
-  \item \url{https://mikemahoney218.github.io/waywiser/}
-  \item Report bugs at \url{https://github.com/mikemahoney218/waywiser/issues}
+  \item \url{https://github.com/ropensci/waywiser}
+  \item \url{https://docs.ropensci.org/waywiser}
+  \item Report bugs at \url{https://github.com/ropensci/waywiser/issues}
 }
 
 }

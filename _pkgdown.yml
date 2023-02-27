@@ -1,13 +1,4 @@
-url: https://mikemahoney218.github.io/waywiser/
-
-template:
-  bootstrap: 5
-  bootswatch: sandstone
-  bslib:
-    primary: "#325d88"
-    success: "#325d88"
-    base_font: {google: "Noto Sans"}
-    heading_font: {google: "Patua One"}
+url: https://docs.ropensci.org/waywiser
 
 authors:
   Michael Mahoney:
@@ -16,9 +7,8 @@ authors:
     href: https://www.rstudio.com
     html: <img src='https://www.tidyverse.org/rstudio-logo.svg' alt='RStudio' width='72' />
 
-# Disable the development site while going through review
-# development:
-#  mode: auto
+development:
+  mode: auto
 
 figures:
   fig.width: 8

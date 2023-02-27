@@ -19,7 +19,7 @@ A tibble of predictions, with two columns: \code{di}, numeric, contains the
 contains whether a row is inside (\code{TRUE}) or outside (\code{FALSE}) the area of
 applicability.
 
-Note that this function is often called using \code{\link[raster:predict]{raster::predict()}} or
+Note that this function is often called using
 \code{\link[terra:predict]{terra::predict()}}, in which case \code{aoa} will be converted to numeric
 implicitly; \code{1} values correspond to cells "inside" the area of applicability
 and \code{0} corresponds to cells "outside" the AOA.

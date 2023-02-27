@@ -35,9 +35,9 @@ Description: Assessing predictive models of spatial data can be challenging,
     multi-scale assessment as described in 'Riemann' 'et' 'al'. (2010)
     (<doi:10.1016/j.rse.2010.05.010>).
 License: MIT + file LICENSE
-URL: https://github.com/mikemahoney218/waywiser,
-    https://mikemahoney218.github.io/waywiser/
-BugReports: https://github.com/mikemahoney218/waywiser/issues
+URL: https://github.com/ropensci/waywiser,
+    https://docs.ropensci.org/waywiser
+BugReports: https://github.com/ropensci/waywiser/issues
 Depends: 
     R (>= 4.0)
 Imports: 
