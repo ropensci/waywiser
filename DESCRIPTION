@@ -67,7 +67,6 @@ Suggests:
     recipes,
     rmarkdown,
     spatialsample,
-    spelling,
     testthat (>= 3.0.0),
     tidymodels,
     tidyr,
