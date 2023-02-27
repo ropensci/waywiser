@@ -13,9 +13,9 @@ Assessing predictive models of spatial data can be challenging, both because the
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/mikemahoney218/waywiser}
-  \item \url{https://mikemahoney218.github.io/waywiser/}
-  \item Report bugs at \url{https://github.com/mikemahoney218/waywiser/issues}
+  \item \url{https://github.com/ropensci/waywiser}
+  \item \url{https://docs.ropensci.org/waywiser}
+  \item Report bugs at \url{https://github.com/ropensci/waywiser/issues}
 }
 
 }
@@ -25,6 +25,8 @@ Useful links:
 Other contributors:
 \itemize{
   \item Lucas Johnson \email{lucas.k.johnson03@gmail.com} (\href{https://orcid.org/0000-0002-7953-0260}{ORCID}) [contributor]
+  \item Virgilio Gómez-Rubio (Virgilio reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>) [reviewer]
+  \item Jakub Nowosad (Jakub reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>) [reviewer]
   \item RStudio [copyright holder, funder]
 }
 

@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.3.0
+# CITATION file created with {cffr} R package, v0.4.1
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -9,20 +9,23 @@ type: software
 license: MIT
 title: 'waywiser: Ergonomic Methods for Assessing Spatial Models'
 version: 0.2.0.9000
-abstract: Assessing predictive models of spatial data can be challenging, both because
+abstract: 'Assessing predictive models of spatial data can be challenging, both because
   these models are typically built for extrapolating outside the original region represented
   by training data and due to potential spatially structured errors, with "hot spots"
   of higher than expected error clustered geographically due to spatial structure
   in the underlying data. Methods are provided for assessing models fit to spatial
   data, including approaches for measuring the spatial structure of model errors,
   assessing model predictions at multiple spatial scales, and evaluating where predictions
-  can be made safely. Methods areparticularly useful for models fit using the 'tidymodels'
-  framework. Methods include Moran's I ('Moran' (1950) <doi:10.2307/2332142>), Geary's
-  C ('Geary' (1954) <doi:10.2307/2986645>), Getis-Ord's G ('Ord' and 'Getis' (1995)
-  <doi:10.1111/j.1538-4632.1995.tb00912.x>), an implementation of the area of applicability
-  methodology from 'Meyer' and 'Pebesma' (2021) (<doi:10.1111/2041-210X.13650>), and
-  an implementation of multi-scale assessment as described in 'Riemann' et al. (2010)
-  (<doi:10.1016/j.rse.2010.05.010>).
+  can be made safely. Methods are particularly useful for models fit using the ''tidymodels''
+  framework. Methods include Moran''s I (''Moran'' (1950) <doi:10.2307/2332142>),
+  Geary''s C (''Geary'' (1954) <doi:10.2307/2986645>), Getis-Ord''s G (''Ord'' and
+  ''Getis'' (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>), agreement coefficients
+  from ''Ji'' and Gallo (2006) (<doi: 10.14358/PERS.72.7.823>), agreement metrics
+  from ''Willmott'' (1981) (<doi: 10.1080/02723646.1981.10642213>) and ''Willmott''
+  ''et'' ''al''. (2012) (<doi: 10.1002/joc.2419>), an implementation of the area of
+  applicability methodology from ''Meyer'' and ''Pebesma'' (2021) (<doi:10.1111/2041-210X.13650>),
+  and an implementation of multi-scale assessment as described in ''Riemann'' ''et''
+  ''al''. (2010) (<doi:10.1016/j.rse.2010.05.010>).'
 authors:
 - family-names: Mahoney
   given-names: Michael
@@ -39,8 +42,8 @@ preferred-citation:
   notes: R package version 0.2.0.9000
   url: https://CRAN.R-project.org/package=waywiser
 repository: https://CRAN.R-project.org/package=waywiser
-repository-code: https://github.com/mikemahoney218/waywiser
-url: https://mikemahoney218.github.io/waywiser/
+repository-code: https://github.com/ropensci/waywiser
+url: https://docs.ropensci.org/waywiser
 contact:
 - family-names: Mahoney
   given-names: Michael
@@ -58,23 +61,25 @@ references:
 - type: software
   title: 'R: A Language and Environment for Statistical Computing'
   notes: Depends
+  url: https://www.R-project.org/
   authors:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2022'
-  url: https://www.R-project.org/
+  year: '2023'
   institution:
     name: R Foundation for Statistical Computing
-  version: '>= 3.6'
+  version: '>= 4.0'
 - type: software
   title: dplyr
   abstract: 'dplyr: A Grammar of Data Manipulation'
   notes: Imports
+  url: https://dplyr.tidyverse.org
+  repository: https://CRAN.R-project.org/package=dplyr
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
     orcid: https://orcid.org/0000-0003-4757-117X
   - family-names: François
     given-names: Romain
@@ -84,12 +89,17 @@ references:
   - family-names: Müller
     given-names: Kirill
     orcid: https://orcid.org/0000-0002-1416-3412
-  year: '2022'
-  url: https://CRAN.R-project.org/package=dplyr
+  - family-names: Vaughan
+    given-names: Davis
+    email: davis@posit.co
+    orcid: https://orcid.org/0000-0003-4777-038X
+  year: '2023'
 - type: software
   title: fields
   abstract: 'fields: Tools for Spatial Data'
   notes: Imports
+  url: https://github.com/dnychka/fieldsRPackage
+  repository: https://CRAN.R-project.org/package=fields
   authors:
   - family-names: Nychka
     given-names: Douglas
@@ -109,12 +119,12 @@ references:
   - family-names: Iverson
     given-names: Matthew
     email: miverson@mymail.mines.edu
-  year: '2022'
-  url: https://CRAN.R-project.org/package=fields
+  year: '2023'
 - type: software
   title: FNN
   abstract: 'FNN: Fast Nearest Neighbor Search Algorithms and Applications'
   notes: Imports
+  repository: https://CRAN.R-project.org/package=FNN
   authors:
   - family-names: Beygelzimer
     given-names: Alina
@@ -128,12 +138,13 @@ references:
     given-names: David
   - family-names: Li
     given-names: Shengqiao
-  year: '2022'
-  url: https://CRAN.R-project.org/package=FNN
+  year: '2023'
 - type: software
   title: glue
   abstract: 'glue: Interpreted String Literals'
   notes: Imports
+  url: https://glue.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=glue
   authors:
   - family-names: Hester
     given-names: Jim
@@ -142,12 +153,13 @@ references:
     given-names: Jennifer
     email: jenny@rstudio.com
     orcid: https://orcid.org/0000-0002-6983-2759
-  year: '2022'
-  url: https://CRAN.R-project.org/package=glue
+  year: '2023'
 - type: software
   title: hardhat
   abstract: 'hardhat: Construct Modeling Packages'
   notes: Imports
+  url: https://hardhat.tidymodels.org
+  repository: https://CRAN.R-project.org/package=hardhat
   authors:
   - family-names: Vaughan
     given-names: Davis
@@ -155,12 +167,13 @@ references:
   - family-names: Kuhn
     given-names: Max
     email: max@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=hardhat
+  year: '2023'
 - type: software
   title: Matrix
   abstract: 'Matrix: Sparse and Dense Matrix Classes and Methods'
   notes: Imports
+  url: https://R-forge.R-project.org/tracker/?atid=294&group_id=61
+  repository: https://CRAN.R-project.org/package=Matrix
   authors:
   - family-names: Bates
     given-names: Douglas
@@ -171,25 +184,28 @@ references:
   - family-names: Jagan
     given-names: Mikael
     orcid: https://orcid.org/0000-0002-3542-2938
-  year: '2022'
-  url: https://CRAN.R-project.org/package=Matrix
+  year: '2023'
 - type: software
   title: purrr
   abstract: 'purrr: Functional Programming Tools'
   notes: Imports
+  url: https://purrr.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=purrr
   authors:
-  - family-names: Henry
-    given-names: Lionel
-    email: lionel@rstudio.com
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=purrr
+    orcid: https://orcid.org/0000-0003-4757-117X
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@rstudio.com
+  year: '2023'
 - type: software
   title: rlang
   abstract: 'rlang: Functions for Base Types and Core R and ''Tidyverse'' Features'
   notes: Imports
+  url: https://rlang.r-lib.org
+  repository: https://CRAN.R-project.org/package=rlang
   authors:
   - family-names: Henry
     given-names: Lionel
@@ -197,12 +213,13 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=rlang
+  year: '2023'
 - type: software
   title: rsample
   abstract: 'rsample: General Resampling Infrastructure'
   notes: Imports
+  url: https://rsample.tidymodels.org
+  repository: https://CRAN.R-project.org/package=rsample
   authors:
   - family-names: Frick
     given-names: Hannah
@@ -225,30 +242,33 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2022'
-  url: https://CRAN.R-project.org/package=rsample
+  year: '2023'
 - type: software
   title: sf
   abstract: 'sf: Simple Features for R'
   notes: Imports
+  url: https://r-spatial.github.io/sf/
+  repository: https://CRAN.R-project.org/package=sf
   authors:
   - family-names: Pebesma
     given-names: Edzer
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
-  year: '2022'
-  url: https://CRAN.R-project.org/package=sf
+  year: '2023'
+  version: '>= 1.0-0'
 - type: software
   title: spdep
   abstract: 'spdep: Spatial Dependence: Weighting Schemes, Statistics'
   notes: Imports
+  url: https://github.com/r-spatial/spdep/
+  repository: https://CRAN.R-project.org/package=spdep
   authors:
   - family-names: Bivand
     given-names: Roger
     email: Roger.Bivand@nhh.no
     orcid: https://orcid.org/0000-0003-2392-6140
-  year: '2022'
-  url: https://CRAN.R-project.org/package=spdep
+  year: '2023'
+  version: '>= 1.1-9'
 - type: software
   title: stats
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -257,14 +277,15 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2022'
-  url: https://www.R-project.org/
+  year: '2023'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
   title: tibble
   abstract: 'tibble: Simple Data Frames'
   notes: Imports
+  url: https://tibble.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=tibble
   authors:
   - family-names: Müller
     given-names: Kirill
@@ -272,12 +293,27 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=tibble
+  year: '2023'
+- type: software
+  title: tidyselect
+  abstract: 'tidyselect: Select from a Set of Strings'
+  notes: Imports
+  url: https://tidyselect.r-lib.org
+  repository: https://CRAN.R-project.org/package=tidyselect
+  authors:
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@rstudio.com
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  year: '2023'
 - type: software
   title: yardstick
   abstract: 'yardstick: Tidy Characterizations of Model Performance'
   notes: Imports
+  url: https://yardstick.tidymodels.org
+  repository: https://CRAN.R-project.org/package=yardstick
   authors:
   - family-names: Kuhn
     given-names: Max
@@ -285,12 +321,17 @@ references:
   - family-names: Vaughan
     given-names: Davis
     email: davis@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=yardstick
+  - family-names: Hvitfeldt
+    given-names: Emil
+    email: emil.hvitfeldt@rstudio.com
+    orcid: https://orcid.org/0000-0002-0679-1945
+  year: '2023'
 - type: software
   title: applicable
   abstract: 'applicable: A Compilation of Applicability Domain Methods'
   notes: Suggests
+  url: https://applicable.tidymodels.org
+  repository: https://CRAN.R-project.org/package=applicable
   authors:
   - family-names: Gotti
     given-names: Marly
@@ -298,22 +339,51 @@ references:
   - family-names: Kuhn
     given-names: Max
     email: max@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=applicable
+  year: '2023'
+- type: software
+  title: caret
+  abstract: 'caret: Classification and Regression Training'
+  notes: Suggests
+  url: https://github.com/topepo/caret/
+  repository: https://CRAN.R-project.org/package=caret
+  authors:
+  - family-names: Kuhn
+    given-names: Max
+    email: mxkuhn@gmail.com
+    orcid: https://orcid.org/0000-0003-2402-136X
+  year: '2023'
+- type: software
+  title: CAST
+  abstract: 'CAST: ''caret'' Applications for Spatial-Temporal Models'
+  notes: Suggests
+  url: https://hannameyer.github.io/CAST/
+  repository: https://CRAN.R-project.org/package=CAST
+  authors:
+  - family-names: Meyer
+    given-names: Hanna
+    email: hanna.meyer@uni-muenster.de
+  - family-names: Milà
+    given-names: Carles
+  - family-names: Ludwig
+    given-names: Marvin
+  year: '2023'
 - type: software
   title: covr
   abstract: 'covr: Test Coverage for Packages'
   notes: Suggests
+  url: https://covr.r-lib.org
+  repository: https://CRAN.R-project.org/package=covr
   authors:
   - family-names: Hester
     given-names: Jim
     email: james.f.hester@gmail.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=covr
+  year: '2023'
 - type: software
   title: ggplot2
   abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
   notes: Suggests
+  url: https://ggplot2.tidyverse.org
+  repository: https://CRAN.R-project.org/package=ggplot2
   authors:
   - family-names: Wickham
     given-names: Hadley
@@ -342,46 +412,50 @@ references:
   - family-names: Dunnington
     given-names: Dewey
     orcid: https://orcid.org/0000-0002-9415-4582
-  year: '2022'
-  url: https://CRAN.R-project.org/package=ggplot2
+  year: '2023'
 - type: software
   title: knitr
   abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
   notes: Suggests
+  url: https://yihui.org/knitr/
+  repository: https://CRAN.R-project.org/package=knitr
   authors:
   - family-names: Xie
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2022'
-  url: https://CRAN.R-project.org/package=knitr
+  year: '2023'
 - type: software
   title: modeldata
   abstract: 'modeldata: Data Sets Useful for Modeling Examples'
   notes: Suggests
+  url: https://modeldata.tidymodels.org
+  repository: https://CRAN.R-project.org/package=modeldata
   authors:
   - family-names: Kuhn
     given-names: Max
-    email: max@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=modeldata
+    email: max@posit.co
+  year: '2023'
 - type: software
   title: recipes
   abstract: 'recipes: Preprocessing and Feature Engineering Steps for Modeling'
   notes: Suggests
+  url: https://recipes.tidymodels.org/
+  repository: https://CRAN.R-project.org/package=recipes
   authors:
   - family-names: Kuhn
     given-names: Max
-    email: max@rstudio.com
+    email: max@posit.co
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=recipes
+    email: hadley@posit.co
+  year: '2023'
 - type: software
   title: rmarkdown
   abstract: 'rmarkdown: Dynamic Documents for R'
   notes: Suggests
+  url: https://pkgs.rstudio.com/rmarkdown/
+  repository: https://CRAN.R-project.org/package=rmarkdown
   authors:
   - family-names: Allaire
     given-names: JJ
@@ -415,12 +489,13 @@ references:
     given-names: Richard
     email: rich@rstudio.com
     orcid: https://orcid.org/0000-0003-3925-190X
-  year: '2022'
-  url: https://CRAN.R-project.org/package=rmarkdown
+  year: '2023'
 - type: software
   title: spatialsample
   abstract: 'spatialsample: Spatial Resampling Infrastructure'
   notes: Suggests
+  url: https://spatialsample.tidymodels.org
+  repository: https://CRAN.R-project.org/package=spatialsample
   authors:
   - family-names: Silge
     given-names: Julia
@@ -430,12 +505,13 @@ references:
     given-names: Michael
     email: mike.mahoney.218@gmail.com
     orcid: https://orcid.org/0000-0003-2402-304X
-  year: '2022'
-  url: https://CRAN.R-project.org/package=spatialsample
+  year: '2023'
 - type: software
   title: spelling
   abstract: 'spelling: Tools for Spell Checking in R'
   notes: Suggests
+  url: https://docs.ropensci.org/spelling/
+  repository: https://CRAN.R-project.org/package=spelling
   authors:
   - family-names: Ooms
     given-names: Jeroen
@@ -444,23 +520,25 @@ references:
   - family-names: Hester
     given-names: Jim
     email: james.hester@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=spelling
+  year: '2023'
 - type: software
   title: testthat
   abstract: 'testthat: Unit Testing for R'
   notes: Suggests
+  url: https://testthat.r-lib.org
+  repository: https://CRAN.R-project.org/package=testthat
   authors:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=testthat
+  year: '2023'
   version: '>= 3.0.0'
 - type: software
   title: tidymodels
   abstract: 'tidymodels: Easily Install and Load the ''Tidymodels'' Packages'
   notes: Suggests
+  url: https://tidymodels.tidymodels.org
+  repository: https://CRAN.R-project.org/package=tidymodels
   authors:
   - family-names: Kuhn
     given-names: Max
@@ -469,34 +547,40 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=tidymodels
+  year: '2023'
 - type: software
   title: tidyr
   abstract: 'tidyr: Tidy Messy Data'
   notes: Suggests
+  url: https://tidyr.tidyverse.org
+  repository: https://CRAN.R-project.org/package=tidyr
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
+  - family-names: Vaughan
+    given-names: Davis
+    email: davis@posit.co
   - family-names: Girlich
     given-names: Maximilian
-  year: '2022'
-  url: https://CRAN.R-project.org/package=tidyr
+  year: '2023'
 - type: software
   title: tigris
   abstract: 'tigris: Load Census TIGER/Line Shapefiles'
   notes: Suggests
+  url: https://github.com/walkerke/tigris
+  repository: https://CRAN.R-project.org/package=tigris
   authors:
   - family-names: Walker
     given-names: Kyle
     email: kyle@walker-data.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=tigris
+  year: '2023'
 - type: software
   title: vip
   abstract: 'vip: Variable Importance Plots'
   notes: Suggests
+  url: https://github.com/koalaverse/vip/
+  repository: https://CRAN.R-project.org/package=vip
   authors:
   - family-names: Greenwell
     given-names: Brandon
@@ -510,5 +594,38 @@ references:
     given-names: Bernie
     email: bfgray3@gmail.com
     orcid: https://orcid.org/0000-0001-9190-6032
-  year: '2022'
-  url: https://CRAN.R-project.org/package=vip
+  year: '2023'
+- type: software
+  title: whisker
+  abstract: 'whisker: mustache for R, Logicless Templating'
+  notes: Suggests
+  url: https://github.com/edwindj/whisker
+  repository: https://CRAN.R-project.org/package=whisker
+  authors:
+  - family-names: de Jonge
+    given-names: Edwin
+  year: '2023'
+- type: software
+  title: withr
+  abstract: 'withr: Run Code ''With'' Temporarily Modified Global State'
+  notes: Suggests
+  url: https://withr.r-lib.org
+  repository: https://CRAN.R-project.org/package=withr
+  authors:
+  - family-names: Hester
+    given-names: Jim
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@rstudio.com
+  - family-names: Müller
+    given-names: Kirill
+    email: krlmlr+r@mailbox.org
+  - family-names: Ushey
+    given-names: Kevin
+    email: kevinushey@gmail.com
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  - family-names: Chang
+    given-names: Winston
+  year: '2023'

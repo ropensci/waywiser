@@ -1,11 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# waywiser <a href="https://mikemahoney218.github.io/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# waywiser <a href="https://docs.ropensci.org/waywiser"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/mikemahoney218/waywiser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mikemahoney218/waywiser/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/ropensci/waywiser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/waywiser/actions/workflows/R-CMD-check.yaml)
 [![License:
 MIT](https://img.shields.io/badge/license-MIT-green)](https://choosealicense.com/licenses/mit/)
 [![Lifecycle:
@@ -14,7 +14,7 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lif
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test
-coverage](https://codecov.io/gh/mikemahoney218/waywiser/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mikemahoney218/waywiser?branch=main)
+coverage](https://codecov.io/gh/ropensci/waywiser/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/waywiser?branch=main)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/waywiser)](https://CRAN.R-project.org/package=waywiser)
 [![Status at rOpenSci Software Peer
@@ -45,8 +45,10 @@ You can install the development version of waywiser from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-remotes::install_github("mikemahoney218/waywiser")
+# install.packages("remotes")
+remotes::install_github("ropensci/waywiser")
+# or, equivalently:
+install.packages("waywiser", repos = "https://ropensci.r-universe.dev")
 ```
 
 ## Example
@@ -110,6 +112,13 @@ guerry_predicted <- guerry
 guerry_predicted$predictions <- predict(crime_model, guerry)
 
 ww_local_moran_i(guerry_predicted, Crm_prs, predictions)
+#> Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
+#> dplyr 1.1.0.
+#> ℹ Please use `reframe()` instead.
+#> ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
+#>   always returns an ungrouped data frame and adjust accordingly.
+#> ℹ The deprecated feature was likely used in the yardstick package.
+#>   Please report the issue at <]8;;https://github.com/tidymodels/yardstick/issueshttps://github.com/tidymodels/yardstick/issues]8;;>.
 #> # A tibble: 85 × 3
 #>    .metric       .estimator .estimate
 #>    <chr>         <chr>          <dbl>
@@ -149,10 +158,6 @@ guerry_aoa <- cbind(
 )
 
 plot(guerry_aoa["aoa"])
-#> Warning in seq.default(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], :
-#> partial argument match of 'length' to 'length.out'
-#> Warning in plot.default(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE, :
-#> partial argument match of 't' to 'type'
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
@@ -162,7 +167,7 @@ meaning that we probably can’t trust our model when extrapolating into
 those regions!
 
 For more information, check out [the documentation
-website!](https://mikemahoney218.github.io/waywiser/)
+website!](https://docs.ropensci.org/waywiser)
 
 ## Citing waywiser
 
@@ -187,12 +192,12 @@ A BibTeX entry for LaTeX users is
 
 ## Contributing
 
-This project is released with a [Contributor Code of
-Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
-By contributing to this project, you agree to abide by its terms.
+Please note that this package is released with a [Contributor Code of
+Conduct](https://ropensci.org/code-of-conduct/). By contributing to this
+project, you agree to abide by its terms.
 
 - If you think you have encountered a bug, please [submit an
-  issue](https://github.com/mikemahoney218/waywiser).
+  issue](https://github.com/ropensci/waywiser).
 
 - Please include a
   [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
