@@ -15,7 +15,7 @@ library(ggplot2)
 theme_set(theme_minimal())
 ```
 
-# waywiser <a href="https://docs.ropensci.org/waywiser"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# waywiser <a href="https://docs.ropensci.org/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ropensci/waywiser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/waywiser/actions/workflows/R-CMD-check.yaml)
@@ -135,7 +135,7 @@ plot(guerry_aoa["aoa"])
 We can see that two areas are outside our model's area of applicability, meaning
 that we probably can't trust our model when extrapolating into those regions!
 
-For more information, check out [the documentation website!](https://docs.ropensci.org/waywiser)
+For more information, check out [the documentation website!](https://docs.ropensci.org/waywiser/)
 
 ## Citing waywiser
 

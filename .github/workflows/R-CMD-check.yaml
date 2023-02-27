@@ -29,11 +29,6 @@ jobs:
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
-          - {os: ubuntu-latest,   r: 'oldrel-2'}
-          # Uncomment this in 2023 (once current R is >= 4.3)
-#          - {os: ubuntu-latest,   r: 'oldrel-3'}
-          # Uncomment this in 2024 (once current R is >= 4.4)
-#          - {os: ubuntu-latest,   r: 'oldrel-4'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
