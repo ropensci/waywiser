@@ -65,28 +65,28 @@
 ---
 
     Code
-      ww_willmott_d(missing_df, x, y)$.estimate
+      round(ww_willmott_d(missing_df, x, y)$.estimate, 15)
     Output
       [1] 1
 
 ---
 
     Code
-      ww_willmott_d(missing_df, y, x)$.estimate
+      round(ww_willmott_d(missing_df, y, x)$.estimate, 15)
     Output
       [1] 1
 
 ---
 
     Code
-      ww_willmott_d_vec(missing_df$y, missing_df$x)
+      round(ww_willmott_d_vec(missing_df$y, missing_df$x), 15)
     Output
       [1] 1
 
 ---
 
     Code
-      ww_willmott_d_vec(missing_df$x, missing_df$y)
+      round(ww_willmott_d_vec(missing_df$x, missing_df$y), 15)
     Output
       [1] 1
 
