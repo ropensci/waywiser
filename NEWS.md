@@ -22,13 +22,25 @@
   `ww_systematic_agreement_coefficient()`, 
   `ww_unsystematic_agreement_coefficient()`, `ww_unsystematic_mpd(),`,
   `ww_systematic_mpd()`, `ww_unsystematic_rmpd()`, `ww_systematic_rmpd()`,
-  `ww_willmott_d()`, `ww_willmott_dr()`, `ww_systematic_mse()`, 
-  `ww_unsystematic_mse()`, `ww_systematic_rmse()`, `ww_unsystematic_rmse()`.
+  `ww_willmott_d()`, `ww_willmott_dr()`, `ww_willmott_d1()`, 
+  `ww_systematic_mse()`, `ww_unsystematic_mse()`, `ww_systematic_rmse()`,
+  `ww_unsystematic_rmse()`. Note that `ww_willmott_dr()` uses the version
+  from Willmott (2012); other implementations (sometimes called "d1r") seem to 
+  use an unbounded variant that I haven't found a reference to support.
 
 * Added a dependency on FNN.
 
+* Minimum versions for dplyr and yardstick have been bumped to 1.1.0, due to 
+  breaking changes in each.
+
 * Changed a call in `ww_area_of_applicability()` to use FNN for nearest 
   neighbors, rather than fields. This sped up prediction by a _lot_.
+  
+* The `na_action` argument to `ww_area_of_applicability()` has been replaced by
+  `na_rm`, with a default value of `FALSE`. 
+  
+* `na_rm` is now `TRUE` by default for non-spatial-autocorrelation functions.
+  NA values will cause spatial-autocorrelation functions to fail with an error.
 
 # waywiser 0.2.0
 

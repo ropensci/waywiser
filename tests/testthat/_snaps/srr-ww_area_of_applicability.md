@@ -93,32 +93,32 @@
     Code
       ww_area_of_applicability(y ~ ., train_na, test, importance)
     Error <rlang_error>
-      Missing values in training (either `x` or `data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in training data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
     Code
       ww_area_of_applicability(y ~ ., train, test_na, importance)
     Error <rlang_error>
-      Missing values in testing (`testing` or `new_data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in testing data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
     Code
       ww_area_of_applicability(train_na[2:11], test[2:11], importance)
     Error <rlang_error>
-      Missing values in training (either `x` or `data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in training data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
     Code
       ww_area_of_applicability(train[2:11], test_na[2:11], importance)
     Error <rlang_error>
-      Missing values in testing (`testing` or `new_data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in testing data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
@@ -126,8 +126,8 @@
       ww_area_of_applicability(as.matrix(train_na[2:11]), as.matrix(test[2:11]),
       importance)
     Error <rlang_error>
-      Missing values in training (either `x` or `data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in training data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
@@ -135,8 +135,8 @@
       ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test_na[2:11]),
       importance)
     Error <rlang_error>
-      Missing values in testing (`testing` or `new_data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in testing data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 
@@ -145,8 +145,8 @@
     Error <purrr_error_indexed>
       i In index: 1.
       Caused by error in `create_aoa()`:
-      ! Missing values in training (either `x` or `data`).
-      i Either process your data to fix the NA values or set `na_action`.
+      ! Missing values in training data.
+      i Either process your data to fix NA values, or set `na_rm = TRUE`.
 
 ---
 

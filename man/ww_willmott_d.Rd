@@ -4,6 +4,9 @@
 \alias{ww_willmott_d}
 \alias{ww_willmott_d.data.frame}
 \alias{ww_willmott_d_vec}
+\alias{ww_willmott_d1}
+\alias{ww_willmott_d1.data.frame}
+\alias{ww_willmott_d1_vec}
 \alias{ww_willmott_dr}
 \alias{ww_willmott_dr.data.frame}
 \alias{ww_willmott_dr_vec}
@@ -23,39 +26,45 @@
 \usage{
 ww_willmott_d(data, ...)
 
-\method{ww_willmott_d}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_willmott_d}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_willmott_d_vec(truth, estimate, na_action = na.fail, ...)
+ww_willmott_d_vec(truth, estimate, na_rm = TRUE, ...)
+
+ww_willmott_d1(data, ...)
+
+\method{ww_willmott_d1}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
+
+ww_willmott_d1_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_willmott_dr(data, ...)
 
-\method{ww_willmott_dr}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_willmott_dr}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_willmott_dr_vec(truth, estimate, na_action = na.fail, ...)
+ww_willmott_dr_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_systematic_mse(data, ...)
 
-\method{ww_systematic_mse}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_systematic_mse}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_systematic_mse_vec(truth, estimate, na_action = na.fail, ...)
+ww_systematic_mse_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_unsystematic_mse(data, ...)
 
-\method{ww_unsystematic_mse}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_unsystematic_mse}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_unsystematic_mse_vec(truth, estimate, na_action = na.fail, ...)
+ww_unsystematic_mse_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_systematic_rmse(data, ...)
 
-\method{ww_systematic_rmse}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_systematic_rmse}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_systematic_rmse_vec(truth, estimate, na_action = na.fail, ...)
+ww_systematic_rmse_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_unsystematic_rmse(data, ...)
 
-\method{ww_unsystematic_rmse}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_unsystematic_rmse}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_unsystematic_rmse_vec(truth, estimate, na_action = na.fail, ...)
+ww_unsystematic_rmse_vec(truth, estimate, na_rm = TRUE, ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
@@ -74,17 +83,13 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{na_action}{A function which indicates what should happen when the data
-contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
-or any of the functions from the "zoo"
-package. This function ignores the value of \code{options("na.action")} in order
-to make cross-computer (and cross-session) results more stable. This argument
-must be of length 1; you cannot pass multiple functions to \code{na_action}.}
+\item{na_rm}{A \code{logical} value indicating whether \code{NA}
+values should be stripped before the computation proceeds.}
 }
 \value{
 A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
-For \verb{_vec()} functions, a single value (or NA).
+For `_vec()` functions, a single value (or NA).
 }
 \description{
 These functions calculate Willmott's d value, a proposed replacement for R2
@@ -94,10 +99,11 @@ components of MSE and RMSE; the sum of the systematic and unsystematic
 components of MSE equal total MSE (though the same is not true for RMSE).
 }
 \details{
-Values of d range from 0 to 1, with 1 indicating perfect agreement. Values of
+Values of d and d1 range from 0 to 1, with 1 indicating perfect agreement.
+Values of
 dr range from -1 to 1, with 1 similarly indicating perfect agreement. Values
-of RMSE are in the same units as \code{truth} and \code{estimate}, while values of MSE
-are in squared units. \code{truth} and \code{estimate} must be the same length. This
+of RMSE are in the same units as `truth` and `estimate`, while values of MSE
+are in squared units. `truth` and `estimate` must be the same length. This
 function is not explicitly spatial and as such can be applied to data with
 any number of dimensions and any coordinate reference system.
 }
@@ -106,6 +112,7 @@ x <- c(6, 8, 9, 10, 11, 14)
 y <- c(2, 3, 5, 5, 6, 8)
 
 ww_willmott_d_vec(x, y)
+ww_willmott_d1_vec(x, y)
 ww_willmott_dr_vec(x, y)
 ww_systematic_mse_vec(x, y)
 ww_unsystematic_mse_vec(x, y)
@@ -114,6 +121,7 @@ ww_unsystematic_rmse_vec(x, y)
 
 example_df <- data.frame(x = x, y = y)
 ww_willmott_d(example_df, x, y)
+ww_willmott_d1(example_df, x, y)
 ww_willmott_dr(example_df, x, y)
 ww_systematic_mse(example_df, x, y)
 ww_unsystematic_mse(example_df, x, y)
@@ -128,6 +136,11 @@ pp 184-194, doi: 10.1080/02723646.1981.10642213.
 Willmott, C. J. 1982. "Some Comments on the Evaluation of Model Performance".
 Bulletin of the American Meteorological Society 63(11), pp 1309-1313,
 doi: 10.1175/1520-0477(1982)063<1309:SCOTEO>2.0.CO;2.
+
+Willmott C. J., Ackleson S. G., Davis R. E., Feddema J. J., Klink K. M.,
+Legates D. R., O’Donnell J., Rowe C. M. 1985. "Statistics for the
+evaluation of model performance." Journal of Geophysical Research
+90(C5): 8995–9005, doi: 10.1029/jc090ic05p08995
 
 Willmott, C. J., Robeson, S. M., and Matsuura, K. "A refined index of model
 performance". International Journal of Climatology 32, pp 2088-2094, doi:

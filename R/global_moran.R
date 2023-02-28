@@ -11,25 +11,6 @@
 #' These functions can be used for geographic or projected coordinate reference
 #' systems and expect 2D data.
 #'
-#' @srrstats {SP1.0} Domain of applicability specified above.
-#' @srrstats {SP1.1} Dimensional domain of applicability specified above.
-#'
-#' @srrstats {G1.4} roxygen2 documentation
-#' @srrstats {G2.7} This function relies on yardstick and dplyr and therefore only handles data.frame and vector input.
-#' @srrstats {G2.8} Method dispatch enforces data.frame inputs
-#' @srrstats {G2.10} Column extraction is properly handled within yardstick.
-#' @srrstats {G2.14} Any function may be passed to na_action
-#' @srrstats {G2.14a} Any function may be passed to na_action
-#' @srrstats {G2.14b} Any function may be passed to na_action
-#' @srrstats {G2.14c} Any function may be passed to na_action
-#' @srrstats {G2.15} Any function may be passed to na_action
-#' @srrstats {G2.16} Any function may be passed to na_action
-#'
-#' @srrstats {SP2.6} Input type requirements are documented.
-#' @srrstats {SP3.0} Users are given total control over weights.
-#' @srrstats {SP3.0a} Users are given total control over weights.
-#' @srrstats {SP3.0b} Users are given total control over weights.
-#' @srrstats {SP3.1} Users are given total control over weights.
 #' @inheritParams ww_global_geary_c
 #' @inheritParams spdep::moran.test
 #' @param ... Additional arguments passed to [spdep::moran()] (for
@@ -38,10 +19,6 @@
 #'
 #' @family autocorrelation metrics
 #' @family yardstick metrics
-#'
-#' @srrstats {SP4.0} Return values are of a unique format
-#' @srrstats {SP4.0b} Return values are of a unique format
-#' @srrstats {SP4.2} Returns are explicitly documented
 #'
 #' @inherit ww_global_geary_c return
 #'
@@ -85,14 +62,14 @@ ww_global_moran_i.data.frame <- function(data,
                                          truth,
                                          estimate,
                                          wt = NULL,
-                                         na_action = na.fail,
+                                         na_rm = FALSE,
                                          ...) {
   spatial_yardstick_df(
     data = data,
     truth = {{ truth }},
     estimate = {{ estimate }},
     wt = wt,
-    na_action = na_action,
+    na_rm = na_rm,
     name = "global_moran_i",
     ...
   )
@@ -103,7 +80,7 @@ ww_global_moran_i.data.frame <- function(data,
 ww_global_moran_i_vec <- function(truth,
                                   estimate,
                                   wt = NULL,
-                                  na_action = na.fail,
+                                  na_rm = FALSE,
                                   ...) {
   ww_global_moran_i_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
@@ -120,7 +97,7 @@ ww_global_moran_i_vec <- function(truth,
     truth = truth,
     estimate = estimate,
     wt = wt,
-    na_action = na_action,
+    na_rm = na_rm,
     impl = ww_global_moran_i_impl,
     ...
   )
@@ -139,14 +116,14 @@ ww_global_moran_pvalue.data.frame <- function(data,
                                               truth,
                                               estimate,
                                               wt = NULL,
-                                              na_action = na.fail,
+                                              na_rm = FALSE,
                                               ...) {
   spatial_yardstick_df(
     data = data,
     truth = {{ truth }},
     estimate = {{ estimate }},
     wt = wt,
-    na_action = na_action,
+    na_rm = na_rm,
     name = "global_moran_pvalue",
     ...
   )
@@ -157,7 +134,7 @@ ww_global_moran_pvalue.data.frame <- function(data,
 ww_global_moran_pvalue_vec <- function(truth,
                                        estimate,
                                        wt = NULL,
-                                       na_action = na.fail,
+                                       na_rm = FALSE,
                                        ...) {
   ww_global_moran_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
@@ -176,7 +153,7 @@ ww_global_moran_pvalue_vec <- function(truth,
     truth = truth,
     estimate = estimate,
     wt = wt,
-    na_action = na_action,
+    na_rm = na_rm,
     impl = ww_global_moran_pvalue_impl,
     ...
   )

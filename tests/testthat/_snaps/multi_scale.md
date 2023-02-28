@@ -51,9 +51,9 @@
 
     Code
       ww_multi_scale(suppressWarnings(sf::st_centroid(guerry_modeled)), Crm_prs,
-      predictions, n = list(c(1, 1)), na_action = c(na.omit, na.fail), metrics = yardstick::rmse)
+      predictions, n = list(c(1, 1)), na_rm = c(TRUE, FALSE), metrics = yardstick::rmse)
     Error <rlang_error>
-      Only one value can be passed to `na_action`.
+      Only one logical value can be passed to `na_rm`.
 
 ---
 
@@ -93,76 +93,86 @@
 ---
 
     Code
-      ww_multi_scale(worldclim_predicted, predicted, response)
-    Error <rlang_error>
-      Missing values in `estimate` ('response').
-      i Either process your data to fix the NA values or set `na_action`.
-
----
-
-    Code
-      ww_multi_scale(worldclim_predicted, response, predicted)
-    Error <rlang_error>
-      Missing values in `truth` ('response').
-      i Either process your data to fix the NA values or set `na_action`.
-
----
-
-    Code
-      ww_multi_scale(worldclim_predicted, predicted, response, na_action = function(x)
-        unlist(na.pass(x)), n = c(2, 4))
+      ww_multi_scale(worldclim_predicted, predicted, response, n = 2)
     Output
-      # A tibble: 4 x 6
-        .metric .estimator .estimate .grid_args       .grid         .notes          
-        <chr>   <chr>          <dbl> <list>           <list>        <list>          
-      1 rmse    standard     0.00739 <tibble [1 x 1]> <sf [4 x 3]>  <tibble [0 x 2]>
-      2 mae     standard     0.00691 <tibble [1 x 1]> <sf [4 x 3]>  <tibble [0 x 2]>
-      3 rmse    standard     0.0255  <tibble [1 x 1]> <sf [16 x 3]> <tibble [0 x 2]>
-      4 mae     standard     0.0165  <tibble [1 x 1]> <sf [16 x 3]> <tibble [0 x 2]>
+      # A tibble: 2 x 6
+        .metric .estimator .estimate .grid_args       .grid        .notes          
+        <chr>   <chr>          <dbl> <list>           <list>       <list>          
+      1 rmse    standard     0.00739 <tibble [1 x 1]> <sf [4 x 3]> <tibble [0 x 2]>
+      2 mae     standard     0.00691 <tibble [1 x 1]> <sf [4 x 3]> <tibble [0 x 2]>
 
 ---
 
     Code
-      ww_multi_scale(worldclim_predicted, response, predicted, na_action = function(x)
-        unlist(na.pass(x)), n = c(2, 4))
+      ww_multi_scale(worldclim_predicted, response, predicted, n = 2)
     Output
-      # A tibble: 4 x 6
-        .metric .estimator .estimate .grid_args       .grid         .notes          
-        <chr>   <chr>          <dbl> <list>           <list>        <list>          
-      1 rmse    standard     0.00739 <tibble [1 x 1]> <sf [4 x 3]>  <tibble [0 x 2]>
-      2 mae     standard     0.00691 <tibble [1 x 1]> <sf [4 x 3]>  <tibble [0 x 2]>
-      3 rmse    standard     0.0255  <tibble [1 x 1]> <sf [16 x 3]> <tibble [0 x 2]>
-      4 mae     standard     0.0165  <tibble [1 x 1]> <sf [16 x 3]> <tibble [0 x 2]>
+      # A tibble: 2 x 6
+        .metric .estimator .estimate .grid_args       .grid        .notes          
+        <chr>   <chr>          <dbl> <list>           <list>       <list>          
+      1 rmse    standard     0.00739 <tibble [1 x 1]> <sf [4 x 3]> <tibble [0 x 2]>
+      2 mae     standard     0.00691 <tibble [1 x 1]> <sf [4 x 3]> <tibble [0 x 2]>
+
+---
+
+    Code
+      ww_multi_scale(worldclim_predicted, predicted, response, n = 2, na_rm = FALSE)
+    Output
+      # A tibble: 2 x 6
+        .metric .estimator .estimate .grid_args       .grid        .notes          
+        <chr>   <chr>          <dbl> <list>           <list>       <list>          
+      1 rmse    standard          NA <tibble [1 x 1]> <sf [4 x 3]> <tibble [0 x 2]>
+      2 mae     standard          NA <tibble [1 x 1]> <sf [4 x 3]> <tibble [0 x 2]>
+
+---
+
+    Code
+      ww_multi_scale(worldclim_predicted, response, predicted, n = 2, na_rm = FALSE)
+    Output
+      # A tibble: 2 x 6
+        .metric .estimator .estimate .grid_args       .grid        .notes          
+        <chr>   <chr>          <dbl> <list>           <list>       <list>          
+      1 rmse    standard          NA <tibble [1 x 1]> <sf [4 x 3]> <tibble [0 x 2]>
+      2 mae     standard          NA <tibble [1 x 1]> <sf [4 x 3]> <tibble [0 x 2]>
 
 ---
 
     Code
       ww_multi_scale(head(worldclim_predicted, 0), response, predicted, n = c(2, 4))
     Error <rlang_error>
-      0 rows were passed as training data.
+      0 rows were passed to `data`.
 
 ---
 
     Code
       ww_multi_scale(head(worldclim_predicted, 0), predicted, response, n = c(2, 4))
     Error <rlang_error>
-      0 rows were passed as training data.
+      0 rows were passed to `data`.
 
 ---
 
     Code
       ww_multi_scale(worldclim_predicted, response, predicted, n = c(2, 4))
-    Error <rlang_error>
-      Missing values in `truth` ('response').
-      i Either process your data to fix the NA values or set `na_action`.
+    Output
+      # A tibble: 4 x 6
+        .metric .estimator .estimate .grid_args       .grid         .notes          
+        <chr>   <chr>          <dbl> <list>           <list>        <list>          
+      1 rmse    standard         NaN <tibble [1 x 1]> <sf [4 x 3]>  <tibble [0 x 2]>
+      2 mae     standard         NaN <tibble [1 x 1]> <sf [4 x 3]>  <tibble [0 x 2]>
+      3 rmse    standard         NaN <tibble [1 x 1]> <sf [16 x 3]> <tibble [0 x 2]>
+      4 mae     standard         NaN <tibble [1 x 1]> <sf [16 x 3]> <tibble [0 x 2]>
 
 ---
 
     Code
       ww_multi_scale(worldclim_predicted, predicted, response, n = c(2, 4))
-    Error <rlang_error>
-      Missing values in `estimate` ('response').
-      i Either process your data to fix the NA values or set `na_action`.
+    Output
+      # A tibble: 4 x 6
+        .metric .estimator .estimate .grid_args       .grid         .notes          
+        <chr>   <chr>          <dbl> <list>           <list>        <list>          
+      1 rmse    standard         NaN <tibble [1 x 1]> <sf [4 x 3]>  <tibble [0 x 2]>
+      2 mae     standard         NaN <tibble [1 x 1]> <sf [4 x 3]>  <tibble [0 x 2]>
+      3 rmse    standard         NaN <tibble [1 x 1]> <sf [16 x 3]> <tibble [0 x 2]>
+      4 mae     standard         NaN <tibble [1 x 1]> <sf [16 x 3]> <tibble [0 x 2]>
 
 ---
 

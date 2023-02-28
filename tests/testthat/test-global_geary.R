@@ -1,5 +1,4 @@
 test_that("Global Geary statistics are stable", {
-  trip_dplyr_warning()
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
@@ -40,8 +39,6 @@ test_that("Global Geary statistics are stable", {
     vec_global_c_p
   )
 
-  #' @srrstats {G5.4} Testing against spdep
-  #' @srrstats {G5.5} Run with a consistent seed
   set.seed(123)
   spdep_output <- spdep::geary.test(resid, weights)
 
