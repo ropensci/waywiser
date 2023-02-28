@@ -50,8 +50,13 @@ You can install the development version of waywiser from [GitHub](https://github
 
 ``` r
 # install.packages("remotes")
+# The current development version of waywiser requires the development version
+# of the yardstick package:
+remotes::install_github("tidymodels/yardstick")
 remotes::install_github("ropensci/waywiser")
+
 # or, equivalently:
+install.packages("yardstick", repos = "https://tidymodels.r-universe.dev")
 install.packages("waywiser", repos = "https://ropensci.r-universe.dev")
 ```
 

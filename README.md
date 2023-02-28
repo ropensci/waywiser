@@ -46,8 +46,13 @@ You can install the development version of waywiser from
 
 ``` r
 # install.packages("remotes")
+# The current development version of waywiser requires the development version
+# of the yardstick package:
+remotes::install_github("tidymodels/yardstick")
 remotes::install_github("ropensci/waywiser")
+
 # or, equivalently:
+install.packages("yardstick", repos = "https://tidymodels.r-universe.dev")
 install.packages("waywiser", repos = "https://ropensci.r-universe.dev")
 ```
 
@@ -94,10 +99,10 @@ guerry_multi_scale
 #> # A tibble: 4 × 6
 #>   .metric .estimator .estimate .grid_args       .grid         .notes          
 #>   <chr>   <chr>          <dbl> <list>           <list>        <list>          
-#> 1 rmse    standard       4893. <tibble [1 × 1]> <sf [25 × 3]> <tibble [0 × 2]>
-#> 2 mae     standard       4393. <tibble [1 × 1]> <sf [25 × 3]> <tibble [0 × 2]>
-#> 3 rmse    standard       3207. <tibble [1 × 1]> <sf [4 × 3]>  <tibble [0 × 2]>
-#> 4 mae     standard       3172. <tibble [1 × 1]> <sf [4 × 3]>  <tibble [0 × 2]>
+#> 1 rmse    standard       4893. <tibble [1 × 1]> <sf [25 × 5]> <tibble [0 × 2]>
+#> 2 mae     standard       4393. <tibble [1 × 1]> <sf [25 × 5]> <tibble [0 × 2]>
+#> 3 rmse    standard       3207. <tibble [1 × 1]> <sf [4 × 5]>  <tibble [0 × 2]>
+#> 4 mae     standard       3172. <tibble [1 × 1]> <sf [4 × 5]>  <tibble [0 × 2]>
 ```
 
 More information about multi-scale assessment is included in
@@ -112,13 +117,6 @@ guerry_predicted <- guerry
 guerry_predicted$predictions <- predict(crime_model, guerry)
 
 ww_local_moran_i(guerry_predicted, Crm_prs, predictions)
-#> Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
-#> dplyr 1.1.0.
-#> ℹ Please use `reframe()` instead.
-#> ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
-#>   always returns an ungrouped data frame and adjust accordingly.
-#> ℹ The deprecated feature was likely used in the yardstick package.
-#>   Please report the issue at <https://github.com/tidymodels/yardstick/issues>.
 #> # A tibble: 85 × 3
 #>    .metric       .estimator .estimate
 #>    <chr>         <chr>          <dbl>
@@ -164,10 +162,10 @@ plot(guerry_aoa["aoa"])
 
 We can see that two areas are outside our model’s area of applicability,
 meaning that we probably can’t trust our model when extrapolating into
-those regions\!
+those regions!
 
 For more information, check out [the documentation
-website\!](https://docs.ropensci.org/waywiser/)
+website!](https://docs.ropensci.org/waywiser/)
 
 ## Citing waywiser
 
@@ -196,10 +194,10 @@ Please note that this package is released with a [Contributor Code of
 Conduct](https://ropensci.org/code-of-conduct/). By contributing to this
 project, you agree to abide by its terms.
 
-  - If you think you have encountered a bug, please [submit an
-    issue](https://github.com/ropensci/waywiser).
+- If you think you have encountered a bug, please [submit an
+  issue](https://github.com/ropensci/waywiser).
 
-  - Please include a
-    [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
-    (a minimal, reproducible example) to clearly communicate about your
-    code.
+- Please include a
+  [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+  (a minimal, reproducible example) to clearly communicate about your
+  code.
