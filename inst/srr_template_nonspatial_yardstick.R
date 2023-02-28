@@ -80,22 +80,22 @@ test_that("srr: expected failures for {{{name}}}", {
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
   #' Users can remove NA:
   expect_snapshot(
-    {{{name}}}(missing_df, x, y)$.estimate,
+    round({{{name}}}(missing_df, x, y)$.estimate, 15),
   )
 
   #' Users can remove NA:
   expect_snapshot(
-    {{{name}}}(missing_df, y, x)$.estimate,
+    round({{{name}}}(missing_df, y, x)$.estimate, 15),
   )
 
   #' Users can remove NA:
   expect_snapshot(
-    {{{name}}}_vec(missing_df$y, missing_df$x),
+    round({{{name}}}_vec(missing_df$y, missing_df$x), 15),
   )
 
   #' Users can remove NA:
   expect_snapshot(
-    {{{name}}}_vec(missing_df$x, missing_df$y),
+    round({{{name}}}_vec(missing_df$x, missing_df$y), 15),
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
@@ -122,66 +122,57 @@ test_that("srr: expected failures for {{{name}}}", {
     NA_real_
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8a} Zero-length data:
+  # Edge condition tests: Zero-length data:
   expect_snapshot(
     {{{name}}}_vec(numeric(), numeric()),
     error = TRUE
   )
 
   empty_df <- tibble::tibble(x = numeric(), y = numeric())
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8a} Zero-length data:
+  # Edge condition tests: Zero-length data:
   expect_snapshot(
     {{{name}}}(empty_df, x, y),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8a} Zero-length data:
+  # Edge condition tests: Zero-length data:
   expect_snapshot(
     {{{name}}}(empty_df, y, x),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-NA:
+  # Edge condition tests: All-NA:
   expect_snapshot(
     {{{name}}}_vec(rep(NA_real_, 4), 4:1),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-NA:
+  # Edge condition tests: All-NA:
   expect_snapshot(
     {{{name}}}_vec(1:4, rep(NA_real_, 4)),
     error = TRUE
   )
 
   all_na <- tibble::tibble(x = rep(NA_real_, 4), y = 1:4)
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-NA:
+  # Edge condition tests: All-NA:
   expect_snapshot(
     {{{name}}}(all_na, x, y),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-NA:
+  # Edge condition tests: All-NA:
   expect_snapshot(
     {{{name}}}(all_na, y, x),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-identical:
+  # Edge condition tests: All-identical:
   expect_snapshot(
     {{{name}}}_vec(1:4, 1:4)
   )
 
   all_identical <- tibble::tibble(x = 1:4, y = 1:4)
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-identical:
+  # Edge condition tests: All-identical:
   expect_snapshot(
     {{{name}}}(all_identical, x, y)
   )
@@ -196,41 +187,31 @@ test_that("other generic srr standards", {
   noised_x <- x + rnorm(x, .Machine$double.eps, .Machine$double.eps)
   noised_df <- tibble::tibble(x = noised_x, y = y)
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  # Noise susceptibility tests: Trivial noise doesn't change results:
   expect_equal(
     {{{name}}}(noised_df, x, y),
     {{{name}}}(df, x, y)
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  # Noise susceptibility tests: Trivial noise doesn't change results:
   expect_equal(
     {{{name}}}(noised_df, y, x),
     {{{name}}}(df, y, x)
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  # Noise susceptibility tests: Trivial noise doesn't change results:
   expect_equal(
     {{{name}}}_vec(noised_x, y),
     {{{name}}}_vec(x, y)
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  # Noise susceptibility tests: Trivial noise doesn't change results:
   expect_equal(
     {{{name}}}_vec(y, noised_x),
     {{{name}}}_vec(y, x)
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9b} Different seeds are equivalent:
+  # Noise susceptibility tests: Different seeds are equivalent:
   expect_equal(
     withr::with_seed(
       123,
@@ -242,9 +223,7 @@ test_that("other generic srr standards", {
     )
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9b} Different seeds are equivalent:
+  # Noise susceptibility tests: Different seeds are equivalent:
   expect_equal(
     withr::with_seed(
       123,
@@ -256,9 +235,7 @@ test_that("other generic srr standards", {
     )
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9b} Different seeds are equivalent:
+  # Noise susceptibility tests: Different seeds are equivalent:
   expect_equal(
     withr::with_seed(
       123,
@@ -270,9 +247,7 @@ test_that("other generic srr standards", {
     )
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9b} Different seeds are equivalent:
+  # Noise susceptibility tests: Different seeds are equivalent:
   expect_equal(
     withr::with_seed(
       123,

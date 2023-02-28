@@ -65,30 +65,30 @@
 ---
 
     Code
-      ww_unsystematic_rmse(missing_df, x, y)$.estimate
+      round(ww_unsystematic_rmse(missing_df, x, y)$.estimate, 15)
     Output
-      [1] 2.56395e-16
+      [1] 0
 
 ---
 
     Code
-      ww_unsystematic_rmse(missing_df, y, x)$.estimate
+      round(ww_unsystematic_rmse(missing_df, y, x)$.estimate, 15)
     Output
-      [1] 2.56395e-16
+      [1] 0
 
 ---
 
     Code
-      ww_unsystematic_rmse_vec(missing_df$y, missing_df$x)
+      round(ww_unsystematic_rmse_vec(missing_df$y, missing_df$x), 15)
     Output
-      [1] 2.56395e-16
+      [1] 0
 
 ---
 
     Code
-      ww_unsystematic_rmse_vec(missing_df$x, missing_df$y)
+      round(ww_unsystematic_rmse_vec(missing_df$x, missing_df$y), 15)
     Output
-      [1] 2.56395e-16
+      [1] 0
 
 ---
 
