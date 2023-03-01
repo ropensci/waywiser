@@ -7,7 +7,6 @@ edition = '2018'
 crate-type = [ 'staticlib' ]
 
 [dependencies]
-extendr-api = {version = '*', features = ["ndarray"]}
+extendr-api = {version = '0.4', features = ["ndarray"]}
 ndarray = {version = '0.15.6', features = ["rayon"]}
 ndarray-stats = '0.5.1'
-serde = { version = "1.0", features = ["derive"] }
