@@ -22,6 +22,8 @@
 #' For grouped data frames, the number of rows returned will be the same as the number of groups.
 #' For `_vec()` functions, a single value (or NA).
 #'
+#' @include waywiser-package.R
+#'
 #' @family agreement metrics
 #' @family yardstick metrics
 #'
@@ -57,7 +59,7 @@ ww_agreement_coefficient <- function(data, ...) {
   UseMethod("ww_agreement_coefficient")
 }
 
-ww_agreement_coefficient <- new_numeric_metric(ww_agreement_coefficient, direction = "maximize")
+ww_agreement_coefficient <- yardstick::new_numeric_metric(ww_agreement_coefficient, direction = "maximize")
 
 #' @rdname ww_agreement_coefficient
 #' @export
@@ -103,7 +105,7 @@ ww_systematic_agreement_coefficient <- function(data, ...) {
   UseMethod("ww_systematic_agreement_coefficient")
 }
 
-ww_systematic_agreement_coefficient <- new_numeric_metric(ww_systematic_agreement_coefficient, direction = "maximize")
+ww_systematic_agreement_coefficient <- yardstick::new_numeric_metric(ww_systematic_agreement_coefficient, direction = "maximize")
 
 #' @rdname ww_agreement_coefficient
 #' @export
@@ -147,7 +149,7 @@ ww_unsystematic_agreement_coefficient <- function(data, ...) {
   UseMethod("ww_unsystematic_agreement_coefficient")
 }
 
-ww_unsystematic_agreement_coefficient <- new_numeric_metric(ww_unsystematic_agreement_coefficient, direction = "maximize")
+ww_unsystematic_agreement_coefficient <- yardstick::new_numeric_metric(ww_unsystematic_agreement_coefficient, direction = "maximize")
 
 #' @rdname ww_agreement_coefficient
 #' @export
@@ -191,7 +193,7 @@ ww_unsystematic_mpd <- function(data, ...) {
   UseMethod("ww_unsystematic_mpd")
 }
 
-ww_unsystematic_mpd <- new_numeric_metric(ww_unsystematic_mpd, direction = "maximize")
+ww_unsystematic_mpd <- yardstick::new_numeric_metric(ww_unsystematic_mpd, direction = "maximize")
 
 #' @rdname ww_agreement_coefficient
 #' @export
@@ -235,7 +237,7 @@ ww_systematic_mpd <- function(data, ...) {
   UseMethod("ww_systematic_mpd")
 }
 
-ww_systematic_mpd <- new_numeric_metric(ww_systematic_mpd, direction = "maximize")
+ww_systematic_mpd <- yardstick::new_numeric_metric(ww_systematic_mpd, direction = "maximize")
 
 #' @rdname ww_agreement_coefficient
 #' @export
@@ -279,7 +281,7 @@ ww_unsystematic_rmpd <- function(data, ...) {
   UseMethod("ww_unsystematic_rmpd")
 }
 
-ww_unsystematic_rmpd <- new_numeric_metric(ww_unsystematic_rmpd, direction = "maximize")
+ww_unsystematic_rmpd <- yardstick::new_numeric_metric(ww_unsystematic_rmpd, direction = "maximize")
 
 #' @rdname ww_agreement_coefficient
 #' @export
@@ -323,7 +325,7 @@ ww_systematic_rmpd <- function(data, ...) {
   UseMethod("ww_systematic_rmpd")
 }
 
-ww_systematic_rmpd <- new_numeric_metric(ww_systematic_rmpd, direction = "maximize")
+ww_systematic_rmpd <- yardstick::new_numeric_metric(ww_systematic_rmpd, direction = "maximize")
 
 #' @rdname ww_agreement_coefficient
 #' @export
@@ -365,21 +367,13 @@ ww_systematic_rmpd_vec <- function(truth,
 #'
 #' @inheritParams yardstick::rmse
 #' @noRd
-calc_ssd <- function(truth, estimate) sum((truth - estimate)^2)
+calc_ssd <- function(truth, estimate) ssd_rust(truth, estimate)
 
 #' Return Sum of Potential Difference from Ji and Gallo (2006)
 #'
 #' @inheritParams yardstick::rmse
 #' @noRd
-calc_spod <- function(truth, estimate) {
-  mean_truth <- mean(truth)
-  mean_estimate <- mean(estimate)
-
-  sum(
-    (abs(mean_truth - mean_estimate) + abs(truth - mean_truth)) *
-      (abs(mean_truth - mean_estimate) + abs(estimate - mean_estimate))
-  )
-}
+calc_spod <- function(truth, estimate) spod_rust(truth, estimate)
 
 #' Return the coefficients of the GMFR line from Ji and Gallo (2006)
 #'
@@ -395,21 +389,8 @@ gmfr <- function(truth, estimate) {
 #' @inheritParams yardstick::rmse
 #' @noRd
 calc_spdu <- function(truth, estimate) {
-  mean_truth <- mean(truth)
-  mean_estimate <- mean(estimate)
-
-  gmfr_predict_truth <- gmfr(truth, estimate)
-  gmfr_predict_estimate <- gmfr(estimate, truth)
-
-  predicted_truth <- gmfr_predict_truth[[1]] +
-    (gmfr_predict_truth[[2]] * estimate)
-  predicted_estimate <- gmfr_predict_estimate[[1]] +
-    (gmfr_predict_estimate[[2]] * truth)
-
-  sum(
-    abs(estimate - predicted_estimate) *
-      abs(truth - predicted_truth)
-  )
+  corsign <- as.integer(sign(stats::cor(truth, estimate)))
+  spdu_rust(truth, estimate, corsign)
 }
 
 #' Return the systematic sum product-difference from Ji and Gallo (2006)
@@ -417,7 +398,6 @@ calc_spdu <- function(truth, estimate) {
 #' @inheritParams yardstick::rmse
 #' @noRd
 calc_spds <- function(truth, estimate) {
-  est_spdu <- calc_spdu(truth, estimate)
-  est_ssd <- calc_ssd(truth, estimate)
-  est_ssd - est_spdu
+  corsign <- as.integer(sign(stats::cor(truth, estimate)))
+  spds_rust(truth, estimate, corsign)
 }

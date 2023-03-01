@@ -93,3 +93,23 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Language: en-US
+VignetteBuilder: knitr
+Remotes:
+    tidymodels/yardstick
+Collate: 
+    'waywiser-package.R'
+    'agreement_coefficient.R'
+    'area_of_applicability.R'
+    'data.R'
+    'extendr-wrappers.R'
+    'global_geary.R'
+    'global_moran.R'
+    'local_geary.R'
+    'local_getis.R'
+    'local_moran.R'
+    'misc.R'
+    'misc_yardstick.R'
+    'multi_scale.R'
+    'tidy_importance.R'
+    'willmott_d.R'

@@ -36,7 +36,7 @@ if needed:
 library(sf)
 library(tidyr)
 library(dplyr)
-library(waywiser)
+library(waywiserrr)
 
 invisible(sf_proj_network(TRUE))
 ```
