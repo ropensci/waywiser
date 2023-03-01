@@ -174,13 +174,6 @@
 # expected_errors
 
     Code
-      ww_agreement_coefficient_vec(1:5, c(1:4, NA), na_action = c(na.omit, na.pass))
-    Error <rlang_error>
-      Only one value can be passed to na_action.
-
----
-
-    Code
       ww_build_neighbors(as.data.frame(guerry))
     Error <rlang_error>
       `data` must be an `sf` or `sfc` object.

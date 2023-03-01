@@ -43,7 +43,6 @@ test_that("`ww_area_of_applicability` finds 0 distance between identical data", 
 })
 
 test_that("`ww_area_of_applicability` works with or without a testing set", {
-
   expect_error(
     ww_area_of_applicability(y ~ ., train, test, importance),
     NA
@@ -57,7 +56,6 @@ test_that("`ww_area_of_applicability` works with or without a testing set", {
 })
 
 test_that("`ww_area_of_applicability` methods are equivalent", {
-
   methods <- list(
     ww_area_of_applicability(y ~ ., train, test, importance),
     ww_area_of_applicability(train[2:11], test[2:11], importance),
@@ -117,7 +115,6 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
 })
 
 test_that("`ww_area_of_applicability` can handle different column orders", {
-
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
@@ -133,7 +130,6 @@ test_that("`ww_area_of_applicability` can handle different column orders", {
 })
 
 test_that("NAs are handled", {
-
   train[1, 2] <- NA
   test[1, 2] <- NA
   comb_rset <- rsample::make_splits(train, test)
@@ -149,7 +145,7 @@ test_that("NAs are handled", {
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
-    ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit)
+    ww_area_of_applicability(y ~ ., train, test, importance, na_rm = TRUE)
   )
 
   #' @srrstats {G2.14a} Users can error on NA:
@@ -160,7 +156,7 @@ test_that("NAs are handled", {
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
-    ww_area_of_applicability(train[2:11], test[2:11], importance, na_action = na.omit)
+    ww_area_of_applicability(train[2:11], test[2:11], importance, na_rm = TRUE)
   )
 
   #' @srrstats {G2.14a} Users can error on NA:
@@ -171,7 +167,7 @@ test_that("NAs are handled", {
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
-    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance, na_action = na.omit)
+    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance, na_rm = TRUE)
   )
 
   #' @srrstats {G2.14a} Users can error on NA:
@@ -182,7 +178,7 @@ test_that("NAs are handled", {
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
-    ww_area_of_applicability(comb_rset_no_y, importance = importance, na_action = na.omit)
+    ww_area_of_applicability(comb_rset_no_y, importance = importance, na_rm = TRUE)
   )
 
   #' @srrstats {G2.14a} Users can error on NA:
@@ -201,14 +197,14 @@ test_that("NAs are handled", {
       comb_rset,
       recipes::recipe(y ~ ., train),
       importance = importance,
-      na_action = na.omit
+      na_rm = TRUE
     )
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_snapshot(
     predict(
-      ww_area_of_applicability(y ~ ., train, test, importance, na_action = na.omit),
+      ww_area_of_applicability(y ~ ., train, test, importance, na_rm = TRUE),
       test
     )
   )
@@ -222,7 +218,7 @@ test_that("Expected errors", {
   )
 
   expect_snapshot(
-    ww_area_of_applicability(y ~ ., train, test, na_action = c(na.omit, na.pass), importance),
+    ww_area_of_applicability(y ~ ., train, test, na_rm = c(TRUE, FALSE), importance),
     error = TRUE
   )
 
@@ -252,7 +248,6 @@ importance <- vip::vi_permute(
 aoa <- ww_area_of_applicability(y ~ ., train, test, importance)
 
 test_that("normal use", {
-
   expect_snapshot(
     predict(aoa, test)
   )

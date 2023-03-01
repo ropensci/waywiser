@@ -26,15 +26,9 @@ jobs:
 
           - {os: windows-latest, r: 'release'}
 
-          # Use older ubuntu to maximise backward compatibility
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
-          - {os: ubuntu-latest,   r: 'oldrel-2'}
-          - {os: ubuntu-latest,   r: 'oldrel-3'}
-          # Uncomment this in 2023 (once current R is >= 4.3)
-          # The package requires R 3.6, I don't really remember why
-#          - {os: ubuntu-latest,   r: 'oldrel-4'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -53,13 +47,9 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          cache-version: 2
           extra-packages: any::rcmdcheck, CAST=?ignore-before-r=4.1.0
           needs: check
-
-      - name: Update dependencies
-        run: |
-          install.packages("purrr", repos = 'https://cloud.r-project.org')
-        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
         env:

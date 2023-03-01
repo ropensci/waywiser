@@ -19,7 +19,7 @@
     Code
       ww_local_moran_i(worldclim_predicted, predicted, response)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
 
@@ -28,7 +28,7 @@
     Code
       ww_local_moran_i(worldclim_predicted, response, predicted)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
 
@@ -53,7 +53,7 @@
     Code
       ww_local_moran_i(worldclim_predicted, response, predicted)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
 
@@ -62,7 +62,7 @@
     Code
       ww_local_moran_i(worldclim_predicted, predicted, response)
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = fn(...)`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
 
@@ -71,20 +71,16 @@
     Code
       ww_local_moran_i(worldclim_predicted, predicted, response)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
-      Caused by error in `yardstick_vec()`:
-      ! Missing values in estimated values (`estimate`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in data.
+      i waywiser can't handle missing data for functions that use spatial weights.
 
 ---
 
     Code
       ww_local_moran_i(worldclim_predicted, response, predicted)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
-      Caused by error in `yardstick_vec()`:
-      ! Missing values in true values (`truth`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in data.
+      i waywiser can't handle missing data for functions that use spatial weights.
 
 ---
 
@@ -92,8 +88,8 @@
       ww_local_moran_i_vec(worldclim_predicted$predicted, worldclim_predicted$
       response, worldclim_weights)
     Error <rlang_error>
-      Missing values in estimated values (`estimate`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in data.
+      i waywiser can't handle missing data for functions that use spatial weights.
 
 ---
 
@@ -101,15 +97,15 @@
       ww_local_moran_i_vec(worldclim_predicted$response, worldclim_predicted$
       predicted, worldclim_weights)
     Error <rlang_error>
-      Missing values in true values (`truth`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in data.
+      i waywiser can't handle missing data for functions that use spatial weights.
 
 ---
 
     Code
       ww_local_moran_i_vec(numeric(), numeric(), structure(list(), class = "listw"))
     Error <rlang_error>
-      0 values were passed to `truth`.
+      0 non-missing values were passed to `truth`.
 
 ---
 
@@ -117,9 +113,9 @@
       ww_local_moran_i(head(worldclim_predicted, 0), response, predicted, structure(
         list(), class = "listw"))
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = fn(...)`.
       Caused by error in `yardstick_vec()`:
-      ! 0 values were passed to `truth`.
+      ! 0 non-missing values were passed to `truth`.
 
 ---
 
@@ -127,37 +123,33 @@
       ww_local_moran_i(head(worldclim_predicted, 0), predicted, response, structure(
         list(), class = "listw"))
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
+      i In argument: `.estimate = fn(...)`.
       Caused by error in `yardstick_vec()`:
-      ! 0 values were passed to `truth`.
+      ! 0 non-missing values were passed to `truth`.
 
 ---
 
     Code
       ww_local_moran_i_vec(NA_real_, NA_real_, structure(list(neighbours = 1), class = "listw"))
     Error <rlang_error>
-      Missing values in true values (`truth`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in data.
+      i waywiser can't handle missing data for functions that use spatial weights.
 
 ---
 
     Code
       ww_local_moran_i(worldclim_predicted, response, predicted)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
-      Caused by error in `yardstick_vec()`:
-      ! Missing values in true values (`truth`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in data.
+      i waywiser can't handle missing data for functions that use spatial weights.
 
 ---
 
     Code
       ww_local_moran_i(worldclim_predicted, predicted, response)$.estimate
     Error <rlang_error>
-      Problem while computing `.estimate = metric_fn(...)`.
-      Caused by error in `yardstick_vec()`:
-      ! Missing values in estimated values (`estimate`).
-      i Either process your data to fix the NA values or set `na_action`.
+      Missing values in data.
+      i waywiser can't handle missing data for functions that use spatial weights.
 
 ---
 

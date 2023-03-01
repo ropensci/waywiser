@@ -14,6 +14,43 @@ knitr::opts_chunk$set(
 )
 ```
 
+Perhaps the most famous sentence in spatial analysis is Tobler's first law of
+geography, from [Tobler (1970)](https://doi.org/10.2307/143141): "Everything is
+related to everything else, but near things are more related than distant 
+things." Spatial data often exhibits spatial autocorrelation, where variables of
+interest are not distributed at random but rather exhibit spatial patterns; in
+particular, spatial data is often clustered (exhibiting positive spatial 
+autocorrelation) such that locations near each other are _more similar_ than 
+you'd expect if you had just sampled two observations at random.
+
+For some data, this makes intuitive sense. The elevation at two neighboring 
+points is extremely likely to be similar, as is the precipitation and 
+temperature; these are variables whose values depend on (among other things) 
+your position on the Earth. However, the first law is often over-interpreted. 
+[Pebesma and Bivand (2022)](https://r-spatial.org/book/15-Measures.html) present
+an interesting discussion of the "first law", quoting 
+[Olsson (1970)](https://doi.org/10.2307/143140) who says:
+
+> [T]he fact that the autocorrelations seem to hide systematic specification errors suggests that the elevation of this statement to the status of ‘the first law of geography’ is at best premature. At worst, the statement may represent the spatial variant of the post hoc fallacy, which would mean that coincidence has been mistaken for a causal relation.
+
+Oftentimes, finding spatial autocorrelation in a variable is a result of that
+variable depending on _other_ variables, which may or may not be spatially 
+dependent themselves. For instance, house prices often exhibit positive 
+autocorrelation, not because home prices are determined by their relative 
+position on Earth, but because house prices rely upon other variables -- school
+zones, median income, housing availability and more -- which may themselves
+be spatially autocorrelated.
+
+For that reason, it's often worthwhile to look at the spatial autocorrelation of
+model residuals, to see if your model makes more errors in certain regions than
+you'd expect if errors were randomly arranged. That can help you to identify
+misspecifications in your model: seeing large autocorrelations in model 
+residuals in an area might suggest that you're missing variables in your model,
+and knowing which areas your model does worse in can help you to identify what
+those variables might be. Even if you can't fix your model, it's often useful to
+identify regions your model does notably worse in, so that you can communicate
+that to whoever winds up using your predictions.
+
 Let's walk through how we can use waywiser to find local indicators of spatial autocorrelation for a very simple model. First things first, let's load a few libraries:
 
 ```{r message=FALSE}
@@ -86,11 +123,39 @@ guerry %>%
   ggplot(aes(fill = .estimate)) +
   geom_sf() + 
   scale_fill_gradient2(
-    "Moran's I", 
+    "Local Moran", 
     low = "#018571", 
     mid = "white", 
     high = "#A6611A"
   )
 ```
 
-This makes it easy to see what areas are poorly represented by our model, which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we're working with.
+This makes it easy to see what areas are poorly represented by our model (which have the highest local Moran values), which might lead us to identify ways to improve our model or help us identify caveats and limitations of the models we're working with.
+
+Other functions in waywiser will allow you to calculate the p-value associated with spatial autocorrelation metrics. You can calculate these alongside the autocorrelation metrics themselves using `yardstick::metric_set()`:
+
+```{r}
+moran <- yardstick::metric_set(
+  ww_global_moran_i,
+  ww_global_moran_pvalue
+)
+
+guerry %>%
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .))) %>% 
+  moran(Crm_prs, pred)
+```
+
+These functions can also be used on their own to help qualitatively identify regions of concern, which may be poorly represented by your model:
+
+```{r 2023_02_21-guerryp, fig.width=8}
+guerry %>%
+  mutate(pred = predict(lm(Crm_prs ~ Litercy, .)),
+         .estimate = ww_local_moran_pvalue_vec(Crm_prs, pred, weights)) %>% 
+  sf::st_as_sf() %>% 
+  ggplot(aes(fill = .estimate < 0.01)) +
+  geom_sf() + 
+  scale_fill_discrete("Local Moran p-value < 0.01?") + 
+  theme(legend.position = "bottom")
+```
+
+This can help identify new predictor variables or other promising refinements to a model during the iterative process of model development. You shouldn't report p-values without other context as results of your model, but this approach can help qualitatively assess a model during the development process. To use these tests for inference, consider using functions from spdep directly; each autocorrelation function in waywiser links to the spdep function it wraps from its documentation.

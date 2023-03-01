@@ -26,67 +26,45 @@
 \usage{
 ww_agreement_coefficient(data, ...)
 
-\method{ww_agreement_coefficient}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_agreement_coefficient}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_agreement_coefficient_vec(truth, estimate, na_action = na.fail, ...)
+ww_agreement_coefficient_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_systematic_agreement_coefficient(data, ...)
 
-\method{ww_systematic_agreement_coefficient}{data.frame}(
-  data,
-  truth,
-  estimate,
-  na_action = na.fail,
-  ...
-)
+\method{ww_systematic_agreement_coefficient}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_systematic_agreement_coefficient_vec(
-  truth,
-  estimate,
-  na_action = na.fail,
-  ...
-)
+ww_systematic_agreement_coefficient_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_unsystematic_agreement_coefficient(data, ...)
 
-\method{ww_unsystematic_agreement_coefficient}{data.frame}(
-  data,
-  truth,
-  estimate,
-  na_action = na.fail,
-  ...
-)
+\method{ww_unsystematic_agreement_coefficient}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_unsystematic_agreement_coefficient_vec(
-  truth,
-  estimate,
-  na_action = na.fail,
-  ...
-)
+ww_unsystematic_agreement_coefficient_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_unsystematic_mpd(data, ...)
 
-\method{ww_unsystematic_mpd}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_unsystematic_mpd}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_unsystematic_mpd_vec(truth, estimate, na_action = na.fail, ...)
+ww_unsystematic_mpd_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_systematic_mpd(data, ...)
 
-\method{ww_systematic_mpd}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_systematic_mpd}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_systematic_mpd_vec(truth, estimate, na_action = na.fail, ...)
+ww_systematic_mpd_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_unsystematic_rmpd(data, ...)
 
-\method{ww_unsystematic_rmpd}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_unsystematic_rmpd}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_unsystematic_rmpd_vec(truth, estimate, na_action = na.fail, ...)
+ww_unsystematic_rmpd_vec(truth, estimate, na_rm = TRUE, ...)
 
 ww_systematic_rmpd(data, ...)
 
-\method{ww_systematic_rmpd}{data.frame}(data, truth, estimate, na_action = na.fail, ...)
+\method{ww_systematic_rmpd}{data.frame}(data, truth, estimate, na_rm = TRUE, ...)
 
-ww_systematic_rmpd_vec(truth, estimate, na_action = na.fail, ...)
+ww_systematic_rmpd_vec(truth, estimate, na_rm = TRUE, ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
@@ -105,17 +83,13 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{na_action}{A function which indicates what should happen when the data
-contain NAs. The default is \code{na.fail}; you may wish to set it to \code{na.omit}
-or any of the functions from the "zoo"
-package. This function ignores the value of \code{options("na.action")} in order
-to make cross-computer (and cross-session) results more stable. This argument
-must be of length 1; you cannot pass multiple functions to \code{na_action}.}
+\item{na_rm}{A \code{logical} value indicating whether \code{NA}
+values should be stripped before the computation proceeds.}
 }
 \value{
 A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
-For \verb{_vec()} functions, a single value (or NA).
+For `_vec()` functions, a single value (or NA).
 }
 \description{
 These functions calculate the agreement coefficient and mean product
@@ -129,7 +103,7 @@ not be a useful metric in all scenarios.
 }
 \details{
 Agreement coefficient values range from 0 to 1, with 1 indicating perfect
-agreement. \code{truth} and \code{estimate} must be the same length. This function is
+agreement. `truth` and `estimate` must be the same length. This function is
 not explicitly spatial and as such can be applied to data with any number of
 dimensions and any coordinate reference system.
 }
@@ -145,6 +119,15 @@ ww_systematic_mpd_vec(x, y)
 ww_unsystematic_mpd_vec(x, y)
 ww_systematic_rmpd_vec(x, y)
 ww_unsystematic_rmpd_vec(x, y)
+
+example_df <- data.frame(x = x, y = y)
+ww_agreement_coefficient(example_df, x, y)
+ww_systematic_agreement_coefficient(example_df, x, y)
+ww_unsystematic_agreement_coefficient(example_df, x, y)
+ww_systematic_mpd(example_df, x, y)
+ww_unsystematic_mpd(example_df, x, y)
+ww_systematic_rmpd(example_df, x, y)
+ww_unsystematic_rmpd(example_df, x, y)
 
 }
 \references{

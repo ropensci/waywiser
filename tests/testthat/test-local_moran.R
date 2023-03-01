@@ -1,6 +1,5 @@
 set.seed(123)
 test_that("Local Moran statistics are stable", {
-
   guerry_modeled <- guerry
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
@@ -33,12 +32,12 @@ test_that("Local Moran statistics are stable", {
 
   expect_identical(
     df_local_i$.estimate,
-    vec_local_i
+    as.vector(vec_local_i)
   )
 
   expect_identical(
     df_local_i_p$.estimate,
-    vec_local_i_p
+    as.vector(vec_local_i_p)
   )
 
   #' @srrstats {G5.4} Testing against spdep

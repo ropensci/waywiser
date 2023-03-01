@@ -99,7 +99,7 @@ test_that("expected errors", {
       Crm_prs,
       predictions,
       n = list(c(1, 1)),
-      na_action = c(na.omit, na.fail),
+      na_rm = c(TRUE, FALSE),
       metrics = yardstick::rmse
     ),
     error = TRUE
@@ -171,27 +171,25 @@ test_that("srr: expected failures for ww_multi_scale", {
   #' @srrstats {G2.15} Missingness is checked
   #' @srrstats {G2.14} Users can specify behavior with NA results
   #' @srrstats {G2.16} NaN is properly handled
-  #' Users can error:
+  #' Default removes NA:
   worldclim_predicted$response[4] <- NA_real_
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, predicted, response),
-    error = TRUE
+    ww_multi_scale(worldclim_predicted, predicted, response, n = 2)
   )
 
-  #' Users can error:
+  # Default removes NA:
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, response, predicted),
-    error = TRUE
+    ww_multi_scale(worldclim_predicted, response, predicted, n = 2),
   )
 
-  #' @srrstats {G2.14b} Users can ignore NA:
+  # Or return NA:
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, predicted, response, na_action = function(x) unlist(na.pass(x)), n = c(2, 4))
+    ww_multi_scale(worldclim_predicted, predicted, response, n = 2, na_rm = FALSE)
   )
 
-  #' @srrstats {G2.14b} Users can ignore NA:
+  # Or return NA:
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, response, predicted, na_action = function(x) unlist(na.pass(x)), n = c(2, 4)),
+    ww_multi_scale(worldclim_predicted, response, predicted, n = 2, na_rm = FALSE),
   )
 
   #' @srrstats {G5.8} Edge condition tests
@@ -213,14 +211,12 @@ test_that("srr: expected failures for ww_multi_scale", {
   #' @srrstats {G5.8c} All-NA:
   expect_snapshot(
     ww_multi_scale(worldclim_predicted, response, predicted, n = c(2, 4)),
-    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8c} All-NA:
   expect_snapshot(
     ww_multi_scale(worldclim_predicted, predicted, response, n = c(2, 4)),
-    error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
@@ -357,3 +353,105 @@ test_that("other generic srr standards", {
   )
 })
 
+test_that("raster method works", {
+  skip_if_not_installed("terra")
+  skip_if_not_installed("exactextractr")
+  skip_if_not_installed("withr")
+
+  r1 <- matrix(nrow = 10, ncol = 10)
+  r1[] <- 1
+  r1 <- terra::rast(r1)
+
+  r2 <- matrix(nrow = 10, ncol = 10)
+  r2[] <- 2
+  r2 <- terra::rast(r2)
+
+  expect_identical(
+    ww_multi_scale(truth = r1, estimate = r2, metrics = yardstick::rmse, n = 1)$.estimate,
+    1
+  )
+
+  expect_identical(
+    ww_multi_scale(truth = r1, estimate = r1, metrics = yardstick::rmse, n = 1)$.estimate,
+    0
+  )
+
+  # built-in functions
+  expect_identical(
+    ww_multi_scale(
+      truth = r1,
+      estimate = r2,
+      metrics = yardstick::rmse,
+      aggregation_function = "median",
+      n = 1
+    )$.estimate,
+    1
+  )
+
+  # R functions
+  expect_identical(
+    ww_multi_scale(
+      truth = r1,
+      estimate = r2,
+      metrics = yardstick::rmse,
+      aggregation_function = stats::weighted.mean,
+      n = 1
+    )$.estimate,
+    1
+  )
+
+})
+
+test_that("raster method is equivalent", {
+  skip_if_not_installed("terra")
+  skip_if_not_installed("exactextractr")
+  skip_if_not_installed("withr")
+
+  withr::with_seed(
+    123,
+    {
+      x <- terra::rast(matrix(rnorm(100), 10))
+      y <- terra::rast(matrix(rnorm(100), 10))
+    }
+  )
+
+  z <- sf::st_as_sf(terra::as.points(c(x, y)))
+
+  sf_method <- ww_multi_scale(z, lyr.1, lyr.1.1, n = 2)
+  sf::st_geometry(sf_method$.grid[[1]]) <- NULL
+  sf::st_geometry(sf_method$.grid[[2]]) <- NULL
+
+  terra_method <- ww_multi_scale(truth = x, estimate = y, n = 2)
+  sf::st_geometry(terra_method$.grid[[1]]) <- NULL
+  sf::st_geometry(terra_method$.grid[[2]]) <- NULL
+
+  expect_identical(sf_method, terra_method, tolerance = 1e-6)
+
+})
+
+test_that("raster method errors as expected", {
+  skip_if_not_installed("terra")
+  skip_if_not_installed("exactextractr")
+
+  r1 <- matrix(nrow = 10, ncol = 10)
+
+  expect_snapshot(
+    ww_multi_scale(truth = 1),
+    error = TRUE
+  )
+  expect_snapshot(
+    ww_multi_scale(truth = c(terra::rast(r1), terra::rast(r1))),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    ww_multi_scale(truth = terra::rast(r1), estimate = 1),
+    error = TRUE
+  )
+  expect_snapshot(
+    ww_multi_scale(truth = terra::rast(r1), estimate = c(terra::rast(r1), terra::rast(r1))),
+    error = TRUE
+  )
+
+
+})

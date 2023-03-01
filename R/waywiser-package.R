@@ -2,9 +2,9 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' @importFrom rlang enquo
+#' @importFrom rlang enquo .data
 #' @importFrom stats predict complete.cases na.fail
-#' @importFrom yardstick metric_summarizer metric_vec_template metric_set new_numeric_metric
-
+#' @importFrom yardstick new_numeric_metric
+utils::globalVariables(c(".truth", ".estimate"))
 ## usethis namespace: end
 NULL

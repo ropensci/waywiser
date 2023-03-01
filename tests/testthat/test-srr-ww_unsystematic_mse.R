@@ -81,134 +81,101 @@ test_that("srr: expected failures for ww_unsystematic_mse", {
   #' @srrstats {G2.14} Users can specify behavior with NA results
   #' @srrstats {G2.16} NaN is properly handled
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
-  #' Users can error:
+  #' Users can remove NA:
   expect_snapshot(
-    ww_unsystematic_mse(missing_df, x, y)$.estimate,
-    error = TRUE
+    round(ww_unsystematic_mse(missing_df, x, y)$.estimate, 15),
   )
 
-  #' Users can error:
+  #' Users can remove NA:
   expect_snapshot(
-    ww_unsystematic_mse(missing_df, y, x)$.estimate,
-    error = TRUE
+    round(ww_unsystematic_mse(missing_df, y, x)$.estimate, 15),
   )
 
-  #' Users can error:
+  #' Users can remove NA:
   expect_snapshot(
-    ww_unsystematic_mse_vec(missing_df$y, missing_df$x),
-    error = TRUE
+    round(ww_unsystematic_mse_vec(missing_df$y, missing_df$x), 15),
   )
 
-  #' Users can error:
+  #' Users can remove NA:
   expect_snapshot(
-    ww_unsystematic_mse_vec(missing_df$x, missing_df$y),
-    error = TRUE
+    round(ww_unsystematic_mse_vec(missing_df$x, missing_df$y), 15),
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mse(missing_df, y, x, na_action = function(x) unlist(na.pass(x)))$.estimate,
+    ww_unsystematic_mse(missing_df, y, x, na_rm = FALSE)$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mse(missing_df, x, y, na_action = function(x) unlist(na.pass(x)))$.estimate,
+    ww_unsystematic_mse(missing_df, x, y, na_rm = FALSE)$.estimate,
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mse_vec(missing_df$y, missing_df$x, na_action = function(x) unlist(na.pass(x))),
+    ww_unsystematic_mse_vec(missing_df$y, missing_df$x, na_rm = FALSE),
     NA_real_
   )
 
   #' @srrstats {G2.14b} Users can ignore NA:
   expect_identical(
-    ww_unsystematic_mse_vec(missing_df$x, missing_df$y, na_action = function(x) unlist(na.pass(x))),
+    ww_unsystematic_mse_vec(missing_df$x, missing_df$y, na_rm = FALSE),
     NA_real_
   )
 
-  #' @srrstats {G2.14b} Users can delete NA values:
-  expect_no_error(
-    ww_unsystematic_mse(missing_df, x, y, na_action = na.omit)
-  )
-
-  #' @srrstats {G2.14b} Users can delete NA values:
-  expect_no_error(
-    ww_unsystematic_mse(missing_df, y, x, na_action = na.omit)
-  )
-
-  #' @srrstats {G2.14b} Users can delete NA values:
-  expect_no_error(
-    ww_unsystematic_mse_vec(missing_df$x, missing_df$y, na_action = na.omit)
-  )
-
-  #' @srrstats {G2.14b} Users can delete NA values:
-  expect_no_error(
-    ww_unsystematic_mse_vec(missing_df$y, missing_df$x, na_action = na.omit)
-  )
-
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8a} Zero-length data:
+  # Edge condition tests: Zero-length data:
   expect_snapshot(
     ww_unsystematic_mse_vec(numeric(), numeric()),
     error = TRUE
   )
 
   empty_df <- tibble::tibble(x = numeric(), y = numeric())
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8a} Zero-length data:
+  # Edge condition tests: Zero-length data:
   expect_snapshot(
     ww_unsystematic_mse(empty_df, x, y),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8a} Zero-length data:
+  # Edge condition tests: Zero-length data:
   expect_snapshot(
     ww_unsystematic_mse(empty_df, y, x),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-NA:
+  # Edge condition tests: All-NA:
   expect_snapshot(
     ww_unsystematic_mse_vec(rep(NA_real_, 4), 4:1),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-NA:
+  # Edge condition tests: All-NA:
   expect_snapshot(
     ww_unsystematic_mse_vec(1:4, rep(NA_real_, 4)),
     error = TRUE
   )
 
   all_na <- tibble::tibble(x = rep(NA_real_, 4), y = 1:4)
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-NA:
+  # Edge condition tests: All-NA:
   expect_snapshot(
     ww_unsystematic_mse(all_na, x, y),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-NA:
+  # Edge condition tests: All-NA:
   expect_snapshot(
     ww_unsystematic_mse(all_na, y, x),
     error = TRUE
   )
 
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-identical:
+  # Edge condition tests: All-identical:
   expect_snapshot(
     ww_unsystematic_mse_vec(1:4, 1:4)
   )
 
   all_identical <- tibble::tibble(x = 1:4, y = 1:4)
-  #' @srrstats {G5.8} Edge condition tests
-  #' @srrstats {G5.8c} All-identical:
+  # Edge condition tests: All-identical:
   expect_snapshot(
     ww_unsystematic_mse(all_identical, x, y)
   )
@@ -223,41 +190,31 @@ test_that("other generic srr standards", {
   noised_x <- x + rnorm(x, .Machine$double.eps, .Machine$double.eps)
   noised_df <- tibble::tibble(x = noised_x, y = y)
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  # Noise susceptibility tests: Trivial noise doesn't change results:
   expect_equal(
     ww_unsystematic_mse(noised_df, x, y),
     ww_unsystematic_mse(df, x, y)
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  # Noise susceptibility tests: Trivial noise doesn't change results:
   expect_equal(
     ww_unsystematic_mse(noised_df, y, x),
     ww_unsystematic_mse(df, y, x)
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  # Noise susceptibility tests: Trivial noise doesn't change results:
   expect_equal(
     ww_unsystematic_mse_vec(noised_x, y),
     ww_unsystematic_mse_vec(x, y)
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9a} Trivial noise doesn't change results:
+  # Noise susceptibility tests: Trivial noise doesn't change results:
   expect_equal(
     ww_unsystematic_mse_vec(y, noised_x),
     ww_unsystematic_mse_vec(y, x)
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9b} Different seeds are equivalent:
+  # Noise susceptibility tests: Different seeds are equivalent:
   expect_equal(
     withr::with_seed(
       123,
@@ -269,9 +226,7 @@ test_that("other generic srr standards", {
     )
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9b} Different seeds are equivalent:
+  # Noise susceptibility tests: Different seeds are equivalent:
   expect_equal(
     withr::with_seed(
       123,
@@ -283,9 +238,7 @@ test_that("other generic srr standards", {
     )
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9b} Different seeds are equivalent:
+  # Noise susceptibility tests: Different seeds are equivalent:
   expect_equal(
     withr::with_seed(
       123,
@@ -297,9 +250,7 @@ test_that("other generic srr standards", {
     )
   )
 
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
-  #' @srrstats {G5.9} Noise susceptibility tests
-  #' @srrstats {G5.9b} Different seeds are equivalent:
+  # Noise susceptibility tests: Different seeds are equivalent:
   expect_equal(
     withr::with_seed(
       123,

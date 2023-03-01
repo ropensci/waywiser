@@ -5,8 +5,6 @@
 #'
 #' Sf object, units in m. EPSG 27572: NTF (Paris) / Lambert zone II.
 #'
-#' @srrstats {G5.0} Standard data set with known properties.
-#'
 #' @format An sf data frame with 85 rows, 23 variables, and a geometry column:
 #' \describe{
 #' \item{	dept	}{	Department ID: Standard numbers for the departments 	}
@@ -55,8 +53,6 @@
 #' The original data is derived from the Forest Inventory and Analysis program,
 #' implemented by the US Department of Agriculture's Forest Service.
 #'
-#' @srrstats {G5.1} Data used to test the package is exported.
-#'
 #' @format An sf object using EPSG 5070: NAD83 / Conus Albers (in meters), with 5,303 rows and 5 columns:
 #' \describe{
 #' \item{yr}{The year measurements were taken.}
@@ -74,9 +70,7 @@
 #'
 #' This data is adapted from the CAST vignette
 #' `vignette("cast02-AOA-tutorial", package = "CAST")`.
-#' The original data is derived from the Worldclim global climate variables/
-#'
-#' @srrstats {G5.1} Data used to test the package is exported.
+#' The original data is derived from the Worldclim global climate variables.
 #'
 #' @format An sf object with 10,000 rows and 6 columns:
 #' \describe{

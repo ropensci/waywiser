@@ -7,15 +7,15 @@
 ww_make_polygon_neighbors(data, ...)
 }
 \arguments{
-\item{data}{An \code{sfc_POLYGON} or \code{sfc_MULTIPOLYGON} object.}
+\item{data}{An `sfc_POLYGON` or `sfc_MULTIPOLYGON` object.}
 
-\item{...}{Additional arguments passed to \code{\link[spdep:poly2nb]{spdep::poly2nb()}}.}
+\item{...}{Additional arguments passed to [spdep::poly2nb()].}
 }
 \value{
 An object of class "nb"
 }
 \description{
-This function is an extremely thin wrapper around \code{\link[spdep:poly2nb]{spdep::poly2nb()}},
+This function is an extremely thin wrapper around [spdep::poly2nb()],
 renamed to use the waywiser "ww" prefix.
 }
 \details{

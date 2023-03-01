@@ -15,6 +15,15 @@ test_that("Willmott's D estimates are the same across methods", {
     0.5137892
   )
 
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  #' @srrstats {G5.4} This comparison is made against a value calculated using metrica::d1()
+  #' @srrstats {G5.4b} This comparison is made against a value calculated using metrica::d1()
+  #' @srrstats {G5.4c} This comparison is made against a value calculated using metrica::d1()
+  expect_equal(
+    ww_willmott_d1_vec(y, x),
+    0.2434783,
+    tolerance = 1e-6
+  )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.4} This comparison is made against the implementation at https://hydroerr.readthedocs.io/en/latest/api/HydroErr.HydroErr.dr.html
@@ -42,6 +51,12 @@ test_that("Willmott's D estimates are the same across methods", {
   expect_equal(
     ww_willmott_d_vec(x, y),
     ww_willmott_d(df, x, y)$.estimate
+  )
+
+  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  expect_equal(
+    ww_willmott_d1_vec(x, y),
+    ww_willmott_d1(df, x, y)$.estimate
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.

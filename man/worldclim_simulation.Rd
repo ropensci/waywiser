@@ -12,7 +12,7 @@ An sf object with 10,000 rows and 6 columns:
 \item{bio13}{Precipitation of Wettest Month}
 \item{bio19}{Precipitation of Coldest Quarter}
 \item{geometry}{The location of the sampled point.}
-\item{response}{A virtual species distribution, generated using the \code{generateSpFromPCA()} function from the \code{virtualspecies} package.}
+\item{response}{A virtual species distribution, generated using the `generateSpFromPCA()` function from the `virtualspecies` package.}
 }
 }
 \source{
@@ -23,7 +23,7 @@ worldclim_simulation
 }
 \description{
 This data is adapted from the CAST vignette
-\code{vignette("cast02-AOA-tutorial", package = "CAST")}.
-The original data is derived from the Worldclim global climate variables/
+`vignette("cast02-AOA-tutorial", package = "CAST")`.
+The original data is derived from the Worldclim global climate variables.
 }
 \keyword{datasets}

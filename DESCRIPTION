@@ -7,6 +7,10 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-2402-304X")),
     person("Lucas", "Johnson", , "lucas.k.johnson03@gmail.com", role = c("ctb"),
            comment = c(ORCID = "0000-0002-7953-0260")),
+    person("Virgilio", "Gómez-Rubio", role = "rev",
+    comment = "Virgilio reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>"),
+    person("Jakub", "Nowosad", role = "rev",
+    comment = "Jakub reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>"),
     person("RStudio", role = c("cph", "fnd"))
   )
 Description: This package is an experimental fork of the 'waywiser' package, 
@@ -42,9 +46,9 @@ URL: https://github.com/mikemahoney218/waywiserrr,
     https://mikemahoney218.github.io/waywiserrr/
 BugReports: https://github.com/mikemahoney218/waywiserrr/issues
 Depends: 
-    R (>= 3.6)
+    R (>= 4.0)
 Imports: 
-    dplyr,
+    dplyr (>= 1.1.0),
     fields,
     FNN,
     glue,
@@ -58,19 +62,20 @@ Imports:
     stats,
     tibble,
     tidyselect,
-    yardstick
+    yardstick (> 1.1.0)
 Suggests: 
     applicable,
     caret,
     CAST,
     covr,
+    exactextractr,
     ggplot2,
     knitr,
     modeldata,
     recipes,
     rmarkdown,
     spatialsample,
-    spelling,
+    terra,
     testthat (>= 3.0.0),
     tidymodels,
     tidyr,
@@ -80,9 +85,11 @@ Suggests:
     withr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
+Config/Needs/website: kableExtra
 Encoding: UTF-8
 LazyData: true
-Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "srr::srr_stats_roclet"))
 RoxygenNote: 7.2.3
 Language: en-US
 VignetteBuilder: knitr
+Remotes:
+    tidymodels/yardstick
