@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(waywiser)
+library(waywiserrr)
 
-test_check("waywiser")
+test_check("waywiserrr")

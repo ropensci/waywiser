@@ -36,7 +36,7 @@ represent temperature and precipitation values at sampled locations, while,
 our response represents a virtual species distribution:
 
 ```{r setup}
-library(waywiser)
+library(waywiserrr)
 set.seed(1107)
 
 worldclim_training <- sample(nrow(worldclim_simulation) * 0.8)

@@ -54,8 +54,8 @@ that to whoever winds up using your predictions.
 Let's walk through how we can use waywiser to find local indicators of spatial autocorrelation for a very simple model. First things first, let's load a few libraries:
 
 ```{r message=FALSE}
-# waywiser itself, of course:
-library(waywiser)
+# waywiserrr itself, of course:
+library(waywiserrr)
 # For the %>% pipe and mutate:
 library(dplyr)
 ```

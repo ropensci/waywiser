@@ -147,6 +147,10 @@ yardstick_vec <- function(truth, estimate, na_rm, impl, wt = NULL, ..., case_wei
   if (!is.numeric(truth)) rlang::abort("`truth` must be numeric.")
   if (!is.numeric(estimate)) rlang::abort("`estimate` must be numeric.")
 
+  # Rust functions will error on integer vectors
+  truth <- as.numeric(truth)
+  estimate <- as.numeric(estimate)
+
   if (length(truth) != length(estimate)) {
     rlang::abort(
       glue::glue("Length of `truth` ({length(truth)}) and `estimate` ({length(estimate)}) must match.")
