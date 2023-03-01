@@ -360,10 +360,12 @@ ww_multi_scale.sf <- function(
       out[attr(out, "sf_column")] <- NULL
       out$.grid_args <- list(grid_list$grid_args[grid_arg, ])
       out$.grid <- list(
-        sf::st_join(
-          sf::st_as_sf(grid),
-          dat,
-          sf::st_contains
+        suppressMessages( # We want to ignore a "names repair" message here
+          sf::st_join(
+            sf::st_as_sf(grid),
+            dat,
+            sf::st_contains
+          )
         )
       )
       out$.notes <- list(.notes)
