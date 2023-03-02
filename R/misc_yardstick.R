@@ -43,13 +43,13 @@ metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, 
   estimate <- ww_eval_select(expr = estimate, data = data, error_call = error_call)
   out <- dplyr::reframe(
     data,
-    .metric = name,
+    .metric = .env[["name"]],
     .estimator = "standard",
     .estimate = fn(
       truth = .data[[truth]],
       estimate = .data[[estimate]],
-      na_rm = na_rm,
-      !!!fn_options
+      na_rm = .env[["na_rm"]],
+      !!! fn_options
     )
   )
   dplyr::as_tibble(out)

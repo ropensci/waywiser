@@ -332,9 +332,9 @@ ww_multi_scale.sf <- function(
         idx_list,
         function(idx) dplyr::summarise(
           data[idx, , drop = FALSE],
-          .truth = rlang::exec(aggregation_function, {{ truth }}),
+          .truth = rlang::exec(.env[["aggregation_function"]], {{ truth }}),
           .truth_count = sum(!is.na({{ truth }})),
-          .estimate = rlang::exec(aggregation_function, {{ estimate }}),
+          .estimate = rlang::exec(.env[["aggregation_function"]], {{ estimate }}),
           .estimate_count = sum(!is.na({{ estimate }})),
           .groups = "keep"
         )
