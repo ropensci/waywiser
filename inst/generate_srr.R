@@ -64,7 +64,7 @@ for (name in spatial_yardstick) {
   tolerance <- switch(
     name,
     "ww_local_geary_pvalue" = ", tolerance = 0.1",
-    "ww_local_getis_ord_g_pvalue" = ", tolerance = 0.1",
+    "ww_local_getis_ord_g_pvalue" = ", tolerance = 0.03",
     ""
   )
 

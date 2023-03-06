@@ -55,7 +55,7 @@ test_that("Local geary statistics are stable", {
 
   expect_identical(
     vec_local_c_p,
-    as.vector(attr(spdep_output, "pseudo-p")[, 4])
+    as.vector(attr(spdep_output, "pseudo-p")[, "Pr(z != E(Ci))"])
   )
 
 })
