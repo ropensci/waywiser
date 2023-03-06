@@ -54,7 +54,7 @@ test_that("Local Getis-Ord statistics are stable", {
 
   expect_identical(
     vec_local_i_p,
-    as.vector(attr(spdep_output, "internals")[, 4])
+    as.vector(attr(spdep_output, "internals")[, "Pr(z != E(Gi))"])
   )
 
 })
@@ -114,7 +114,7 @@ test_that("Local Getis-Ord statistics are stable", {
 
   expect_identical(
     vec_local_i_p,
-    as.vector(attr(spdep_output, "internals")[, 4])
+    as.vector(attr(spdep_output, "internals")[, "Pr(z != E(Gi))"])
   )
 
 })

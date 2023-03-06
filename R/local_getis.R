@@ -133,8 +133,7 @@ ww_local_getis_ord_g_pvalue_vec <- function(truth, estimate, wt, na_rm = FALSE, 
       listw = wt,
       ...
     )
-    out <- attr(out, "internals")
-    as.vector(out[, 4])
+    as.vector(attr(out, "internals")[, "Pr(z != E(Gi))"])
   }
 
   spatial_yardstick_vec(
