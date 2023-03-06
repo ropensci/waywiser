@@ -17,7 +17,7 @@
     Code
       ww_unsystematic_mpd(char_df, x, y)
     Error <rlang_error>
-      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = na_rm)`.
+      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
 
@@ -26,7 +26,7 @@
     Code
       ww_unsystematic_mpd(char_df, y, x)
     Error <rlang_error>
-      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = na_rm)`.
+      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
 
@@ -49,7 +49,7 @@
     Code
       ww_unsystematic_mpd(list_df, x, y)
     Error <rlang_error>
-      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = na_rm)`.
+      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
 
@@ -58,7 +58,7 @@
     Code
       ww_unsystematic_mpd(list_df, y, x)
     Error <rlang_error>
-      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = na_rm)`.
+      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
 
@@ -102,7 +102,7 @@
     Code
       ww_unsystematic_mpd(empty_df, x, y)
     Error <rlang_error>
-      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = na_rm)`.
+      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! 0 non-missing values were passed to `truth`.
 
@@ -111,7 +111,7 @@
     Code
       ww_unsystematic_mpd(empty_df, y, x)
     Error <rlang_error>
-      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = na_rm)`.
+      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! 0 non-missing values were passed to `truth`.
 
@@ -134,7 +134,7 @@
     Code
       ww_unsystematic_mpd(all_na, x, y)
     Error <rlang_error>
-      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = na_rm)`.
+      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! 0 non-missing values were passed to `truth`.
 
@@ -143,7 +143,7 @@
     Code
       ww_unsystematic_mpd(all_na, y, x)
     Error <rlang_error>
-      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = na_rm)`.
+      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! 0 non-missing values were passed to `truth`.
 
