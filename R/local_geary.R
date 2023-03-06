@@ -145,7 +145,7 @@ ww_local_geary_pvalue_vec <- function(truth,
     )
 
     as.vector(
-      attr(out, "pseudo-p")[, 4]
+      attr(out, "pseudo-p")[, "Pr(z != E(Ci))"]
     )
   }
   spatial_yardstick_vec(
