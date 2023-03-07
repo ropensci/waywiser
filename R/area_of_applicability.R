@@ -227,6 +227,7 @@ ww_area_of_applicability.recipe <- ww_area_of_applicability.formula
 #' @rdname ww_area_of_applicability
 ww_area_of_applicability.rset <- function(x, y = NULL, importance, ..., na_rm = FALSE) {
   rlang::check_dots_empty()
+  rlang::check_installed("rsample")
 
   if (missing(y) || identical(y, NULL) || identical(y, NA)) y <- NA_real_
 
