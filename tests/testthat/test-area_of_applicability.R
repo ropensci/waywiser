@@ -4,10 +4,13 @@ skip_if_not(rlang::is_installed("vip"))
 train <- vip::gen_friedman(1000, seed = 101)
 test <- train[701:1000, ]
 train <- train[1:700, ]
-comb_rset <- rsample::make_splits(train, test)
-comb_rset <- rsample::manual_rset(list(comb_rset), "Fold1")
-comb_rset_no_y <- rsample::make_splits(train[2:11], test[2:11])
-comb_rset_no_y <- rsample::manual_rset(list(comb_rset_no_y), "Fold1")
+
+if (rlang::is_installed("rsample")) {
+  comb_rset <- rsample::make_splits(train, test)
+  comb_rset <- rsample::manual_rset(list(comb_rset), "Fold1")
+  comb_rset_no_y <- rsample::make_splits(train[2:11], test[2:11])
+  comb_rset_no_y <- rsample::manual_rset(list(comb_rset_no_y), "Fold1")
+}
 
 pp <- ppr(y ~ ., data = train, nterms = 11)
 importance <- vip::vi_permute(
@@ -59,8 +62,7 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
   methods <- list(
     ww_area_of_applicability(y ~ ., train, test, importance),
     ww_area_of_applicability(train[2:11], test[2:11], importance),
-    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance),
-    ww_area_of_applicability(comb_rset_no_y, importance = importance)
+    ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance)
   )
 
   expect_identical(
@@ -88,7 +90,8 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
   # Comparing rset method to the others --
   # because here we calculate our training data on the entire thing
   # the training, means, sds slots are all different
-  #' @srrstats {G3.0} Testing with appropriate tolerances.
+  skip_if_not_installed("rsample")
+  methods[[4]] <- ww_area_of_applicability(comb_rset_no_y, importance = importance)
   expect_equal(
     methods[[3]]$aoa_threshold,
     methods[[4]]$aoa_threshold
@@ -132,10 +135,12 @@ test_that("`ww_area_of_applicability` can handle different column orders", {
 test_that("NAs are handled", {
   train[1, 2] <- NA
   test[1, 2] <- NA
-  comb_rset <- rsample::make_splits(train, test)
-  comb_rset <- rsample::manual_rset(list(comb_rset), "Fold1")
-  comb_rset_no_y <- rsample::make_splits(train[2:11], test[2:11])
-  comb_rset_no_y <- rsample::manual_rset(list(comb_rset_no_y), "Fold1")
+  if (rlang::is_installed("rsample")) {
+    comb_rset <- rsample::make_splits(train, test)
+    comb_rset <- rsample::manual_rset(list(comb_rset), "Fold1")
+    comb_rset_no_y <- rsample::make_splits(train[2:11], test[2:11])
+    comb_rset_no_y <- rsample::manual_rset(list(comb_rset_no_y), "Fold1")
+  }
 
   #' @srrstats {G2.14a} Users can error on NA:
   expect_snapshot(
@@ -170,6 +175,7 @@ test_that("NAs are handled", {
     ww_area_of_applicability(as.matrix(train[2:11]), as.matrix(test[2:11]), importance, na_rm = TRUE)
   )
 
+  skip_if_not_installed("rsample")
   #' @srrstats {G2.14a} Users can error on NA:
   expect_snapshot(
     ww_area_of_applicability(comb_rset_no_y, importance = importance),
