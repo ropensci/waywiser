@@ -179,7 +179,6 @@ test_that("srr: expected failures for ww_systematic_rmse", {
   expect_snapshot(
     ww_systematic_rmse(all_identical, x, y)
   )
-
 })
 
 test_that("other generic srr standards", {
@@ -261,5 +260,4 @@ test_that("other generic srr standards", {
       ww_systematic_rmse_vec(y, x)
     )
   )
-
 })

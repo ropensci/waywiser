@@ -179,7 +179,6 @@ test_that("srr: expected failures for ww_willmott_d", {
   expect_snapshot(
     ww_willmott_d(all_identical, x, y)
   )
-
 })
 
 test_that("other generic srr standards", {
@@ -261,5 +260,4 @@ test_that("other generic srr standards", {
       ww_willmott_d_vec(y, x)
     )
   )
-
 })

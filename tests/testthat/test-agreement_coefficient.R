@@ -58,7 +58,6 @@ test_that("agreement coefficients match Ji and Gallo", {
     0.420,
     tolerance = 0.01
   )
-
 })
 
 test_that("agreement coefficients are the same across methods", {
@@ -114,5 +113,4 @@ test_that("agreement coefficients are the same across methods", {
     ww_unsystematic_rmpd_vec(x, y),
     ww_unsystematic_rmpd(df, x, y)$.estimate
   )
-
 })

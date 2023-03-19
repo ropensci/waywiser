@@ -15,15 +15,14 @@
 #'
 #' @noRd
 yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., case_weights = NULL) {
-
   if (missing(metric_fun)) metric_fun <- get(paste0("ww_", name, "_vec"))
   out <- metric_reframer(
     name = name,
     fn = metric_fun,
     data = data,
     na_rm = na_rm,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
+    truth = !!enquo(truth),
+    estimate = !!enquo(estimate),
     fn_options = list(
       ...
     )
@@ -49,14 +48,14 @@ metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, 
       truth = .data[[truth]],
       estimate = .data[[estimate]],
       na_rm = .env[["na_rm"]],
-      !!! fn_options
+      !!!fn_options
     )
   )
   dplyr::as_tibble(out)
 }
 
 # cribbed from yardstick 1.2.0
-ww_eval_select <- function (expr, data, arg, ..., error_call = rlang::caller_env()) {
+ww_eval_select <- function(expr, data, arg, ..., error_call = rlang::caller_env()) {
   rlang::check_dots_empty()
   out <- tidyselect::eval_select(
     expr = expr,
@@ -89,7 +88,6 @@ ww_eval_select <- function (expr, data, arg, ..., error_call = rlang::caller_env
 #'
 #' @noRd
 spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., case_weights = NULL) {
-
   if (is.null(wt)) {
     wt <- ww_build_weights(data)
   }
@@ -114,7 +112,7 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., ca
   metric_fun <- get(paste0("ww_", name, "_vec"))
 
   if (grepl("getis_ord_g", name) &&
-      identical(attr(wt$neighbours, "self.included"), TRUE)) {
+    identical(attr(wt$neighbours, "self.included"), TRUE)) {
     name <- gsub("ord_g", "ord_gstar", name)
   }
 
@@ -140,7 +138,6 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., ca
 #'
 #' @noRd
 yardstick_vec <- function(truth, estimate, na_rm, impl, wt = NULL, ..., case_weights = NULL) {
-
   if (!is.vector(truth)) rlang::abort("`truth` must be a numeric vector.")
   if (!is.vector(estimate)) rlang::abort("`estimate` must be a numeric vector.")
 

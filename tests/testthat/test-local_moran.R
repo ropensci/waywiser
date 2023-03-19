@@ -8,19 +8,15 @@ test_that("Local Moran statistics are stable", {
 
   resid <- guerry_modeled$Crm_prs - guerry_modeled$predictions
 
-  expect_snapshot(
-    {
-      df_local_i <- ww_local_moran_i(guerry_modeled, Crm_prs, predictions)
-      df_local_i[1:3]
-    }
-  )
+  expect_snapshot({
+    df_local_i <- ww_local_moran_i(guerry_modeled, Crm_prs, predictions)
+    df_local_i[1:3]
+  })
 
-  expect_snapshot(
-    {
-      df_local_i_p <- ww_local_moran_pvalue(guerry_modeled, Crm_prs, predictions)
-      df_local_i_p[1:3]
-    }
-  )
+  expect_snapshot({
+    df_local_i_p <- ww_local_moran_pvalue(guerry_modeled, Crm_prs, predictions)
+    df_local_i_p[1:3]
+  })
 
   expect_snapshot(
     (vec_local_i <- ww_local_moran_i_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
@@ -54,5 +50,4 @@ test_that("Local Moran statistics are stable", {
     vec_local_i_p,
     spdep_output[, 5]
   )
-
 })

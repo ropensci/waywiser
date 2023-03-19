@@ -123,7 +123,7 @@
 #' @family area of applicability functions
 #'
 #' @examplesIf rlang::is_installed("vip")
-#' train <- vip::gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
+#' train <- vip::gen_friedman(1000, seed = 101) # ?vip::gen_friedman
 #' test <- train[701:1000, ]
 #' train <- train[1:700, ]
 #' pp <- stats::ppr(y ~ ., data = train, nterms = 11)
@@ -386,7 +386,6 @@ create_aoa <- function(training, testing, importance, na_rm, ..., include_di = F
   if (!include_di) aoa["di"] <- NULL
 
   do.call(hardhat::new_model, aoa)
-
 }
 
 #' Validate "testing" objects and reorder columns to match training data
@@ -401,9 +400,10 @@ create_aoa <- function(training, testing, importance, na_rm, ..., include_di = F
 #'
 #' @noRd
 check_di_testing <- function(training, testing, na_rm = FALSE) {
-
   # If NULL, nothing to validate or re-order, so just return NULL
-  if (is.null(testing)) return(NULL)
+  if (is.null(testing)) {
+    return(NULL)
+  }
 
   testing <- testing$predictors
 
@@ -428,7 +428,6 @@ check_di_testing <- function(training, testing, na_rm = FALSE) {
   # Re-order testing so that its columns are guaranteed to be in the
   # same order as those in `training`
   testing[names(training)]
-
 }
 
 #' Validate "importance" objects
@@ -565,7 +564,6 @@ calc_di <- function(training, testing, d_bar) {
 
   # Use d_bar to rescale dk from 2.3
   dk / d_bar
-
 }
 
 #' Calculate the area of applicability threshold
@@ -614,7 +612,7 @@ calc_aoa <- function(di) {
 #'
 #' @examplesIf rlang::is_installed("vip")
 #' library(vip)
-#' train <- gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
+#' train <- gen_friedman(1000, seed = 101) # ?vip::gen_friedman
 #' test <- train[701:1000, ]
 #' train <- train[1:700, ]
 #' pp <- stats::ppr(y ~ ., data = train, nterms = 11)
@@ -674,7 +672,7 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
 #'
 #' @examplesIf rlang::is_installed("vip")
 #' library(vip)
-#' trn <- gen_friedman(500, seed = 101)  # ?vip::gen_friedman
+#' trn <- gen_friedman(500, seed = 101) # ?vip::gen_friedman
 #' pp <- ppr(y ~ ., data = trn, nterms = 11)
 #' importance <- vi_permute(
 #'   pp,

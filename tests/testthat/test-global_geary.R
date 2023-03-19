@@ -7,19 +7,15 @@ test_that("Global Geary statistics are stable", {
 
   resid <- guerry_modeled$Crm_prs - guerry_modeled$predictions
 
-  expect_snapshot(
-    {
-      df_global_c <- ww_global_geary_c(guerry_modeled, Crm_prs, predictions)
-      df_global_c[1:3]
-    }
-  )
+  expect_snapshot({
+    df_global_c <- ww_global_geary_c(guerry_modeled, Crm_prs, predictions)
+    df_global_c[1:3]
+  })
 
-  expect_snapshot(
-    {
-      df_global_c_p <- ww_global_geary_pvalue(guerry_modeled, Crm_prs, predictions)
-      df_global_c_p[1:3]
-    }
-  )
+  expect_snapshot({
+    df_global_c_p <- ww_global_geary_pvalue(guerry_modeled, Crm_prs, predictions)
+    df_global_c_p[1:3]
+  })
 
   expect_snapshot(
     (vec_global_c <- ww_global_geary_c_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
@@ -51,5 +47,4 @@ test_that("Global Geary statistics are stable", {
     vec_global_c_p,
     spdep_output$p.value
   )
-
 })

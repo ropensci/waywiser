@@ -35,7 +35,7 @@
 #'   \item{Angeville, A. (1836). Essai sur la Statistique de la Population française Paris: F. Doufour.}
 #'   \item{Guerry, A.-M. (1833). Essai sur la statistique morale de la France Paris: Crochard. English translation: Hugh P. Whitt and Victor W. Reinking, Lewiston, N.Y. : Edwin Mellen Press, 2002.}
 #'   \item{Parent-Duchatelet, A. (1836). De la prostitution dans la ville de Paris, 3rd ed, 1857, p. 32, 36}
-#'}
+#' }
 #'   <https://geodacenter.github.io/data-and-lab/Guerry/>
 #' @examples
 #' if (requireNamespace("sf", quietly = TRUE)) {
