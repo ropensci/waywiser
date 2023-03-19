@@ -54,7 +54,7 @@ Imports:
     stats,
     tibble,
     tidyselect,
-    yardstick (> 1.1.0)
+    yardstick
 Suggests: 
     applicable,
     caret,
@@ -84,5 +84,3 @@ LazyData: true
 RoxygenNote: 7.2.3
 Language: en-US
 VignetteBuilder: knitr
-Remotes:
-    tidymodels/yardstick
