@@ -27,7 +27,7 @@ Other contributors:
   \item Lucas Johnson \email{lucas.k.johnson03@gmail.com} (\href{https://orcid.org/0000-0002-7953-0260}{ORCID}) [contributor]
   \item Virgilio Gómez-Rubio (Virgilio reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>) [reviewer]
   \item Jakub Nowosad (Jakub reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>) [reviewer]
-  \item RStudio [copyright holder, funder]
+  \item Posit Software, PBC [copyright holder, funder]
 }
 
 }

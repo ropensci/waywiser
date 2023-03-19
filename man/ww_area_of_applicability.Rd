@@ -162,7 +162,7 @@ CAST when using \code{rset} objects.
 
 \examples{
 \dontshow{if (rlang::is_installed("vip")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-train <- vip::gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
+train <- vip::gen_friedman(1000, seed = 101) # ?vip::gen_friedman
 test <- train[701:1000, ]
 train <- train[1:700, ]
 pp <- stats::ppr(y ~ ., data = train, nterms = 11)
