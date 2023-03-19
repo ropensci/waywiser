@@ -309,7 +309,7 @@ create_aoa <- function(training, testing, importance, na_rm, ..., include_di = F
 
   if (na_rm) {
     aoa$training <- aoa$training[complete_cases(aoa$training), , drop = FALSE]
-  } else if (yardstick::yardstick_any_missing(aoa$training, NULL, NULL)) {
+  } else if (yardstick_any_missing(aoa$training, NULL, NULL)) {
     rlang::abort(
       c(
         "Missing values in training data.",
@@ -409,7 +409,7 @@ check_di_testing <- function(training, testing, na_rm = FALSE) {
 
   if (!is.na(na_rm) && na_rm) {
     testing <- testing[complete_cases(testing), , drop = FALSE]
-  } else if (!is.na(na_rm) && yardstick::yardstick_any_missing(testing, NULL, NULL)) {
+  } else if (!is.na(na_rm) && yardstick_any_missing(testing, NULL, NULL)) {
     rlang::abort(
       c(
         "Missing values in testing data.",

@@ -35,6 +35,27 @@ yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., ca
   out
 }
 
+# Replace these with yardstick functions once yardstick > 1.1.0 is out
+yardstick_any_missing <- function(truth, estimate, case_weights = NULL) {
+  anyNA(truth) || anyNA(estimate)
+}
+
+yardstick_remove_missing <- function(truth, estimate, case_weights = NULL) {
+  complete_cases <- stats::complete.cases(truth, estimate)
+
+  truth <- truth[complete_cases]
+  if (is.matrix(estimate)) {
+    estimate <- estimate[complete_cases, , drop = FALSE]
+  } else {
+    estimate <- estimate[complete_cases]
+  }
+
+  list(
+    truth = truth,
+    estimate = estimate
+  )
+}
+
 metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, fn_options = list(), error_call = rlang::caller_env()) {
   truth <- enquo(truth)
   estimate <- enquo(estimate)
@@ -100,7 +121,7 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., ca
   truth <- ww_eval_select(expr = truth, data = data, error_call = rlang::caller_env())
   estimate <- ww_eval_select(expr = estimate, data = data, error_call = rlang::caller_env())
 
-  if (yardstick::yardstick_any_missing(data[[truth]], data[[estimate]], NULL)) {
+  if (yardstick_any_missing(data[[truth]], data[[estimate]], NULL)) {
     rlang::abort(
       c(
         "Missing values in data.",
@@ -151,10 +172,10 @@ yardstick_vec <- function(truth, estimate, na_rm, impl, wt = NULL, ..., case_wei
   }
 
   if (na_rm) {
-    result <- yardstick::yardstick_remove_missing(truth, estimate, NULL)
+    result <- yardstick_remove_missing(truth, estimate, NULL)
     truth <- result$truth
     estimate <- result$estimate
-  } else if (yardstick::yardstick_any_missing(truth, estimate, NULL)) {
+  } else if (yardstick_any_missing(truth, estimate, NULL)) {
     return(NA_real_)
   }
 
@@ -182,7 +203,7 @@ spatial_yardstick_vec <- function(truth, estimate, wt, na_rm = TRUE, impl, ..., 
     )
   }
 
-  if (yardstick::yardstick_any_missing(truth, estimate, NULL)) {
+  if (yardstick_any_missing(truth, estimate, NULL)) {
     rlang::abort(
       c(
         "Missing values in data.",
