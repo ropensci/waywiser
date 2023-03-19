@@ -19,7 +19,7 @@ ww_local_moran_pvalue_vec(truth, estimate, wt = NULL, na_rm = FALSE, ...)
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
 and \code{estimate} arguments.}
 
-\item{...}{Additional arguments passed to [spdep::localmoran()].}
+\item{...}{Additional arguments passed to \code{\link[spdep:localmoran]{spdep::localmoran()}}.}
 
 \item{truth}{The column identifier for the true results
 (that is \code{numeric}). This should be an unquoted column name although
@@ -32,25 +32,25 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{wt}{A `listw` object, for instance as created with [ww_build_weights()].
-For data.frame input, may also be a function that takes `data` and returns a
-`listw` object.}
+\item{wt}{A \code{listw} object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.
+For data.frame input, may also be a function that takes \code{data} and returns a
+\code{listw} object.}
 
 \item{na_rm}{A \code{logical} value indicating whether \code{NA}
 values should be stripped before the computation proceeds.}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and `nrow(data)`
+A tibble with columns .metric, .estimator, and .estimate and \code{nrow(data)}
 rows of values.
-For `_vec()` functions, a numeric vector of `length(truth)` (or NA).
+For \verb{_vec()} functions, a numeric vector of \code{length(truth)} (or NA).
 }
 \description{
 Calculate the local Moran's I statistic for model residuals.
-`ww_local_moran_i()` returns the statistic itself, while
-`ww_local_moran_pvalue()` returns the associated p value.
+\code{ww_local_moran_i()} returns the statistic itself, while
+\code{ww_local_moran_pvalue()} returns the associated p value.
 These functions are meant to help assess model predictions, for instance by
 identifying clusters of higher residuals than expected. For statistical
-testing and inference applications, use [spdep::localmoran_perm()] instead.
+testing and inference applications, use \code{\link[spdep:localmoran]{spdep::localmoran_perm()}} instead.
 }
 \details{
 These functions can be used for geographic or projected coordinate reference

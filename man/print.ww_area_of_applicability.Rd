@@ -7,7 +7,7 @@
 \method{print}{ww_area_of_applicability}(x, digits = getOption("digits"), ...)
 }
 \arguments{
-\item{x}{A `ww_area_of_applicability` object.}
+\item{x}{A \code{ww_area_of_applicability} object.}
 
 \item{digits}{The number of digits to print, used when rounding the AOA threshold.}
 

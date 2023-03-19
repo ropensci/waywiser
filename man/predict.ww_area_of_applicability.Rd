@@ -2,34 +2,34 @@
 % Please edit documentation in R/area_of_applicability.R
 \name{predict.ww_area_of_applicability}
 \alias{predict.ww_area_of_applicability}
-\title{Predict from a `ww_area_of_applicability`}
+\title{Predict from a \code{ww_area_of_applicability}}
 \usage{
 \method{predict}{ww_area_of_applicability}(object, new_data, ...)
 }
 \arguments{
-\item{object}{A `ww_area_of_applicability` object.}
+\item{object}{A \code{ww_area_of_applicability} object.}
 
 \item{new_data}{A data frame or matrix of new samples.}
 
 \item{...}{Not used.}
 }
 \value{
-A tibble of predictions, with two columns: `di`, numeric, contains the
-"dissimilarity index" of each point in `new_data`, while `aoa`, logical,
-contains whether a row is inside (`TRUE`) or outside (`FALSE`) the area of
+A tibble of predictions, with two columns: \code{di}, numeric, contains the
+"dissimilarity index" of each point in \code{new_data}, while \code{aoa}, logical,
+contains whether a row is inside (\code{TRUE}) or outside (\code{FALSE}) the area of
 applicability.
 
 Note that this function is often called using
-[terra::predict()], in which case `aoa` will be converted to numeric
-implicitly; `1` values correspond to cells "inside" the area of applicability
-and `0` corresponds to cells "outside" the AOA.
+\code{\link[terra:predict]{terra::predict()}}, in which case \code{aoa} will be converted to numeric
+implicitly; \code{1} values correspond to cells "inside" the area of applicability
+and \code{0} corresponds to cells "outside" the AOA.
 
 The number of rows in the tibble is guaranteed
-to be the same as the number of rows in `new_data`. Rows with `NA` predictor
-values will have `NA` `di` and `aoa` values.
+to be the same as the number of rows in \code{new_data}. Rows with \code{NA} predictor
+values will have \code{NA} \code{di} and \code{aoa} values.
 }
 \description{
-Predict from a `ww_area_of_applicability`
+Predict from a \code{ww_area_of_applicability}
 }
 \details{
 The function computes the distance indices of the new data and

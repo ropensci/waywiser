@@ -89,7 +89,7 @@ values should be stripped before the computation proceeds.}
 \value{
 A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
-For `_vec()` functions, a single value (or NA).
+For \verb{_vec()} functions, a single value (or NA).
 }
 \description{
 These functions calculate the agreement coefficient and mean product
@@ -103,7 +103,7 @@ not be a useful metric in all scenarios.
 }
 \details{
 Agreement coefficient values range from 0 to 1, with 1 indicating perfect
-agreement. `truth` and `estimate` must be the same length. This function is
+agreement. \code{truth} and \code{estimate} must be the same length. This function is
 not explicitly spatial and as such can be applied to data with any number of
 dimensions and any coordinate reference system.
 }

@@ -36,7 +36,7 @@
 #'   \item{Guerry, A.-M. (1833). Essai sur la statistique morale de la France Paris: Crochard. English translation: Hugh P. Whitt and Victor W. Reinking, Lewiston, N.Y. : Edwin Mellen Press, 2002.}
 #'   \item{Parent-Duchatelet, A. (1836). De la prostitution dans la ville de Paris, 3rd ed, 1857, p. 32, 36}
 #'}
-#'   \url{https://geodacenter.github.io/data-and-lab/Guerry/}
+#'   <https://geodacenter.github.io/data-and-lab/Guerry/>
 #' @examples
 #' if (requireNamespace("sf", quietly = TRUE)) {
 #'   library(sf)
@@ -49,7 +49,7 @@
 
 #' Number of trees and aboveground biomass for Forest Inventory and Analysis plots in New York State
 #'
-#' This data is adapted from the Tidymodels "multi-scale assessment" lesson, available at \url{https://www.tidymodels.org/learn/work/multi-scale/}.
+#' This data is adapted from the Tidymodels "multi-scale assessment" lesson, available at <https://www.tidymodels.org/learn/work/multi-scale/>.
 #' The original data is derived from the Forest Inventory and Analysis program,
 #' implemented by the US Department of Agriculture's Forest Service.
 #'
@@ -63,7 +63,7 @@
 #' }
 #'
 #' @source
-#' Tidymodels team, "Multi-scale Assessment". Retrieved 30 November 2022. Available at \url{https://www.tidymodels.org/learn/work/multi-scale/}
+#' Tidymodels team, "Multi-scale Assessment". Retrieved 30 November 2022. Available at <https://www.tidymodels.org/learn/work/multi-scale/>
 "ny_trees"
 
 #' Simulated data based on WorldClim Bioclimatic variables
@@ -82,5 +82,5 @@
 #' \item{response}{A virtual species distribution, generated using the `generateSpFromPCA()` function from the `virtualspecies` package.}
 #' }
 #'
-#' @source \url{https://www.worldclim.org}
+#' @source <https://www.worldclim.org>
 "worldclim_simulation"
