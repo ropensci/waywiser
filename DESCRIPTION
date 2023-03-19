@@ -86,3 +86,4 @@ Language: en-US
 VignetteBuilder: knitr
 Remotes:
     tidymodels/yardstick
+Roxygen: list(markdown = TRUE)
