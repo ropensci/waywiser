@@ -18,7 +18,6 @@ importance <- vip::vi_permute(
 )
 
 test_that("srr: expected failures for ww_area_of_applicability", {
-
   #' @srrstats {G5.2} Testing errors
   #' @srrstats {G5.2b} Testing errors
   #' @srrstats {G5.8b} Data of unsupported types

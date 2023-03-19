@@ -45,7 +45,7 @@ worldclim_training <- worldclim_simulation[worldclim_training, ]
 
 
 worldclim_model <- lm(
-  response ~ bio2 + bio10 + bio13 + bio19, 
+  response ~ bio2 + bio10 + bio13 + bio19,
   worldclim_training
 )
 
@@ -227,7 +227,7 @@ higher "di":
 ```{r}
 library(ggplot2)
 
-ggplot(worldclim_testing, aes(di, abs(response - predictions), color = aoa)) + 
+ggplot(worldclim_testing, aes(di, abs(response - predictions), color = aoa)) +
   geom_point(alpha = 0.6)
 ```
 

@@ -179,7 +179,6 @@ test_that("srr: expected failures for ww_unsystematic_mpd", {
   expect_snapshot(
     ww_unsystematic_mpd(all_identical, x, y)
   )
-
 })
 
 test_that("other generic srr standards", {
@@ -261,5 +260,4 @@ test_that("other generic srr standards", {
       ww_unsystematic_mpd_vec(y, x)
     )
   )
-
 })

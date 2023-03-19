@@ -82,7 +82,6 @@ ww_agreement_coefficient_vec <- function(truth,
                                          estimate,
                                          na_rm = TRUE,
                                          ...) {
-
   ww_agreement_coefficient_impl <- function(truth, estimate, ...) {
     est_SSD <- calc_ssd(truth, estimate)
     est_SPOD <- calc_spod(truth, estimate)
@@ -129,7 +128,6 @@ ww_systematic_agreement_coefficient_vec <- function(truth,
                                                     estimate,
                                                     na_rm = TRUE,
                                                     ...) {
-
   ww_systematic_agreement_coefficient_impl <- function(truth, estimate, ...) {
     1 - (calc_spds(truth, estimate) / calc_spod(truth, estimate))
   }
@@ -174,7 +172,6 @@ ww_unsystematic_agreement_coefficient_vec <- function(truth,
                                                       estimate,
                                                       na_rm = TRUE,
                                                       ...) {
-
   ww_unsystematic_agreement_coefficient_impl <- function(truth, estimate, ...) {
     1 - (calc_spdu(truth, estimate) / calc_spod(truth, estimate))
   }
@@ -307,7 +304,6 @@ ww_unsystematic_rmpd_vec <- function(truth,
                                      estimate,
                                      na_rm = TRUE,
                                      ...) {
-
   ww_unsystematic_rmpd_impl <- function(truth, estimate, ...) {
     sqrt(ww_unsystematic_mpd_impl(truth, estimate, ...))
   }
@@ -352,7 +348,6 @@ ww_systematic_rmpd_vec <- function(truth,
                                    estimate,
                                    na_rm = TRUE,
                                    ...) {
-
   ww_systematic_rmpd_impl <- function(truth, estimate, ...) {
     sqrt(ww_systematic_mpd_impl(truth, estimate, ...))
   }

@@ -137,7 +137,6 @@ ww_local_moran_pvalue_vec <- function(truth,
       listw = wt,
       ...
     )[, 5]
-
   }
   spatial_yardstick_vec(
     truth = truth,

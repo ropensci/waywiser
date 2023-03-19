@@ -10,8 +10,8 @@ ww_build_neighbors(data, nb = NULL, ..., call = rlang::caller_env())
 \item{data}{An sf object (of class "sf" or "sfc").}
 
 \item{nb}{An object of class "nb" (in which case it will be returned
-unchanged), or a function to create an object of class "nb" from `data` and
-`...`, or `NULL`. See details.}
+unchanged), or a function to create an object of class "nb" from \code{data} and
+\code{...}, or \code{NULL}. See details.}
 
 \item{...}{Arguments passed to the neighbor-creating function.}
 
@@ -37,17 +37,18 @@ These functions can be used for geographic or projected coordinate reference
 systems and expect 2D data.
 }
 \details{
-When `nb = NULL`, the method used to create neighbors from `data` is
-dependent on what geometry type `data` is:
-
-+ If `nb = NULL` and `data` is a point geometry
+When \code{nb = NULL}, the method used to create neighbors from \code{data} is
+dependent on what geometry type \code{data} is:
+\itemize{
+\item If \code{nb = NULL} and \code{data} is a point geometry
 (classes "sfc_POINT" or "sfc_MULTIPOINT") the "nb" object will be created
-using [ww_make_point_neighbors()].
-+ If `nb = NULL` and `data` is a polygon geometry
+using \code{\link[=ww_make_point_neighbors]{ww_make_point_neighbors()}}.
+\item If \code{nb = NULL} and \code{data} is a polygon geometry
 (classes "sfc_POLYGON" or "sfc_MULTIPOLYGON") the "nb" object will be created
-using [ww_make_polygon_neighbors()].
-+ If `nb = NULL` and `data` is any other geometry type, the "nb" object will
+using \code{\link[=ww_make_polygon_neighbors]{ww_make_polygon_neighbors()}}.
+\item If \code{nb = NULL} and \code{data} is any other geometry type, the "nb" object will
 be created using the centroids of the data as points, with a warning.
+}
 }
 \examples{
 ww_build_neighbors(guerry)

@@ -93,7 +93,6 @@ ww_willmott_d_vec <- function(truth,
                               estimate,
                               na_rm = TRUE,
                               ...) {
-
   ww_willmott_d_impl <- function(truth, estimate, ...) {
     numerator <- calc_ssd(truth, estimate)
     denominator <- sum(
@@ -142,7 +141,6 @@ ww_willmott_d1_vec <- function(truth,
                                estimate,
                                na_rm = TRUE,
                                ...) {
-
   ww_willmott_d1_impl <- function(truth, estimate, ...) {
     numerator <- sum(abs(truth - estimate))
     denominator <- sum(
@@ -191,7 +189,6 @@ ww_willmott_dr_vec <- function(truth,
                                estimate,
                                na_rm = TRUE,
                                ...) {
-
   ww_willmott_dr_impl <- function(truth, estimate, ...) {
     term_1 <- sum(abs(estimate - truth))
     term_2 <- sum(abs(truth - mean(truth))) * 2
@@ -337,7 +334,6 @@ ww_systematic_rmse_vec <- function(truth,
                                    estimate,
                                    na_rm = TRUE,
                                    ...) {
-
   ww_systematic_rmse_impl <- function(truth, estimate, ...) {
     sqrt(ww_systematic_mse_impl(truth, estimate, ...))
   }
@@ -382,7 +378,6 @@ ww_unsystematic_rmse_vec <- function(truth,
                                      estimate,
                                      na_rm = TRUE,
                                      ...) {
-
   ww_unsystematic_rmse_impl <- function(truth, estimate, ...) {
     sqrt(ww_unsystematic_mse_impl(truth, estimate, ...))
   }

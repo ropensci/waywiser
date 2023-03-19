@@ -89,7 +89,7 @@ values should be stripped before the computation proceeds.}
 \value{
 A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 For grouped data frames, the number of rows returned will be the same as the number of groups.
-For `_vec()` functions, a single value (or NA).
+For \verb{_vec()} functions, a single value (or NA).
 }
 \description{
 These functions calculate Willmott's d value, a proposed replacement for R2
@@ -102,8 +102,8 @@ components of MSE equal total MSE (though the same is not true for RMSE).
 Values of d and d1 range from 0 to 1, with 1 indicating perfect agreement.
 Values of
 dr range from -1 to 1, with 1 similarly indicating perfect agreement. Values
-of RMSE are in the same units as `truth` and `estimate`, while values of MSE
-are in squared units. `truth` and `estimate` must be the same length. This
+of RMSE are in the same units as \code{truth} and \code{estimate}, while values of MSE
+are in squared units. \code{truth} and \code{estimate} must be the same length. This
 function is not explicitly spatial and as such can be applied to data with
 any number of dimensions and any coordinate reference system.
 }

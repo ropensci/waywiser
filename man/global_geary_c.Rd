@@ -19,9 +19,9 @@ ww_global_geary_pvalue_vec(truth, estimate, wt = NULL, na_rm = FALSE, ...)
 \item{data}{A \code{data.frame} containing the columns specified by the \code{truth}
 and \code{estimate} arguments.}
 
-\item{...}{Additional arguments passed to [spdep::geary()] (for
-`ww_global_geary_c()`) or [spdep::geary.test()] (for
-`ww_global_geary_pvalue()`).}
+\item{...}{Additional arguments passed to \code{\link[spdep:geary]{spdep::geary()}} (for
+\code{ww_global_geary_c()}) or \code{\link[spdep:geary.test]{spdep::geary.test()}} (for
+\code{ww_global_geary_pvalue()}).}
 
 \item{truth}{The column identifier for the true results
 (that is \code{numeric}). This should be an unquoted column name although
@@ -34,9 +34,9 @@ results (that is also \code{numeric}). As with \code{truth} this can be
 specified different ways but the primary method is to use an
 unquoted variable name. For \verb{_vec()} functions, a \code{numeric} vector.}
 
-\item{wt}{A `listw` object, for instance as created with [ww_build_weights()].
-For data.frame input, may also be a function that takes `data` and returns a
-`listw` object.}
+\item{wt}{A \code{listw} object, for instance as created with \code{\link[=ww_build_weights]{ww_build_weights()}}.
+For data.frame input, may also be a function that takes \code{data} and returns a
+\code{listw} object.}
 
 \item{na_rm}{A \code{logical} value indicating whether \code{NA}
 values should be stripped before the computation proceeds.}
@@ -45,16 +45,16 @@ values should be stripped before the computation proceeds.}
 A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 For grouped data frames, the number of rows returned will be the same as the
 number of groups.
-For `_vec()` functions, a single value (or NA).
+For \verb{_vec()} functions, a single value (or NA).
 }
 \description{
 Calculate the global Geary's C statistic for model residuals.
-`ww_global_geary_c()` returns the statistic itself, while
-`ww_global_geary_pvalue()` returns the associated p value.
+\code{ww_global_geary_c()} returns the statistic itself, while
+\code{ww_global_geary_pvalue()} returns the associated p value.
 These functions are meant to help assess model predictions, for instance by
 identifying if there are clusters of higher residuals than expected. For
 statistical testing and inference applications, use
-[spdep::geary.test()] instead.
+\code{\link[spdep:geary.test]{spdep::geary.test()}} instead.
 }
 \details{
 These functions can be used for geographic or projected coordinate reference

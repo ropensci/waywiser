@@ -3,12 +3,10 @@ test_that("passing functions to build weights", {
   guerry_lm <- lm(Crm_prs ~ Litercy, guerry_modeled)
   guerry_modeled$predictions <- predict(guerry_lm, guerry_modeled)
 
-  expect_snapshot(
-    {
-      df_local_i <- ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions, wt = ww_build_weights)
-      df_local_i[1:3]
-    }
-  )
+  expect_snapshot({
+    df_local_i <- ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions, wt = ww_build_weights)
+    df_local_i[1:3]
+  })
 })
 
 test_that("edge cases", {
@@ -72,6 +70,4 @@ test_that("edge cases", {
     ),
     error = TRUE
   )
-
-
 })

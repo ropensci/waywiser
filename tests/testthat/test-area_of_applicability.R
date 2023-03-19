@@ -42,7 +42,6 @@ test_that("`ww_area_of_applicability` finds 0 distance between identical data", 
     0,
     tolerance = 1e-7
   )
-
 })
 
 test_that("`ww_area_of_applicability` works with or without a testing set", {
@@ -55,7 +54,6 @@ test_that("`ww_area_of_applicability` works with or without a testing set", {
     ww_area_of_applicability(y ~ ., train, importance = importance),
     NA
   )
-
 })
 
 test_that("`ww_area_of_applicability` methods are equivalent", {
@@ -113,8 +111,6 @@ test_that("`ww_area_of_applicability` methods are equivalent", {
     predict(methods[[4]], test),
     predict(methods[[5]], test)
   )
-
-
 })
 
 test_that("`ww_area_of_applicability` can handle different column orders", {
@@ -129,7 +125,6 @@ test_that("`ww_area_of_applicability` can handle different column orders", {
     ww_area_of_applicability(train[2:11], test[2:11], importance)$aoa_threshold,
     ww_area_of_applicability(train[11:2], test[2:11], importance)$aoa_threshold
   )
-
 })
 
 test_that("NAs are handled", {
@@ -214,7 +209,6 @@ test_that("NAs are handled", {
       test
     )
   )
-
 })
 
 test_that("Expected errors", {
@@ -262,7 +256,6 @@ test_that("normal use", {
   expect_snapshot(
     predict(aoa, train)
   )
-
 })
 
 test_that("`new_ww_area_of_applicability` arguments are assigned correctly", {
@@ -290,21 +283,20 @@ test_that("ww_area_of_applicability() is close-enough to CAST", {
 
   # Changes in CAST 0.7.1 mean that thresholds can't be compared against earlier versions
   if (rlang::is_installed("CAST", version = "0.7.1") &&
-      rlang::is_installed("caret") &&
-      rlang::is_installed("randomforest")) {
-
+    rlang::is_installed("caret") &&
+    rlang::is_installed("randomforest")) {
     withr::with_seed(
       123,
       model <- caret::train(
         relevant_data[1:4],
         relevant_data$response,
-        method="rf",
-        importance=TRUE,
-        trControl = caret::trainControl(method="none",savePredictions = TRUE)
+        method = "rf",
+        importance = TRUE,
+        trControl = caret::trainControl(method = "none", savePredictions = TRUE)
       )
     )
 
-    AOA <- CAST::aoa(relevant_data, model=model)
+    AOA <- CAST::aoa(relevant_data, model = model)
     cast_threshold <- AOA$parameters$threshold[[1]]
     importance <- data.frame(
       term = rownames(caret::varImp(model)$importance),
@@ -328,7 +320,6 @@ test_that("ww_area_of_applicability() is close-enough to CAST", {
     cast_threshold,
     tolerance = 0.000001
   )
-
 })
 
 test_that("loaded data is equivalent", {

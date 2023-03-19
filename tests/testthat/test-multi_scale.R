@@ -74,7 +74,6 @@ test_that("ww_multi_scale", {
     )$.estimate,
     yardstick::mae_vec(median(ames_sf$Sale_Price), median(ames_sf$predictions))
   )
-
 })
 
 test_that("expected errors", {
@@ -115,7 +114,6 @@ test_that("expected errors", {
     ),
     error = TRUE
   )
-
 })
 
 test_that("srr: expected failures for ww_multi_scale", {
@@ -224,7 +222,6 @@ test_that("srr: expected failures for ww_multi_scale", {
   expect_snapshot(
     ww_multi_scale(worldclim_simulation, response, response, n = c(2, 4))
   )
-
 })
 
 test_that("other generic srr standards", {
@@ -399,7 +396,6 @@ test_that("raster method works", {
     )$.estimate,
     1
   )
-
 })
 
 test_that("raster method is equivalent", {
@@ -426,7 +422,6 @@ test_that("raster method is equivalent", {
   sf::st_geometry(terra_method$.grid[[2]]) <- NULL
 
   expect_identical(sf_method, terra_method, tolerance = 1e-6)
-
 })
 
 test_that("raster method errors as expected", {
@@ -452,6 +447,4 @@ test_that("raster method errors as expected", {
     ww_multi_scale(truth = terra::rast(r1), estimate = c(terra::rast(r1), terra::rast(r1))),
     error = TRUE
   )
-
-
 })

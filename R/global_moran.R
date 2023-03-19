@@ -91,7 +91,6 @@ ww_global_moran_i_vec <- function(truth,
       S0 = spdep::Szero(wt),
       ...
     )$I
-
   }
   spatial_yardstick_vec(
     truth = truth,

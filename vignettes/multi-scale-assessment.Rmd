@@ -52,8 +52,8 @@ New York City to the south) have clusters of much lower AGB.
 library(ggplot2)
 
 ny_trees %>%
-  ggplot() + 
-  geom_sf(aes(color = agb), alpha = 0.4) + 
+  ggplot() +
+  geom_sf(aes(color = agb), alpha = 0.4) +
   scale_color_distiller(palette = "Greens", direction = 1)
 ```
 
@@ -95,7 +95,7 @@ aggregation:
 ```{r}
 ny_multi_scale %>%
   unnest(.grid_args) %>%
-  ggplot(aes(x = cellsize, y = .estimate, color = .metric)) + 
+  ggplot(aes(x = cellsize, y = .estimate, color = .metric)) +
   geom_line()
 ```
 
@@ -111,8 +111,8 @@ level of aggregation:
 ```{r}
 ny_multi_scale$.grid[[9]] %>%
   filter(!is.na(.estimate)) %>%
-  ggplot(aes(fill = .estimate)) + 
-  geom_sf() + 
+  ggplot(aes(fill = .estimate)) +
+  geom_sf() +
   scale_fill_distiller(palette = "Greens", direction = 1)
 ```
 
@@ -148,7 +148,7 @@ ny_division_assessment %>%
   mutate(
     division = rep(c("Block group", "County subdivision", "County"), each = 2)
   ) %>%
-  ggplot(aes(x = division, y = .estimate, fill = .metric)) + 
+  ggplot(aes(x = division, y = .estimate, fill = .metric)) +
   geom_col(position = position_dodge())
 ```
 

@@ -7,20 +7,20 @@
 ww_make_point_neighbors(data, k = 1, sym = FALSE, ...)
 }
 \arguments{
-\item{data}{An `sfc_POINT` or `sfc_MULTIPOINT` object.}
+\item{data}{An \code{sfc_POINT} or \code{sfc_MULTIPOINT} object.}
 
-\item{k}{How many nearest neighbors to use in [spdep::knearneigh()].}
+\item{k}{How many nearest neighbors to use in \code{\link[spdep:knearneigh]{spdep::knearneigh()}}.}
 
-\item{sym}{Force the output neighbors list (from [spdep::knn2nb()]) to
+\item{sym}{Force the output neighbors list (from \code{\link[spdep:knn2nb]{spdep::knn2nb()}}) to
 symmetry.}
 
-\item{...}{Other arguments passed to [spdep::knearneigh()].}
+\item{...}{Other arguments passed to \code{\link[spdep:knearneigh]{spdep::knearneigh()}}.}
 }
 \value{
 An object of class "nb"
 }
 \description{
-This function uses [spdep::knearneigh()] and [spdep::knn2nb()] to
+This function uses \code{\link[spdep:knearneigh]{spdep::knearneigh()}} and \code{\link[spdep:knn2nb]{spdep::knn2nb()}} to
 create a "nb" neighbors list.
 }
 \details{

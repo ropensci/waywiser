@@ -186,7 +186,6 @@ test_that("srr: expected failures for ww_global_geary_c", {
   expect_snapshot(
     ww_global_geary_c(worldclim_simulation, response, response)
   )
-
 })
 
 test_that("other generic srr standards", {
@@ -457,5 +456,4 @@ test_that("other generic srr standards", {
       ww_global_geary_c_vec(worldclim_loaded$bio13, worldclim_loaded$bio19, other_weights)
     )
   )
-
 })

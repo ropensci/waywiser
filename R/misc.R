@@ -30,7 +30,6 @@
 #'
 #' @export
 ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env()) {
-
   if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
     rlang::abort(
       "`data` must be an `sf` or `sfc` object.",
@@ -58,8 +57,7 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
   }
 
   if (is.null(nb)) {
-    nb <- switch(
-      type,
+    nb <- switch(type,
       "point" = ww_make_point_neighbors(data, ...),
       "polygon" = ww_make_polygon_neighbors(data, ...)
     )
@@ -77,7 +75,6 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
   }
 
   nb
-
 }
 
 #' Make 'nb' objects from point geometries
@@ -101,7 +98,6 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
 #'
 #' @export
 ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
-
   if (!(inherits(data, "sf") || inherits(data, "sfc"))) {
     rlang::abort(
       "`data` must be an `sf` or `sfc` object."
@@ -116,7 +112,6 @@ ww_make_point_neighbors <- function(data, k = 1, sym = FALSE, ...) {
 
   knn <- spdep::knearneigh(data, k, ...)
   spdep::knn2nb(knn, sym = sym)
-
 }
 
 #' Make 'nb' objects from polygon geometries
@@ -161,7 +156,6 @@ ww_make_polygon_neighbors <- function(data, ...) {
 #'
 #' @export
 ww_build_weights <- function(x, wt = NULL, include_self = FALSE, ...) {
-
   if (!inherits(x, "nb")) {
     x <- ww_build_neighbors(x, call = rlang::caller_env())
   }
@@ -184,7 +178,6 @@ ww_build_weights <- function(x, wt = NULL, include_self = FALSE, ...) {
   }
 
   wt
-
 }
 
 complete_cases <- function(data_frame) {
