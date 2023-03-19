@@ -11,7 +11,7 @@ Authors@R: c(
            comment = "Virgilio reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>"),
     person("Jakub", "Nowosad", role = "rev",
            comment = "Jakub reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>"),
-    person("RStudio", role = c("cph", "fnd"))
+    person("Posit Software, PBC", role = c("cph", "fnd"))
   )
 Description: Assessing predictive models of spatial data can be
     challenging, both because these models are typically built for
