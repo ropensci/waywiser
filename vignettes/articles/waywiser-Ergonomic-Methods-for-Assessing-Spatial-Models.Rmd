@@ -1,0 +1,704 @@
+---
+title: "waywiser: Ergonomic Methods for Assessing Spatial Models"
+documentclass: jss
+classoption: shortnames,nojss
+author:
+  - name: Michael J Mahoney
+    orcid: 0000-0003-2402-304X
+    affiliation: State University of New York College of Environmental Science and Forestry
+    # use this syntax to add text on several lines
+    address: |
+      | Graduate Program in Environmental Science
+      | 1 Forestry Drive
+      | Syracuse, NY, USA
+    email: \email{mjmahone@esf.edu}
+    url: https://mm218.dev/
+title:
+  formatted: "\\pkg{waywiser}: Ergonomic Methods for Assessing Spatial Models"
+  plain:     "waywiser: Ergonomic Methods for Assessing Spatial Models"
+abstract: |
+  Assessing predictive models can be challenging. Modelers must navigate a wide array of evaluation methodologies implemented with incompatible interfaces across multiple packages which may give different or even contradictory results, while ensuring that their chosen approach properly estimates the performance of their model when generalizing to new observations. Assessing models fit to spatial data can be particularly difficult, given that model errors may exhibit spatial autocorrelation, model predictions are often aggregated to multiple spatial scales by end users, and models are often tasked with generalizing into spatial regions outside the boundaries of their initial training data. 
+  
+  The \pkg{waywiser} package for the \proglang{R} language attempts to make assessing spatial models easier by providing an ergonomic toolkit for model evaluation tasks, with functions for multiple assessment methodologies sharing a unified interface. Functions from \pkg{waywiser} share standardized argument names and default values, making the user-facing interface simple and easy to learn. These functions are additionally designed to be easy to integrate into a wide variety of modeling workflows, accepting standard classes as inputs and returning size- and type-stable outputs, ensuring that their results are of consistent and predictable data types and dimensions. Additional features make it particularly easy to use \pkg{waywiser} along packages and workflows in the tidymodels ecosystem.
+keywords:
+  # at least one keyword must be supplied
+  formatted: [spatial modeling, model assessment, applicability domains, "\\proglang{R}"]
+  plain:     [spatial modeling, model assessment, applicability domains, R]
+preamble: >
+  \usepackage{amsmath}
+output: 
+  bookdown::pdf_book:
+    base_format: rticles::jss_article
+bibliography: paper.bib
+pagetitle:   "Software article"
+pkgdown:
+  as_is: true
+  extension: pdf
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+options(prompt = 'R> ', continue = '+ ')
+
+library(patchwork)
+knitr::opts_chunk$set(
+  prompt = TRUE,
+  fig.width = 7.5,
+  fig.height = 5
+)
+
+theme_pub <- function (base_fill = "white", base_size = 11, base_family = "") {
+    ggplot2::`%+replace%`(
+      ggplot2::theme_minimal(),
+      ggplot2::theme(
+      axis.line = ggplot2::element_line(), 
+      panel.grid = ggplot2::element_blank(), 
+      axis.text = ggplot2::element_text(size = base_size * 0.9), 
+      axis.title = ggplot2::element_text(size = base_size *  1.15), 
+      text = ggplot2::element_text(family = base_family), 
+      strip.background = ggplot2::element_blank(), 
+      strip.text = ggplot2::element_text(size = base_size), 
+      legend.text = ggplot2::element_text(size = base_size * 0.85), 
+      legend.title = ggplot2::element_text(hjust = 0, size = base_size * 1.1),
+      legend.background = ggplot2::element_blank(), 
+      legend.spacing = ggplot2::unit(base_size, "pt"), 
+      legend.margin = ggplot2::margin(0, 0, 0, 0), 
+      legend.key = ggplot2::element_blank(), 
+      legend.key.size = ggplot2::unit(1.2 * base_size, "pt"), 
+      legend.box.margin = ggplot2::margin(0, 0, 0, 0), 
+      legend.box.background = ggplot2::element_blank(), 
+      legend.box.spacing = ggplot2::unit(base_size, "pt"), 
+      panel.background = ggplot2::element_rect(fill = base_fill, color = NA),
+      plot.background = ggplot2::element_rect(fill = base_fill, color = NA), 
+      title = ggplot2::element_text(size = base_size *  1.3, family = base_family),
+      complete = TRUE
+    )
+    )
+}
+
+ggplot2::theme_set(theme_pub())
+```
+
+# Introduction
+
+Assessing predictive models can be challenging. Modelers must pick from a wide variety of evaluation approaches, each of which may give different and even contradictory results [@reich1999], and ensure that their chosen approach will properly estimate their model's performance when generalizing to observations not used to train the model. Even more complicated is assessing models fit to spatial data, where errors may not be randomly distributed across the study area [@legendre1989], predictions are often aggregated into larger units which may compound existing spatial error patterns, requiring model accuracy assessments at multiple spatial scales [@riemann2010], and models are often used to predict areas outside of the spatial boundary of the initial study area [@meyer2021].
+
+Statistical software can help mitigate some of the complexity created by the array of considerations and approaches for evaluating models fit to spatial data. By providing a common user interface for multiple well-established evaluation procedures, software can make it easier for users to switch between evaluation approaches as appropriate for their current task, helping reduce some of the cognitive load associated with switching between different tasks [@roehm2012]. User interfaces should also make it easy to follow scientific and statistical best practices, and similarly make it difficult to commit methodological errors [@tidymodels].
+
+Many excellent \proglang{R} packages aim to help reduce this complexity and promote best practices by addressing individual aspects of model evaluation. Among many others, packages like \pkg{yardstick} [@yardstick], \pkg{metrica} [@metrica], and \pkg{hydroGOF} [@hydroGOF] provide suites of metrics for model assessment, providing standard interfaces for calculating model accuracy and agreement given vectors of observed and predicted values. Packages like \pkg{spdep} [@spdep] and \pkg{rgeoda} [@rgeoda], meanwhile, provide measures of spatial autocorrelation, helping modelers assess the spatial distribution of model errors. Finally, several packages implement additional evaluation approaches beyond standard error assessments; for instance, \pkg{CAST} [@CAST] and \pkg{applicable} [@applicable] implement approaches for calculating model applicability domains.
+
+The new \pkg{waywiser} package implements elements of each of these approaches, while providing a consistent, ergonomic user interface for each aspect of model assessment. Functions in \pkg{waywiser} provide new implementations of several popular assessment metrics from the spatial modeling literature, and provide a wrapper around functions for calculating spatial autocorrelation metrics. Additional functions provide an approach for assessing model predictions aggregated to multiple spatial scales, and a new implementation of the dissimilarity index and area of applicability from @meyer2021. These functions share a consistent interface, with standardized argument names and definitions, making it easy for users to learn how to use the package, and to switch between evaluation approaches as desired. 
+
+Outputs from \pkg{waywiser} are both type-stable and size-stable, making \pkg{waywiser} functions both predictable and easy to program with. Functions in \pkg{waywiser} additionally accept inputs and return outputs using standard classes, using objects from the popular \pkg{sf} [@sf] package for spatial data and simple data frames and vectors otherwise. This predictability and reliance on well-established classes makes it easy to use \pkg{waywiser} with the majority of modeling tools in \proglang{R}. Additional features make it particularly easy to combine \pkg{waywiser} with packages in the tidymodels modeling framework [@tidymodels]. For instance, while \pkg{waywiser} does not itself provide any functions for performing cross-validation or hyperparameter selection, functions from waywiser integrate naturally with the \pkg{tune} package [@tune], allowing for cross-validated model assessment using data splits from \pkg{rsample} [@rsample] and \pkg{spatialsample} [@spatialsample] and automated hyperparameter selection using \pkg{dials} [@dials].
+
+The rest of this article walks through features in \pkg{waywiser}, starting with functions implementing (or wrapping implementations of) model assessment metrics (Section \@ref(sec-assessment-metrics)), followed by methods for assessing model performance when aggregating predictions across multiple spatial scales (Section \@ref(sec-multi-scale)), then by functions for calculating the applicability domain of a model (Section \@ref(sec-aoa)). An additional section discusses how \pkg{waywiser} integrates with the tidymodels modeling framework (Section \@ref(sec-interop)).
+
+# Example data
+
+For demonstration purposes, this paper will assess a linear model fit to the `worldclim_simulation` data included in \pkg{waywiser}, containing a random sample of 10,000 points from the WorldClim Bioclimatic variables data set [@worldclim]. Variable "`bio2`" records the mean monthly diurnal temperature range, "`bio10`" the mean temperature of the warmest 3 months of the year, "`bio13`" the precipitation of the wettest month of the year, and "`bio19`" the precipitation of the coldest 3 months of the year. A final variable, "`response`", was simulated using the \pkg{virtualspecies} package following examples in \pkg{CAST} [@virtualspecies; @CAST].
+
+To create this model, we will first split our data into training and test sets, resembling a standard predictive modeling workflow. For simplicity, we will assign observations to these sets at random; in actual practice, it would be best to use spatial cross-validation approaches in order to address any spatial autocorrelation in the response variable [@spatialsample].
+
+```{r split-data}
+set.seed(1107)
+data("worldclim_simulation", package = "waywiser")
+worldclim_training <- sample(nrow(worldclim_simulation),
+                             nrow(worldclim_simulation) * 0.8)
+worldclim_testing <- worldclim_simulation[-worldclim_training, ]
+worldclim_training <- worldclim_simulation[worldclim_training, ]
+```
+
+We then fit a linear model using base \proglang{R}'s `lm()` function, and use the resulting model to generate predictions for our test set:
+
+```{r fit-lm}
+worldclim_model <- lm(response ~ bio2 + bio10 + bio13 + bio19,
+                      data = worldclim_training)
+worldclim_testing$predictions <- predict(worldclim_model, 
+                                         worldclim_testing)
+```
+
+# Model assessment metrics {#sec-assessment-metrics}
+
+## Agreement metrics
+
+Several functions in \pkg{waywiser} revolve around calculating model agreement metrics: numeric indices of how closely model predictions (which we refer to as $\hat{y}$) align with another data set ($y$), with $y$ typically (but not necessarily) representing "true" measured values. This set of metrics generally originated within the spatial modeling literature and are most popular for assessing models fit to spatial data, but do not incorporate any geographic information into their calculation.
+
+For instance, in a series of papers, Willmott [-@willmott1980; -@willmott1981; -@willmott1982] introduced a index of agreement, $d$. This metric represents the agreement of model predictions ($\hat{y}$) with observed values ($y$) as the ratio of the sum of squared differences to the sum of the absolute values of differences in predicted and observed values from the observed mean ($\bar{y}$); that is:
+
+\begin{equation}
+d = 1 - \frac{\sum_{i=1}^{n}{\left(\hat{y}_{i}-y_{i}\right)^{2}}}{\sum_{i=1}^{n}{\left(\left|\hat{y}_{i}-\bar{y}\right| + \left|y_{i}-\bar{y}\right|\right)^{2}}}
+(\#eq:willmott-d)
+\end{equation}
+
+This formulation means that $d$ is bounded $[0, 1]$, with higher values of $d$ indicating greater agreement between $y$ and $\hat{y}$. As a dimensionless metric, $d$ is a useful tool for comparing models; however, the use of summed differences in the numerator means that $d$ is oversensitive to outliers in $\hat{y}_{i} - y_{i}$ [@legates1999]. To address this concern, Willmott et al. [-@willmott1985] introduced a revised metric named $d_1$, using the sum of the absolute values of differences in the place of the sum of squared differences and no longer squaring the denominator:
+
+\begin{equation}
+d_1 = 1 - \frac{\sum_{i=1}^{n}{\left|\hat{y}_{i}-y_{i}\right|}}{\sum_{i=1}^{n}{\left(\left|\hat{y}_{i}-\bar{y}\right| + \left|y_{i}-\bar{y}\right|\right)}}
+(\#eq:willmott-d1)
+\end{equation}
+
+As with $d$, $d_1$ is bounded $[0, 1]$ with higher values indicating improved agreement; Willmott [-@willmott2011] notes that $d_1$ approaches 1 more slowly than $d$, allowing for finer-grained comparisons between well-performing models.
+
+Willmott et al. revisited these indices twenty-five years later [-@willmott2011], noting that interpretation of $d$ and $d_1$ was made difficult both by the limited range of the metric and by the inclusion of $\hat{y}$ in the denominator, which made the scaling factor of the agreement metric dependent upon the model itself. To address this, they introduce a new metric $d_r$, such that:
+
+\begin{equation}
+d_r = 
+\left\{
+\begin{array}{l}
+1 - \dfrac{\sum_{i=1}^{n}{\left|\hat{y}_{i}-y_{i}\right|}}{c\sum_{i=1}^{n}{\left|y_{i}-\bar{y}\right|}}, \text{ when}\\\\ \sum_{i=1}^{n}{\left|\hat{y}_{i}-y_{i}\right|} \leq c\sum_{i=1}^{n}{\left|y_{i}-\bar{y}\right|}\\\\
+\dfrac{c\sum_{i=1}^{n}{\left|y_{i}-\bar{y}\right|}}{\sum_{i=1}^{n}{\left|\hat{y}_{i}-y_{i}\right|}} - 1 \text{ otherwise}
+\end{array}
+\right\}
+(\#eq:willmott-dr)
+\end{equation}
+
+Where $c$ is a scaling constant set to 2. A full derivation is provided in @willmott2011.
+
+Compared to $d$ and $d_1$, $d_r$ provides a larger metric range (being bounded $[-1, 1]$, with 1 indicating perfect agreement) and is more directly interpretable; $d_r$ is proportional to the mean absolute error divided by $c$ times the mean absolute deviation.
+
+These agreement metrics are all asymmetric, assuming that $y$ values are more accurate than $\hat{y}$. This makes this set of metrics useful when comparing model predictions against measured values, as measured values used to train models are generally assumed to be more trustworthy than model predictions. However, in some model assessment scenarios it can be desirable to treat both $y$ and $\hat{y}$ as capable of containing error. For instance, when comparing two distinct sets of model predictions, it is typically desirable to not treat whichever set of predictions is labeled as $y$ as being inherently more accurate.
+
+For this reason, @ji2006 introduce an agreement coefficient, $\operatorname{AC}$, which is symmetrical and allows for errors in both $y$ and $\hat{y}$:
+
+\begin{equation}
+\operatorname{AC} = 1 - \frac{\sum_{i=1}^{n}{\left(\hat{y}_{i}-y_{i}\right)^{2}}}{\sum_{i=1}^{n}{\left(\left|\bar{\hat{y}}-\bar{y}\right|+\left|\hat{y}_{i}-\bar{\hat{y}}\right|\right)\left(\left|\bar{\hat{y}}-\bar{y}\right|+\left|y_{i}-\bar{y}\right|\right)}}
+(\#eq:ac)
+\end{equation}
+
+Unlike $d$ and related metrics, $\operatorname{AC}$ is symmetrical, producing identical values if $y$ and $\hat{y}$ are reversed. This makes $\operatorname{AC}$ a preferable metric for comparing predictions from models, as it does not assume either set of predictions to be more accurate than the other. @ji2006 describe $\operatorname{AC}$ as bounded $[0, 1]$, as when $\sum_{i=1}^{n}{y_i} = \bar{y}$ and $\sum_{i=1}^{n}{\hat{y}_i} = \bar{\hat{y}}$ (as would occur under a null model) the fractional term simplifies to 1 and thus $\operatorname{AC}$ is 0. In practice however, the null model is not the true lower bound for how poorly two data sets can agree with one another; it is entirely possible for poor models with large differences between $y_i$ and $\hat{y}_i$ to produce negative $\operatorname{AC}$ estimates, with true bounds of $(-\infty, 1]$. Worse agreement between $y_i$ and $y$ produces smaller values.
+
+In addition to these dimensionless agreement metrics, these authors also suggest a host of metrics for model assessment in units of $y$, which may then be decomposed into systematic and unsystematic components. For instance, @willmott1981 walks through the decomposition of the familiar mean squared error ($\operatorname{MSE}$):
+
+\begin{equation}
+\operatorname{MSE} = \frac{1}{n}\sum_{i=1}^{n}{\left(\hat{y}_{i}-y_{i}\right)^{2}}
+(\#eq:mse)
+\end{equation}
+
+Into its systematic and unsystematic components, with the systematic component of $\operatorname{MSE}$ given by:
+
+\begin{equation}
+\operatorname{MSE}_{s} = \frac{1}{n}\sum_{i=1}^{n}{\left(\hat{y}_{i}-y_{i}^\prime{}\right)^{2}}
+(\#eq:mse-s)
+\end{equation}
+
+And the unsystematic component of $\operatorname{MSE}$ given by:
+
+\begin{equation}
+\operatorname{MSE}_{u} = \frac{1}{n}\sum_{i=1}^{n}{\left(y_{i}-{y}_{i}^\prime{}\right)^{2}}
+(\#eq:mse-u)
+\end{equation}
+
+Where $y^\prime{}$ is the predicted value of $y$ from the linear regression model $y^\prime{} = a + b\hat{y}$. These two components sum to $\operatorname{MSE}$:
+
+\begin{equation}
+\operatorname{MSE} = \operatorname{MSE}_{s} + \operatorname{MSE}_{u}
+(\#eq:mse-decomp)
+\end{equation}
+
+As $\operatorname{MSE}$ is in squared units of $y$, it is typically more useful to use the root mean squared error ($\operatorname{RMSE}$) and its systematic and unsystematic components, calculated by taking the square root of $\operatorname{MSE}$ and its components.
+
+@ji2006 present a similar decomposition for their $\operatorname{AC}$ metric, using a geometric mean functional relationship (GMFR) model in place of the linear regression to allow for errors in both $y$ and $\hat{y}$ [@draper1997]. The GMFR is estimated such that:
+
+\begin{equation}
+\begin{aligned}
+y^\prime{} &= a + b\hat{y} \\
+b &= \pm \left(\frac{\sum_{i=1}^{n}{\left(\hat{y}_{i}-\bar{\hat{y}}\right)^{2}}}{\sum_{i=1}^{n}{\left({y}_{i}-\bar{{y}}\right)^{2}}}\right)^{\frac{1}{2}} \\
+a &= \bar{\hat{y}} - b\bar{y}
+\end{aligned}
+(\#eq:gmfr)
+\end{equation}
+
+Where the sign of $b$ is the same sign as the correlation coefficient between $y$ and $\hat{y}$. This regression equation can be reversed to predict $\hat{y}$, represented by $\hat{y}^\prime{}$, as a function of $y$:
+
+\begin{equation}
+\hat{y}^\prime{} = -\frac{a}{b} + \frac{1}{by}
+(\#eq:gmfr-flip)
+\end{equation}
+
+@ji2006 use these quantities to decompose the sum of squared differences into systematic and unsystematic components, which they refer to as the systematic and unsystematic sum of product differences ($\operatorname{SPD}$). The unsystematic component of $\operatorname{SPD}$ is defined as:
+
+\begin{equation}
+\operatorname{SPD}_u = \sum_{i=1}^{n}{\left[\left(\left|\hat{y}_{i}-\hat{y}_i^\prime{}\right|\right)\left(\left|{y}_{i}-{y}_i^\prime{}\right|\right)\right]}
+(\#eq:spdu)
+\end{equation}
+
+While the systematic component is found by subtracting $\operatorname{SPD}_u$ from the sum of squared differences:
+
+\begin{equation}
+\operatorname{SPD}_{s} = \left(\sum_{i=1}^{n}{\left(\hat{y}_{i}-y_{i}\right)^{2}}\right) - \left(\sum_{i=1}^{n}{\left[\left(\left|\hat{y}_{i}-\hat{y}_i^\prime{}\right|\right)\left(\left|{y}_{i}-{y}_i^\prime{}\right|\right)\right]}\right)
+(\#eq:spds)
+\end{equation}
+
+Taking the arithmetic mean of these terms produces the unsystematic and systematic mean product difference ($\operatorname{MPD}_{u}$ and $\operatorname{MPD}_{s}$, respectively):
+
+\begin{equation}
+\operatorname{MPD}_{u} = \frac{1}{n}\left(\operatorname{SPD}_u\right)
+(\#eq:mpdu)
+\end{equation}
+
+\begin{equation}
+\operatorname{MPD}_{s} = \frac{1}{n}\left(\operatorname{SPD}_s\right)
+(\#eq:mpds)
+\end{equation}
+
+These quantities can be expressed as a ratio of MSE to represent the proportion of systematic and unsystematic disagreement between $y$ and $\hat{y}$. The square roots of $\operatorname{MPD}_{u}$ and $\operatorname{MPD}_{s}$ ($\operatorname{RMPD}_{u}$ and $\operatorname{RMPD}_{s}$, respectively) are in units of $y$ and may be useful ways to describe systematic and unsystematic disagreement in absolute units.
+
+As $\operatorname{SPD}_u$ and $\operatorname{SPD}_s$ sum to the sum of squared differences, the numerator of $\operatorname{AC}$ (Equation \@ref(eq:ac)) can then be decomposed into systematic and unsystematic components by replacing the numerator with the appropriate component of $\operatorname{SPD}$:
+
+\begin{equation}
+\operatorname{AC}_u = 1 - \frac{\operatorname{SPD}_{u}}{\sum_{i=1}^{n}{\left(\left|\bar{\hat{y}}-\bar{y}\right|+\left|\hat{y}_{i}-\bar{\hat{y}}\right|\right)\left(\left|\bar{\hat{y}}-\bar{y}\right|+\left|y_{i}-\bar{y}\right|\right)}}
+(\#eq:acu)
+\end{equation}
+
+\begin{equation}
+\operatorname{AC}_s = 1 - \frac{\operatorname{SPD}_{s}}{\sum_{i=1}^{n}{\left(\left|\bar{\hat{y}}-\bar{y}\right|+\left|\hat{y}_{i}-\bar{\hat{y}}\right|\right)\left(\left|\bar{\hat{y}}-\bar{y}\right|+\left|y_{i}-\bar{y}\right|\right)}}
+(\#eq:acs)
+\end{equation}
+
+These metrics are all implemented in \pkg{waywiser} using the infrastructure provided by \pkg{yardstick} [@yardstick]. Functions are prefixed with `ww_`, to help with autocompletion inside of code editors, and all share identical user interfaces. The main version of each metric function takes three primary arguments, namely `data` (an object inheriting the `data.frame` S3 class), `truth` (the name of the column containing $y$), and `estimate` (the name of the column containing $\hat{y}$). Both `truth` and `estimate` follow tidy evaluation rules, with the main user-noticeable effect being that these arguments accept either quoted or unquoted column identifiers. These functions return a "tibble" [@tibble] with a single row and three columns, `.metric` (containing the name of the metric), `.estimator` (containing the string "standard", for compatibility with \pkg{yardstick} and the broader tidymodels ecosystem), and `.estimate` (containing the metric estimate).
+
+```{r ww-willmott-d}
+waywiser::ww_willmott_d(data = worldclim_testing,
+                        truth = response,
+                        estimate = predictions)
+```
+
+When `data` is a grouped data frame, as produced by the `group_by()` function in \pkg{dplyr} [@dplyr], \pkg{waywiser} will calculate metrics independently for each group. In these cases, the resulting tibble will have one row per group and include the columns used to group the data alongside the standard `.metric`, `.estimator`, and `.estimate` columns:
+
+```{r grouped-willmott-d}
+worldclim_testing$group <- sample(1:2, nrow(worldclim_testing), 
+                                  replace = TRUE)
+waywiser::ww_willmott_d(data = dplyr::group_by(worldclim_testing, group),
+                        truth = response,
+                        estimate = predictions)
+```
+
+These functions additionally each have a variant, suffixed with `_vec`, which directly accepts numeric vectors to `truth` and `estimate`. These functions return a numeric vector with metric estimates.
+
+```{r ww-willmott-d-vec}
+waywiser::ww_willmott_d_vec(truth = worldclim_testing$response,
+                            estimate = worldclim_testing$predictions)
+```
+
+Internally, data frame-based functions call their `_vec` variants to calculate metrics, ensuring that identical calculations are performed (and therefore, identical results are returned) regardless of which interface is used.
+
+As these functions leverage infrastructure from the \pkg{yardstick} package, the data frame variants can be combined using the \pkg{yardstick} function `metric_set()`. This function accepts any number of metric functions as an input and returns a new function to calculate all metrics in a single call. The returned function has the same user interface as the data frame metric functions, accepting the arguments `data`, `truth`, and `estimate` and returning a tibble with the columns `.metric`, `.estimator`, and `.estimate`.
+
+```{r metric-set}
+metrics <- yardstick::metric_set(
+  waywiser::ww_willmott_d, waywiser::ww_willmott_d1,
+  waywiser::ww_willmott_dr, waywiser::ww_systematic_mse,
+  waywiser::ww_unsystematic_mse, waywiser::ww_systematic_rmse,
+  waywiser::ww_unsystematic_rmse, waywiser::ww_agreement_coefficient,
+  waywiser::ww_systematic_agreement_coefficient,
+  waywiser::ww_unsystematic_agreement_coefficient,
+  waywiser::ww_systematic_mpd, waywiser::ww_unsystematic_mpd,
+  waywiser::ww_systematic_rmpd, waywiser::ww_unsystematic_rmpd)
+print(metrics(data = worldclim_testing,
+              truth = response, estimate = predictions), n = 14)
+```
+
+## Autocorrelation metrics
+
+In addition to its set of agreement metrics, \pkg{waywiser} provides a set of functions for measuring spatial autocorrelation in model residuals. These functions provide a thin wrapper over functions provided by the \pkg{spdep} package [@spdep; @bivand2022; @applied2008], meaning that (unlike the agreement metrics) metric calculations are not implemented directly in \pkg{waywiser}. Equations in this section are largely derived from @spdep.
+
+Spatial autocorrelation metrics are designed to detect if values among neighboring observations are more related to each other than to a randomly selected observation; that is, if similar values are more clustered together or more dispersed than would be expected at random. In order to assess variable relationships between neighboring observations, it is necessary to first define which observations neighbor one another. A utility function in \pkg{waywiser}, `ww_build_neighbors()`, can be used to do so automatically for classes from the \pkg{sf} package, though it is often preferable for users to more thoughtfully calculate neighbors and provide the resulting object to functions instead. When working with polygon geometries, `ww_build_neighbors()` uses the default behavior of the `poly2nb()` function from \pkg{spdep}, defining neighbors as any polygons sharing at least one boundary point. We can visualize this using the standard "moral statistics" data set from @guerry:
+
+```{r neighbors-poly}
+#| fig-cap: Automatically calculated spatial neighbors for departments of France. Lines between department centroids indicate a neighbor relationship.
+data("guerry", package = "waywiser")
+plot(sf::st_geometry(guerry))
+plot(waywiser::ww_build_neighbors(guerry), 
+     sf::st_geometry(guerry), add = TRUE)
+```
+
+When working with point geometries, \pkg{waywiser} instead uses the `knearneigh()` and `knn2nb()` functions from \pkg{spdep} with `k = 1`, returning a list of each point's nearest neighbor.
+
+```{r plot-point-neighbors}
+#| fig-cap: Automatically calculated spatial neighbors for points from the WorldClim simulation data. Lines between points indicate a neighbor relationship.
+plot(waywiser::ww_build_neighbors(worldclim_testing),
+     sf::st_geometry(worldclim_testing))
+plot(sf::st_geometry(worldclim_testing), add = TRUE)
+```
+
+
+
+For calculations, this neighbor list object must be transformed into a matrix of spatial weights, $w$. Another utility function in \pkg{waywiser}, `ww_build_weights()`, provides a thin wrapper around the `nb2listw()` function from \pkg{spdep}, by default producing a row-standardized spatial weights matrix.
+
+```{r ww-build-weights}
+waywiser::ww_build_weights(guerry)
+```
+
+Measures of spatial autocorrelation use this matrix in computations to estimate the relationship between variables at neighboring locations. For \pkg{waywiser}, this variable is typically assumed to be the model residual, which we will refer to as $x$, so that for a given observation $y_{i}$, $x_{i} = y_{i} - \hat{y}_{i}$. By far the most popular spatial autocorrelation metric is Moran's I [@moran1950], defined as:
+
+\begin{equation}
+I = \frac{n}{W}\frac{\sum{}_{i=1}^{n}\sum{}_{j=1}^{n}w_{ij}\left(x_i-\bar{x}\right)\left(x_j-\bar{x}\right)}{\sum{}_{i=1}^{n}\left(x_i-\bar{x}\right)^2}
+(\#eq:global-moran)
+\end{equation}
+
+Where $n$ is the number of observations, $W$ the sum of all $w_{ij}$, and $i \neq j$. $I$ is generally bounded $[-1, 1]$ when using row-standardized weights matrices, with positive values significantly greater than the expected value $E(I) = -\dfrac{1}{n -1}$ indicating positive autocorrelation.
+
+@anselin1995 later expanded upon $I$, presenting a method to estimate "local" $I$ values at each observation rather than relying upon a single autocorrelation statistic to represent the entire study area:
+
+\begin{equation}
+I_{i} = \frac{\left(x_i-\bar{x}\right)\left(\sum{}_{j=1}^Nw_{ij}\left(x_j-\bar{x}\right)\right)}{m^{2}}
+(\#eq:localmoran)
+\end{equation}
+
+Where $m^2 = \dfrac{\sum{}_{i=1}^n\left(x_i-\bar{x}\right)^2}{n}$ [@spdep].
+
+A less frequently used alternative to $I$ is Geary's $c$ [@geary1954], defined as:
+
+\begin{equation}
+c = \frac{n-1}{2W}\frac{\sum{}_{i=1}^{n}\sum{}_{j=1}^{n}w_{ij}\left(x_i-x_j\right)^{2}}{\sum{}_{i=1}^{n}\left(x_i-\bar{x}\right)^2}
+(\#eq:geary-c)
+\end{equation}
+
+As with Moran's $I$, $c$ stated this way provides a single index of spatial autocorrelation across the entire study area. Values of $c$ are greater than or equal to 0, with low values relative to the expected value of 1 reflecting positive autocorrelation. @anselin1995 extended $c$ in a similar manner to $I$, providing a method to estimate local $c$ values for each observation in a data set, with further elaboration provided in @anselin2018:
+
+\begin{equation}
+c_{i} = \sum{}_{j=1}^nw_{ij}\left(x_i-x_j\right)^{2}
+(\#eq:local-c)
+\end{equation}
+
+A final metric of local spatial autocorrelation provided in \pkg{waywiser} is Getis-Ord's $G_{i}$ [@getis2010; @ord2010]. As with the other spatial autocorrelation metrics provided, the function implementing $G_{i}$ in \pkg{waywiser} is a thin wrapper over a function from \pkg{spdep}, which calculates $G_{i}$ as a standard deviate [@spdep; @getis1996local]:
+
+\begin{equation}
+Z(G_{i})=\frac{\left[\sum_{j=1}^{n}{w_{ij}x_{j}}\right]-\left[\sum_{j=1}^{n}{w_{ij}\bar{x}}_{i}\right]}{s_i\left[\frac{\left(n-1\right)\left(\sum_{j=1}^{n}{w_{ij}^{2}}\right)-\left(\sum_{j=1}^{n}{w_{ij}}\right)^{2}}{n-1}\right]^{1/2}}, i\neq j
+(\#eq:getis-ord-g)
+\end{equation}
+
+Where $s_{i} = \sqrt{\left(\left(\sum_{j=1}^{n}{x_{j}^{2}}\right)/\left(n-1\right)\right)-\left[\bar{x}_{i}\right]^{2}},i \neq j$ and $\bar{x}_i = \left(\sum_{j=1}^{n}{x_{j}}\right)/\left(n-1\right),i \neq j$. An extension of this metric, $G_{i}^{*}$ removes the requirement that $i \neq j$ by including $i$ as a neighbor of itself, resulting in the formula [@spdep; @getis1996local]:
+
+\begin{equation}
+Z(G_{i}^{*})=\frac{\left[\sum_{j=1}^{n}{w_{ij}x_{j}}\right]-\left[\left(\sum_{j=1}^{n}{w_{ij}}\right)\bar{x}^{*}\right]}{s^{*}\left[\frac{\left(n-1\right)\left(\sum_{j=1}^{n}{w_{ij}^{2}}\right)-\left(\sum_{j=1}^{n}{w_{ij}}\right)^{2}}{n-1}\right]^{1/2}}
+(\#eq:getis-ord-gstar)
+\end{equation}
+
+Where $s^{*} = \sqrt{\left(\left(\sum_{j=1}^{n}{x_{j}^{2}}\right)/n\right)-\bar{x}^{*2}}$ and $\bar{x}^{*} = \left(\sum_{j=1}^{n}{x_{j}}\right)/n$. In practice, both $G_{i}$ and $G_{i}^{*}$ generally provide similar information [@getis2010].
+
+Much as with the model agreement metrics, spatial autocorrelation metrics are implemented in \pkg{waywiser} using the infrastructure provided by \pkg{yardstick} [@yardstick], with functions prefixed with `ww_` for autocompletion. As before, these functions take `data`, `truth`, and `estimate` as arguments, and return a tibble with `.metric`, `.estimator`, and `.estimate` for columns:
+
+```{r ww-global-moran-i}
+waywiser::ww_global_moran_i(worldclim_testing,
+                            truth = response,
+                            estimate = predictions)
+```
+
+As discussed above, by default \pkg{waywiser} will automatically create the spatial weights matrix for calculations using `ww_build_weights()`. To let users alter this behavior, functions for estimating spatial autocorrelation also accept an argument, `wt`, containing either the spatial weights matrix to use in calculations or a function to create the matrix from `data`:
+
+```{r ww-global-geary-c}
+waywiser::ww_global_geary_c(worldclim_testing,
+                            truth = response,
+                            estimate = predictions,
+                            wt = waywiser::ww_build_weights)
+```
+
+As the `_vec` variants of these functions do not take an argument for `data`, \pkg{waywiser} cannot automatically create a spatial weights matrix, and one must be provided to the `wt` argument:
+
+```{r ww-global-geary-c-vec}
+waywiser::ww_global_geary_c_vec(
+  truth = worldclim_testing$response,
+  estimate = worldclim_testing$predictions,
+  wt = waywiser::ww_build_weights(worldclim_testing))
+```
+
+As previously mentioned, functions from \pkg{waywiser} are both type- and size-stable, guaranteeing that the outputs from a function will always be of a known data type and of known dimensions. For model agreement metrics and global autocorrelation statistics, this means that the output from \pkg{waywiser} will always be a tibble with one row (or, for grouped data frames, one row per group). This behavior changes for local autocorrelation metrics, however: rather than returning a single row, local autocorrelation functions return a tibble with as many rows as there are observations in `data` (or values in `truth` and `estimate`, for the `_vec` variants). These estimates are ordered in the same order as the input data frame, meaning that the outputs from these functions can be used with `cbind()` to associate an autocorrelation estimate with its corresponding observation.
+
+```{r ww-local-moran-i}
+waywiser::ww_local_moran_i(worldclim_testing,
+                           truth = response,
+                           estimate = predictions) |> head(2)
+```
+
+Autocorrelation metrics are useful for informing qualitative assessments of model performance, with local statistics in particular being more useful for data exploration tasks than inference [@anselin2018]. For instance, when evaluating our linear model fit to simulation data, visually inspecting local $I$ statistics (plotted in Figure \@ref(fig:visualize-local-metrics) using \pkg{ggplot2} [@ggplot2] and \pkg{patchwork} [@patchwork]) indicate notable clustering of residuals in southern India. Local $c$ statistics meanwhile highlight the same location as an area of concern, but also highlight several other regions in southeastern Asia, as well as areas in western Africa and South America.
+
+```{r visualize-local-metrics, echo=FALSE}
+#| fig-cap: Local $I$ and $c$ values for model residuals from a linear model fit to the WorldClim simulation data.
+worldclim_testing$local_i <- waywiser::ww_local_moran_i_vec(
+  truth = worldclim_testing$response, 
+  estimate = worldclim_testing$predictions,
+  wt = waywiser::ww_build_weights(worldclim_testing)
+)
+worldclim_testing$local_c <- waywiser::ww_local_geary_c_vec(
+  truth = worldclim_testing$response, 
+  estimate = worldclim_testing$predictions,
+  wt = waywiser::ww_build_weights(worldclim_testing)
+)
+
+i_graph <- ggplot2::ggplot(
+  worldclim_testing[order(worldclim_testing$local_i), ], 
+  ggplot2::aes(color = local_i)
+) + 
+  ggplot2::geom_sf() + 
+  ggplot2::scale_color_distiller(
+    "Local I",
+    palette = "Reds",
+    direction = 1
+  )
+
+c_graph <- ggplot2::ggplot(
+  worldclim_testing[order(worldclim_testing$local_c), ], 
+  ggplot2::aes(color = local_c)
+) + 
+  ggplot2::geom_sf() + 
+  ggplot2::scale_color_distiller(
+    "Local C",
+    palette = "Reds",
+    direction = 1
+  )
+
+i_graph / c_graph
+```
+
+The presence of spatial autocorrelation in model residuals suggests a misspecification in the underlying model. Similarities between regions exhibiting residual autocorrelation may help to identify missing predictors, or to explain model weaknesses.
+
+# Multi-scale assessment {#sec-multi-scale}
+
+Spatial models are often used to predict the most fine-grain scale of interest, with predictions then aggregated to broader scales as necessary. For instance, models of forest aboveground biomass are often used to predict biomass at individual measurement plots, and then aggregated to provide biomass estimates at regional or landscape scales [@johnson2022; @blackard2008]. Similarly, models of nematode biomass are used to estimate biomass at fine-grained resolutions, with predictions then aggregated to produce global estimates [@vandenhoogen2019]. Unfortunately, model performance estimates cannot be assumed to be consistent across spatial scales [@nelson2009]. As a result, separate performance metrics must be calculated for each relevant scale of interest.
+
+To this end, @riemann2010 introduced an assessment protocol for evaluating model performance across multiple scales of aggregation. This method requires calculating multiple performance estimates from model predictions and measured values aggregated to multiple grids of regular polygons, in order to assess how model performance varies spatially and across multiple scales. This approach is implemented in \pkg{waywiser} as the function `ww_multi_scale()`. As with the model assessment functions already described, this function accepts the arguments `data`, `truth`, and `estimate`, as well as a new argument `metrics` which accepts lists of metric functions (or outputs from `yardstick::metric_set()`) to calculate at each scale of aggregation. Additional arguments can be passed via `...` to `sf::st_make_grid()` in order to assess predictions aggregated to a grid of evenly spaced regular polygons. For example, the following code evaluates the RMSE and Willmott's $d_1$ values for the WorldClim model aggregated using a 2-by-2, 5-by-5, and 10-by-10 grid:
+
+```{r ww-multi-scale}
+(multi_scale_output <- waywiser::ww_multi_scale(
+  worldclim_testing,
+  truth = response,
+  estimate = predictions,
+  metrics = list(yardstick::rmse, waywiser::ww_willmott_d1), 
+  n = c(2, 5, 10)))
+```
+
+Note that this function requires `data` be an `sf` object with point geometries from the \pkg{sf} package, in order to ensure that the data's coordinate reference system and units are properly handled when assigning observations to each grid cell.
+
+The output from `ww_multi_scale()` will typically have one row for each combination of metric and aggregation level. As with functions for model agreement metrics, however, if `data` is a grouped data frame produced by `group_by()`, this function will instead calculate metrics for each group independently, resulting in an output with one row per combination of unique grouping, metric, and aggregation:
+
+```{r group-multi-scale}
+waywiser::ww_multi_scale(
+  dplyr::group_by(worldclim_testing, group),
+  truth = response,
+  estimate = predictions,
+  metrics = list(waywiser::ww_willmott_d1), 
+  n = 2)
+```
+
+
+In addition to the familiar `.metric`, `.estimator`, and `.estimate` columns, `ww_multi_scale()` returns three new columns. The `.grid_args` column is a list of tibbles from the \pkg{tibble} package [@tibble], containing the arguments used to construct the grid via `sf::st_make_grid()`. This column can be unpacked, for example via the `unnest()` function in \pkg{tidyr} [@tidyr], to add these arguments as columns to the output table:
+
+```{r grid-args}
+tidyr::unnest(multi_scale_output, .grid_args)
+```
+
+This is particularly convenient when visualizing the outputs from this process:
+
+```{r vis-grid-args}
+#| fig-cap: RMSE and Willmott $d_{1}$ estimates for a linear model fit to the WorldClim simulation data, aggregated to multiple spatial scales. The "number of grid cells" refers to the number of partitions data was aggregated into; more grid cells indicate a finer-grained level of aggregation.
+tidyr::unnest(multi_scale_output, .grid_args) |> 
+  ggplot2::ggplot(ggplot2::aes(n^2, .estimate, color = .metric)) + 
+  ggplot2::geom_line() +
+  ggplot2::scale_x_continuous(
+    name = "Number of grid cells",
+    breaks = (c(2, 5, 10)^2)) + 
+  ggplot2::facet_wrap(~ .metric)
+```
+
+The `.grid` column meanwhile is a list of `sf` objects, each containing the actual polygons used to aggregate predictions and observed values before calculating metrics. These objects also contain the aggregated values of `.truth` and `.estimate`, as well as a count of the number of non-missing observations for each of `.truth` and `.estimate` contained in the polygon.
+
+```{r grid}
+multi_scale_output$.grid[[2]]
+```
+
+This data is often useful to visualize the spatial distribution of error:
+
+```{r vis-grid}
+#| fig-cap: Model errors after aggregating predictions and observed values to a 10-by-10 grid.
+multi_scale_output$.grid[[6]] |> 
+  tidyr::drop_na() |> 
+  ggplot2::ggplot(ggplot2::aes(fill = .truth - .estimate)) + 
+  ggplot2::geom_sf() + 
+  ggplot2::scale_fill_distiller(palette = "YlOrRd", direction = 1)
+```
+
+The final `.notes` column contains diagnostic information, including information on which (if any) observations fell outside the boundaries of the grid.
+
+When not all use cases for a model are known, this approach of systematically aggregating predictions and observed values to grids of regular polygons can help provide useful performance estimates for future users who will aggregate predictions to their boundaries of interest. If future use cases are well understood, however, it is often more useful to assess model performance when aggregating to those boundaries directly; for instance, it often makes sense to evaluate model performance when aggregating predictions to administrative boundaries such as along town or regional polygons, in addition to other assessments.
+
+For this reason, `ww_multi_scale()` allows users to provide their own pre-computed polygons to the `grids` argument. Predictions and observed values will then be aggregated to the provided polygons. Other than this, the function interface and returned values are identical:
+
+```{r custom-grids}
+waywiser::ww_multi_scale(
+  worldclim_testing,
+  truth = response,
+  estimate = predictions,
+  metrics = list(yardstick::rmse, waywiser::ww_willmott_d1),
+  grids = list(sf::st_make_grid(worldclim_testing)))
+```
+
+Note that when using pre-computed polygons `.grid_args` is a tibble with 0 rows, as no arguments were passed to create the grid.
+
+A challenge with requiring `sf` objects for input data is that it requires all observations be loaded into memory before any aggregations can be calculated, which poses problems for modeling efforts with large numbers of relatively small observation units such as high-resolution landscape or global models. Such efforts typically rely on raster formats for efficiency, and avoid transforming rasters into vector representations whenever possible. As such, `ww_multi_scale()` can also be used to calculate performance metrics using raster inputs. If `data` is `NULL` or missing, users can provide `SpatRaster` objects from the \pkg{terra} package [@terra] to both `truth` and `estimate` in order to perform a multi-scale assessment. Aggregation for this method is performed using the \pkg{exactextractr} package [@exactextractr] for memory and computational efficiency. Other than the slightly different interface and using \pkg{exactextractr} for aggregation, this method of `ww_multi_scale()` works identically and returns an identical output to the `sf` method.
+
+```{r terra-inputs}
+r1 <- matrix(nrow = 10, ncol = 10)
+r1[] <- 1
+r1 <- terra::rast(r1)
+r2 <- matrix(nrow = 10, ncol = 10)
+r2[] <- 2
+r2 <- terra::rast(r2)
+waywiser::ww_multi_scale(truth = r1, estimate = r2, n = 1)
+```
+
+# Area of applicability {#sec-aoa}
+
+A final set of functions in \pkg{waywiser} aim to help users assess if their model can be trusted to generalize to new observations. By calculating how similar new observations are in predictor space to the data used to train a model, it is possible to determine if new observations are within the "applicability domain" of a model and are likely to be well-represented by the model's predictions [@netzeva2005]. While these methods are not explicitly spatial, the presence of spatial autocorrelation in model predictors makes it more likely that using a model to extrapolate geographically will also require the model to extrapolate in predictor space, producing worse predictions as the extrapolation distance increases. As such, these techniques are particularly useful when predicting into regions with little data for model training and assessment.
+
+@meyer2021 introduce a new applicability domain methodology built upon a "dissimilarity index", $DI$, representing the Euclidean distance in predictor space between a point and its nearest neighbor scaled by the average such distance in the data used to train a model. Using variables which have been scaled and centered, then weighted by variable importance scores, the $DI$ for an observation $k$ is calculated as:
+
+\begin{equation}
+\begin{aligned}
+d\left(a, b\right) &= \sqrt{\sum{}_{i=1}^{p}\left(a_i - b_i\right)^2}\\
+d_k &= \operatorname*{arg\,min}_{z}d(k, z)\\
+DI_k &= \dfrac{d_k}{\bar{d}}
+\end{aligned}
+(\#eq:di)
+\end{equation}
+
+Where $p$ is the number of predictors used in fitting a model, $a_i$ and $b_i$ the scaled and weighted predictor values for observations $a$ and $b$, $z$ observations in the data used to train the model, and $\bar{d}$ the mean $d$ for all pairs of observations in the data used to train the model.
+
+These $DI$ values are useful in their own right to characterize the similarity of new observations to those used to train a model, and increasing $DI$ often correlates with increasing prediction error [@meyer2021]. @meyer2021 also propose a thresholding method to calculate a boolean "area of applicability" (AOA), defining points with a $DI_k$ greater than the 75th percentile $DI$ value plus 1.5 times the IQR of $DI$ values in training data as beyond the model's AOA, and therefore likely to have greater prediction error than reported for test set observations.
+
+Functions to calculate $DI$ and AOA were first implemented in \pkg{CAST} [@CAST], with a focus on supporting models fit using the \pkg{caret} modeling framework [@caret]. In \pkg{waywiser}, the `ww_area_of_applicability()` function provides a framework-agnostic interface for calculating $DI$ and AOA, with additional support for workflows using the tidymodels framework (Section \@ref(sec-interop)) [@tidymodels]. The interface of `ww_area_of_applicability()` is inspired by the \pkg{applicable} package [@applicable], and mimics common model-fitting functions such as `lm()`. A standard call involves providing the model formula used, training and testing data sets, and variable importance scores:
+
+```{r aoa-formula}
+(aoa <- waywiser::ww_area_of_applicability(
+  formula(worldclim_model),
+  worldclim_training,
+  testing = worldclim_testing,
+  importance = vip::vi_model(worldclim_model)))
+```
+
+An equivalent call removes the formula argument, and instead passes the training and testing data, subset to include only the variables used to fit the model:
+
+```{r aoa-df}
+waywiser::ww_area_of_applicability(
+  as.data.frame(worldclim_training)[1:4],
+  testing = as.data.frame(worldclim_testing)[1:4],
+  importance = vip::vi_model(worldclim_model))
+```
+
+As demonstrated, `ww_area_of_applicability()` natively accepts variable importance scores returned by the \pkg{vip} package [@vip]. The `importance` argument will also accept any data frame with columns named `term` and `estimate`, containing (respectively) the variable name and importance estimate, allowing the use of any method for calculating variable importance scores.
+
+Unlike other functions in \pkg{waywiser}, the output from `ww_area_of_applicability()` is a custom class "`ww_area_of_applicability`" which inherits from the "`hardhat_model`" and "`hardhat_scalar`" classes from the \pkg{hardhat} package. This class can be thought of as being a model object, like that returned by `lm()`, and as such implements a `predict()` method for calculating $DI$ and AOA for new observations. This function returns a tibble with two columns: `di`, containing $DI$ values for each new observation, and `aoa`, a boolean indicating if the observation is within (`TRUE`) or outside of (`FALSE`) the AOA:
+
+```{r aoa-predict}
+predict(aoa, worldclim_testing)
+```
+
+Observations with missing values will have an `NA` for both `di` and `aoa`, guaranteeing that the number of rows returned will always match the number of rows in the `newdata` object. As such, these predictions can be safely combined with predictor values via `cbind()` and similar functions, making visualization and analysis easier.
+
+```{r aoa-graph}
+#| fig-cap: $DI$ and AOA for for a linear model fit to the WorldClim simulation data. Areas with a higher $DI$ are poorly represented in the data used to train the model, and are likely to fall outside the model's AOA (`FALSE` in the lower graph).
+library("patchwork")
+(cbind(worldclim_testing, predict(aoa, worldclim_testing)) |> 
+    ggplot2::ggplot(ggplot2::aes(color = di)) + 
+    ggplot2::geom_sf(alpha = 0.7) + 
+    ggplot2::scale_color_distiller(palette = "Reds", direction = 1)) /
+  (cbind(worldclim_testing, predict(aoa, worldclim_testing)) |> 
+     ggplot2::ggplot(ggplot2::aes(color = aoa)) + 
+     ggplot2::geom_sf(alpha = 0.7))
+```
+
+Finally, `ww_area_of_applicability()` also supports calculating the AOA using data splits from cross-validation, as opposed to distinct training and testing sets. Any `rset` object, such as those produced by the \pkg{rsample} or \pkg{spatialsample} packages [@rsample; @spatialsample], can be used to calculate the AOA. This method calculates $d_k$ as the distance between a point in the assessment set and its nearest neighbor in the analysis set. A full demonstration is included in Section \@ref(sec-interop).
+
+When using cross-validation splits in the place of test set data, \pkg{waywiser} differs slightly from the implementation in \pkg{CAST}. Whereas \pkg{CAST} performs scaling and centering using all observations, and calculates $\bar{d}$ as the mean distance between all observations across all folds, \pkg{waywiser} rescales the analysis and assessment sets for each fold of cross validation separately, and calculates a per-fold $\bar{d}$ as the mean distance between observations in only the analysis set. These changes aim to limit data leakage between the analysis and assessment data sets, ensuring that assessment data is not used to determine parameters for centering and scaling analysis data or to calculate $\bar{d}$. In practice, this means that \pkg{waywiser} calculates a somewhat higher $d_k$ than \pkg{CAST}, which results in a slightly higher $DI_k$ and threshold value. For predictions, \pkg{waywiser} scales and centers the entire data set as a whole, and sets $\bar{d}$ to the mean $\bar{d}$ across folds, under the assumption that the final model in use has been retrained using the entire data set.
+
+# Interoperability {#sec-interop}
+
+As previous sections have demonstrated, \pkg{waywiser} is designed to be useful for most spatial modeling workflows, no matter what models or frameworks are used. Functions in \pkg{waywiser} are size- and type-stable, returning outputs of the same data type and predictable dimensions regardless of the input arguments used. Functions rely upon well-established data types for inputs and outputs, using standard data frames and vectors where appropriate and relying on the popular \pkg{sf} package for spatial data classes. By relying upon standard classes and returning predictable outputs, \pkg{waywiser} aims to integrate easily with as many modeling workflows as possible.
+
+However, \pkg{waywiser} is particularly well suited for workflows leveraging the tidymodels ecosystem of modeling packages [@tidymodels]. These packages provide a consistent, user-friendly interface for common modeling tasks, with the aim of making it easy for users to follow statistical best practices simply by using package functions in the most straightforward way. Functions in \pkg{waywiser} are designed to be automatically compatible with tidymodels packages. To demonstrate this, we will first split our data into folds for cross-validation, using a 10-fold spatial clustering cross-validation approach, as implemented in \pkg{spatialsample} [@spatialsample]:
+
+```{r spatialsample}
+library("tidymodels") |> 
+  suppressPackageStartupMessages()
+(worldclim_resamples <- 
+    spatialsample::spatial_clustering_cv(worldclim_training))
+```
+
+Each row of `worldclim_resamples` contains a single cross-validation iteration, with data split into analysis and assessment sets based on spatial location; each observation is assigned to precisely one assessment set. We can use functions from \pkg{workflows}, \pkg{parsnip}, \pkg{tune}, and \pkg{yardstick} from the tidymodels ecosystem to then fit separate linear models to each of these analysis sets, and evaluate them against their respective assessment set [@workflows; @parsnip; @tune; @yardstick]. Note that we can easily integrate model assessment functions from \pkg{waywiser} into this workflow, as a result of these functions extending infrastructure from \pkg{yardstick}:
+
+```{r fit-resamples}
+workflow(response ~ bio2 + bio10 + bio13 + bio19) |> 
+  add_model(linear_reg()) |> 
+  fit_resamples(worldclim_resamples,
+                metrics = metric_set(rmse, mae, waywiser::ww_willmott_d1)) |> 
+  collect_metrics()
+```
+
+We can similarly use model assessment functions from \pkg{waywiser} for other purposes, for instance to automatically evaluate hyperparameters for a random forest model using the \pkg{dials} package [@dials]:
+
+```{r tune-grid}
+rf_workflow <- workflow(response ~ bio2 + bio10 + bio13 + bio19) |> 
+  add_model(rand_forest("regression", mtry = tune(), 
+                        trees = tune(), min_n = tune()))
+rf_parameters <- extract_parameter_set_dials(rf_workflow) |> 
+  finalize(worldclim_resamples)
+rf_res <- rf_workflow |> 
+  tune_grid(grid = grid_latin_hypercube(rf_parameters, size = 9),
+            resamples = worldclim_resamples,
+            metrics = metric_set(waywiser::ww_willmott_d1))
+collect_metrics(rf_res)
+select_best(rf_res)
+```
+
+Having found the optimal hyperparameters for the random forest, we can then fit our tuned model to our full set of training data and use functions from \pkg{yardstick} and \pkg{waywiser} to evaluate predictions against the test set:
+
+```{r auto-tune}
+tuned_rf_workflow <- rf_workflow |> 
+  finalize_workflow(select_best(rf_res)) |> 
+  fit(worldclim_training)
+worldclim_testing$predictions <- predict(tuned_rf_workflow,
+                                         worldclim_testing)$.pred
+metrics <- metric_set(waywiser::ww_willmott_d1,
+                      waywiser::ww_agreement_coefficient)
+metrics(worldclim_testing, response, predictions)
+```
+
+Finally, as alluded to in Section \@ref(sec-aoa), we may also use `ww_area_of_applicability()` with our cross-validation object to estimate the AOA of this random forest. In order to do so, we will first estimate our variable importance scores through `vip::vi_permute()`:
+
+```{r rf-importance}
+d1_wrapper <- function(actual, predicted) {
+  waywiser::ww_willmott_d1_vec(actual, predicted)
+}
+pred_wrapper <- function(object, newdata) {
+  object |> 
+    predict(newdata) |> 
+    ranger::predictions()
+}
+importance <- vip::vi_permute(
+  extract_fit_engine(tuned_rf_workflow),
+  train = as.data.frame(worldclim_training)[c(1:4, 6)],
+  target = "response",
+  metric = d1_wrapper,
+  smaller_is_better = FALSE,
+  pred_wrapper = pred_wrapper)
+```
+
+We are then able to calculate our area of applicability by passing our cross-validation object, model formula, and importance scores to `ww_area_of_applicability()`:
+
+```{r cv-aoa}
+waywiser::ww_area_of_applicability(
+  worldclim_resamples,
+  response ~ bio2 + bio10 + bio13 + bio19,
+  importance = importance)
+```
+
+In this way, \pkg{waywiser} functions are designed to integrate naturally with packages in the tidymodels ecosystem, extending the consistent user-friendly interfaces of those packages for spatial model assessment tasks. However, as emphasized at the start of this section, \pkg{waywiser} functions are designed to be framework-agnostic and also accept standard data frames and vectors as inputs, while returning standard data frames and vectors as outputs wherever possible. In this way, \pkg{waywiser} aims to be maximally interoperable with as many modeling workflows as possible.
+
+# Conclusion
+
+The \pkg{waywiser} package provides an ergonomic toolkit for assessing spatial models, with a focus on providing a consistent interface to multiple well-established assessment methods. Functions provided by \pkg{waywiser} include a number of model assessment metrics, an approach for assessing model performance when aggregating predictions across multiple spatial scales, and an approach for calculating the applicability domain of a model. These functions accept and, where possible, return values as standard data frames and vectors, making them compatible with a wide swath of modeling workflows. Additional features make it particularly easy to use \pkg{waywiser} in combination with packages from the tidymodels ecosystem. Future directions for the package will include the addition of new assessment metrics and computational speedups. Release versions of \pkg{waywiser} are available from the Comprehensive \proglang{R} Archive Network (CRAN) at \url{https://CRAN.R-project.org/package=waywiser}, while development versions may be downloaded from GitHub at \url{https://github.com/ropensci/waywiser}.
+
+# Acknowledgments {.unnumbered}
+
+Initial development of \pkg{waywiser} was supported by Posit, PBC. Version 0.3.0 of \pkg{waywiser} was reviewed for rOpenSci by Dr. Virgilio Gómez-Rubio and Dr. Jakub Nowosad, whose feedback greatly improved the package. Lucas Johnson provided valuable feedback on the area of applicability implementation and the multi-scale assessment workflow.
+
+# References {.unnumbered}
