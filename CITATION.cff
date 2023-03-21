@@ -8,7 +8,8 @@ message: 'To cite package "waywiser" in publications use:'
 type: software
 license: MIT
 title: 'waywiser: Ergonomic Methods for Assessing Spatial Models'
-version: 0.2.0.9000
+version: 0.3.0.9000
+doi: 10.48550/arXiv.2303.11312
 abstract: 'Assessing predictive models of spatial data can be challenging, both because
   these models are typically built for extrapolating outside the original region represented
   by training data and due to potential spatially structured errors, with "hot spots"
@@ -32,15 +33,14 @@ authors:
   email: mike.mahoney.218@gmail.com
   orcid: https://orcid.org/0000-0003-2402-304X
 preferred-citation:
-  type: manual
+  type: generic
   title: 'waywiser: Ergonomic Methods for Assessing Spatial Models'
   authors:
   - family-names: Mahoney
-    given-names: Michael
-    email: mike.mahoney.218@gmail.com
-    orcid: https://orcid.org/0000-0003-2402-304X
-  notes: R package version 0.2.0.9000
-  url: https://CRAN.R-project.org/package=waywiser
+    given-names: Michael J
+  year: '2023'
+  doi: 10.48550/arXiv.2303.11312
+  url: https://arxiv.org/abs/2303.11312
 repository: https://CRAN.R-project.org/package=waywiser
 repository-code: https://github.com/ropensci/waywiser
 url: https://docs.ropensci.org/waywiser/
@@ -210,10 +210,10 @@ references:
   authors:
   - family-names: Henry
     given-names: Lionel
-    email: lionel@rstudio.com
+    email: lionel@posit.co
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   year: '2023'
 - type: software
   title: sf
@@ -261,7 +261,8 @@ references:
   authors:
   - family-names: Müller
     given-names: Kirill
-    email: krlmlr+r@mailbox.org
+    email: kirill@cynkra.com
+    orcid: https://orcid.org/0000-0002-1416-3412
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
@@ -297,7 +298,6 @@ references:
     given-names: Emil
     email: emil.hvitfeldt@rstudio.com
     orcid: https://orcid.org/0000-0002-0679-1945
-  version: '> 1.1.0'
   year: '2023'
 - type: software
   title: applicable

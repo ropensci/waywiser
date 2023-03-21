@@ -4,17 +4,17 @@
   "identifier": "waywiser",
   "description": "Assessing predictive models of spatial data can be challenging, both because these models are typically built for extrapolating outside the original region represented by training data and due to potential spatially structured errors, with \"hot spots\" of higher than expected error clustered geographically due to spatial structure in the underlying data. Methods are provided for assessing models fit to spatial data, including approaches for measuring the spatial structure of model errors, assessing model predictions at multiple spatial scales, and evaluating where predictions can be made safely. Methods are particularly useful for models fit using the 'tidymodels' framework. Methods include Moran's I ('Moran' (1950) <doi:10.2307/2332142>), Geary's C ('Geary' (1954) <doi:10.2307/2986645>), Getis-Ord's G ('Ord' and 'Getis' (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>), agreement coefficients from 'Ji' and Gallo (2006) (<doi: 10.14358/PERS.72.7.823>), agreement metrics from 'Willmott' (1981) (<doi: 10.1080/02723646.1981.10642213>) and 'Willmott' 'et' 'al'. (2012) (<doi: 10.1002/joc.2419>), an implementation of the area of applicability methodology from 'Meyer' and 'Pebesma' (2021) (<doi:10.1111/2041-210X.13650>), and an implementation of multi-scale assessment as described in 'Riemann' 'et' 'al'. (2010) (<doi:10.1016/j.rse.2010.05.010>).",
   "name": "waywiser: Ergonomic Methods for Assessing Spatial Models",
-  "relatedLink": ["https://docs.ropensci.org/waywiser", "https://CRAN.R-project.org/package=waywiser"],
+  "relatedLink": ["https://docs.ropensci.org/waywiser/", "https://CRAN.R-project.org/package=waywiser"],
   "codeRepository": "https://github.com/ropensci/waywiser",
   "issueTracker": "https://github.com/ropensci/waywiser/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.0.9000",
+  "version": "0.3.0.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.2 Patched (2022-11-10 r83330)",
+  "runtimePlatform": "R version 4.2.3 (2023-03-15)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -42,13 +42,13 @@
   "copyrightHolder": [
     {
       "@type": "Organization",
-      "name": "RStudio"
+      "name": "Posit Software, PBC"
     }
   ],
   "funder": [
     {
       "@type": "Organization",
-      "name": "RStudio"
+      "name": "Posit Software, PBC"
     }
   ],
   "maintainer": [
@@ -108,6 +108,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=covr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "exactextractr",
+      "name": "exactextractr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=exactextractr"
     },
     {
       "@type": "SoftwareApplication",
@@ -171,6 +183,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "rsample",
+      "name": "rsample",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rsample"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "spatialsample",
       "name": "spatialsample",
       "provider": {
@@ -183,15 +207,15 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "spelling",
-      "name": "spelling",
+      "identifier": "terra",
+      "name": "terra",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=spelling"
+      "sameAs": "https://CRAN.R-project.org/package=terra"
     },
     {
       "@type": "SoftwareApplication",
@@ -290,6 +314,7 @@
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
+      "version": ">= 1.1.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -384,18 +409,6 @@
     },
     "10": {
       "@type": "SoftwareApplication",
-      "identifier": "rsample",
-      "name": "rsample",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=rsample"
-    },
-    "11": {
-      "@type": "SoftwareApplication",
       "identifier": "sf",
       "name": "sf",
       "version": ">= 1.0-0",
@@ -407,7 +420,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sf"
     },
-    "12": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "spdep",
       "name": "spdep",
@@ -420,12 +433,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=spdep"
     },
-    "13": {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "stats",
       "name": "stats"
     },
-    "14": {
+    "13": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -437,7 +450,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "15": {
+    "14": {
       "@type": "SoftwareApplication",
       "identifier": "tidyselect",
       "name": "tidyselect",
@@ -449,7 +462,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyselect"
     },
-    "16": {
+    "15": {
       "@type": "SoftwareApplication",
       "identifier": "yardstick",
       "name": "yardstick",
@@ -463,20 +476,23 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "10709.331KB",
+  "fileSize": "8892.597KB",
   "citation": [
     {
-      "@type": "SoftwareSourceCode",
+      "@type": "CreativeWork",
+      "datePublished": "2023",
       "author": [
         {
           "@type": "Person",
-          "givenName": "Michael",
+          "givenName": ["Michael", "J"],
           "familyName": "Mahoney"
         }
       ],
-      "name": "{waywiser}: Ergonomic Methods for Assessing Spatial Models",
-      "url": "https://CRAN.R-project.org/package=waywiser",
-      "description": "R package version 0.2.0.9000"
+      "name": "waywiser: Ergonomic Methods for Assessing Spatial Models",
+      "identifier": "10.48550/arXiv.2303.11312",
+      "url": "https://arxiv.org/abs/2303.11312",
+      "@id": "https://doi.org/10.48550/arXiv.2303.11312",
+      "sameAs": "https://doi.org/10.48550/arXiv.2303.11312"
     }
   ],
   "releaseNotes": "https://github.com/ropensci/waywiser/blob/master/NEWS.md",

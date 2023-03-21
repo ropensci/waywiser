@@ -1,16 +1,12 @@
-citHeader("To cite waywiser in publications please use:")
-
-year <- sub("-.*", "", meta$Date)
-note <- sprintf("R package version %s", meta$Version)
-
-bibentry(bibtype = "Manual",
-         title = "{waywiser}: Ergonomic Methods for Assessing Spatial Models",
-         author = person("Michael", "Mahoney"),
-         year = year,
-         note = note,
-         url = "https://CRAN.R-project.org/package=waywiser")
-
- textVersion = paste0("Michael J Mahoney, (", year, ").",
-  " waywiser: Ergonomic Methods for Assessing Spatial Models. ",
-  note, ".",
-  " https://CRAN.R-project.org/package=waywiser")
+bibentry(
+  bibtype = "Misc",
+  title="waywiser: Ergonomic Methods for Assessing Spatial Models",
+  author="Michael J Mahoney",
+  year="2023",
+  eprint="2303.11312",
+  archivePrefix="arXiv",
+  primaryClass="cs.MS",
+  doi = "10.48550/arXiv.2303.11312",
+  url = "https://arxiv.org/abs/2303.11312",
+  textVersion = "Mahoney M. J. (2023). waywiser: Ergonomic Methods for Assessing Spatial Models. arXiv:2303.11312 [cs.MS]. https://doi.org/10.48550/arXiv.2303.11312",
+         mheader = "To cite spatialsample in publications please use:")
