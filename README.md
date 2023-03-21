@@ -167,22 +167,26 @@ website!](https://docs.ropensci.org/waywiser/)
 
 To cite waywiser in publications please use:
 
-> Mahoney, M. J. (2022). waywiser: Ergonomic Methods for Assessing
-> Spatial Models. R package version 0.2.0,
-> <https://CRAN.R-project.org/package=waywiser>.
+Mahoney M. J. (2023). waywiser: Ergonomic Methods for Assessing Spatial
+Models. arXiv:2303.11312 \[cs.MS\].
+<https://doi.org/10.48550/arXiv.2303.11312>
 
 A BibTeX entry for LaTeX users is
 
 ``` bibtex
-
-  @Manual{,
-    title = {{waywiser}: Ergonomic Methods for Assessing Spatial Models},
-    author = {Michael Mahoney},
-    year = 2022,
-    note = {R package version 0.2.0},
-    url = {https://CRAN.R-project.org/package=waywiser},
+  @Misc{,
+    title = {waywiser: Ergonomic Methods for Assessing Spatial Models},
+    author = {Michael J Mahoney},
+    year = {2023},
+    eprint = {2303.11312},
+    archiveprefix = {arXiv},
+    primaryclass = {cs.MS},
+    doi = {10.48550/arXiv.2303.11312},
+    url = {https://arxiv.org/abs/2303.11312},
   }
 ```
+
+See `citation("waywiser")` for the most up-to-date citation information.
 
 ## Contributing
 
