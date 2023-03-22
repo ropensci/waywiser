@@ -529,9 +529,7 @@ standardize_and_weight <- function(dat, sds, means, importance) {
 calc_d_bar <- function(training) {
   # 2.4 Dissimilarity index
   # Find the mean nearest neighbor distance between training points:
-  dists <- fields::rdist(training)
-  diag(dists) <- NA
-  Matrix::mean(dists, na.rm = TRUE)
+  d_bar(as.matrix(training))
 }
 
 #' Calculate di
