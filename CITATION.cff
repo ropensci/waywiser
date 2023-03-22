@@ -8,7 +8,8 @@ message: 'To cite package "waywiser" in publications use:'
 type: software
 license: MIT
 title: 'waywiser: Ergonomic Methods for Assessing Spatial Models'
-version: 0.2.0.9000
+version: 0.3.0.9000
+doi: 10.48550/arXiv.2303.11312
 abstract: 'Assessing predictive models of spatial data can be challenging, both because
   these models are typically built for extrapolating outside the original region represented
   by training data and due to potential spatially structured errors, with "hot spots"
@@ -32,18 +33,17 @@ authors:
   email: mike.mahoney.218@gmail.com
   orcid: https://orcid.org/0000-0003-2402-304X
 preferred-citation:
-  type: manual
+  type: generic
   title: 'waywiser: Ergonomic Methods for Assessing Spatial Models'
   authors:
   - family-names: Mahoney
-    given-names: Michael
-    email: mike.mahoney.218@gmail.com
-    orcid: https://orcid.org/0000-0003-2402-304X
-  notes: R package version 0.2.0.9000
-  url: https://CRAN.R-project.org/package=waywiser
+    given-names: Michael J
+  year: '2023'
+  doi: 10.48550/arXiv.2303.11312
+  url: https://arxiv.org/abs/2303.11312
 repository: https://CRAN.R-project.org/package=waywiser
 repository-code: https://github.com/ropensci/waywiser
-url: https://docs.ropensci.org/waywiser
+url: https://docs.ropensci.org/waywiser/
 contact:
 - family-names: Mahoney
   given-names: Michael
@@ -94,6 +94,7 @@ references:
     email: davis@posit.co
     orcid: https://orcid.org/0000-0003-4777-038X
   year: '2023'
+  version: '>= 1.1.0'
 - type: software
   title: fields
   abstract: 'fields: Tools for Spatial Data'
@@ -209,36 +210,7 @@ references:
   authors:
   - family-names: Henry
     given-names: Lionel
-    email: lionel@rstudio.com
-  - family-names: Wickham
-    given-names: Hadley
-    email: hadley@rstudio.com
-  year: '2023'
-- type: software
-  title: rsample
-  abstract: 'rsample: General Resampling Infrastructure'
-  notes: Imports
-  url: https://rsample.tidymodels.org
-  repository: https://CRAN.R-project.org/package=rsample
-  authors:
-  - family-names: Frick
-    given-names: Hannah
-    email: hannah@posit.co
-    orcid: https://orcid.org/0000-0002-6049-5258
-  - family-names: Chow
-    given-names: Fanny
-    email: fannybchow@gmail.com
-  - family-names: Kuhn
-    given-names: Max
-    email: max@posit.co
-  - family-names: Mahoney
-    given-names: Michael
-    email: mike.mahoney.218@gmail.com
-    orcid: https://orcid.org/0000-0003-2402-304X
-  - family-names: Silge
-    given-names: Julia
-    email: julia.silge@posit.co
-    orcid: https://orcid.org/0000-0002-3671-836X
+    email: lionel@posit.co
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
@@ -289,7 +261,8 @@ references:
   authors:
   - family-names: Müller
     given-names: Kirill
-    email: krlmlr+r@mailbox.org
+    email: kirill@cynkra.com
+    orcid: https://orcid.org/0000-0002-1416-3412
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
@@ -379,6 +352,16 @@ references:
     email: james.f.hester@gmail.com
   year: '2023'
 - type: software
+  title: exactextractr
+  abstract: 'exactextractr: Fast Extraction from Raster Datasets using Polygons'
+  notes: Suggests
+  url: https://isciences.gitlab.io/exactextractr/
+  repository: https://CRAN.R-project.org/package=exactextractr
+  authors:
+  - name: Daniel Baston
+    email: dbaston@isciences.com
+  year: '2023'
+- type: software
   title: ggplot2
   abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
   notes: Suggests
@@ -387,7 +370,7 @@ references:
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
     orcid: https://orcid.org/0000-0003-4757-117X
   - family-names: Chang
     given-names: Winston
@@ -396,7 +379,7 @@ references:
     given-names: Lionel
   - family-names: Pedersen
     given-names: Thomas Lin
-    email: thomas.pedersen@rstudio.com
+    email: thomas.pedersen@posit.co
     orcid: https://orcid.org/0000-0002-5147-4711
   - family-names: Takahashi
     given-names: Kohske
@@ -491,6 +474,35 @@ references:
     orcid: https://orcid.org/0000-0003-3925-190X
   year: '2023'
 - type: software
+  title: rsample
+  abstract: 'rsample: General Resampling Infrastructure'
+  notes: Suggests
+  url: https://rsample.tidymodels.org
+  repository: https://CRAN.R-project.org/package=rsample
+  authors:
+  - family-names: Frick
+    given-names: Hannah
+    email: hannah@posit.co
+    orcid: https://orcid.org/0000-0002-6049-5258
+  - family-names: Chow
+    given-names: Fanny
+    email: fannybchow@gmail.com
+  - family-names: Kuhn
+    given-names: Max
+    email: max@posit.co
+  - family-names: Mahoney
+    given-names: Michael
+    email: mike.mahoney.218@gmail.com
+    orcid: https://orcid.org/0000-0003-2402-304X
+  - family-names: Silge
+    given-names: Julia
+    email: julia.silge@posit.co
+    orcid: https://orcid.org/0000-0002-3671-836X
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2023'
+- type: software
   title: spatialsample
   abstract: 'spatialsample: Spatial Resampling Infrastructure'
   notes: Suggests
@@ -507,19 +519,16 @@ references:
     orcid: https://orcid.org/0000-0003-2402-304X
   year: '2023'
 - type: software
-  title: spelling
-  abstract: 'spelling: Tools for Spell Checking in R'
+  title: terra
+  abstract: 'terra: Spatial Data Analysis'
   notes: Suggests
-  url: https://docs.ropensci.org/spelling/
-  repository: https://CRAN.R-project.org/package=spelling
+  url: https://rspatial.org/terra/
+  repository: https://CRAN.R-project.org/package=terra
   authors:
-  - family-names: Ooms
-    given-names: Jeroen
-    email: jeroen@berkeley.edu
-    orcid: https://orcid.org/0000-0002-4035-0289
-  - family-names: Hester
-    given-names: Jim
-    email: james.hester@rstudio.com
+  - family-names: Hijmans
+    given-names: Robert J.
+    email: r.hijmans@gmail.com
+    orcid: https://orcid.org/0000-0001-5872-2872
   year: '2023'
 - type: software
   title: testthat

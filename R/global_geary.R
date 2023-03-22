@@ -107,7 +107,6 @@ ww_global_geary_c_vec <- function(truth, estimate, wt, na_rm = FALSE, ...) {
     impl = ww_global_geary_c_impl,
     ...
   )
-
 }
 
 #' @rdname global_geary_c
@@ -143,7 +142,6 @@ ww_global_geary_pvalue_vec <- function(truth,
                                        wt = NULL,
                                        na_rm = FALSE,
                                        ...) {
-
   ww_global_geary_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
     if (all(resid == 0)) {
@@ -165,5 +163,4 @@ ww_global_geary_pvalue_vec <- function(truth,
     impl = ww_global_geary_pvalue_impl,
     ...
   )
-
 }

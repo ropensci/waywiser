@@ -16,7 +16,6 @@ test_that("tidy_importance is idempotent", {
       tidy_importance.data.frame(tidy_importance.vi(importance))
     )
   )
-
 })
 
 test_that("expected failures", {
@@ -32,5 +31,4 @@ test_that("expected failures", {
     tidy_importance(data.frame()),
     error = TRUE
   )
-
 })

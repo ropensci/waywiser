@@ -1,45 +1,47 @@
 Type: Package
 Package: waywiserrr
-Title: waywiser Rewritten in Rust: Ergonomic Methods for Assessing Spatial Models
+Title: waywiser Rewritten in Rust: Ergonomic Methods for Assessing Spatial
+    Models
 Version: 0.2.0.9000
 Authors@R: c(
     person("Michael", "Mahoney", , "mike.mahoney.218@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2402-304X")),
-    person("Lucas", "Johnson", , "lucas.k.johnson03@gmail.com", role = c("ctb"),
+    person("Lucas", "Johnson", , "lucas.k.johnson03@gmail.com", role = "ctb",
            comment = c(ORCID = "0000-0002-7953-0260")),
     person("Virgilio", "Gómez-Rubio", role = "rev",
-    comment = "Virgilio reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>"),
+           comment = "Virgilio reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>"),
     person("Jakub", "Nowosad", role = "rev",
-    comment = "Jakub reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>"),
-    person("RStudio", role = c("cph", "fnd"))
+           comment = "Jakub reviewed the package (v. 0.2.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/571>"),
+    person("Posit Software, PBC", role = c("cph", "fnd"))
   )
-Description: This package is an experimental fork of the 'waywiser' package, 
-    replacing slow calculations with implementations written in Rust. This 
-    package will not be released to CRAN, and there is currently no intention
-    of the Rust rewrites making their way upstream to the original package; 
-    the maintenance burden that would involve outweighs the speed benefits. 
-    There is also no promise that improvements in the upstream repo ever migrate
-    to this package. As described in the original package, assessing predictive 
-    models of spatial data can be challenging, both because these models are 
-    typically built for extrapolating outside the
-    original region represented by training data and due to potential spatially
-    structured errors, with "hot spots" of higher than expected error
-    clustered geographically due to spatial structure in the underlying
-    data. Methods are provided for assessing models fit to spatial data, 
-    including approaches for measuring the spatial structure of model errors,
-    assessing model predictions at multiple spatial scales, and evaluating where 
-    predictions can be made safely. Methods are particularly useful for models 
-    fit using the 'tidymodels' framework. Methods include Moran's I
-    ('Moran' (1950) <doi:10.2307/2332142>), Geary's C 
-    ('Geary' (1954) <doi:10.2307/2986645>), Getis-Ord's G
-    ('Ord' and 'Getis' (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>),
-    agreement coefficients from 'Ji' and Gallo (2006) 
-    (<doi: 10.14358/PERS.72.7.823>), agreement metrics from 'Willmott' (1981)
-    (<doi: 10.1080/02723646.1981.10642213>) and 'Willmott' 'et' 'al'. (2012)
-    (<doi: 10.1002/joc.2419>), an implementation of the area of applicability 
-    methodology from 'Meyer' and 'Pebesma' (2021) 
-    (<doi:10.1111/2041-210X.13650>), and an implementation of
-    multi-scale assessment as described in 'Riemann' 'et' 'al'. (2010)
+Description: This package is an experimental fork of the 'waywiser'
+    package, replacing slow calculations with implementations written in
+    Rust. This package will not be released to CRAN, and there is
+    currently no intention of the Rust rewrites making their way upstream
+    to the original package; the maintenance burden that would involve
+    outweighs the speed benefits.  There is also no promise that
+    improvements in the upstream repo ever migrate to this package. As
+    described in the original package, assessing predictive models of
+    spatial data can be challenging, both because these models are
+    typically built for extrapolating outside the original region
+    represented by training data and due to potential spatially structured
+    errors, with "hot spots" of higher than expected error clustered
+    geographically due to spatial structure in the underlying data.
+    Methods are provided for assessing models fit to spatial data,
+    including approaches for measuring the spatial structure of model
+    errors, assessing model predictions at multiple spatial scales, and
+    evaluating where predictions can be made safely. Methods are
+    particularly useful for models fit using the 'tidymodels' framework.
+    Methods include Moran's I ('Moran' (1950) <doi:10.2307/2332142>),
+    Geary's C ('Geary' (1954) <doi:10.2307/2986645>), Getis-Ord's G ('Ord'
+    and 'Getis' (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>),
+    agreement coefficients from 'Ji' and Gallo (2006) (<doi:
+    10.14358/PERS.72.7.823>), agreement metrics from 'Willmott' (1981)
+    (<doi: 10.1080/02723646.1981.10642213>) and 'Willmott' 'et' 'al'.
+    (2012) (<doi: 10.1002/joc.2419>), an implementation of the area of
+    applicability methodology from 'Meyer' and 'Pebesma' (2021)
+    (<doi:10.1111/2041-210X.13650>), and an implementation of multi-scale
+    assessment as described in 'Riemann' 'et' 'al'. (2010)
     (<doi:10.1016/j.rse.2010.05.010>).
 License: MIT + file LICENSE
 URL: https://github.com/mikemahoney218/waywiserrr,
@@ -56,13 +58,12 @@ Imports:
     Matrix,
     purrr,
     rlang,
-    rsample,
     sf (>= 1.0-0),
     spdep (>= 1.1-9),
     stats,
     tibble,
     tidyselect,
-    yardstick (> 1.1.0)
+    yardstick
 Suggests: 
     applicable,
     caret,
@@ -74,6 +75,7 @@ Suggests:
     modeldata,
     recipes,
     rmarkdown,
+    rsample,
     spatialsample,
     terra,
     testthat (>= 3.0.0),
@@ -83,16 +85,16 @@ Suggests:
     vip,
     whisker,
     withr
+VignetteBuilder: 
+    knitr
+Config/Needs/website: kableExtra
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Config/Needs/website: kableExtra
 Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.2.3
 Language: en-US
-VignetteBuilder: knitr
-Remotes:
-    tidymodels/yardstick
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
 Collate: 
     'waywiser-package.R'
     'agreement_coefficient.R'

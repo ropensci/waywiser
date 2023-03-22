@@ -15,15 +15,14 @@
 #'
 #' @noRd
 yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., case_weights = NULL) {
-
   if (missing(metric_fun)) metric_fun <- get(paste0("ww_", name, "_vec"))
   out <- metric_reframer(
     name = name,
     fn = metric_fun,
     data = data,
     na_rm = na_rm,
-    truth = !! enquo(truth),
-    estimate = !! enquo(estimate),
+    truth = !!enquo(truth),
+    estimate = !!enquo(estimate),
     fn_options = list(
       ...
     )
@@ -36,6 +35,27 @@ yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., ca
   out
 }
 
+# Replace these with yardstick functions once yardstick > 1.1.0 is out
+yardstick_any_missing <- function(truth, estimate, case_weights = NULL) {
+  anyNA(truth) || anyNA(estimate)
+}
+
+yardstick_remove_missing <- function(truth, estimate, case_weights = NULL) {
+  complete_cases <- stats::complete.cases(truth, estimate)
+
+  truth <- truth[complete_cases]
+  if (is.matrix(estimate)) {
+    estimate <- estimate[complete_cases, , drop = FALSE]
+  } else {
+    estimate <- estimate[complete_cases]
+  }
+
+  list(
+    truth = truth,
+    estimate = estimate
+  )
+}
+
 metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, fn_options = list(), error_call = rlang::caller_env()) {
   truth <- enquo(truth)
   estimate <- enquo(estimate)
@@ -43,12 +63,12 @@ metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, 
   estimate <- ww_eval_select(expr = estimate, data = data, error_call = error_call)
   out <- dplyr::reframe(
     data,
-    .metric = name,
+    .metric = .env[["name"]],
     .estimator = "standard",
     .estimate = fn(
       truth = .data[[truth]],
       estimate = .data[[estimate]],
-      na_rm = na_rm,
+      na_rm = .env[["na_rm"]],
       !!!fn_options
     )
   )
@@ -56,7 +76,7 @@ metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, 
 }
 
 # cribbed from yardstick 1.2.0
-ww_eval_select <- function (expr, data, arg, ..., error_call = rlang::caller_env()) {
+ww_eval_select <- function(expr, data, arg, ..., error_call = rlang::caller_env()) {
   rlang::check_dots_empty()
   out <- tidyselect::eval_select(
     expr = expr,
@@ -89,7 +109,6 @@ ww_eval_select <- function (expr, data, arg, ..., error_call = rlang::caller_env
 #'
 #' @noRd
 spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., case_weights = NULL) {
-
   if (is.null(wt)) {
     wt <- ww_build_weights(data)
   }
@@ -102,7 +121,7 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., ca
   truth <- ww_eval_select(expr = truth, data = data, error_call = rlang::caller_env())
   estimate <- ww_eval_select(expr = estimate, data = data, error_call = rlang::caller_env())
 
-  if (yardstick::yardstick_any_missing(data[[truth]], data[[estimate]], NULL)) {
+  if (yardstick_any_missing(data[[truth]], data[[estimate]], NULL)) {
     rlang::abort(
       c(
         "Missing values in data.",
@@ -114,7 +133,7 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., ca
   metric_fun <- get(paste0("ww_", name, "_vec"))
 
   if (grepl("getis_ord_g", name) &&
-      identical(attr(wt$neighbours, "self.included"), TRUE)) {
+    identical(attr(wt$neighbours, "self.included"), TRUE)) {
     name <- gsub("ord_g", "ord_gstar", name)
   }
 
@@ -140,7 +159,6 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., ca
 #'
 #' @noRd
 yardstick_vec <- function(truth, estimate, na_rm, impl, wt = NULL, ..., case_weights = NULL) {
-
   if (!is.vector(truth)) rlang::abort("`truth` must be a numeric vector.")
   if (!is.vector(estimate)) rlang::abort("`estimate` must be a numeric vector.")
 
@@ -158,10 +176,10 @@ yardstick_vec <- function(truth, estimate, na_rm, impl, wt = NULL, ..., case_wei
   }
 
   if (na_rm) {
-    result <- yardstick::yardstick_remove_missing(truth, estimate, NULL)
+    result <- yardstick_remove_missing(truth, estimate, NULL)
     truth <- result$truth
     estimate <- result$estimate
-  } else if (yardstick::yardstick_any_missing(truth, estimate, NULL)) {
+  } else if (yardstick_any_missing(truth, estimate, NULL)) {
     return(NA_real_)
   }
 
@@ -189,7 +207,7 @@ spatial_yardstick_vec <- function(truth, estimate, wt, na_rm = TRUE, impl, ..., 
     )
   }
 
-  if (yardstick::yardstick_any_missing(truth, estimate, NULL)) {
+  if (yardstick_any_missing(truth, estimate, NULL)) {
     rlang::abort(
       c(
         "Missing values in data.",

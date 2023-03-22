@@ -9,18 +9,18 @@ ww_build_weights(x, wt = NULL, include_self = FALSE, ...)
 \arguments{
 \item{x}{Either an sf object or a "nb" neighbors list object.
 If an sf object, will be converted into a neighbors list via
-[ww_build_neighbors()].}
+\code{\link[=ww_build_neighbors]{ww_build_neighbors()}}.}
 
 \item{wt}{Either a "listw" object (which will be returned unchanged),
-a function for creating a "listw" object from `x`, or `NULL`, in which case
-weights will be constructed via [spdep::nb2listw()].}
+a function for creating a "listw" object from \code{x}, or \code{NULL}, in which case
+weights will be constructed via \code{\link[spdep:nb2listw]{spdep::nb2listw()}}.}
 
 \item{include_self}{Include each region itself in its own list of neighbors?}
 
 \item{...}{Arguments passed to the weight constructing function.}
 }
 \value{
-A `listw` object.
+A \code{listw} object.
 }
 \description{
 These functions can be used for geographic or projected coordinate reference

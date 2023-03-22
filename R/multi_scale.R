@@ -123,8 +123,7 @@ ww_multi_scale <- function(
     na_rm = TRUE,
     aggregation_function = "mean",
     autoexpand_grid = TRUE,
-    progress = TRUE
-) {
+    progress = TRUE) {
   if (length(na_rm) != 1 || !is.logical(na_rm)) {
     rlang::abort("Only one logical value can be passed to `na_rm`.")
   }
@@ -147,9 +146,7 @@ ww_multi_scale.SpatRaster <- function(
     na_rm = TRUE,
     aggregation_function = "mean",
     autoexpand_grid = TRUE,
-    progress = TRUE
-) {
-
+    progress = TRUE) {
   rlang::check_installed("terra")
   rlang::check_installed("exactextractr")
 
@@ -253,9 +250,7 @@ ww_multi_scale.sf <- function(
     na_rm = TRUE,
     aggregation_function = "mean",
     autoexpand_grid = TRUE,
-    progress = TRUE
-) {
-
+    progress = TRUE) {
   if (nrow(data) == 0) {
     rlang::abort(
       "0 rows were passed to `data`."
@@ -330,18 +325,20 @@ ww_multi_scale.sf <- function(
     function(idx_list) {
       out <- purrr::map_dfr(
         idx_list,
-        function(idx) dplyr::summarise(
-          data[idx, , drop = FALSE],
-          .truth = rlang::exec(aggregation_function, {{ truth }}),
-          .truth_count = sum(!is.na({{ truth }})),
-          .estimate = rlang::exec(aggregation_function, {{ estimate }}),
-          .estimate_count = sum(!is.na({{ estimate }})),
-          .groups = "keep"
-        )
+        function(idx) {
+          dplyr::summarise(
+            data[idx, , drop = FALSE],
+            .truth = rlang::exec(.env[["aggregation_function"]], {{ truth }}),
+            .truth_count = sum(!is.na({{ truth }})),
+            .estimate = rlang::exec(.env[["aggregation_function"]], {{ estimate }}),
+            .estimate_count = sum(!is.na({{ estimate }})),
+            .groups = "keep"
+          )
+        }
       )
 
       if (dplyr::is_grouped_df(data)) {
-        dplyr::group_by(out, !!! dplyr::groups(data))
+        dplyr::group_by(out, !!!dplyr::groups(data))
       } else {
         out
       }
@@ -462,4 +459,3 @@ expand_grid <- function(grid_box, expansion = 0.00001) {
 is_longlat <- function(x) {
   !(sf::st_crs(x) == sf::NA_crs_) && sf::st_is_longlat(x)
 }
-

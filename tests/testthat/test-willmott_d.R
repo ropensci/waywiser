@@ -38,13 +38,13 @@ test_that("Willmott's D estimates are the same across methods", {
   #' @srrstats {G5.4} These comparisons test that combining the systematic and unsystematic components of MSE sum to RMSE, implemented in yardstick
   expect_equal(
     ww_systematic_mse_vec(y, x) + ww_unsystematic_mse_vec(y, x),
-    yardstick::rmse_vec(y, x) ** 2
+    yardstick::rmse_vec(y, x)**2
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   expect_equal(
-    ww_systematic_rmse_vec(y, x) ** 2 + ww_unsystematic_rmse_vec(y, x) ** 2,
-    yardstick::rmse_vec(y, x) ** 2
+    ww_systematic_rmse_vec(y, x)**2 + ww_unsystematic_rmse_vec(y, x)**2,
+    yardstick::rmse_vec(y, x)**2
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.

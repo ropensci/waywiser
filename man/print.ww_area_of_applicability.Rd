@@ -7,7 +7,7 @@
 \method{print}{ww_area_of_applicability}(x, digits = getOption("digits"), ...)
 }
 \arguments{
-\item{x}{A `ww_area_of_applicability` object.}
+\item{x}{A \code{ww_area_of_applicability} object.}
 
 \item{digits}{The number of digits to print, used when rounding the AOA threshold.}
 
@@ -19,7 +19,7 @@ Print number of predictors and area-of-applicability threshold
 \examples{
 \dontshow{if (rlang::is_installed("vip")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(vip)
-trn <- gen_friedman(500, seed = 101)  # ?vip::gen_friedman
+trn <- gen_friedman(500, seed = 101) # ?vip::gen_friedman
 pp <- ppr(y ~ ., data = trn, nterms = 11)
 importance <- vi_permute(
   pp,

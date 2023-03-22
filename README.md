@@ -1,9 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# waywiserrr <a href="https://mikemahoney218.github.io/waywiserrr/"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# waywiserrr <a href="https://mikemahoney218.github.io/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
-waywiserrr is [waywise**r**](https://docs.ropensci.org/waywiser/),
+waywiserrr is
+[waywise**r**](https://mikemahoney218.github.io/waywiser/),
 **r**ewritten in **R**ust. I’m using this repo to experiment with using
 Rust in R packages, and to try and muddle my way through learning
 ndarray.

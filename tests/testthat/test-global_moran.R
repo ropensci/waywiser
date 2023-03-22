@@ -7,19 +7,15 @@ test_that("Global Moran statistics are stable", {
 
   resid <- guerry_modeled$Crm_prs - guerry_modeled$predictions
 
-  expect_snapshot(
-    {
-      df_global_i <- ww_global_moran_i(guerry_modeled, Crm_prs, predictions)
-      df_global_i[1:3]
-    }
-  )
+  expect_snapshot({
+    df_global_i <- ww_global_moran_i(guerry_modeled, Crm_prs, predictions)
+    df_global_i[1:3]
+  })
 
-  expect_snapshot(
-    {
-      df_global_i_p <- ww_global_moran_pvalue(guerry_modeled, Crm_prs, predictions)
-      df_global_i_p[1:3]
-    }
-  )
+  expect_snapshot({
+    df_global_i_p <- ww_global_moran_pvalue(guerry_modeled, Crm_prs, predictions)
+    df_global_i_p[1:3]
+  })
 
   expect_snapshot(
     (vec_global_i <- ww_global_moran_i_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
@@ -53,5 +49,4 @@ test_that("Global Moran statistics are stable", {
     vec_global_i_p,
     spdep_output$p.value
   )
-
 })

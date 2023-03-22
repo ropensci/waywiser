@@ -1,5 +1,5 @@
-This is the second CRAN release of waywiser, adding the area of applicability
-methods. 
+This is the third CRAN release of waywiser, adding methods for multi-scale 
+assessment and a number of improvements following rOpenSci review.
 
 ## R CMD check results
 

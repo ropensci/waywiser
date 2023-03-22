@@ -8,20 +8,16 @@ test_that("Local Getis-Ord statistics are stable", {
 
   resid <- guerry_modeled$Crm_prs - guerry_modeled$predictions
 
-  expect_snapshot(
-    {
-      df_local_i <- ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions)
-      df_local_i[1:3]
-    }
-  )
+  expect_snapshot({
+    df_local_i <- ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions)
+    df_local_i[1:3]
+  })
 
   set.seed(123)
-  expect_snapshot(
-    {
-      df_local_i_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, Crm_prs, predictions)
-      df_local_i_p[1:3]
-    }
-  )
+  expect_snapshot({
+    df_local_i_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, Crm_prs, predictions)
+    df_local_i_p[1:3]
+  })
 
   expect_snapshot(
     (vec_local_i <- ww_local_getis_ord_g_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
@@ -54,9 +50,8 @@ test_that("Local Getis-Ord statistics are stable", {
 
   expect_identical(
     vec_local_i_p,
-    as.vector(attr(spdep_output, "internals")[, 4])
+    as.vector(attr(spdep_output, "internals")[, "Pr(z != E(Gi))"])
   )
-
 })
 
 test_that("Local Getis-Ord statistics are stable", {
@@ -68,20 +63,16 @@ test_that("Local Getis-Ord statistics are stable", {
 
   resid <- guerry_modeled$Crm_prs - guerry_modeled$predictions
 
-  expect_snapshot(
-    {
-      df_local_i <- ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions, weights)
-      df_local_i[1:3]
-    }
-  )
+  expect_snapshot({
+    df_local_i <- ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions, weights)
+    df_local_i[1:3]
+  })
 
   set.seed(123)
-  expect_snapshot(
-    {
-      df_local_i_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, Crm_prs, predictions, weights)
-      df_local_i_p[1:3]
-    }
-  )
+  expect_snapshot({
+    df_local_i_p <- ww_local_getis_ord_g_pvalue(guerry_modeled, Crm_prs, predictions, weights)
+    df_local_i_p[1:3]
+  })
 
   expect_snapshot(
     (vec_local_i <- ww_local_getis_ord_g_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, weights))
@@ -114,7 +105,6 @@ test_that("Local Getis-Ord statistics are stable", {
 
   expect_identical(
     vec_local_i_p,
-    as.vector(attr(spdep_output, "internals")[, 4])
+    as.vector(attr(spdep_output, "internals")[, "Pr(z != E(Gi))"])
   )
-
 })

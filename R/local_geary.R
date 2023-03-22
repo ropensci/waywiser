@@ -62,12 +62,12 @@ ww_local_geary_c <- function(data, ...) {
 ww_local_geary_c <- new_numeric_metric(ww_local_geary_c, direction = "zero")
 
 #' @export
-ww_local_geary_c.data.frame  <- function(data,
-                                         truth,
-                                         estimate,
-                                         wt = NULL,
-                                         na_rm = FALSE,
-                                         ...) {
+ww_local_geary_c.data.frame <- function(data,
+                                        truth,
+                                        estimate,
+                                        wt = NULL,
+                                        na_rm = FALSE,
+                                        ...) {
   spatial_yardstick_df(
     data = data,
     truth = {{ truth }},
@@ -82,7 +82,6 @@ ww_local_geary_c.data.frame  <- function(data,
 #' @rdname local_geary_c
 #' @export
 ww_local_geary_c_vec <- function(truth, estimate, wt, na_rm = FALSE, ...) {
-
   ww_local_geary_c_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
@@ -145,7 +144,7 @@ ww_local_geary_pvalue_vec <- function(truth,
     )
 
     as.vector(
-      attr(out, "pseudo-p")[, 4]
+      attr(out, "pseudo-p")[, "Pr(z != E(Ci))"]
     )
   }
   spatial_yardstick_vec(

@@ -8,7 +8,6 @@ test_that("ww_make_point_neighbors is stable", {
   expect_snapshot(
     ww_make_point_neighbors(guerry_pt, k = 2)
   )
-
 })
 
 test_that("ww_make_polygon_neighbors is stable", {
@@ -19,7 +18,6 @@ test_that("ww_make_polygon_neighbors is stable", {
   expect_snapshot(
     ww_make_polygon_neighbors(guerry, queen = FALSE)
   )
-
 })
 
 test_that("ww_build_neighbors is stable", {
@@ -46,7 +44,6 @@ test_that("ww_build_neighbors is stable", {
     ww_build_neighbors(guerry, function(data) data),
     error = TRUE
   )
-
 })
 
 test_that("ww_build_weights is stable", {
@@ -77,11 +74,9 @@ test_that("ww_build_weights is stable", {
   expect_snapshot(
     ww_build_weights(guerry, include_self = TRUE)
   )
-
 })
 
 test_that("expected_errors", {
-
   expect_snapshot(
     ww_build_neighbors(as.data.frame(guerry)),
     error = TRUE
@@ -96,5 +91,4 @@ test_that("expected_errors", {
     ww_make_point_neighbors(guerry, k = c(1, 5)),
     error = TRUE
   )
-
 })

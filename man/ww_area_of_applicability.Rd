@@ -38,10 +38,10 @@ ww_area_of_applicability(x, ...)
 \arguments{
 \item{x}{Either a data frame, matrix, formula
 (specifying predictor terms on the right-hand side), recipe
-(from [recipes::recipe()], or `rset` object, produced by resampling functions
+(from \code{\link[recipes:recipe]{recipes::recipe()}}, or \code{rset} object, produced by resampling functions
 from rsample or spatialsample.
 
-If `x` is a recipe, it should be the same one used to pre-process the data
+If \code{x} is a recipe, it should be the same one used to pre-process the data
 used in your model. If the recipe used to build the area of applicability
 doesn't match the one used to build the model, the returned area of
 applicability won't be correct.}
@@ -49,45 +49,46 @@ applicability won't be correct.}
 \item{...}{Not currently used.}
 
 \item{testing}{A data frame or matrix containing the data used to
- validate your model. This should be the same data as used to calculate all
- model accuracy metrics.
+validate your model. This should be the same data as used to calculate all
+model accuracy metrics.
 
- If this argument is `NULL`, then this function will use the training data
- (from `x` or `data`) to calculate within-sample distances.
- This may result in the area of applicability threshold being set too high,
- with the result that too many points are classed as "inside" the area of
- applicability.}
+If this argument is \code{NULL}, then this function will use the training data
+(from \code{x} or \code{data}) to calculate within-sample distances.
+This may result in the area of applicability threshold being set too high,
+with the result that too many points are classed as "inside" the area of
+applicability.}
 
 \item{importance}{Either:
+\itemize{
+\item A data.frame with two columns: \code{term}, containing the names of each
+variable in the training and testing data, and \code{estimate}, containing
+the (raw or scaled) feature importance for each variable.
+\item An object of class \code{vi} with at least two columns, \code{Variable} and
+\code{Importance}.
+}
 
-  * A data.frame with two columns: `term`, containing the names of each
-    variable in the training and testing data, and `estimate`, containing
-    the (raw or scaled) feature importance for each variable.
-  * An object of class `vi` with at least two columns, `Variable` and
-    `Importance`.
-
-All variables in the training data (`x` or `data`, depending on the context)
+All variables in the training data (\code{x} or \code{data}, depending on the context)
 must have a matching importance estimate, and all terms with importance
 estimates must be in the training data.}
 
 \item{na_rm}{A logical of length 1, indicating whether observations (in both
-training and testing) with `NA` values in predictors should be removed. Only
+training and testing) with \code{NA} values in predictors should be removed. Only
 predictor variables are considered, and this value has no impact on
-predictions (where `NA` values produce `NA` predictions). If `na_rm = FALSE`
-and `NA` values are found, this function returns an error.}
+predictions (where \code{NA} values produce \code{NA} predictions). If \code{na_rm = FALSE}
+and \code{NA} values are found, this function returns an error.}
 
 \item{data}{The data frame representing your "training" data, when using the
 formula or recipe methods.}
 
-\item{y}{Optional: a recipe (from [recipes::recipe()]) or formula.
+\item{y}{Optional: a recipe (from \code{\link[recipes:recipe]{recipes::recipe()}}) or formula.
 
-If `y` is a recipe, it should be the same one used to pre-process the data
+If \code{y} is a recipe, it should be the same one used to pre-process the data
 used in your model. If the recipe used to build the area of applicability
 doesn't match the one used to build the model, the returned area of
 applicability won't be correct.}
 }
 \value{
-A `ww_area_of_applicability` object, which can be used with [predict()] to
+A \code{ww_area_of_applicability} object, which can be used with \code{\link[=predict]{predict()}} to
 calculate the distance of new data to the original training data, and
 determine if new data is within a model's area of applicability.
 }
@@ -101,15 +102,13 @@ not care about the spatial arrangement of your data, can be used with 2D or
 }
 \details{
 Predictions made on points "inside" the area of applicability should be as
-accurate as predictions made on the data provided to `testing`.
-That means that generally `testing` should be your final hold-out
+accurate as predictions made on the data provided to \code{testing}.
+That means that generally \code{testing} should be your final hold-out
 set so that predictions on points inside the area of applicability are
 accurately described by your reported model metrics.
-When passing an `rset` object to `x`, predictions made on points "inside" the
+When passing an \code{rset} object to \code{x}, predictions made on points "inside" the
 area of applicability instead should be as accurate as predictions made on
 the assessment sets during cross-validation.
-
-
 
 This method assumes your model was fit using dummy variables in the place of
 any non-numeric predictor, and that you have one importance score per
@@ -122,32 +121,34 @@ This implementation differs from
 Meyer and Pebesma (2021) (and therefore from CAST) when using cross-validated
 data in order to minimize data leakage. Namely, in order to calculate
 the dissimilarity index \eqn{DI_{k}}, CAST:
-
-1. Rescales all data used for cross validation at once, lumping assessment
-   folds in with analysis data.
-2. Calculates a single \eqn{\bar{d}} as the mean distance between all points
-   in the rescaled data set, including between points in the same assessment
-   fold.
-3. For each point \eqn{k} that's used in an assessment fold, calculates
-   \eqn{d_{k}} as the minimum distance between \eqn{k} and any point in its
-   corresponding analysis fold.
-4. Calculates \eqn{DI_{k}} by dividing \eqn{d_{k}} by \eqn{\bar{d}} (which
-   was partially calculated as the distance between \eqn{k} and the rest of
-   the rescaled data).
+\enumerate{
+\item Rescales all data used for cross validation at once, lumping assessment
+folds in with analysis data.
+\item Calculates a single \eqn{\bar{d}} as the mean distance between all points
+in the rescaled data set, including between points in the same assessment
+fold.
+\item For each point \eqn{k} that's used in an assessment fold, calculates
+\eqn{d_{k}} as the minimum distance between \eqn{k} and any point in its
+corresponding analysis fold.
+\item Calculates \eqn{DI_{k}} by dividing \eqn{d_{k}} by \eqn{\bar{d}} (which
+was partially calculated as the distance between \eqn{k} and the rest of
+the rescaled data).
+}
 
 Because assessment data is used to calculate constants for rescaling analysis
 data and \eqn{\bar{d}}, the assessment data may appear too "similar" to
 the analysis data when calculating \eqn{DI_{k}}. As such, waywiser treats
-each fold in an `rset` independently:
-
-1. Each analysis set is rescaled independently.
-2. Separate \eqn{\bar{d}} are calculated for each fold, as the mean distance
-   between all points in the analysis set for that fold.
-3. Identically to CAST, \eqn{d_{k}} is the minimum distance between a point
-   \eqn{k} in the assessment fold and any point in the
-   corresponding analysis fold.
-4. \eqn{DI_{k}} is then found by dividing \eqn{d_{k}} by \eqn{\bar{d}},
-   which was calculated independently from {k}.
+each fold in an \code{rset} independently:
+\enumerate{
+\item Each analysis set is rescaled independently.
+\item Separate \eqn{\bar{d}} are calculated for each fold, as the mean distance
+between all points in the analysis set for that fold.
+\item Identically to CAST, \eqn{d_{k}} is the minimum distance between a point
+\eqn{k} in the assessment fold and any point in the
+corresponding analysis fold.
+\item \eqn{DI_{k}} is then found by dividing \eqn{d_{k}} by \eqn{\bar{d}},
+which was calculated independently from {k}.
+}
 
 Predictions are made using the full training data set, rescaled once (in
 the same way as CAST), and the mean \eqn{\bar{d}} across folds, under the
@@ -156,12 +157,12 @@ data set.
 
 In practice, this means waywiser produces very slightly higher \eqn{\bar{d}}
 values than CAST and a slightly higher area of applicability threshold than
-CAST when using `rset` objects.
+CAST when using \code{rset} objects.
 }
 
 \examples{
 \dontshow{if (rlang::is_installed("vip")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-train <- vip::gen_friedman(1000, seed = 101)  # ?vip::gen_friedman
+train <- vip::gen_friedman(1000, seed = 101) # ?vip::gen_friedman
 test <- train[701:1000, ]
 train <- train[1:700, ]
 pp <- stats::ppr(y ~ ., data = train, nterms = 11)
