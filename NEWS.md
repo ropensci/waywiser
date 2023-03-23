@@ -1,5 +1,11 @@
 # waywiser (development version)
 
+* Added a new method to support passing a `SpatRaster` to `data` in 
+  `ww_multi_scale()`, with `truth` and `estimate` being indices used to subset 
+  `data`. This is a bit faster than passing `SpatRaster` objects to `truth` and
+  `estimate`, as extraction is only done once per grid rather than twice, but 
+  does not easily support passing R functions to `aggregation_function`.
+
 # waywiser 0.3.0
 
 ## Breaking Changes

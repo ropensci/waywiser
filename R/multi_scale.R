@@ -34,13 +34,16 @@
 #' This function can be used for geographic or projected coordinate reference
 #' systems and expects 2D data.
 #'
-#' @param data Either a point geometry `sf` object containing the columns
-#' specified by the `truth` and `estimate` arguments, or `NULL` if `truth` and
-#' `estimate` are `SpatRaster` objects.
+#' @param data Either: a point geometry `sf` object containing the columns
+#' specified by the `truth` and `estimate` arguments; a `SpatRaster` from
+#' the `terra` package containing layers specified by the `truth` and `estimate`
+#' arguments; or `NULL` if `truth` and `estimate` are `SpatRaster` objects.
 #' @param truth,estimate If `data` is an `sf` object, the names (optionally
 #' unquoted) for the columns in `data` containing the true and predicted values,
-#' respectively. If `data` is `NULL`, `SpatRaster` objects with a single layer
-#' containing the true and predicted values, respectively.
+#' respectively. If `data` is a `SpatRaster` object, either layer names or
+#' indices which will select the true and predicted layers, respectively, via
+#' [terra::subset()] If `data` is `NULL`, `SpatRaster` objects with a single
+#' layer containing the true and predicted values, respectively.
 #' @param metrics Either a [yardstick::metric_set()] object, or a list of
 #' functions which will be used to construct a [yardstick::metric_set()] object
 #' specifying the performance metrics to evaluate at each scale.
@@ -128,8 +131,19 @@ ww_multi_scale <- function(
     rlang::abort("Only one logical value can be passed to `na_rm`.")
   }
 
-  if (is.null(data)) {
-    UseMethod("ww_multi_scale", truth)
+  if (missing(data) || is.null(data)) {
+    ww_multi_scale_raster_args(
+      data = data,
+      truth = truth,
+      estimate = estimate,
+      metrics = metrics,
+      grids = grids,
+      ...,
+      na_rm = na_rm,
+      aggregation_function = aggregation_function,
+      autoexpand_grid = autoexpand_grid,
+      progress = progress
+    )
   } else {
     UseMethod("ww_multi_scale", data)
   }
@@ -137,6 +151,104 @@ ww_multi_scale <- function(
 
 #' @exportS3Method
 ww_multi_scale.SpatRaster <- function(
+    data = NULL,
+    truth,
+    estimate,
+    metrics = list(yardstick::rmse, yardstick::mae),
+    grids = NULL,
+    ...,
+    na_rm = TRUE,
+    aggregation_function = "mean",
+    autoexpand_grid = TRUE,
+    progress = TRUE) {
+  rlang::check_installed("terra")
+  rlang::check_installed("exactextractr")
+
+  data <- tryCatch(
+    terra::subset(data, c(truth, estimate)),
+    error = function(e) {
+      rlang::abort("Couldn't select either `truth` or `estimate`. Are your indices correct?")
+    }
+  )
+
+  if (terra::nlyr(data) != 2) {
+    rlang::abort(c(
+      "`terra::subset(data, c(truth, estimate))` didn't return 2 layers as expected.",
+      i = "Make sure `truth` and `estimate` both select exactly one layer."
+    ))
+  }
+  names(data) <- c("truth", "estimate")
+
+  metrics <- handle_metrics(metrics)
+  grid_list <- handle_grids(data, grids, autoexpand_grid, ...)
+
+  grid_list$grids <- purrr::map(
+    grid_list$grids,
+    function(grid) {
+      grid <- sf::st_as_sf(grid)
+      sf::st_geometry(grid) <- "geometry"
+      if (rlang::is_function(aggregation_function) || aggregation_function == "count") {
+        grid <- cbind(
+          grid,
+          setNames(
+            exactextractr::exact_extract(
+              data,
+              grid,
+              fun = aggregation_function,
+              progress = progress
+            ),
+            c(".truth", ".estimate")
+          )
+        )
+        grid[c(".truth", ".estimate", "geometry")]
+      } else {
+        grid_df <- exactextractr::exact_extract(
+          data,
+          grid,
+          fun = c(aggregation_function, "count"),
+          progress = progress
+        )
+        names(grid_df) <- c(".truth", ".estimate", ".truth_count", ".estimate_count")
+
+        cbind(grid, grid_df)[c(
+          ".truth",
+          ".truth_count",
+          ".estimate",
+          ".estimate_count",
+          "geometry"
+        )]
+      }
+    }
+  )
+
+  .notes <- purrr::map(
+    seq_along(grid_list$grids),
+    function(idx) {
+      tibble::tibble(
+        note = character(0),
+        missing_indices = list()
+      )
+    }
+  )
+
+  purrr::pmap_dfr(
+    list(
+      grid = grid_list$grids,
+      grid_arg = grid_list$grid_arg_idx,
+      .notes = .notes
+    ),
+    function(grid, grid_arg, .notes) {
+      out <- metrics(grid, .truth, .estimate, na_rm = na_rm)
+      out[attr(out, "sf_column")] <- NULL
+      out$.grid_args <- list(grid_list$grid_args[grid_arg, ])
+      out$.grid <- list(grid)
+      out$.notes <- list(.notes)
+      out
+    }
+  )
+}
+
+ww_multi_scale_raster_args <- function(
     data = NULL,
     truth,
     estimate,
