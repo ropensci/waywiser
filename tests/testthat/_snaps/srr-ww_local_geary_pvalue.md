@@ -733,7 +733,7 @@
        8 local_geary_pvalue standard         NaN
        9 local_geary_pvalue standard         NaN
       10 local_geary_pvalue standard         NaN
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 # other generic srr standards
 
@@ -753,7 +753,7 @@
        8 local_geary_pvalue standard       0.731
        9 local_geary_pvalue standard       0.774
       10 local_geary_pvalue standard       0.686
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -773,7 +773,7 @@
        8 local_geary_pvalue standard       0.731
        9 local_geary_pvalue standard       0.774
       10 local_geary_pvalue standard       0.686
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -4807,7 +4807,7 @@
        8 local_geary_pvalue standard       0.731
        9 local_geary_pvalue standard       0.774
       10 local_geary_pvalue standard       0.686
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -4828,7 +4828,7 @@
        8 local_geary_pvalue standard    4.50e- 1
        9 local_geary_pvalue standard    5.02e- 1
       10 local_geary_pvalue standard    4.72e- 1
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 

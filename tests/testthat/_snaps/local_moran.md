@@ -17,7 +17,7 @@
        8 local_moran_i standard      1.69  
        9 local_moran_i standard     -0.0109
       10 local_moran_i standard      0.710 
-      # ... with 75 more rows
+      # i 75 more rows
 
 ---
 
@@ -38,7 +38,7 @@
        8 local_moran_pvalue standard     0.109  
        9 local_moran_pvalue standard     0.335  
       10 local_moran_pvalue standard     0.00663
-      # ... with 75 more rows
+      # i 75 more rows
 
 ---
 

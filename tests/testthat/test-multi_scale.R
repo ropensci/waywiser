@@ -363,6 +363,8 @@ test_that("raster method works", {
   r2[] <- 2
   r2 <- terra::rast(r2)
 
+  r3 <- c(r1, r2)
+
   expect_identical(
     ww_multi_scale(truth = r1, estimate = r2, metrics = yardstick::rmse, n = 1)$.estimate,
     1
@@ -373,11 +375,33 @@ test_that("raster method works", {
     0
   )
 
+  expect_identical(
+    ww_multi_scale(r3, truth = 1, estimate = 2, metrics = yardstick::rmse, n = 1)$.estimate,
+    1
+  )
+
+  expect_identical(
+    ww_multi_scale(r3, truth = 1, estimate = 1, metrics = yardstick::rmse, n = 1)$.estimate,
+    0
+  )
+
   # built-in functions
   expect_identical(
     ww_multi_scale(
       truth = r1,
       estimate = r2,
+      metrics = yardstick::rmse,
+      aggregation_function = "median",
+      n = 1
+    )$.estimate,
+    1
+  )
+
+  expect_identical(
+    ww_multi_scale(
+      r3,
+      truth = 1,
+      estimate = 2,
       metrics = yardstick::rmse,
       aggregation_function = "median",
       n = 1
@@ -396,6 +420,7 @@ test_that("raster method works", {
     )$.estimate,
     1
   )
+
 })
 
 test_that("raster method is equivalent", {
@@ -421,7 +446,12 @@ test_that("raster method is equivalent", {
   sf::st_geometry(terra_method$.grid[[1]]) <- NULL
   sf::st_geometry(terra_method$.grid[[2]]) <- NULL
 
+  terra_data_method <- ww_multi_scale(c(x, y), truth = 1, estimate = 2, n = 2)
+  sf::st_geometry(terra_data_method$.grid[[1]]) <- NULL
+  sf::st_geometry(terra_data_method$.grid[[2]]) <- NULL
+
   expect_identical(sf_method, terra_method, tolerance = 1e-6)
+  expect_identical(sf_method, terra_data_method, tolerance = 1e-6)
 })
 
 test_that("raster method errors as expected", {
