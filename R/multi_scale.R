@@ -221,31 +221,9 @@ ww_multi_scale.SpatRaster <- function(
     }
   )
 
-  .notes <- purrr::map(
-    seq_along(grid_list$grids),
-    function(idx) {
-      tibble::tibble(
-        note = character(0),
-        missing_indices = list()
-      )
-    }
-  )
+  .notes <- raster_method_notes(grid_list)
 
-  purrr::pmap_dfr(
-    list(
-      grid = grid_list$grids,
-      grid_arg = grid_list$grid_arg_idx,
-      .notes = .notes
-    ),
-    function(grid, grid_arg, .notes) {
-      out <- metrics(grid, .truth, .estimate, na_rm = na_rm)
-      out[attr(out, "sf_column")] <- NULL
-      out$.grid_args <- list(grid_list$grid_args[grid_arg, ])
-      out$.grid <- list(grid)
-      out$.notes <- list(.notes)
-      out
-    }
-  )
+  raster_method_summary(grid_list, .notes, metrics, na_rm)
 }
 
 ww_multi_scale_raster_args <- function(
@@ -324,7 +302,13 @@ ww_multi_scale_raster_args <- function(
     }
   )
 
-  .notes <- purrr::map(
+  .notes <- raster_method_notes(grid_list)
+
+  raster_method_summary(grid_list, .notes, metrics, na_rm)
+}
+
+raster_method_notes <- function(grid_list) {
+  purrr::map(
     seq_along(grid_list$grids),
     function(idx) {
       tibble::tibble(
@@ -333,7 +317,9 @@ ww_multi_scale_raster_args <- function(
       )
     }
   )
+}
 
+raster_method_summary <- function(grid_list, .notes, metrics, na_rm) {
   purrr::pmap_dfr(
     list(
       grid = grid_list$grids,
