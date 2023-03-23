@@ -120,7 +120,7 @@
        8  0.205  TRUE 
        9  0.134  TRUE 
       10  0.177  TRUE 
-      # ... with 290 more rows
+      # i 290 more rows
 
 # Expected errors
 
@@ -168,7 +168,7 @@
        8 0.205  TRUE 
        9 0.134  TRUE 
       10 0.177  TRUE 
-      # ... with 290 more rows
+      # i 290 more rows
 
 ---
 
@@ -188,7 +188,7 @@
        8     0 TRUE 
        9     0 TRUE 
       10     0 TRUE 
-      # ... with 690 more rows
+      # i 690 more rows
 
 # `new_ww_area_of_applicability` arguments are assigned correctly
 

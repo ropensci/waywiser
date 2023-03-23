@@ -732,7 +732,7 @@
        8 local_geary_c standard         NaN
        9 local_geary_c standard         NaN
       10 local_geary_c standard         NaN
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 # other generic srr standards
 
@@ -752,7 +752,7 @@
        8 local_geary_c standard    0.000282 
        9 local_geary_c standard    0.00704  
       10 local_geary_c standard    0.00451  
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -772,7 +772,7 @@
        8 local_geary_c standard    0.000282 
        9 local_geary_c standard    0.00704  
       10 local_geary_c standard    0.00451  
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -4806,7 +4806,7 @@
        8 local_geary_c standard    0.000282 
        9 local_geary_c standard    0.00704  
       10 local_geary_c standard    0.00451  
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -4827,7 +4827,7 @@
        8 local_geary_c standard    0.000939
        9 local_geary_c standard    0.00201 
       10 local_geary_c standard    0.0195  
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 

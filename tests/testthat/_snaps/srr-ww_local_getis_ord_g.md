@@ -733,7 +733,7 @@
        8 local_getis_ord_g standard         NaN
        9 local_getis_ord_g standard         NaN
       10 local_getis_ord_g standard         NaN
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 # other generic srr standards
 
@@ -753,7 +753,7 @@
        8 local_getis_ord_g standard      0.0373
        9 local_getis_ord_g standard      0.272 
       10 local_getis_ord_g standard      0.0653
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -773,7 +773,7 @@
        8 local_getis_ord_g standard      0.0373
        9 local_getis_ord_g standard      0.272 
       10 local_getis_ord_g standard      0.0653
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -4807,7 +4807,7 @@
        8 local_getis_ord_g standard      0.0373
        9 local_getis_ord_g standard      0.272 
       10 local_getis_ord_g standard      0.0653
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -4828,7 +4828,7 @@
        8 local_getis_ord_g standard      0.0259
        9 local_getis_ord_g standard      0.459 
       10 local_getis_ord_g standard     -0.0917
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
