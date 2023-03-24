@@ -733,7 +733,7 @@
        8 local_getis_ord_g_pvalue standard         NaN
        9 local_getis_ord_g_pvalue standard         NaN
       10 local_getis_ord_g_pvalue standard         NaN
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 # other generic srr standards
 
@@ -754,7 +754,7 @@
        8 local_getis_ord_g_pvalue standard      0.969 
        9 local_getis_ord_g_pvalue standard      0.750 
       10 local_getis_ord_g_pvalue standard      0.995 
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -775,7 +775,7 @@
        8 local_getis_ord_g_pvalue standard      0.969 
        9 local_getis_ord_g_pvalue standard      0.750 
       10 local_getis_ord_g_pvalue standard      0.995 
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -4810,7 +4810,7 @@
        8 local_getis_ord_g_pvalue standard      0.969 
        9 local_getis_ord_g_pvalue standard      0.750 
       10 local_getis_ord_g_pvalue standard      0.995 
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -4831,7 +4831,7 @@
        8 local_getis_ord_g_pvalue standard   0.974       
        9 local_getis_ord_g_pvalue standard   0.623       
       10 local_getis_ord_g_pvalue standard   0.920       
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 

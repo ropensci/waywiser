@@ -17,7 +17,7 @@
        8 local_geary_c standard       1.57 
        9 local_geary_c standard       0.867
       10 local_geary_c standard       0.737
-      # ... with 75 more rows
+      # i 75 more rows
 
 ---
 
@@ -38,7 +38,7 @@
        8 local_geary_pvalue standard       0.208
        9 local_geary_pvalue standard       0.802
       10 local_geary_pvalue standard       0.412
-      # ... with 75 more rows
+      # i 75 more rows
 
 ---
 

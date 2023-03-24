@@ -1717,7 +1717,7 @@
        8 local_moran_pvalue standard         NaN
        9 local_moran_pvalue standard         NaN
       10 local_moran_pvalue standard         NaN
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 # other generic srr standards
 
@@ -1737,7 +1737,7 @@
        8 local_moran_pvalue standard      0.970 
        9 local_moran_pvalue standard      0.785 
       10 local_moran_pvalue standard      0.948 
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -1757,7 +1757,7 @@
        8 local_moran_pvalue standard      0.970 
        9 local_moran_pvalue standard      0.785 
       10 local_moran_pvalue standard      0.948 
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -8459,7 +8459,7 @@
        8 local_moran_pvalue standard      0.970 
        9 local_moran_pvalue standard      0.785 
       10 local_moran_pvalue standard      0.948 
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -8480,7 +8480,7 @@
        8 local_moran_pvalue standard   0.979      
        9 local_moran_pvalue standard   0.646      
       10 local_moran_pvalue standard   0.927      
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 

@@ -191,8 +191,8 @@
 
     Code
       ww_multi_scale(truth = 1)
-    Error <simpleError>
-      no applicable method for 'ww_multi_scale' applied to an object of class "c('double', 'numeric')"
+    Error <rlang_error>
+      `truth` must be a SpatRaster with only one layer.
 
 ---
 

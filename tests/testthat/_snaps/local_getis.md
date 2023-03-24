@@ -17,7 +17,7 @@
        8 local_getis_ord_g standard      -1.60 
        9 local_getis_ord_g standard       0.964
       10 local_getis_ord_g standard      -2.71 
-      # ... with 75 more rows
+      # i 75 more rows
 
 ---
 
@@ -39,7 +39,7 @@
        8 local_getis_ord_g_pvalue standard     0.132  
        9 local_getis_ord_g_pvalue standard     0.361  
       10 local_getis_ord_g_pvalue standard     0.00787
-      # ... with 75 more rows
+      # i 75 more rows
 
 ---
 
@@ -105,7 +105,7 @@
        8 local_getis_ord_gstar standard      -2.32 
        9 local_getis_ord_gstar standard       0.880
       10 local_getis_ord_gstar standard      -2.74 
-      # ... with 75 more rows
+      # i 75 more rows
 
 ---
 
@@ -127,7 +127,7 @@
        8 local_getis_ord_gstar_pvalue standard     0.100  
        9 local_getis_ord_gstar_pvalue standard     0.324  
       10 local_getis_ord_gstar_pvalue standard     0.00724
-      # ... with 75 more rows
+      # i 75 more rows
 
 ---
 

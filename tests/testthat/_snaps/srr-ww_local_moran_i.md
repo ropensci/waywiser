@@ -1716,7 +1716,7 @@
        8 local_moran_i standard         NaN
        9 local_moran_i standard         NaN
       10 local_moran_i standard         NaN
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 # other generic srr standards
 
@@ -1736,7 +1736,7 @@
        8 local_moran_i standard    0.000766
        9 local_moran_i standard    0.0513  
       10 local_moran_i standard   -0.000120
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -1756,7 +1756,7 @@
        8 local_moran_i standard    0.000766
        9 local_moran_i standard    0.0513  
       10 local_moran_i standard   -0.000120
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -9790,7 +9790,7 @@
        8 local_moran_i standard    0.000766
        9 local_moran_i standard    0.0513  
       10 local_moran_i standard   -0.000120
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
@@ -9811,7 +9811,7 @@
        8 local_moran_i standard    0.000238 
        9 local_moran_i standard    0.0386   
       10 local_moran_i standard    0.0000756
-      # ... with 9,990 more rows
+      # i 9,990 more rows
 
 ---
 
