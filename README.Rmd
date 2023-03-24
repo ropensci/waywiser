@@ -15,9 +15,9 @@ library(ggplot2)
 theme_set(theme_minimal())
 ```
 
-# waywiserrr <a href="https://mikemahoney218.github.io/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# waywiserrr <a href="https://docs.ropensci.org/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
-waywiserrr is [waywise**r**](https://mikemahoney218.github.io/waywiser/), 
+waywiserrr is [waywise**r**](https://docs.ropensci.org/waywiser/), 
 **r**ewritten in **R**ust. I'm using this repo to experiment with using Rust
 in R packages, and to try and muddle my way through learning ndarray.
 
@@ -26,3 +26,128 @@ with most bug fixes and feature additions put into the main repo. I'm also not
 particularly likely to port any of this code into the main repo, as the speedups
 don't yet justify the headache of maintaining a package with compiled code 
 (or, in particular, maintaining a package with Rust code).
+
+## Comparisons
+
+```{r, message=FALSE, warning=FALSE}
+benchmarks <- bench::press(
+  rows = 10^(2:6),
+  {
+    df <- withr::with_seed(
+      1107,
+      data.frame(x = rnorm(rows), y = rnorm(rows))
+    )
+    bench::mark(
+      waywiser::ww_agreement_coefficient(df, x, y),
+      waywiserrr::ww_agreement_coefficient(df, x, y),
+      waywiser::ww_systematic_agreement_coefficient(df, x, y),
+      waywiserrr::ww_systematic_agreement_coefficient(df, x, y),
+      waywiser::ww_unsystematic_agreement_coefficient(df, x, y),
+      waywiserrr::ww_unsystematic_agreement_coefficient(df, x, y),
+      waywiser::ww_unsystematic_mpd(df, x, y),
+      waywiserrr::ww_unsystematic_mpd(df, x, y),
+      waywiser::ww_systematic_mpd(df, x, y),
+      waywiserrr::ww_systematic_mpd(df, x, y),
+      waywiser::ww_unsystematic_rmpd(df, x, y),
+      waywiserrr::ww_unsystematic_rmpd(df, x, y),
+      waywiser::ww_systematic_rmpd(df, x, y),
+      waywiserrr::ww_systematic_rmpd(df, x, y),
+      waywiser::ww_willmott_d(df, x, y),
+      waywiserrr::ww_willmott_d(df, x, y),
+      waywiser::ww_willmott_d1(df, x, y),
+      waywiserrr::ww_willmott_d1(df, x, y),
+      waywiser::ww_willmott_dr(df, x, y),
+      waywiserrr::ww_willmott_dr(df, x, y),
+      waywiser::ww_systematic_mse(df, x, y),
+      waywiserrr::ww_systematic_mse(df, x, y),
+      waywiser::ww_unsystematic_mse(df, x, y),
+      waywiserrr::ww_unsystematic_mse(df, x, y),
+      waywiser::ww_unsystematic_rmse(df, x, y),
+      waywiserrr::ww_unsystematic_rmse(df, x, y),
+      check = FALSE,
+      min_iterations = 10,
+      filter_gc = FALSE
+    )
+  }
+)
+
+library(ggplot2)
+benchmarks |> 
+  dplyr::mutate(
+    expression = as.character(expression),
+    median = as.numeric(median)
+  ) |> 
+  tidyr::separate_wider_delim(
+    "expression", "::", names = c("package", "func")
+  ) |> 
+  dplyr::arrange(rows, func, package) |> 
+  dplyr::group_by(rows, func) |> 
+  dplyr::summarise(
+    ratio = median[1] / median[2],
+    .groups = "drop"
+  ) |> 
+  ggplot() +
+  aes(x = rows, y = ratio) + 
+  geom_abline(slope = 0, intercept = 1, linesize = 0.2) +
+  geom_line(linewidth = .5) +
+  geom_point(aes(color = ratio > 1)) +
+  scale_x_log10() +
+  scale_color_manual(
+    "Runs faster in:",
+    labels = c("waywiser", "waywiserrr"),
+    values = c("#c5784f", "#588d75")
+  ) +
+  labs(
+    x = "Number of rows in training data",
+    y = "Runtime ratio (Base R / Rust)",
+    title = "Changes in speed, waywiser vs waywiserrr",
+    subtitle = "Positive values run faster in waywiserrr, negative slower"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.subtitle = element_text(face = "italic"),
+    panel.grid = element_blank(),
+    strip.text = element_text(size = 7),
+    axis.text.x = element_text(size = 7)
+  ) +
+  facet_wrap(~ func)
+
+print(
+  benchmarks[c("expression", "rows", "median")],
+  n = 999
+)
+
+# waywiser::ww_area_of_applicability()
+# # & predict
+# 
+# waywiser::ww_multi_scale()
+# 
+# waywiser::ww_global_moran_i()
+# 
+# waywiser::ww_global_moran_pvalue()
+# 
+# waywiser::ww_local_moran_i()
+# 
+# waywiser::ww_local_moran_pvalue()
+# 
+# waywiser::ww_global_geary_c()
+# 
+# waywiser::ww_global_geary_pvalue()
+# 
+# waywiser::ww_local_geary_c()
+# 
+# waywiser::ww_local_geary_pvalue()
+# 
+# waywiser::ww_local_getis_ord_g()
+# 
+# waywiser::ww_local_getis_ord_g_pvalue()
+#
+# waywiser::ww_build_neighbors()
+# 
+# waywiser::ww_build_weights()
+# 
+# waywiser::ww_make_point_neighbors()
+# 
+# waywiser::ww_make_polygon_neighbors()
+```
+
