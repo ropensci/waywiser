@@ -63,6 +63,7 @@ Imports:
     stats,
     tibble,
     tidyselect,
+    waywiser,
     yardstick
 Suggests: 
     applicable,
