@@ -1,7 +1,7 @@
 use extendr_api::prelude::*;
 use ndarray_stats::{DeviationExt};
 
-/// Calculate Euclidean distance matrix
+// Calculate Euclidean distance matrix
 #[extendr]
 fn d_bar(a: ArrayView2<f64>) -> f64 {
     let nrow = a.nrows();
@@ -17,7 +17,7 @@ fn d_bar(a: ArrayView2<f64>) -> f64 {
     out.iter().sum::<f64>() / out.len() as f64
 }
 
-/// Calculate geometric mean functional relationship parameters
+// Calculate geometric mean functional relationship parameters
 #[extendr]
 fn gmfr_rust(truth: ArrayView1<f64>, estimate: ArrayView1<f64>, corsign: i8) -> [f64; 2] {
     let mean_truth = truth.mean().unwrap();
@@ -31,13 +31,13 @@ fn gmfr_rust(truth: ArrayView1<f64>, estimate: ArrayView1<f64>, corsign: i8) -> 
     [a, b]
 }
 
-/// Calculate ssd
+// Calculate ssd
 #[extendr]
 fn ssd_rust(truth: ArrayView1<f64>, estimate: ArrayView1<f64>) -> [f64; 1] {
     [(truth.into_owned() - estimate.into_owned()).mapv(|a| a.powi(2)).sum()]
 }
 
-/// Sum of Potential Difference from Ji and Gallo (2006)
+// Sum of Potential Difference from Ji and Gallo (2006)
 #[extendr]
 fn spod_rust(truth: ArrayView1<f64>, estimate: ArrayView1<f64>) -> [f64; 1] {
     let mean_truth = truth.mean().unwrap();
@@ -48,7 +48,7 @@ fn spod_rust(truth: ArrayView1<f64>, estimate: ArrayView1<f64>) -> [f64; 1] {
     (term_1 + (estimate.into_owned() - mean_estimate).mapv(|a| a.abs()))).sum()]
 }
 
-/// Return the unsystematic sum product-difference from Ji and Gallo (2006)
+// Return the unsystematic sum product-difference from Ji and Gallo (2006)
 #[extendr]
 fn spdu_rust(truth: ArrayView1<f64>, estimate: ArrayView1<f64>, corsign: i8) -> [f64; 1] {
     let gmfr_predict_truth = gmfr_rust(truth, estimate, corsign);
@@ -64,7 +64,7 @@ fn spdu_rust(truth: ArrayView1<f64>, estimate: ArrayView1<f64>, corsign: i8) -> 
     (owned_truth - predicted_truth).mapv(|a| a.abs())).sum()]
 }
 
-/// Return the systematic sum product-difference from Ji and Gallo (2006)
+// Return the systematic sum product-difference from Ji and Gallo (2006)
 #[extendr]
 fn spds_rust(truth: ArrayView1<f64>, estimate: ArrayView1<f64>, corsign: i8) -> [f64; 1] {
   [ssd_rust(truth, estimate)[0] - spdu_rust(truth, estimate, corsign)[0]]

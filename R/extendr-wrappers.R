@@ -8,21 +8,15 @@
 #' @useDynLib waywiserrr, .registration = TRUE
 NULL
 
-#' Calculate Euclidean distance matrix
 d_bar <- function(a) .Call(wrap__d_bar, a)
 
-#' Calculate geometric mean functional relationship parameters
 gmfr_rust <- function(truth, estimate, corsign) .Call(wrap__gmfr_rust, truth, estimate, corsign)
 
-#' Calculate ssd
 ssd_rust <- function(truth, estimate) .Call(wrap__ssd_rust, truth, estimate)
 
-#' Sum of Potential Difference from Ji and Gallo (2006)
 spod_rust <- function(truth, estimate) .Call(wrap__spod_rust, truth, estimate)
 
-#' Return the unsystematic sum product-difference from Ji and Gallo (2006)
 spdu_rust <- function(truth, estimate, corsign) .Call(wrap__spdu_rust, truth, estimate, corsign)
 
-#' Return the systematic sum product-difference from Ji and Gallo (2006)
 spds_rust <- function(truth, estimate, corsign) .Call(wrap__spds_rust, truth, estimate, corsign)
 
