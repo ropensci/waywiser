@@ -190,7 +190,7 @@ ww_multi_scale.SpatRaster <- function(
       if (rlang::is_function(aggregation_function) || aggregation_function == "count") {
         grid <- cbind(
           grid,
-          setNames(
+          stats::setNames(
             exactextractr::exact_extract(
               data,
               grid,
