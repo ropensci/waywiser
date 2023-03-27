@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![arXiv
+preprint](https://img.shields.io/badge/arXiv-2303.11312-brightgreen)](https://arxiv.org/abs/2303.11312)
 [![R-CMD-check](https://github.com/ropensci/waywiser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/waywiser/actions/workflows/R-CMD-check.yaml)
 [![License:
 MIT](https://img.shields.io/badge/license-MIT-green)](https://choosealicense.com/licenses/mit/)
@@ -126,7 +128,7 @@ ww_local_moran_i(guerry_predicted, Crm_prs, predictions)
 #>  8 local_moran_i standard      1.79  
 #>  9 local_moran_i standard      0.0208
 #> 10 local_moran_i standard      0.750 
-#> # … with 75 more rows
+#> # ℹ 75 more rows
 ```
 
 More information about multi-scale assessment is included in
