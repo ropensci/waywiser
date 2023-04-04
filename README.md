@@ -203,3 +203,5 @@ project, you agree to abide by its terms.
   [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
   (a minimal, reproducible example) to clearly communicate about your
   code.
+
+[![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
