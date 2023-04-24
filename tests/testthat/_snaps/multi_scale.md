@@ -39,6 +39,27 @@
       1 rmse    standard        51.1 <tibble [1 x 1]> <sf [1 x 5]> <tibble [1 x 2]>
       2 mae     standard        51.1 <tibble [1 x 1]> <sf [1 x 5]> <tibble [1 x 2]>
 
+---
+
+    Code
+      ww_multi_scale(dplyr::group_by(ames_sf, Neighborhood), Sale_Price, predictions,
+      n = list(c(10, 10), c(1, 1)), square = FALSE)
+    Output
+      # A tibble: 112 x 7
+         Neighborhood       .metric .estimator .estimate .grid_args .grid  .notes  
+         <fct>              <chr>   <chr>          <dbl> <list>     <list> <list>  
+       1 North_Ames         rmse    standard      34378. <tibble>   <sf>   <tibble>
+       2 College_Creek      rmse    standard      23948. <tibble>   <sf>   <tibble>
+       3 Old_Town           rmse    standard      59797. <tibble>   <sf>   <tibble>
+       4 Edwards            rmse    standard      53641. <tibble>   <sf>   <tibble>
+       5 Somerset           rmse    standard      63641. <tibble>   <sf>   <tibble>
+       6 Northridge_Heights rmse    standard     154598. <tibble>   <sf>   <tibble>
+       7 Gilbert            rmse    standard      51916. <tibble>   <sf>   <tibble>
+       8 Sawyer             rmse    standard      53511. <tibble>   <sf>   <tibble>
+       9 Northwest_Ames     rmse    standard      26636. <tibble>   <sf>   <tibble>
+      10 Sawyer_West        rmse    standard      46203. <tibble>   <sf>   <tibble>
+      # i 102 more rows
+
 # expected errors
 
     Code
