@@ -50,19 +50,6 @@ test_that("srr: ww_unsystematic_rmpd errors if truth and estimate are list colum
   )
 })
 
-test_that("srr: ww_unsystematic_rmpd errors if truth and estimate are list columns", {
-  list_df <- tibble::tibble(x = 1:5, y = lapply(1:5, function(x) x))
-  expect_snapshot(
-    ww_unsystematic_rmpd(list_df, x, y),
-    error = TRUE
-  )
-
-  expect_snapshot(
-    ww_unsystematic_rmpd(list_df, y, x),
-    error = TRUE
-  )
-})
-
 test_that("srr: ww_unsystematic_rmpd removes NaN and NA when na_rm = TRUE", {
 
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
