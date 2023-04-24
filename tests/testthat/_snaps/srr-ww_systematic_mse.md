@@ -70,26 +70,6 @@
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
 
----
-
-    Code
-      ww_systematic_mse(list_df, x, y)
-    Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
-      ! `estimate` must be numeric.
-
----
-
-    Code
-      ww_systematic_mse(list_df, y, x)
-    Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
-      ! `truth` must be numeric.
-
 # srr: ww_systematic_mse removes NaN and NA when na_rm = TRUE
 
     Code
