@@ -4,7 +4,9 @@
 #'
 #' If `data` is `NULL`, then `truth` and `estimate` should both be `SpatRaster`
 #' objects, as created via [terra::rast()]. These rasters will then be
-#' aggregated to each grid using [exactextractr::exact_extract()].
+#' aggregated to each grid using [exactextractr::exact_extract()]. If `data`
+#' is a `SpatRaster` object, then `truth` and `estimate` should be indices to
+#' select the appropriate layers of the raster via [terra::subset()].
 #'
 #' Grids are calculated using the bounding box of `truth`, under the assumption
 #' that you may have extrapolated into regions which do not have matching "true"
@@ -30,6 +32,14 @@
 #' `cellsize` as fit inside the bounding box of `data`. If only `n` is provided,
 #' then `cellsize` will be automatically adjusted to create the requested
 #' number of cells.
+#'
+#' Grids are created by mapping over each argument passed via `...`
+#' simultaneously, in a similar manner to [mapply()] or [purrr::pmap()]. This
+#' means that, for example, passing `n = list(c(1, 2))` will create a single
+#' 1x2 grid, while passing `n = c(1, 2)` will create a 1x1 grid _and_ a 2x2
+#' grid. It also means that arguments will be recycled using R's standard
+#' vector recycling rules, so that passing `n = c(1, 2)` and `square = FALSE`
+#' will create two separate grids of hexagons.
 #'
 #' This function can be used for geographic or projected coordinate reference
 #' systems and expects 2D data.
