@@ -184,6 +184,7 @@
     Condition
       Warning:
       The AOA threshold was 0, which is usually unexpected.
+      i Did you accidentally pass the same data as testing and training?
     Output
       # Predictors:
          10
@@ -197,6 +198,7 @@
     Condition
       Warning:
       The AOA threshold was 0, which is usually unexpected.
+      i Did you accidentally pass the same data as testing and training?
     Output
       # Predictors:
          10
@@ -211,6 +213,7 @@
     Condition
       Warning:
       The AOA threshold was 0, which is usually unexpected.
+      i Did you accidentally pass the same data as testing and training?
     Output
       # Predictors:
          10
@@ -224,6 +227,7 @@
     Condition
       Warning:
       The AOA threshold was 0, which is usually unexpected.
+      i Did you accidentally pass the same data as testing and training?
     Output
       # Predictors:
          10

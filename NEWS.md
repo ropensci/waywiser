@@ -8,6 +8,10 @@
   
 * The `sf` method for `ww_multi_scale()` is now _much_ faster (and more memory 
   efficient). 
+  
+* Fixed the warning when `ww_area_of_applicability()` calculates an AOA 
+  threshold of 0. It now includes "Did you accidentally pass the same data as 
+  testing and training?" as a bullet.
 
 # waywiser 0.3.0
 
