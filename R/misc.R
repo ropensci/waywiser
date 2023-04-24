@@ -44,16 +44,14 @@ ww_build_neighbors <- function(data, nb = NULL, ..., call = rlang::caller_env())
   } else if (any(c("sfc_MULTIPOLYGON", "sfc_POLYGON") %in% class(data))) {
     "polygon"
   } else if (is.null(nb)) {
-    rlang::warn(
+    rlang::abort(
       c(
-        "Non-point or polygon geometry specified, calculating neighbors using sf::st_centroid()",
-        "i" = "To avoid this, provide neighbors explicitly",
-        "i" = "Or provide a neighbor-creating function"
+        "Can only calculate neighbors from point or polygon geometries.",
+        "i" = "To avoid this, provide neighbors explicitly.",
+        "i" = "Or provide a neighbor-creating function."
       ),
       call = call
     )
-    data <- sf::st_centroid(data)
-    "point"
   }
 
   if (is.null(nb)) {
