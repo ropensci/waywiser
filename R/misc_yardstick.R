@@ -40,18 +40,46 @@ metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, 
   estimate <- enquo(estimate)
   truth <- ww_eval_select(expr = truth, data = data, error_call = error_call)
   estimate <- ww_eval_select(expr = estimate, data = data, error_call = error_call)
-  out <- dplyr::reframe(
-    data,
-    .metric = .env[["name"]],
-    .estimator = "standard",
-    .estimate = fn(
-      truth = .data[[truth]],
-      estimate = .data[[estimate]],
-      na_rm = .env[["na_rm"]],
-      !!!fn_options
+
+  group_rows <- dplyr::group_rows(data)
+  group_keys <- dplyr::group_keys(data)
+  data <- dplyr::ungroup(data)
+  groups <- vctrs::vec_chop(data, indices = group_rows)
+  out <- vector("list", length = length(groups))
+
+  for (i in seq_along(groups)) {
+    group <- groups[[i]]
+
+    group_truth <- group[[truth]]
+    group_estimate <- group[[estimate]]
+
+    elt_out <- list(
+      .metric = name,
+      .estimator = "standard",
+      .estimate = rlang::inject(
+        withCallingHandlers(
+          fn(
+            truth = group_truth,
+            estimate = group_estimate,
+            na_rm = na_rm,
+            !!!fn_options
+          ),
+          error = function(cnd) {
+            cnd$call <- error_call
+            rlang::cnd_signal(cnd)
+          }
+        )
+      )
     )
-  )
-  dplyr::as_tibble(out)
+
+    out[[i]] <- tibble::new_tibble(elt_out)
+  }
+
+  group_keys <- vctrs::vec_rep_each(group_keys, times = vctrs::list_sizes(out))
+  out <- vctrs::vec_rbind(!!!out)
+  out <- vctrs::vec_cbind(group_keys, out)
+
+  out
 }
 
 # cribbed from yardstick 1.2.0
