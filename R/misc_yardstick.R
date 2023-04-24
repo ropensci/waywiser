@@ -7,6 +7,7 @@
 #' @inheritParams yardstick::rmse
 #' @inheritParams ww_area_of_applicability
 #' @inheritParams rlang::args_dots_empty
+#' @inheritParams rlang::args_error_context
 #'
 #' @return A tibble with one row and three columns: `.metric`, containing `name`,
 #' `.estimator`, containing `standard`, and `.estimate`, the metric estimate.
@@ -14,7 +15,8 @@
 #' inputs.
 #'
 #' @noRd
-yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., case_weights = NULL) {
+yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., case_weights = NULL,
+                         error_call = rlang::caller_env()) {
   if (missing(metric_fun)) metric_fun <- get(paste0("ww_", name, "_vec"))
   out <- metric_reframer(
     name = name,
@@ -25,7 +27,8 @@ yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., ca
     estimate = !!enquo(estimate),
     fn_options = list(
       ...
-    )
+    ),
+    error_call = error_call
   )
 
   if (inherits(out, "sf")) {
@@ -72,6 +75,7 @@ metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, 
       )
     )
 
+    elt_out <- vctrs::vec_recycle_common(!!!elt_out)
     out[[i]] <- tibble::new_tibble(elt_out)
   }
 
@@ -107,6 +111,7 @@ ww_eval_select <- function(expr, data, arg, ..., error_call = rlang::caller_env(
 #' @inheritParams yardstick::rmse
 #' @inheritParams ww_area_of_applicability
 #' @inheritParams rlang::args_dots_empty
+#' @inheritParams rlang::args_error_context
 #' @inheritParams yardstick_df
 #'
 #' @return A tibble with one row and three columns: `.metric`, containing `name`,
@@ -115,7 +120,8 @@ ww_eval_select <- function(expr, data, arg, ..., error_call = rlang::caller_env(
 #' inputs.
 #'
 #' @noRd
-spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., case_weights = NULL) {
+spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., case_weights = NULL,
+                                 error_call = rlang::caller_env()) {
   if (is.null(wt)) {
     wt <- ww_build_weights(data)
   }
@@ -152,7 +158,8 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., ca
     name = name,
     metric_fun = metric_fun,
     wt = wt,
-    ...
+    ...,
+    error_call = error_call
   )
 }
 
