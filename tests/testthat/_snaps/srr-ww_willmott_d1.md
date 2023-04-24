@@ -2,21 +2,24 @@
 
     Code
       ww_willmott_d1_vec(1:5, 1:4)
-    Error <rlang_error>
-      Length of `truth` (5) and `estimate` (4) must match.
+    Condition
+      Error in `yardstick_vec()`:
+      ! Length of `truth` (5) and `estimate` (4) must match.
 
 ---
 
     Code
       ww_willmott_d1_vec(1:4, 1:5)
-    Error <rlang_error>
-      Length of `truth` (4) and `estimate` (5) must match.
+    Condition
+      Error in `yardstick_vec()`:
+      ! Length of `truth` (4) and `estimate` (5) must match.
 
 ---
 
     Code
       ww_willmott_d1(char_df, x, y)
-    Error <rlang_error>
+    Condition
+      Error in `dplyr::reframe()`:
       i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
@@ -25,7 +28,8 @@
 
     Code
       ww_willmott_d1(char_df, y, x)
-    Error <rlang_error>
+    Condition
+      Error in `dplyr::reframe()`:
       i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
@@ -34,21 +38,24 @@
 
     Code
       ww_willmott_d1_vec(as.character(1:5), 1:4)
-    Error <rlang_error>
-      `truth` must be numeric.
+    Condition
+      Error in `yardstick_vec()`:
+      ! `truth` must be numeric.
 
 ---
 
     Code
       ww_willmott_d1_vec(1:5, as.character(1:4))
-    Error <rlang_error>
-      `estimate` must be numeric.
+    Condition
+      Error in `yardstick_vec()`:
+      ! `estimate` must be numeric.
 
 ---
 
     Code
       ww_willmott_d1(list_df, x, y)
-    Error <rlang_error>
+    Condition
+      Error in `dplyr::reframe()`:
       i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! `estimate` must be numeric.
@@ -57,7 +64,8 @@
 
     Code
       ww_willmott_d1(list_df, y, x)
-    Error <rlang_error>
+    Condition
+      Error in `dplyr::reframe()`:
       i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! `truth` must be numeric.
@@ -94,14 +102,16 @@
 
     Code
       ww_willmott_d1_vec(numeric(), numeric())
-    Error <rlang_error>
-      0 non-missing values were passed to `truth`.
+    Condition
+      Error in `yardstick_vec()`:
+      ! 0 non-missing values were passed to `truth`.
 
 ---
 
     Code
       ww_willmott_d1(empty_df, x, y)
-    Error <rlang_error>
+    Condition
+      Error in `dplyr::reframe()`:
       i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! 0 non-missing values were passed to `truth`.
@@ -110,7 +120,8 @@
 
     Code
       ww_willmott_d1(empty_df, y, x)
-    Error <rlang_error>
+    Condition
+      Error in `dplyr::reframe()`:
       i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! 0 non-missing values were passed to `truth`.
@@ -119,21 +130,24 @@
 
     Code
       ww_willmott_d1_vec(rep(NA_real_, 4), 4:1)
-    Error <rlang_error>
-      0 non-missing values were passed to `truth`.
+    Condition
+      Error in `yardstick_vec()`:
+      ! 0 non-missing values were passed to `truth`.
 
 ---
 
     Code
       ww_willmott_d1_vec(1:4, rep(NA_real_, 4))
-    Error <rlang_error>
-      0 non-missing values were passed to `truth`.
+    Condition
+      Error in `yardstick_vec()`:
+      ! 0 non-missing values were passed to `truth`.
 
 ---
 
     Code
       ww_willmott_d1(all_na, x, y)
-    Error <rlang_error>
+    Condition
+      Error in `dplyr::reframe()`:
       i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! 0 non-missing values were passed to `truth`.
@@ -142,7 +156,8 @@
 
     Code
       ww_willmott_d1(all_na, y, x)
-    Error <rlang_error>
+    Condition
+      Error in `dplyr::reframe()`:
       i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
       Caused by error in `yardstick_vec()`:
       ! 0 non-missing values were passed to `truth`.
