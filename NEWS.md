@@ -5,6 +5,9 @@
   `data`. This is a bit faster than passing `SpatRaster` objects to `truth` and
   `estimate`, as extraction is only done once per grid rather than twice, but 
   does not easily support passing R functions to `aggregation_function`.
+  
+* The `sf` method for `ww_multi_scale()` is now _much_ faster (and more memory 
+  efficient). 
 
 # waywiser 0.3.0
 

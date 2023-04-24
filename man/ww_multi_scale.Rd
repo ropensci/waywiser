@@ -18,14 +18,17 @@ ww_multi_scale(
 )
 }
 \arguments{
-\item{data}{Either a point geometry \code{sf} object containing the columns
-specified by the \code{truth} and \code{estimate} arguments, or \code{NULL} if \code{truth} and
-\code{estimate} are \code{SpatRaster} objects.}
+\item{data}{Either: a point geometry \code{sf} object containing the columns
+specified by the \code{truth} and \code{estimate} arguments; a \code{SpatRaster} from
+the \code{terra} package containing layers specified by the \code{truth} and \code{estimate}
+arguments; or \code{NULL} if \code{truth} and \code{estimate} are \code{SpatRaster} objects.}
 
 \item{truth, estimate}{If \code{data} is an \code{sf} object, the names (optionally
 unquoted) for the columns in \code{data} containing the true and predicted values,
-respectively. If \code{data} is \code{NULL}, \code{SpatRaster} objects with a single layer
-containing the true and predicted values, respectively.}
+respectively. If \code{data} is a \code{SpatRaster} object, either layer names or
+indices which will select the true and predicted layers, respectively, via
+\code{\link[terra:subset]{terra::subset()}} If \code{data} is \code{NULL}, \code{SpatRaster} objects with a single
+layer containing the true and predicted values, respectively.}
 
 \item{metrics}{Either a \code{\link[yardstick:metric_set]{yardstick::metric_set()}} object, or a list of
 functions which will be used to construct a \code{\link[yardstick:metric_set]{yardstick::metric_set()}} object
@@ -81,7 +84,9 @@ Evaluate metrics at multiple scales of aggregation
 
 If \code{data} is \code{NULL}, then \code{truth} and \code{estimate} should both be \code{SpatRaster}
 objects, as created via \code{\link[terra:rast]{terra::rast()}}. These rasters will then be
-aggregated to each grid using \code{\link[exactextractr:exact_extract]{exactextractr::exact_extract()}}.
+aggregated to each grid using \code{\link[exactextractr:exact_extract]{exactextractr::exact_extract()}}. If \code{data}
+is a \code{SpatRaster} object, then \code{truth} and \code{estimate} should be indices to
+select the appropriate layers of the raster via \code{\link[terra:subset]{terra::subset()}}.
 
 Grids are calculated using the bounding box of \code{truth}, under the assumption
 that you may have extrapolated into regions which do not have matching "true"
@@ -110,6 +115,14 @@ is provided, this function will return as many blocks of size
 \code{cellsize} as fit inside the bounding box of \code{data}. If only \code{n} is provided,
 then \code{cellsize} will be automatically adjusted to create the requested
 number of cells.
+
+Grids are created by mapping over each argument passed via \code{...}
+simultaneously, in a similar manner to \code{\link[=mapply]{mapply()}} or \code{\link[purrr:pmap]{purrr::pmap()}}. This
+means that, for example, passing \code{n = list(c(1, 2))} will create a single
+1x2 grid, while passing \code{n = c(1, 2)} will create a 1x1 grid \emph{and} a 2x2
+grid. It also means that arguments will be recycled using R's standard
+vector recycling rules, so that passing \code{n = c(1, 2)} and \code{square = FALSE}
+will create two separate grids of hexagons.
 
 This function can be used for geographic or projected coordinate reference
 systems and expects 2D data.
