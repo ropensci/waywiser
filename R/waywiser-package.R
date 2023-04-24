@@ -2,7 +2,7 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' @importFrom rlang enquo .data .env
+#' @import rlang
 #' @importFrom stats predict complete.cases na.fail
 #' @importFrom yardstick new_numeric_metric
 utils::globalVariables(c(".truth", ".estimate"))

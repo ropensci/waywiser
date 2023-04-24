@@ -380,21 +380,36 @@ ww_multi_scale.sf <- function(
 
   grid_list <- handle_grids(data, grids, autoexpand_grid, ...)
 
-  grid_list$grid_intersections <- purrr::map(
+  data$.grid_idx <- seq_len(nrow(data))
+  out <- purrr::map2_dfr(
     grid_list$grids,
-    function(grid) {
-      out <- sf::st_intersects(grid, data)
-      out[purrr::map_lgl(out, function(x) !identical(x, integer(0)))]
-    }
-  )
+    grid_list$grid_arg_idx,
+    function(grid, grid_args_idx) {
+      grid_args <- grid_list[["grid_args"]][grid_args_idx, ]
 
-  .notes <- purrr::map(
-    grid_list$grid_intersections,
-    function(idx) {
-      missing <- setdiff(seq_len(nrow(data)), unlist(idx))
+      grid <- sf::st_as_sf(grid)
 
+      data_crs <- sf::st_crs(data)
+      grid_crs <- sf::st_crs(grid)
+      # If both have a CRS, reproject
+      if (!is.na(data_crs) && !is.na(grid_crs)) {
+        grid <- sf::st_transform(grid, data_crs)
+        # if only data has CRS, assume grid in same
+      } else if (!is.na(data_crs)) {
+        grid <- sf::st_set_crs(grid, data_crs)
+      }
+      # if neither has a CRS, ignore (so, implicitly assume grid is in same)
+
+      grid$grid_cell_idx <- seq_len(nrow(grid))
+      grid_matches <- sf::st_join(
+        grid,
+        data[".grid_idx"],
+        left = FALSE
+      )
+      grid_matches <- sf::st_drop_geometry(grid_matches)
+
+      missing <- setdiff(data[[".grid_idx"]], grid_matches[[".grid_idx"]])
       note <- character(0)
-
       if (length(missing) > 0) {
         note <- "Some observations were not within any grid cell, and as such were not used in any assessments. Their row numbers are in the `missing_indices` column."
         missing <- list(missing)
@@ -402,14 +417,53 @@ ww_multi_scale.sf <- function(
         missing <- list()
       }
 
-      tibble::tibble(
+      notes_tibble <- tibble::tibble(
         note = note,
         missing_indices = missing
       )
+
+      matched_data <- dplyr::left_join(
+        data,
+        grid_matches,
+        by = dplyr::join_by(.grid_idx)
+      )
+      matched_data <- sf::st_drop_geometry(matched_data)
+      matched_data <- matched_data[!is.na(matched_data[["grid_cell_idx"]]), ]
+      matched_data <- dplyr::group_by(
+        matched_data,
+        dplyr::across(dplyr::all_of(c(dplyr::group_vars(data), "grid_cell_idx")))
+      )
+      matched_data <- dplyr::summarise(
+        matched_data,
+        .truth = rlang::exec(.env[["aggregation_function"]], {{ truth }}),
+        .truth_count = sum(!is.na({{ truth }})),
+        .estimate = rlang::exec(.env[["aggregation_function"]], {{ estimate }}),
+        .estimate_count = sum(!is.na({{ estimate }})),
+        .groups = "drop"
+      )
+
+      if (dplyr::is_grouped_df(data)) {
+        matched_data <- dplyr::group_by(matched_data, !!!dplyr::groups(data))
+      }
+
+      out <- metrics(matched_data, .truth, .estimate, na_rm = na_rm)
+      out["grid_cell_idx"] <- NULL
+      out[attr(out, "sf_column")] <- NULL
+      out$.grid_args <- list(grid_args)
+      .grid <- dplyr::left_join(
+        grid,
+        matched_data,
+        by = dplyr::join_by(grid_cell_idx)
+      )
+      .grid["grid_cell_idx"] <- NULL
+      out$.grid <- list(.grid)
+      out$.notes <- list(notes_tibble)
+      out
+
     }
   )
 
-  if (any(purrr::map_lgl(.notes, function(x) nrow(x) > 0))) {
+  if (any(purrr::map_lgl(out[[".notes"]], function(x) nrow(x) > 0))) {
     rlang::warn(
       c(
         "Some observations were not within any grid cell, and as such were not used in any assessments.",
@@ -418,55 +472,8 @@ ww_multi_scale.sf <- function(
     )
   }
 
-  grid_list$grid_intersections <- purrr::map(
-    grid_list$grid_intersections,
-    function(idx_list) {
-      out <- purrr::map_dfr(
-        idx_list,
-        function(idx) {
-          dplyr::summarise(
-            data[idx, , drop = FALSE],
-            .truth = rlang::exec(.env[["aggregation_function"]], {{ truth }}),
-            .truth_count = sum(!is.na({{ truth }})),
-            .estimate = rlang::exec(.env[["aggregation_function"]], {{ estimate }}),
-            .estimate_count = sum(!is.na({{ estimate }})),
-            .groups = "keep"
-          )
-        }
-      )
+  out
 
-      if (dplyr::is_grouped_df(data)) {
-        dplyr::group_by(out, !!!dplyr::groups(data))
-      } else {
-        out
-      }
-    }
-  )
-
-  purrr::pmap_dfr(
-    list(
-      dat = grid_list$grid_intersections,
-      grid = grid_list$grids,
-      grid_arg = grid_list$grid_arg_idx,
-      .notes = .notes
-    ),
-    function(dat, grid, grid_arg, .notes) {
-      out <- metrics(dat, .truth, .estimate, na_rm = na_rm)
-      out[attr(out, "sf_column")] <- NULL
-      out$.grid_args <- list(grid_list$grid_args[grid_arg, ])
-      out$.grid <- list(
-        suppressMessages( # We want to ignore a "names repair" message here
-          sf::st_join(
-            sf::st_as_sf(grid),
-            dat,
-            sf::st_contains
-          )
-        )
-      )
-      out$.notes <- list(.notes)
-      out
-    }
-  )
 }
 
 handle_metrics <- function(metrics) {
