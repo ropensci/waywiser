@@ -24,9 +24,7 @@
     Code
       ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions, wt = list())
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(...)`.
-      Caused by error in `spatial_yardstick_vec()`:
+      Error in `ww_local_getis_ord_g()`:
       ! `wt` must be a 'listw' object
       i You can create 'listw' objects using `ww_build_weights()`
 

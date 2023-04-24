@@ -19,9 +19,7 @@
     Code
       ww_systematic_agreement_coefficient(char_df, x, y)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_systematic_agreement_coefficient()`:
       ! `estimate` must be numeric.
 
 ---
@@ -29,9 +27,7 @@
     Code
       ww_systematic_agreement_coefficient(char_df, y, x)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_systematic_agreement_coefficient()`:
       ! `truth` must be numeric.
 
 ---
@@ -55,9 +51,7 @@
     Code
       ww_systematic_agreement_coefficient(list_df, x, y)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_systematic_agreement_coefficient()`:
       ! `estimate` must be numeric.
 
 ---
@@ -65,9 +59,7 @@
     Code
       ww_systematic_agreement_coefficient(list_df, y, x)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_systematic_agreement_coefficient()`:
       ! `truth` must be numeric.
 
 # srr: ww_systematic_agreement_coefficient removes NaN and NA when na_rm = TRUE
@@ -111,9 +103,7 @@
     Code
       ww_systematic_agreement_coefficient(empty_df, x, y)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_systematic_agreement_coefficient()`:
       ! 0 non-missing values were passed to `truth`.
 
 ---
@@ -121,9 +111,7 @@
     Code
       ww_systematic_agreement_coefficient(empty_df, y, x)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_systematic_agreement_coefficient()`:
       ! 0 non-missing values were passed to `truth`.
 
 # srr: ww_systematic_agreement_coefficient errors on all-NA data
@@ -147,9 +135,7 @@
     Code
       ww_systematic_agreement_coefficient(all_na, x, y)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["x"]], estimate = .data[["y"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_systematic_agreement_coefficient()`:
       ! 0 non-missing values were passed to `truth`.
 
 ---
@@ -157,9 +143,7 @@
     Code
       ww_systematic_agreement_coefficient(all_na, y, x)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(truth = .data[["y"]], estimate = .data[["x"]], na_rm = .env[["na_rm"]])`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_systematic_agreement_coefficient()`:
       ! 0 non-missing values were passed to `truth`.
 
 ---

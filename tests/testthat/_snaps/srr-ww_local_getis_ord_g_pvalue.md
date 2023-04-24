@@ -21,9 +21,7 @@
     Code
       ww_local_getis_ord_g_pvalue(worldclim_predicted, predicted, response)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(...)`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_local_getis_ord_g_pvalue()`:
       ! `truth` must be numeric.
 
 ---
@@ -31,9 +29,7 @@
     Code
       ww_local_getis_ord_g_pvalue(worldclim_predicted, response, predicted)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(...)`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_local_getis_ord_g_pvalue()`:
       ! `estimate` must be numeric.
 
 ---
@@ -59,9 +55,7 @@
     Code
       ww_local_getis_ord_g_pvalue(worldclim_predicted, response, predicted)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(...)`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_local_getis_ord_g_pvalue()`:
       ! `estimate` must be numeric.
 
 ---
@@ -69,9 +63,7 @@
     Code
       ww_local_getis_ord_g_pvalue(worldclim_predicted, predicted, response)
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(...)`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_local_getis_ord_g_pvalue()`:
       ! `truth` must be numeric.
 
 ---
@@ -126,9 +118,7 @@
       ww_local_getis_ord_g_pvalue(head(worldclim_predicted, 0), response, predicted,
       structure(list(), class = "listw"))
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(...)`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_local_getis_ord_g_pvalue()`:
       ! 0 non-missing values were passed to `truth`.
 
 ---
@@ -137,9 +127,7 @@
       ww_local_getis_ord_g_pvalue(head(worldclim_predicted, 0), predicted, response,
       structure(list(), class = "listw"))
     Condition
-      Error in `dplyr::reframe()`:
-      i In argument: `.estimate = fn(...)`.
-      Caused by error in `yardstick_vec()`:
+      Error in `ww_local_getis_ord_g_pvalue()`:
       ! 0 non-missing values were passed to `truth`.
 
 ---
