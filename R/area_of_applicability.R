@@ -367,8 +367,10 @@ create_aoa <- function(training, testing, importance, na_rm, ..., include_di = F
 
   if (isTRUE(all.equal(aoa$aoa_threshold, 0))) {
     rlang::warn(
-      "The AOA threshold was 0, which is usually unexpected.",
-      i = "Did you accidentally pass the same data as testing and training?"
+      c(
+        "The AOA threshold was 0, which is usually unexpected.",
+        i = "Did you accidentally pass the same data as testing and training?"
+      )
     )
   }
 
