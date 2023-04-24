@@ -35,27 +35,6 @@ yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., ca
   out
 }
 
-# Replace these with yardstick functions once yardstick > 1.1.0 is out
-yardstick_any_missing <- function(truth, estimate, case_weights = NULL) {
-  anyNA(truth) || anyNA(estimate)
-}
-
-yardstick_remove_missing <- function(truth, estimate, case_weights = NULL) {
-  complete_cases <- stats::complete.cases(truth, estimate)
-
-  truth <- truth[complete_cases]
-  if (is.matrix(estimate)) {
-    estimate <- estimate[complete_cases, , drop = FALSE]
-  } else {
-    estimate <- estimate[complete_cases]
-  }
-
-  list(
-    truth = truth,
-    estimate = estimate
-  )
-}
-
 metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, fn_options = list(), error_call = rlang::caller_env()) {
   truth <- enquo(truth)
   estimate <- enquo(estimate)
