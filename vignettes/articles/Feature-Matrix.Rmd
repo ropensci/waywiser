@@ -1,5 +1,5 @@
 ---
-title: "Feature Matrix"
+title: "Feature matrix"
 ---
 
 ```{r, include = FALSE}
