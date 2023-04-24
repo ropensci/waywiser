@@ -54,7 +54,7 @@ Imports:
     stats,
     tibble,
     tidyselect,
-    yardstick
+    yardstick (>= 1.2.0)
 Suggests: 
     applicable,
     caret,
