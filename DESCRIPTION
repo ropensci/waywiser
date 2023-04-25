@@ -54,6 +54,7 @@ Imports:
     stats,
     tibble,
     tidyselect,
+    vctrs,
     yardstick (>= 1.2.0)
 Suggests: 
     applicable,

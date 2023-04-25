@@ -80,11 +80,13 @@ ww_local_moran_i_vec <- function(truth, estimate, wt, na_rm = FALSE, ...) {
   ww_local_moran_i_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    spdep::localmoran(
-      x = resid,
-      listw = wt,
-      ...
-    )[, 1]
+    as.vector(
+      spdep::localmoran(
+        x = resid,
+        listw = wt,
+        ...
+      )[, 1]
+    )
   }
   spatial_yardstick_vec(
     truth = truth,
@@ -132,11 +134,13 @@ ww_local_moran_pvalue_vec <- function(truth,
   ww_local_moran_pvalue_impl <- function(truth, estimate, ...) {
     resid <- truth - estimate
 
-    spdep::localmoran(
-      x = resid,
-      listw = wt,
-      ...
-    )[, 5]
+    as.vector(
+      spdep::localmoran(
+        x = resid,
+        listw = wt,
+        ...
+      )[, 5]
+    )
   }
   spatial_yardstick_vec(
     truth = truth,
