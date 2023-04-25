@@ -43,11 +43,11 @@ test_that("Local Moran statistics are stable", {
 
   expect_identical(
     vec_local_i,
-    spdep_output[, 1]
+    as.vector(spdep_output[, 1])
   )
 
   expect_identical(
     vec_local_i_p,
-    spdep_output[, 5]
+    as.vector(spdep_output[, 5])
   )
 })

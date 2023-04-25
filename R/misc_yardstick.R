@@ -59,18 +59,20 @@ metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, 
     elt_out <- list(
       .metric = name,
       .estimator = "standard",
-      .estimate = rlang::inject(
-        withCallingHandlers(
-          fn(
-            truth = group_truth,
-            estimate = group_estimate,
-            na_rm = na_rm,
-            !!!fn_options
-          ),
-          error = function(cnd) {
-            cnd$call <- error_call
-            rlang::cnd_signal(cnd)
-          }
+      .estimate = as.vector(
+        rlang::inject(
+          withCallingHandlers(
+            fn(
+              truth = group_truth,
+              estimate = group_estimate,
+              na_rm = na_rm,
+              !!!fn_options
+            ),
+            error = function(cnd) {
+              cnd$call <- error_call
+              rlang::cnd_signal(cnd)
+            }
+          )
         )
       )
     )

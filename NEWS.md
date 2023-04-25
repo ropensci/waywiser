@@ -4,6 +4,9 @@
 
 * `ww_build_neighbors()` (and by extent, every spatial dependence metric) will
   no longer calculate neighbors for non-point or non-polygon geometries.
+  
+* Functions dealing with local Moran's I and related p-values (both data frame 
+  and vector variants) now return unnamed vectors. 
 
 ## New Features
 
@@ -12,6 +15,13 @@
   `data`. This is a bit faster than passing `SpatRaster` objects to `truth` and
   `estimate`, as extraction is only done once per grid rather than twice, but 
   does not easily support passing R functions to `aggregation_function`.
+  
+* Metric functions now have better error messages including the name of the 
+  function the _user_ called that errored, not the internal function that 
+  errored. Huge thanks to @EmilHvitfeldt for their PR (#40).
+
+* Data frame metric functions now guarantee that `.estimate` will be an unnamed
+  vector.
 
 ## Bug Fixes
 
