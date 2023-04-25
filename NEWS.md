@@ -1,11 +1,20 @@
 # waywiser (development version)
 
+## Breaking Changes
+
+* `ww_build_neighbors()` (and by extent, every spatial dependence metric) will
+  no longer calculate neighbors for non-point or non-polygon geometries.
+
+## New Features
+
 * Added a new method to support passing a `SpatRaster` to `data` in 
   `ww_multi_scale()`, with `truth` and `estimate` being indices used to subset 
   `data`. This is a bit faster than passing `SpatRaster` objects to `truth` and
   `estimate`, as extraction is only done once per grid rather than twice, but 
   does not easily support passing R functions to `aggregation_function`.
-  
+
+## Bug Fixes
+
 * The `sf` method for `ww_multi_scale()` is now _much_ faster (and more memory 
   efficient). 
   
