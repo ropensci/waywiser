@@ -15,7 +15,7 @@ library(ggplot2)
 theme_set(theme_minimal())
 ```
 
-# waywiser <a href="https://docs.ropensci.org/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# waywiser <a href="https://docs.ropensci.org/waywiser"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 [![arXiv preprint](https://img.shields.io/badge/arXiv-2303.11312-brightgreen)](https://arxiv.org/abs/2303.11312)

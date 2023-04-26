@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# waywiser <a href="https://docs.ropensci.org/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# waywiser <a href="https://docs.ropensci.org/waywiser"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 
@@ -147,6 +147,7 @@ crime_model_aoa <- ww_area_of_applicability(
   importance = vip::vi_model(crime_model)
 )
 #> Warning: The AOA threshold was 0, which is usually unexpected.
+#> ℹ Did you accidentally pass the same data as testing and training?
 
 guerry_aoa <- cbind(
   guerry,
