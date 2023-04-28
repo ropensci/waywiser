@@ -9,4 +9,4 @@ bibentry(
   doi = "10.48550/arXiv.2303.11312",
   url = "https://arxiv.org/abs/2303.11312",
   textVersion = "Mahoney M. J. (2023). waywiser: Ergonomic Methods for Assessing Spatial Models. arXiv:2303.11312 [cs.MS]. https://doi.org/10.48550/arXiv.2303.11312",
-         mheader = "To cite spatialsample in publications please use:")
+         mheader = "To cite waywiser in publications please use:")

@@ -186,6 +186,7 @@ test_that("srr: expected failures for ww_local_getis_ord_g_pvalue", {
   expect_snapshot(
     ww_local_getis_ord_g_pvalue(worldclim_simulation, response, response)
   )
+
 })
 
 test_that("other generic srr standards", {
@@ -281,8 +282,7 @@ test_that("other generic srr standards", {
     withr::with_seed(
       1107,
       ww_local_getis_ord_g_pvalue(worldclim_predicted, predicted, response, nsim = 10000)
-    ),
-    tolerance = 0.03
+    ), tolerance = 0.03
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -297,8 +297,7 @@ test_that("other generic srr standards", {
     withr::with_seed(
       1107,
       ww_local_getis_ord_g_pvalue(worldclim_predicted, response, predicted, nsim = 10000)
-    ),
-    tolerance = 0.03
+    ), tolerance = 0.03
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -313,8 +312,7 @@ test_that("other generic srr standards", {
     withr::with_seed(
       1107,
       ww_local_getis_ord_g_pvalue_vec(worldclim_predicted$response, worldclim_predicted$predicted, worldclim_weights, nsim = 10000)
-    ),
-    tolerance = 0.03
+    ), tolerance = 0.03
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -329,8 +327,7 @@ test_that("other generic srr standards", {
     withr::with_seed(
       1107,
       ww_local_getis_ord_g_pvalue_vec(worldclim_predicted$predicted, worldclim_predicted$response, worldclim_weights, nsim = 10000)
-    ),
-    tolerance = 0.03
+    ), tolerance = 0.03
   )
 
   guerry_modeled <- guerry
@@ -348,8 +345,7 @@ test_that("other generic srr standards", {
   #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     ww_local_getis_ord_g_pvalue(guerry_modeled, predictions, Crm_prs, nsim = 10000)$.estimate,
-    ww_local_getis_ord_g_pvalue(guerry_modeled_geo, predictions, Crm_prs, nsim = 10000)$.estimate,
-    tolerance = 0.03
+    ww_local_getis_ord_g_pvalue(guerry_modeled_geo, predictions, Crm_prs, nsim = 10000)$.estimate, tolerance = 0.03
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -358,8 +354,7 @@ test_that("other generic srr standards", {
   #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     ww_local_getis_ord_g_pvalue(guerry_modeled, Crm_prs, predictions, nsim = 10000)$.estimate,
-    ww_local_getis_ord_g_pvalue(guerry_modeled_geo, Crm_prs, predictions, nsim = 10000)$.estimate,
-    tolerance = 0.03
+    ww_local_getis_ord_g_pvalue(guerry_modeled_geo, Crm_prs, predictions, nsim = 10000)$.estimate, tolerance = 0.03
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -368,8 +363,7 @@ test_that("other generic srr standards", {
   #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     ww_local_getis_ord_g_pvalue_vec(guerry_modeled$Crm_prs, guerry_modeled$predictions, guerry_weights, nsim = 10000),
-    ww_local_getis_ord_g_pvalue_vec(guerry_modeled_geo$Crm_prs, guerry_modeled_geo$predictions, guerry_weights_geo, nsim = 10000),
-    tolerance = 0.03
+    ww_local_getis_ord_g_pvalue_vec(guerry_modeled_geo$Crm_prs, guerry_modeled_geo$predictions, guerry_weights_geo, nsim = 10000), tolerance = 0.03
   )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
@@ -378,8 +372,7 @@ test_that("other generic srr standards", {
   #' @srrstats {SP6.2} Testing with ~global data
   expect_equal(
     ww_local_getis_ord_g_pvalue_vec(guerry_modeled$predictions, guerry_modeled$Crm_prs, guerry_weights, nsim = 10000),
-    ww_local_getis_ord_g_pvalue_vec(guerry_modeled_geo$predictions, guerry_modeled_geo$Crm_prs, guerry_weights_geo, nsim = 10000),
-    tolerance = 0.03
+    ww_local_getis_ord_g_pvalue_vec(guerry_modeled_geo$predictions, guerry_modeled_geo$Crm_prs, guerry_weights_geo, nsim = 10000), tolerance = 0.03
   )
 
   #' @srrstats {SP2.3} Testing with loaded sf objects:
@@ -464,4 +457,5 @@ test_that("other generic srr standards", {
       ww_local_getis_ord_g_pvalue_vec(worldclim_loaded$bio13, worldclim_loaded$bio19, other_weights)
     )
   )
+
 })

@@ -45,5 +45,5 @@ If you’ve found a bug, please file an issue that illustrates the bug with a mi
 ## Code of Conduct
 
 Please note that the waywiser project is released with a
-[Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this
+[Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this
 project you agree to abide by its terms.

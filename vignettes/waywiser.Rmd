@@ -1,5 +1,5 @@
 ---
-title: "Assessing Models with Waywiser"
+title: "Assessing models with waywiser"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Assessing Models with Waywiser}

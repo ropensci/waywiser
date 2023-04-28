@@ -57,14 +57,15 @@ Imports:
     hardhat,
     Matrix,
     purrr,
-    rlang,
+    rlang (>= 1.1.0),
     sf (>= 1.0-0),
     spdep (>= 1.1-9),
     stats,
     tibble,
     tidyselect,
     waywiser,
-    yardstick
+    vctrs,
+    yardstick (>= 1.2.0)
 Suggests: 
     applicable,
     caret,

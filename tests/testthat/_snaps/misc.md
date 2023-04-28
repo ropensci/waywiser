@@ -71,24 +71,19 @@
 
     Code
       ww_build_neighbors(sf::st_cast(guerry, "MULTILINESTRING"))
-    Warning <rlang_warning>
-      Non-point or polygon geometry specified, calculating neighbors using sf::st_centroid()
-      i To avoid this, provide neighbors explicitly
-      i Or provide a neighbor-creating function
-    Output
-      Neighbour list object:
-      Number of regions: 85 
-      Number of nonzero links: 85 
-      Percentage nonzero weights: 1.176471 
-      Average number of links: 1 
-      Non-symmetric neighbours list
+    Condition
+      Error:
+      ! Can only calculate neighbors from point or polygon geometries.
+      i To avoid this, provide neighbors explicitly.
+      i Or provide a neighbor-creating function.
 
 ---
 
     Code
       ww_build_neighbors(guerry, function(data) data)
-    Error <rlang_error>
-      Couldn't figure out how to build an `nb` object from the provided arguments
+    Condition
+      Error:
+      ! Couldn't figure out how to build an `nb` object from the provided arguments
 
 # ww_build_weights is stable
 
@@ -129,30 +124,19 @@
 
     Code
       ww_build_weights(sf::st_cast(guerry, "MULTILINESTRING"))
-    Warning <rlang_warning>
-      Non-point or polygon geometry specified, calculating neighbors using sf::st_centroid()
-      i To avoid this, provide neighbors explicitly
-      i Or provide a neighbor-creating function
-    Output
-      Characteristics of weights list object:
-      Neighbour list object:
-      Number of regions: 85 
-      Number of nonzero links: 85 
-      Percentage nonzero weights: 1.176471 
-      Average number of links: 1 
-      Non-symmetric neighbours list
-      
-      Weights style: W 
-      Weights constants summary:
-         n   nn S0  S1  S2
-      W 85 7225 85 139 388
+    Condition
+      Error:
+      ! Can only calculate neighbors from point or polygon geometries.
+      i To avoid this, provide neighbors explicitly.
+      i Or provide a neighbor-creating function.
 
 ---
 
     Code
       ww_build_weights(guerry, function(data) data)
-    Error <rlang_error>
-      Couldn't figure out how to build a `listw` object from the provided arguments
+    Condition
+      Error:
+      ! Couldn't figure out how to build a `listw` object from the provided arguments
 
 ---
 
@@ -175,20 +159,23 @@
 
     Code
       ww_build_neighbors(as.data.frame(guerry))
-    Error <rlang_error>
-      `data` must be an `sf` or `sfc` object.
+    Condition
+      Error:
+      ! `data` must be an `sf` or `sfc` object.
 
 ---
 
     Code
       ww_make_point_neighbors(as.data.frame(guerry))
-    Error <rlang_error>
-      `data` must be an `sf` or `sfc` object.
+    Condition
+      Error in `ww_make_point_neighbors()`:
+      ! `data` must be an `sf` or `sfc` object.
 
 ---
 
     Code
       ww_make_point_neighbors(guerry, k = c(1, 5))
-    Error <rlang_error>
-      `k` must be a single numeric integer.
+    Condition
+      Error in `ww_make_point_neighbors()`:
+      ! `k` must be a single numeric integer.
 

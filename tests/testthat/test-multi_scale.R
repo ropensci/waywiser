@@ -74,6 +74,19 @@ test_that("ww_multi_scale", {
     )$.estimate,
     yardstick::mae_vec(median(ames_sf$Sale_Price), median(ames_sf$predictions))
   )
+
+  expect_snapshot(
+    ww_multi_scale(
+      dplyr::group_by(ames_sf, Neighborhood),
+      Sale_Price,
+      predictions,
+      n = list(
+        c(10, 10),
+        c(1, 1)
+      ),
+      square = FALSE
+    )
+  )
 })
 
 test_that("expected errors", {

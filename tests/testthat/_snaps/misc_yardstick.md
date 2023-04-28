@@ -23,9 +23,8 @@
 
     Code
       ww_local_getis_ord_g(guerry_modeled, Crm_prs, predictions, wt = list())
-    Error <rlang_error>
-      i In argument: `.estimate = fn(...)`.
-      Caused by error in `spatial_yardstick_vec()`:
+    Condition
+      Error in `ww_local_getis_ord_g()`:
       ! `wt` must be a 'listw' object
       i You can create 'listw' objects using `ww_build_weights()`
 
@@ -33,44 +32,50 @@
 
     Code
       ww_local_getis_ord_g_vec(as.character(crm), prd, structure(list(), class = "listw"))
-    Error <rlang_error>
-      `truth` must be numeric.
+    Condition
+      Error in `yardstick_vec()`:
+      ! `truth` must be numeric.
 
 ---
 
     Code
       ww_local_getis_ord_g_vec(crm, as.character(prd), structure(list(), class = "listw"))
-    Error <rlang_error>
-      `estimate` must be numeric.
+    Condition
+      Error in `yardstick_vec()`:
+      ! `estimate` must be numeric.
 
 ---
 
     Code
       ww_local_getis_ord_g_vec(as.matrix(crm), prd, structure(list(), class = "listw"))
-    Error <rlang_error>
-      `truth` must be a numeric vector.
+    Condition
+      Error in `yardstick_vec()`:
+      ! `truth` must be a numeric vector.
 
 ---
 
     Code
       ww_local_getis_ord_g_vec(crm, as.matrix(prd), structure(list(), class = "listw"))
-    Error <rlang_error>
-      `estimate` must be a numeric vector.
+    Condition
+      Error in `yardstick_vec()`:
+      ! `estimate` must be a numeric vector.
 
 ---
 
     Code
       ww_local_getis_ord_g_vec(crm, numeric(), structure(list(), class = "listw"))
-    Error <rlang_error>
-      Length of `truth` (85) and `estimate` (0) must match.
+    Condition
+      Error in `yardstick_vec()`:
+      ! Length of `truth` (85) and `estimate` (0) must match.
 
 ---
 
     Code
       ww_local_getis_ord_g_vec(crm, prd, structure(list(), class = "listw"),
       na_action = na.omit)
-    Error <rlang_error>
-      Missing values in data.
+    Condition
+      Error in `spatial_yardstick_vec()`:
+      ! Missing values in data.
       i waywiser can't handle missing data for functions that use spatial weights.
 
 ---
@@ -78,7 +83,8 @@
     Code
       withr::with_seed(123, ww_local_getis_ord_g_vec(crm, prd, structure(list(),
       class = "listw"), na_action = function(x) runif(sample(1:100, sample(1:100, 1)))))
-    Error <rlang_error>
-      Missing values in data.
+    Condition
+      Error in `spatial_yardstick_vec()`:
+      ! Missing values in data.
       i waywiser can't handle missing data for functions that use spatial weights.
 

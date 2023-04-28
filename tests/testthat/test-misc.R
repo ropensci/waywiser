@@ -37,7 +37,8 @@ test_that("ww_build_neighbors is stable", {
   )
 
   expect_snapshot(
-    ww_build_neighbors(sf::st_cast(guerry, "MULTILINESTRING"))
+    ww_build_neighbors(sf::st_cast(guerry, "MULTILINESTRING")),
+    error = TRUE
   )
 
   expect_snapshot(
@@ -63,7 +64,8 @@ test_that("ww_build_weights is stable", {
   )
 
   expect_snapshot(
-    ww_build_weights(sf::st_cast(guerry, "MULTILINESTRING"))
+    ww_build_weights(sf::st_cast(guerry, "MULTILINESTRING")),
+    error = TRUE
   )
 
   expect_snapshot(

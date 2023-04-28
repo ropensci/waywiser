@@ -151,3 +151,17 @@ print(
 # waywiser::ww_make_polygon_neighbors()
 ```
 
+See `citation("waywiser")` for the most up-to-date citation information.
+
+## Contributing
+
+Please note that this package is released with a 
+[Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). 
+By contributing to this project, you agree to abide by its terms.
+
+- If you think you have encountered a bug, please [submit an issue](https://github.com/ropensci/waywiser).
+
+- Please include a [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html) (a minimal, reproducible example) to clearly communicate about your code.
+
+[![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
+>>>>>>> 8057a9b48cc5043bea752cbc9a494ea7ba509e23

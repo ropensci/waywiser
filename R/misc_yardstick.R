@@ -7,6 +7,7 @@
 #' @inheritParams yardstick::rmse
 #' @inheritParams ww_area_of_applicability
 #' @inheritParams rlang::args_dots_empty
+#' @inheritParams rlang::args_error_context
 #'
 #' @return A tibble with one row and three columns: `.metric`, containing `name`,
 #' `.estimator`, containing `standard`, and `.estimate`, the metric estimate.
@@ -14,7 +15,8 @@
 #' inputs.
 #'
 #' @noRd
-yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., case_weights = NULL) {
+yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., case_weights = NULL,
+                         error_call = rlang::caller_env()) {
   if (missing(metric_fun)) metric_fun <- get(paste0("ww_", name, "_vec"))
   out <- metric_reframer(
     name = name,
@@ -25,7 +27,8 @@ yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., ca
     estimate = !!enquo(estimate),
     fn_options = list(
       ...
-    )
+    ),
+    error_call = error_call
   )
 
   if (inherits(out, "sf")) {
@@ -35,44 +38,54 @@ yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., ca
   out
 }
 
-# Replace these with yardstick functions once yardstick > 1.1.0 is out
-yardstick_any_missing <- function(truth, estimate, case_weights = NULL) {
-  anyNA(truth) || anyNA(estimate)
-}
-
-yardstick_remove_missing <- function(truth, estimate, case_weights = NULL) {
-  complete_cases <- stats::complete.cases(truth, estimate)
-
-  truth <- truth[complete_cases]
-  if (is.matrix(estimate)) {
-    estimate <- estimate[complete_cases, , drop = FALSE]
-  } else {
-    estimate <- estimate[complete_cases]
-  }
-
-  list(
-    truth = truth,
-    estimate = estimate
-  )
-}
-
 metric_reframer <- function(name, fn, data, truth, estimate, ..., na_rm = TRUE, fn_options = list(), error_call = rlang::caller_env()) {
   truth <- enquo(truth)
   estimate <- enquo(estimate)
   truth <- ww_eval_select(expr = truth, data = data, error_call = error_call)
   estimate <- ww_eval_select(expr = estimate, data = data, error_call = error_call)
-  out <- dplyr::reframe(
-    data,
-    .metric = .env[["name"]],
-    .estimator = "standard",
-    .estimate = fn(
-      truth = .data[[truth]],
-      estimate = .data[[estimate]],
-      na_rm = .env[["na_rm"]],
-      !!!fn_options
+
+  group_rows <- dplyr::group_rows(data)
+  group_keys <- dplyr::group_keys(data)
+  data <- dplyr::ungroup(data)
+  groups <- vctrs::vec_chop(data, indices = group_rows)
+  out <- vector("list", length = length(groups))
+
+  for (i in seq_along(groups)) {
+    group <- groups[[i]]
+
+    group_truth <- group[[truth]]
+    group_estimate <- group[[estimate]]
+
+    elt_out <- list(
+      .metric = name,
+      .estimator = "standard",
+      .estimate = as.vector(
+        rlang::inject(
+          withCallingHandlers(
+            fn(
+              truth = group_truth,
+              estimate = group_estimate,
+              na_rm = na_rm,
+              !!!fn_options
+            ),
+            error = function(cnd) {
+              cnd$call <- error_call
+              rlang::cnd_signal(cnd)
+            }
+          )
+        )
+      )
     )
-  )
-  dplyr::as_tibble(out)
+
+    elt_out <- vctrs::vec_recycle_common(!!!elt_out)
+    out[[i]] <- tibble::new_tibble(elt_out)
+  }
+
+  group_keys <- vctrs::vec_rep_each(group_keys, times = vctrs::list_sizes(out))
+  out <- vctrs::vec_rbind(!!!out)
+  out <- vctrs::vec_cbind(group_keys, out)
+
+  out
 }
 
 # cribbed from yardstick 1.2.0
@@ -100,6 +113,7 @@ ww_eval_select <- function(expr, data, arg, ..., error_call = rlang::caller_env(
 #' @inheritParams yardstick::rmse
 #' @inheritParams ww_area_of_applicability
 #' @inheritParams rlang::args_dots_empty
+#' @inheritParams rlang::args_error_context
 #' @inheritParams yardstick_df
 #'
 #' @return A tibble with one row and three columns: `.metric`, containing `name`,
@@ -108,7 +122,8 @@ ww_eval_select <- function(expr, data, arg, ..., error_call = rlang::caller_env(
 #' inputs.
 #'
 #' @noRd
-spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., case_weights = NULL) {
+spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., case_weights = NULL,
+                                 error_call = rlang::caller_env()) {
   if (is.null(wt)) {
     wt <- ww_build_weights(data)
   }
@@ -145,7 +160,8 @@ spatial_yardstick_df <- function(data, truth, estimate, wt, na_rm, name, ..., ca
     name = name,
     metric_fun = metric_fun,
     wt = wt,
-    ...
+    ...,
+    error_call = error_call
   )
 }
 

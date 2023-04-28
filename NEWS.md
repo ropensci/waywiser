@@ -1,10 +1,36 @@
 # waywiser (development version)
 
+## Breaking Changes
+
+* `ww_build_neighbors()` (and by extent, every spatial dependence metric) will
+  no longer calculate neighbors for non-point or non-polygon geometries.
+  
+* Functions dealing with local Moran's I and related p-values (both data frame 
+  and vector variants) now return unnamed vectors. 
+
+## New Features
+
 * Added a new method to support passing a `SpatRaster` to `data` in 
   `ww_multi_scale()`, with `truth` and `estimate` being indices used to subset 
   `data`. This is a bit faster than passing `SpatRaster` objects to `truth` and
   `estimate`, as extraction is only done once per grid rather than twice, but 
   does not easily support passing R functions to `aggregation_function`.
+  
+* Metric functions now have better error messages including the name of the 
+  function the _user_ called that errored, not the internal function that 
+  errored. Huge thanks to @EmilHvitfeldt for their PR (#40).
+
+* Data frame metric functions now guarantee that `.estimate` will be an unnamed
+  vector.
+
+## Bug Fixes
+
+* The `sf` method for `ww_multi_scale()` is now _much_ faster (and more memory 
+  efficient). 
+  
+* Fixed the warning when `ww_area_of_applicability()` calculates an AOA 
+  threshold of 0. It now includes "Did you accidentally pass the same data as 
+  testing and training?" as a bullet.
 
 # waywiser 0.3.0
 
