@@ -1,5 +1,7 @@
-This is the third CRAN release of waywiser, adding methods for multi-scale 
-assessment and a number of improvements following rOpenSci review.
+This is the fourth CRAN release of waywiser, adding methods for using
+raster data in multi-scale assessments, improving multi-scale assessment
+speed, and implementing a number of updates and fixes following evolution
+in the tidymodels ecosystem.
 
 ## R CMD check results
 

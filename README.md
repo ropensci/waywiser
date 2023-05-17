@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# waywiser <a href="https://docs.ropensci.org/waywiser"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# waywiser <a href="https://docs.ropensci.org/waywiser/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 
