@@ -491,3 +491,50 @@ test_that("raster method errors as expected", {
     error = TRUE
   )
 })
+
+test_that("sf method supports quoted names", {
+  expect_identical(
+    waywiser::ww_multi_scale(
+      waywiser::ny_trees,
+      n_trees,
+      agb,
+      n = 10
+    )$.estimate,
+    waywiser::ww_multi_scale(
+      waywiser::ny_trees,
+      n_trees,
+      "agb",
+      n = 10
+    )$.estimate
+  )
+
+  expect_identical(
+    waywiser::ww_multi_scale(
+      waywiser::ny_trees,
+      n_trees,
+      "agb",
+      n = 10
+    )$.estimate,
+    waywiser::ww_multi_scale(
+      waywiser::ny_trees,
+      "n_trees",
+      agb,
+      n = 10
+    )$.estimate
+  )
+
+  expect_identical(
+    waywiser::ww_multi_scale(
+      waywiser::ny_trees,
+      "n_trees",
+      agb,
+      n = 10
+    )$.estimate,
+    waywiser::ww_multi_scale(
+      waywiser::ny_trees,
+      "n_trees",
+      "agb",
+      n = 10
+    )$.estimate
+  )
+})

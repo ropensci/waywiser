@@ -443,11 +443,12 @@ ww_multi_scale.sf <- function(
         matched_data,
         dplyr::across(dplyr::all_of(c(dplyr::group_vars(data), "grid_cell_idx")))
       )
+
       matched_data <- dplyr::summarise(
         matched_data,
-        .truth = rlang::exec(.env[["aggregation_function"]], {{ truth }}),
+        .truth = rlang::exec(.env[["aggregation_function"]], .data[[names(truth_var)]]),
         .truth_count = sum(!is.na({{ truth }})),
-        .estimate = rlang::exec(.env[["aggregation_function"]], {{ estimate }}),
+        .estimate = rlang::exec(.env[["aggregation_function"]], .data[[names(estimate_var)]]),
         .estimate_count = sum(!is.na({{ estimate }})),
         .groups = "drop"
       )
