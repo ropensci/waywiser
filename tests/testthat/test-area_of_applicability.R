@@ -13,10 +13,16 @@ if (rlang::is_installed("rsample")) {
 }
 
 pp <- ppr(y ~ ., data = train, nterms = 11)
+metric_name <- ifelse(
+  packageVersion("vip") > package_version("0.3.2"),
+  "rsq",
+  "rsquared"
+)
+
 importance <- vip::vi_permute(
   pp,
   target = "y",
-  metric = "rsquared",
+  metric = metric_name,
   pred_wrapper = predict
 )
 
@@ -239,10 +245,16 @@ test <- train[701:1000, ]
 train <- train[1:700, ]
 
 pp <- ppr(y ~ ., data = train, nterms = 11)
+metric_name <- ifelse(
+  packageVersion("vip") > package_version("0.3.2"),
+  "rsq",
+  "rsquared"
+)
+
 importance <- vip::vi_permute(
   pp,
   target = "y",
-  metric = "rsquared",
+  metric = metric_name,
   pred_wrapper = predict
 )
 aoa <- ww_area_of_applicability(y ~ ., train, test, importance)
