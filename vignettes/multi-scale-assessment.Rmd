@@ -20,14 +20,9 @@ ggplot2::theme_set(ggplot2::theme_minimal())
 ```
 
 This vignette walks through how to use waywiser to assess model predictions at
-multiple spatial scales. The data and code here are adapted from the 
-[tidymodels multi-scale assessment tutorial.](https://www.tidymodels.org/learn/work/multi-scale/)
-However, that tutorial performs a cross-validation procedure at each scale of 
-aggregation, meaning that you're measuring how well your model does when both
-trained and evaluated at multiple scales of aggregation; this vignette focuses
-instead on evaluating a single model's predictions across multiple scales.
+multiple spatial scales, using the `ny_trees` data in waywiser, adapted from 
+that post. 
 
-We're going to use the `ny_trees` data in waywiser, adapted from that post. 
 First things first, we'll set up our environment, loading a few packages 
 and telling sf to download the coordinate reference system for our data,
 if needed:

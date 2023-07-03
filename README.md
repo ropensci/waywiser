@@ -115,6 +115,14 @@ guerry_predicted <- guerry
 guerry_predicted$predictions <- predict(crime_model, guerry)
 
 ww_local_moran_i(guerry_predicted, Crm_prs, predictions)
+#> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
+#> which was just loaded, will retire in October 2023.
+#> Please refer to R-spatial evolution reports for details, especially
+#> https://r-spatial.org/r/2023/05/15/evolution4.html.
+#> It may be desirable to make the sf package available;
+#> package maintainers should consider adding sf to Suggests:.
+#> The sp package is now running under evolution status 2
+#>      (status 2 uses the sf package in place of rgdal)
 #> # A tibble: 85 × 3
 #>    .metric       .estimator .estimate
 #>    <chr>         <chr>          <dbl>

@@ -1,7 +1,7 @@
-This is the fourth CRAN release of waywiser, adding methods for using
-raster data in multi-scale assessments, improving multi-scale assessment
-speed, and implementing a number of updates and fixes following evolution
-in the tidymodels ecosystem.
+This is the fifth CRAN release of waywiser. This patch release anticipates
+some breaking changes in new versions of the vip package, and updates some tests 
+and examples so that waywiser will still pass checks once the new version of vip 
+is released.
 
 ## R CMD check results
 

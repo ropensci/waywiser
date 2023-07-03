@@ -14,14 +14,10 @@ An sf object using EPSG 5070: NAD83 / Conus Albers (in meters), with 5,303 rows 
 \item{geometry}{The centroid of the plot location.}
 }
 }
-\source{
-Tidymodels team, "Multi-scale Assessment". Retrieved 30 November 2022. Available at \url{https://www.tidymodels.org/learn/work/multi-scale/}
-}
 \usage{
 ny_trees
 }
 \description{
-This data is adapted from the Tidymodels "multi-scale assessment" lesson, available at \url{https://www.tidymodels.org/learn/work/multi-scale/}.
 The original data is derived from the Forest Inventory and Analysis program,
 implemented by the US Department of Agriculture's Forest Service.
 }

@@ -49,7 +49,6 @@
 
 #' Number of trees and aboveground biomass for Forest Inventory and Analysis plots in New York State
 #'
-#' This data is adapted from the Tidymodels "multi-scale assessment" lesson, available at <https://www.tidymodels.org/learn/work/multi-scale/>.
 #' The original data is derived from the Forest Inventory and Analysis program,
 #' implemented by the US Department of Agriculture's Forest Service.
 #'
@@ -61,9 +60,6 @@
 #' \item{agb}{The total aboveground biomass at the plot location, in pounds.}
 #' \item{geometry}{The centroid of the plot location.}
 #' }
-#'
-#' @source
-#' Tidymodels team, "Multi-scale Assessment". Retrieved 30 November 2022. Available at <https://www.tidymodels.org/learn/work/multi-scale/>
 "ny_trees"
 
 #' Simulated data based on WorldClim Bioclimatic variables
