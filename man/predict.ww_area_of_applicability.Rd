@@ -42,10 +42,16 @@ train <- gen_friedman(1000, seed = 101) # ?vip::gen_friedman
 test <- train[701:1000, ]
 train <- train[1:700, ]
 pp <- stats::ppr(y ~ ., data = train, nterms = 11)
-importance <- vi_permute(
+metric_name <- ifelse(
+  packageVersion("vip") > package_version("0.3.2"),
+  "rsq",
+  "rsquared"
+)
+
+importance <- vip::vi_permute(
   pp,
   target = "y",
-  metric = "rsquared",
+  metric = metric_name,
   pred_wrapper = predict
 )
 

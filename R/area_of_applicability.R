@@ -127,10 +127,16 @@
 #' test <- train[701:1000, ]
 #' train <- train[1:700, ]
 #' pp <- stats::ppr(y ~ ., data = train, nterms = 11)
+#' metric_name <- ifelse(
+#'   packageVersion("vip") > package_version("0.3.2"),
+#'   "rsq",
+#'   "rsquared"
+#' )
+#'
 #' importance <- vip::vi_permute(
 #'   pp,
 #'   target = "y",
-#'   metric = "rsquared",
+#'   metric = metric_name,
 #'   pred_wrapper = predict
 #' )
 #'
@@ -618,10 +624,16 @@ calc_aoa <- function(di) {
 #' test <- train[701:1000, ]
 #' train <- train[1:700, ]
 #' pp <- stats::ppr(y ~ ., data = train, nterms = 11)
-#' importance <- vi_permute(
+#' metric_name <- ifelse(
+#'   packageVersion("vip") > package_version("0.3.2"),
+#'   "rsq",
+#'   "rsquared"
+#' )
+#'
+#' importance <- vip::vi_permute(
 #'   pp,
 #'   target = "y",
-#'   metric = "rsquared",
+#'   metric = metric_name,
 #'   pred_wrapper = predict
 #' )
 #'
@@ -676,10 +688,16 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
 #' library(vip)
 #' trn <- gen_friedman(500, seed = 101) # ?vip::gen_friedman
 #' pp <- ppr(y ~ ., data = trn, nterms = 11)
-#' importance <- vi_permute(
+#' metric_name <- ifelse(
+#'   packageVersion("vip") > package_version("0.3.2"),
+#'   "rsq",
+#'   "rsquared"
+#' )
+#'
+#' importance <- vip::vi_permute(
 #'   pp,
 #'   target = "y",
-#'   metric = "rsquared",
+#'   metric = metric_name,
 #'   pred_wrapper = predict
 #' )
 #'
