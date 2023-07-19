@@ -12,7 +12,8 @@ test_that("tidy_importance is idempotent", {
     pp,
     target = "y",
     metric = metric_name,
-    pred_wrapper = predict
+    pred_wrapper = predict,
+    train = train
   )
 
   expect_identical(

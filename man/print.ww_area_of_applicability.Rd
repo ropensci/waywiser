@@ -31,7 +31,8 @@ importance <- vip::vi_permute(
   pp,
   target = "y",
   metric = metric_name,
-  pred_wrapper = predict
+  pred_wrapper = predict,
+  train = trn
 )
 
 
