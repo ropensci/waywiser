@@ -701,7 +701,7 @@ predict.ww_area_of_applicability <- function(object, new_data, ...) {
 #'   target = "y",
 #'   metric = metric_name,
 #'   pred_wrapper = predict,
-#'   train = train
+#'   train = trn
 #' )
 #'
 #'
