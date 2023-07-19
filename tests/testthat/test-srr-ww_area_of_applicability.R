@@ -20,7 +20,8 @@ importance <- vip::vi_permute(
   pp,
   target = "y",
   metric = metric_name,
-  pred_wrapper = predict
+  pred_wrapper = predict,
+  train = train
 )
 
 test_that("srr: expected failures for ww_area_of_applicability", {
