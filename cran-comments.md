@@ -1,7 +1,6 @@
-This is the fifth CRAN release of waywiser. This patch release anticipates
+This is the sixth CRAN release of waywiser. This patch release addresses
 some breaking changes in new versions of the vip package, and updates some tests 
-and examples so that waywiser will still pass checks once the new version of vip 
-is released.
+and examples so that waywiser will pass checks under the new version of vip.
 
 ## R CMD check results
 
