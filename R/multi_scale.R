@@ -498,7 +498,15 @@ handle_metrics <- function(metrics) {
 handle_grids <- function(data, grids, autoexpand_grid, ...) {
   if (is.null(grids)) {
     grid_args <- rlang::list2(...)
-    grid_args <- tibble::as_tibble(do.call(cbind, grid_args))
+    grid_arg_idx <- max(vapply(grid_args, length, integer(1)))
+    grid_args <- stats::setNames(
+      lapply(
+        grid_args,
+        \(x) rep(x, length.out = grid_arg_idx)
+      ),
+      names(grid_args)
+    )
+    grid_args <- tibble::as_tibble(grid_args)
     grid_arg_idx <- seq_len(nrow(grid_args))
 
     grid_box <- sf::st_bbox(data)
@@ -511,14 +519,12 @@ handle_grids <- function(data, grids, autoexpand_grid, ...) {
       # points within the grid
       grid_box <- expand_grid(grid_box)
     }
-
-    grids <- apply(
-      grid_args,
-      1,
-      function(g_args) {
+    grids <- lapply(
+      grid_arg_idx,
+      function(idx) {
         do.call(
           sf::st_make_grid,
-          c(g_args, x = list(grid_box))
+          c(x = list(grid_box), grid_args[idx, ])
         )
       }
     )
