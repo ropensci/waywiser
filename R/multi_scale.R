@@ -446,10 +446,10 @@ ww_multi_scale.sf <- function(
 
       matched_data <- dplyr::summarise(
         matched_data,
-        .truth = rlang::exec(.env[["aggregation_function"]], .data[[names(truth_var)]]),
         .truth_count = sum(!is.na({{ truth }})),
-        .estimate = rlang::exec(.env[["aggregation_function"]], .data[[names(estimate_var)]]),
+        .truth = rlang::exec(.env[["aggregation_function"]], .data[[names(truth_var)]]),
         .estimate_count = sum(!is.na({{ estimate }})),
+        .estimate = rlang::exec(.env[["aggregation_function"]], .data[[names(estimate_var)]]),
         .groups = "drop"
       )
 
