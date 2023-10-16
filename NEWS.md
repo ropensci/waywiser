@@ -4,8 +4,6 @@
 
 * `ww_multi_scale()` using sf data always returned "1" for truth and estimate counts. This was because counts were calculated post-aggregation by mistake. Calculation order has been fixed, and these counts should now be correct.
 
-* Relatedly, `ww_multi_scale()` using sf data now reverses the order of the `.truth` and `.truth_count` columns, as well as the `.estimate` and `.estimate_count` columns.
-
 # waywiser 0.4.2
 
 * This is a patch release to keep up with additional breaking changes in the vip package. There are no user-facing differences in this version.
