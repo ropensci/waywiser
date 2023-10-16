@@ -147,7 +147,7 @@ between all points in the analysis set for that fold.
 \eqn{k} in the assessment fold and any point in the
 corresponding analysis fold.
 \item \eqn{DI_{k}} is then found by dividing \eqn{d_{k}} by \eqn{\bar{d}},
-which was calculated independently from {k}.
+which was calculated independently from \eqn{k}.
 }
 
 Predictions are made using the full training data set, rescaled once (in

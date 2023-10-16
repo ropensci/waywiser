@@ -46,7 +46,7 @@
 #'    \eqn{k} in the assessment fold and any point in the
 #'    corresponding analysis fold.
 #' 4. \eqn{DI_{k}} is then found by dividing \eqn{d_{k}} by \eqn{\bar{d}},
-#'    which was calculated independently from {k}.
+#'    which was calculated independently from \eqn{k}.
 #'
 #' Predictions are made using the full training data set, rescaled once (in
 #' the same way as CAST), and the mean \eqn{\bar{d}} across folds, under the
