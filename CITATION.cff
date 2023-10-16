@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.4.1
+# CITATION file created with {cffr} R package, v0.5.0
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -8,7 +8,7 @@ message: 'To cite package "waywiser" in publications use:'
 type: software
 license: MIT
 title: 'waywiser: Ergonomic Methods for Assessing Spatial Models'
-version: 0.3.0.9000
+version: 0.5.0.9000
 doi: 10.48550/arXiv.2303.11312
 abstract: 'Assessing predictive models of spatial data can be challenging, both because
   these models are typically built for extrapolating outside the original region represented
@@ -164,10 +164,10 @@ references:
   authors:
   - family-names: Vaughan
     given-names: Davis
-    email: davis@rstudio.com
+    email: davis@posit.co
   - family-names: Kuhn
     given-names: Max
-    email: max@rstudio.com
+    email: max@posit.co
   year: '2023'
 - type: software
   title: Matrix
@@ -178,6 +178,7 @@ references:
   authors:
   - family-names: Bates
     given-names: Douglas
+    orcid: https://orcid.org/0000-0001-8316-9503
   - family-names: Maechler
     given-names: Martin
     email: mmaechler+Matrix@gmail.com
@@ -215,6 +216,7 @@ references:
     given-names: Hadley
     email: hadley@posit.co
   year: '2023'
+  version: '>= 1.1.0'
 - type: software
   title: sf
   abstract: 'sf: Simple Features for R'
@@ -282,6 +284,23 @@ references:
     email: hadley@rstudio.com
   year: '2023'
 - type: software
+  title: vctrs
+  abstract: 'vctrs: Vector Helpers'
+  notes: Imports
+  url: https://vctrs.r-lib.org/
+  repository: https://CRAN.R-project.org/package=vctrs
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Vaughan
+    given-names: Davis
+    email: davis@posit.co
+  year: '2023'
+- type: software
   title: yardstick
   abstract: 'yardstick: Tidy Characterizations of Model Performance'
   notes: Imports
@@ -290,15 +309,16 @@ references:
   authors:
   - family-names: Kuhn
     given-names: Max
-    email: max@rstudio.com
+    email: max@posit.co
   - family-names: Vaughan
     given-names: Davis
-    email: davis@rstudio.com
+    email: davis@posit.co
   - family-names: Hvitfeldt
     given-names: Emil
-    email: emil.hvitfeldt@rstudio.com
+    email: emil.hvitfeldt@posit.co
     orcid: https://orcid.org/0000-0002-0679-1945
   year: '2023'
+  version: '>= 1.2.0'
 - type: software
   title: applicable
   abstract: 'applicable: A Compilation of Applicability Domain Methods'
@@ -339,6 +359,8 @@ references:
     given-names: Carles
   - family-names: Ludwig
     given-names: Marvin
+  - family-names: Linnenbrink
+    given-names: Jan
   year: '2023'
 - type: software
   title: covr
@@ -432,6 +454,9 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
+  - family-names: Hvitfeldt
+    given-names: Emil
+    email: emil.hvitfeldt@posit.co
   year: '2023'
 - type: software
   title: rmarkdown
@@ -442,35 +467,38 @@ references:
   authors:
   - family-names: Allaire
     given-names: JJ
-    email: jj@rstudio.com
+    email: jj@posit.co
   - family-names: Xie
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
+  - family-names: Dervieux
+    given-names: Christophe
+    email: cderv@posit.co
+    orcid: https://orcid.org/0000-0003-4474-2498
   - family-names: McPherson
     given-names: Jonathan
-    email: jonathan@rstudio.com
+    email: jonathan@posit.co
   - family-names: Luraschi
     given-names: Javier
-    email: javier@rstudio.com
   - family-names: Ushey
     given-names: Kevin
-    email: kevin@rstudio.com
+    email: kevin@posit.co
   - family-names: Atkins
     given-names: Aron
-    email: aron@rstudio.com
+    email: aron@posit.co
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   - family-names: Cheng
     given-names: Joe
-    email: joe@rstudio.com
+    email: joe@posit.co
   - family-names: Chang
     given-names: Winston
-    email: winston@rstudio.com
+    email: winston@posit.co
   - family-names: Iannone
     given-names: Richard
-    email: rich@rstudio.com
+    email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
   year: '2023'
 - type: software
@@ -509,20 +537,20 @@ references:
   url: https://spatialsample.tidymodels.org
   repository: https://CRAN.R-project.org/package=spatialsample
   authors:
-  - family-names: Silge
-    given-names: Julia
-    email: julia.silge@rstudio.com
-    orcid: https://orcid.org/0000-0002-3671-836X
   - family-names: Mahoney
     given-names: Michael
     email: mike.mahoney.218@gmail.com
     orcid: https://orcid.org/0000-0003-2402-304X
+  - family-names: Silge
+    given-names: Julia
+    email: julia.silge@posit.co
+    orcid: https://orcid.org/0000-0002-3671-836X
   year: '2023'
 - type: software
   title: terra
   abstract: 'terra: Spatial Data Analysis'
   notes: Suggests
-  url: https://rspatial.org/terra/
+  url: https://rspatial.org/
   repository: https://CRAN.R-project.org/package=terra
   authors:
   - family-names: Hijmans
@@ -539,7 +567,7 @@ references:
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   year: '2023'
   version: '>= 3.0.0'
 - type: software
@@ -551,11 +579,11 @@ references:
   authors:
   - family-names: Kuhn
     given-names: Max
-    email: max@rstudio.com
+    email: max@posit.co
     orcid: https://orcid.org/0000-0003-2402-136X
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   year: '2023'
 - type: software
   title: tidyr
@@ -585,6 +613,27 @@ references:
     email: kyle@walker-data.com
   year: '2023'
 - type: software
+  title: units
+  abstract: 'units: Measurement Units for R Vectors'
+  notes: Suggests
+  url: https://r-quantities.github.io/units/
+  repository: https://CRAN.R-project.org/package=units
+  authors:
+  - family-names: Pebesma
+    given-names: Edzer
+    email: edzer.pebesma@uni-muenster.de
+    orcid: https://orcid.org/0000-0001-8049-7069
+  - family-names: Mailund
+    given-names: Thomas
+    email: mailund@birc.au.dk
+  - family-names: Kalinowski
+    given-names: Tomasz
+  - family-names: Ucar
+    given-names: Iñaki
+    email: iucar@fedoraproject.org
+    orcid: https://orcid.org/0000-0001-6403-5550
+  year: '2023'
+- type: software
   title: vip
   abstract: 'vip: Variable Importance Plots'
   notes: Suggests
@@ -592,7 +641,7 @@ references:
   repository: https://CRAN.R-project.org/package=vip
   authors:
   - family-names: Greenwell
-    given-names: Brandon
+    given-names: Brandon M.
     email: greenwell.brandon@gmail.com
     orcid: https://orcid.org/0000-0002-8120-0084
   - family-names: Boehmke
