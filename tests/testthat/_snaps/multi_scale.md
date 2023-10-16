@@ -251,3 +251,13 @@
       Error in `ww_multi_scale_raster_args()`:
       ! `estimate` must be a SpatRaster with only one layer.
 
+# using protected names triggers errors
+
+    This function cannot work with data whose columns are named `.truth`, `.estimate`, `.truth_count`, or `estimate_count`.
+    i Rename the relevant columns and try again.
+
+---
+
+    This function cannot work with data whose columns are named `.truth`, `.estimate`, `.truth_count`, or `estimate_count`.
+    i Rename the relevant columns and try again.
+

@@ -365,6 +365,13 @@ ww_multi_scale.sf <- function(
     )
   }
 
+  if (any(names(data) %in% c(".truth", ".estimate", ".truth_count", ".estimate_count"))) {
+    rlang::abort(c(
+      "This function cannot work with data whose columns are named `.truth`, `.estimate`, `.truth_count`, or `estimate_count`.",
+      i = "Rename the relevant columns and try again."
+    ))
+  }
+
   geom_type <- unique(sf::st_geometry_type(data))
   if (!(length(geom_type) == 1 && geom_type == "POINT")) {
     rlang::abort(
@@ -446,10 +453,10 @@ ww_multi_scale.sf <- function(
 
       matched_data <- dplyr::summarise(
         matched_data,
-        .truth_count = sum(!is.na(.data[[names(truth_var)]])),
         .truth = rlang::exec(.env[["aggregation_function"]], .data[[names(truth_var)]]),
-        .estimate_count = sum(!is.na(.data[[names(estimate_var)]])),
+        .truth_count = sum(!is.na(.data[[names(truth_var)]])),
         .estimate = rlang::exec(.env[["aggregation_function"]], .data[[names(estimate_var)]]),
+        .estimate_count = sum(!is.na(.data[[names(estimate_var)]])),
         .groups = "drop"
       )
 
