@@ -79,4 +79,5 @@ for (name in spatial_yardstick) {
     generated_template,
     file.path("tests", "testthat", paste0("test-srr-", name, ".R"))
   )
+  styler::style_file(file.path("tests", "testthat", paste0("test-srr-", name, ".R")))
 }

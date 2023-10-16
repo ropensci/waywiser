@@ -48,7 +48,6 @@ test_that("srr: {{{name}}} errors if truth and estimate are list columns", {
 })
 
 test_that("srr: {{{name}}} removes NaN and NA when na_rm = TRUE", {
-
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
 
   expect_snapshot(
@@ -69,7 +68,6 @@ test_that("srr: {{{name}}} removes NaN and NA when na_rm = TRUE", {
 })
 
 test_that("srr: {{{name}}} returns NA when na_rm = FALSE and NA is present", {
-
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
 
   expect_identical(
@@ -91,11 +89,9 @@ test_that("srr: {{{name}}} returns NA when na_rm = FALSE and NA is present", {
     {{{name}}}_vec(missing_df$x, missing_df$y, na_rm = FALSE),
     NA_real_
   )
-
 })
 
 test_that("srr: {{{name}}} errors on zero-length data", {
-
   expect_snapshot(
     {{{name}}}_vec(numeric(), numeric()),
     error = TRUE
@@ -114,7 +110,6 @@ test_that("srr: {{{name}}} errors on zero-length data", {
 })
 
 test_that("srr: {{{name}}} errors on all-NA data", {
-
   expect_snapshot(
     {{{name}}}_vec(rep(NA_real_, 4), 4:1),
     error = TRUE
@@ -139,12 +134,10 @@ test_that("srr: {{{name}}} errors on all-NA data", {
   expect_snapshot(
     {{{name}}}_vec(1:4, 1:4)
   )
-
 })
 
 
 test_that("srr: {{{name}}} works with all identical data", {
-
   all_identical <- tibble::tibble(x = 1:4, y = 1:4)
   expect_snapshot(
     {{{name}}}(all_identical, x, y)
@@ -158,7 +151,6 @@ test_that("srr: {{{name}}} works with all identical data", {
   expect_snapshot(
     {{{name}}}(all_identical, x, y)
   )
-
 })
 
 test_that("srr: {{{name}}} results don't change with trivial noise", {
@@ -188,7 +180,6 @@ test_that("srr: {{{name}}} results don't change with trivial noise", {
     {{{name}}}_vec(y, noised_x),
     {{{name}}}_vec(y, x)
   )
-
 })
 
 test_that("srr: {{{name}}} results don't change with different seeds", {
@@ -240,5 +231,4 @@ test_that("srr: {{{name}}} results don't change with different seeds", {
       {{{name}}}_vec(y, x)
     )
   )
-
 })
