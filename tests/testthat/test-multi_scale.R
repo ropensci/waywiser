@@ -608,3 +608,45 @@ test_that("counts of non-NA values are correct", {
   expect_identical(actual, expected)
 })
 
+test_that("counts are the same whether or not column names are quoted", {
+  pts <- sf::st_sample(
+    sf::st_as_sfc(
+      sf::st_bbox(
+        c(xmin = 1327326, ymin = 2175524, xmax = 1971106, ymax = 2651347),
+        crs = 5072
+      )
+    ),
+    500
+  )
+
+  pts <- sf::st_as_sf(pts)
+  pts$truth <- rnorm(500, 123, 35)
+  pts$estimate <- rnorm(500, 123, 39)
+
+  cellsizes <- units::set_units(seq(20, 100, 10), "km")
+
+  expect_identical(
+    lapply(
+      waywiser::ww_multi_scale(
+        pts,
+        truth,
+        estimate,
+        cellsize = cellsizes,
+        square = FALSE,
+        metrics = yardstick::rmse
+      )$.grid,
+      function(x) x$.truth_count
+    ),
+    lapply(
+      waywiser::ww_multi_scale(
+        pts,
+        "truth",
+        "estimate",
+        cellsize = cellsizes,
+        square = FALSE,
+        metrics = yardstick::rmse
+      )$.grid,
+      function(x) x$.truth_count
+    )
+  )
+})
