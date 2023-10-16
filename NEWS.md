@@ -1,3 +1,5 @@
+# waywiser (development version)
+
 # waywiser 0.5.0
 
 * `ww_multi_scale()` did not correctly handle grid cellsizes with units. Units (set using the `units` package) are now respected.
