@@ -601,7 +601,7 @@ test_that("counts of non-NA values are correct", {
   actual <- ww_output$.grid[[1]]$.truth_count
   expected <- vapply(
     seq_len(nrow(ww_output$.grid[[1]])),
-    function(idx) nrow(sf::st_intersection(ww_output$.grid[[1]][idx, ], pts)),
+    function(idx) nrow(sf::st_intersection((ww_output$.grid[[1]][idx, ]["x"]), pts["x"])),
     integer(1)
   )
   expected[expected == 0] <- NA_integer_

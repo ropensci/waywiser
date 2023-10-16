@@ -522,9 +522,16 @@ handle_grids <- function(data, grids, autoexpand_grid, ...) {
     grids <- lapply(
       grid_arg_idx,
       function(idx) {
+        arg <- lapply(
+          names(grid_args),
+          function(arg) {
+            grid_args[[arg]][[idx]]
+          }
+        )
+        names(arg) <- names(grid_args)
         do.call(
           sf::st_make_grid,
-          c(x = list(grid_box), grid_args[idx, ])
+          c(x = list(grid_box), arg)
         )
       }
     )
