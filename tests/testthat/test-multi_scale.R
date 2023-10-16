@@ -433,7 +433,6 @@ test_that("raster method works", {
     )$.estimate,
     1
   )
-
 })
 
 test_that("raster method is equivalent", {
@@ -569,7 +568,6 @@ test_that("units are handled properly", {
     vapply(ww_output$.grid, nrow, integer(1)),
     vapply(cellsizes, function(cellsize) length(sf::st_make_grid(pts, cellsize, square = FALSE)), integer(1))
   )
-
 })
 
 test_that("counts of non-NA values are correct", {

@@ -477,7 +477,6 @@ ww_multi_scale.sf <- function(
       out$.grid <- list(.grid)
       out$.notes <- list(notes_tibble)
       out
-
     }
   )
 
@@ -491,7 +490,6 @@ ww_multi_scale.sf <- function(
   }
 
   out
-
 }
 
 handle_metrics <- function(metrics) {
