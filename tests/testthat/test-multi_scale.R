@@ -538,3 +538,36 @@ test_that("sf method supports quoted names", {
     )$.estimate
   )
 })
+
+test_that("units are handled properly", {
+  pts <- sf::st_sample(
+    sf::st_as_sfc(
+      sf::st_bbox(
+        c(xmin = 1327326, ymin = 2175524, xmax = 1971106, ymax = 2651347),
+        crs = 5072
+      )
+    ),
+    500
+  )
+
+  pts <- sf::st_as_sf(pts)
+  pts$truth <- rnorm(500, 123, 35)
+  pts$estimate <- rnorm(500, 123, 39)
+
+  cellsizes <- units::set_units(seq(20, 100, 10), "km")
+
+  ww_output <- ww_multi_scale(
+    pts,
+    truth,
+    estimate,
+    cellsize = cellsizes,
+    square = FALSE,
+    metrics = yardstick::rmse
+  )
+
+  expect_identical(
+    vapply(ww_output$.grid, nrow, integer(1)),
+    vapply(cellsizes, function(cellsize) length(sf::st_make_grid(pts, cellsize, square = FALSE)), integer(1))
+  )
+
+})
