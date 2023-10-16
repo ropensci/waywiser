@@ -652,6 +652,7 @@ test_that("counts are the same whether or not column names are quoted", {
 })
 
 test_that("using protected names triggers errors", {
+  skip_if_not_installed("units")
   pts <- sf::st_sample(
     sf::st_as_sfc(
       sf::st_bbox(
