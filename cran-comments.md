@@ -1,6 +1,6 @@
-This is the sixth CRAN release of waywiser. This patch release addresses
-some breaking changes in new versions of the vip package, and updates some tests 
-and examples so that waywiser will pass checks under the new version of vip.
+This is the seventh CRAN release of waywiser. This minor release addresses
+some bugs in the `ww_multi_scale()` function and improves test coverage for
+edge case behaviors.
 
 ## R CMD check results
 

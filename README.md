@@ -80,16 +80,16 @@ two different scales:
 
 ``` r
 guerry_points <- data.frame(
-  .truth = guerry$Crm_prs,
-  .estimate = predict(crime_model, guerry),
+  truth = guerry$Crm_prs,
+  estimate = predict(crime_model, guerry),
   geometry = sf::st_centroid(sf::st_geometry(guerry))
 )
 guerry_points <- sf::st_as_sf(guerry_points)
 
 guerry_multi_scale <- ww_multi_scale(
   guerry_points,
-  .truth,
-  .estimate,
+  truth,
+  estimate,
   n = list(c(5, 5), c(2, 2))
 )
 
