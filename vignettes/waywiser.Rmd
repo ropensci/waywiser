@@ -2,7 +2,7 @@
 title: "Assessing models with waywiser"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Assessing Models with Waywiser}
+  %\VignetteIndexEntry{Assessing Models with waywiser}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
