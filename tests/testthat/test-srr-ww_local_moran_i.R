@@ -186,7 +186,6 @@ test_that("srr: expected failures for ww_local_moran_i", {
   expect_snapshot(
     ww_local_moran_i(worldclim_simulation, response, response)
   )
-
 })
 
 test_that("other generic srr standards", {
@@ -457,5 +456,4 @@ test_that("other generic srr standards", {
       ww_local_moran_i_vec(worldclim_loaded$bio13, worldclim_loaded$bio19, other_weights)
     )
   )
-
 })
