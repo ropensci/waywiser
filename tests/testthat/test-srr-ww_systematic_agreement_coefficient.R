@@ -51,7 +51,6 @@ test_that("srr: ww_systematic_agreement_coefficient errors if truth and estimate
 })
 
 test_that("srr: ww_systematic_agreement_coefficient removes NaN and NA when na_rm = TRUE", {
-
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
 
   expect_snapshot(
@@ -72,7 +71,6 @@ test_that("srr: ww_systematic_agreement_coefficient removes NaN and NA when na_r
 })
 
 test_that("srr: ww_systematic_agreement_coefficient returns NA when na_rm = FALSE and NA is present", {
-
   missing_df <- tibble::tibble(x = c(NaN, 2:5), y = c(1:4, NA))
 
   expect_identical(
@@ -94,11 +92,9 @@ test_that("srr: ww_systematic_agreement_coefficient returns NA when na_rm = FALS
     ww_systematic_agreement_coefficient_vec(missing_df$x, missing_df$y, na_rm = FALSE),
     NA_real_
   )
-
 })
 
 test_that("srr: ww_systematic_agreement_coefficient errors on zero-length data", {
-
   expect_snapshot(
     ww_systematic_agreement_coefficient_vec(numeric(), numeric()),
     error = TRUE
@@ -117,7 +113,6 @@ test_that("srr: ww_systematic_agreement_coefficient errors on zero-length data",
 })
 
 test_that("srr: ww_systematic_agreement_coefficient errors on all-NA data", {
-
   expect_snapshot(
     ww_systematic_agreement_coefficient_vec(rep(NA_real_, 4), 4:1),
     error = TRUE
@@ -142,12 +137,10 @@ test_that("srr: ww_systematic_agreement_coefficient errors on all-NA data", {
   expect_snapshot(
     ww_systematic_agreement_coefficient_vec(1:4, 1:4)
   )
-
 })
 
 
 test_that("srr: ww_systematic_agreement_coefficient works with all identical data", {
-
   all_identical <- tibble::tibble(x = 1:4, y = 1:4)
   expect_snapshot(
     ww_systematic_agreement_coefficient(all_identical, x, y)
@@ -161,7 +154,6 @@ test_that("srr: ww_systematic_agreement_coefficient works with all identical dat
   expect_snapshot(
     ww_systematic_agreement_coefficient(all_identical, x, y)
   )
-
 })
 
 test_that("srr: ww_systematic_agreement_coefficient results don't change with trivial noise", {
@@ -191,7 +183,6 @@ test_that("srr: ww_systematic_agreement_coefficient results don't change with tr
     ww_systematic_agreement_coefficient_vec(y, noised_x),
     ww_systematic_agreement_coefficient_vec(y, x)
   )
-
 })
 
 test_that("srr: ww_systematic_agreement_coefficient results don't change with different seeds", {
@@ -243,5 +234,4 @@ test_that("srr: ww_systematic_agreement_coefficient results don't change with di
       ww_systematic_agreement_coefficient_vec(y, x)
     )
   )
-
 })
