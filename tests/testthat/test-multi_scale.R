@@ -692,3 +692,30 @@ test_that("using protected names triggers errors", {
     )
   )
 })
+
+
+test_that("Data with an NA CRS works", {
+  pts <- sf::st_sample(
+    sf::st_as_sfc(
+      sf::st_bbox(
+        c(xmin = 1327326, ymin = 2175524, xmax = 1971106, ymax = 2651347)
+      )
+    ),
+    500
+  )
+
+  pts <- sf::st_as_sf(pts)
+  pts$truth <- rnorm(500, 123, 35)
+  pts$estimate <- rnorm(500, 123, 39)
+
+  expect_no_error(
+    waywiser::ww_multi_scale(
+      pts,
+      truth,
+      estimate,
+      cellsize = 20000,
+      square = FALSE,
+      metrics = yardstick::rmse
+    )
+  )
+})
