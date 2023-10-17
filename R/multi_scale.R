@@ -190,7 +190,7 @@ ww_multi_scale.SpatRaster <- function(
   names(data) <- c("truth", "estimate")
 
   metrics <- handle_metrics(metrics)
-  grid_list <- handle_grids(data, grids, autoexpand_grid, ...)
+  grid_list <- handle_grids(data, grids, autoexpand_grid, sf::st_crs(data), ...)
 
   grid_list$grids <- purrr::map(
     grid_list$grids,
@@ -263,7 +263,7 @@ ww_multi_scale_raster_args <- function(
   }
 
   metrics <- handle_metrics(metrics)
-  grid_list <- handle_grids(truth, grids, autoexpand_grid, ...)
+  grid_list <- handle_grids(truth, grids, autoexpand_grid, sf::st_crs(data), ...)
 
   grid_list$grids <- purrr::map(
     grid_list$grids,
@@ -365,23 +365,7 @@ ww_multi_scale.sf <- function(
     )
   }
 
-  if (any(names(data) %in% c(".truth", ".estimate", ".truth_count", ".estimate_count"))) {
-    rlang::abort(c(
-      "This function cannot work with data whose columns are named `.truth`, `.estimate`, `.truth_count`, or `estimate_count`.",
-      i = "Rename the relevant columns and try again."
-    ))
-  }
-
-  geom_type <- unique(sf::st_geometry_type(data))
-  if (!(length(geom_type) == 1 && geom_type == "POINT")) {
-    rlang::abort(
-      c(
-        "ww_multi_scale is currently only implemented for point geometries.",
-        i = "Consider casting your data to points."
-      )
-    )
-  }
-
+  check_multi_scale_data(data)
   metrics <- handle_metrics(metrics)
 
   truth_var <- tidyselect::eval_select(rlang::expr({{ truth }}), data)
@@ -395,7 +379,8 @@ ww_multi_scale.sf <- function(
     rlang::abort("`estimate` must be numeric.")
   }
 
-  grid_list <- handle_grids(data, grids, autoexpand_grid, ...)
+  data_crs <- sf::st_crs(data)
+  grid_list <- handle_grids(data, grids, autoexpand_grid, data_crs, ...)
 
   data$.grid_idx <- seq_len(nrow(data))
   out <- purrr::map2_dfr(
@@ -404,20 +389,9 @@ ww_multi_scale.sf <- function(
     function(grid, grid_args_idx) {
       grid_args <- grid_list[["grid_args"]][grid_args_idx, ]
 
-      grid <- sf::st_as_sf(grid)
-
-      data_crs <- sf::st_crs(data)
-      grid_crs <- sf::st_crs(grid)
-      # If both have a CRS, reproject
-      if (!is.na(data_crs) && !is.na(grid_crs)) {
-        grid <- sf::st_transform(grid, data_crs)
-        # if only data has CRS, assume grid in same
-      } else if (!is.na(data_crs)) {
-        grid <- sf::st_set_crs(grid, data_crs)
-      }
-      # if neither has a CRS, ignore (so, implicitly assume grid is in same)
-
+      grid <- prep_grid(data, grid, data_crs)
       grid$grid_cell_idx <- seq_len(nrow(grid))
+
       grid_matches <- sf::st_join(
         grid,
         data[".grid_idx"],
@@ -425,44 +399,16 @@ ww_multi_scale.sf <- function(
       )
       grid_matches <- sf::st_drop_geometry(grid_matches)
 
-      missing <- setdiff(data[[".grid_idx"]], grid_matches[[".grid_idx"]])
-      note <- character(0)
-      if (length(missing) > 0) {
-        note <- "Some observations were not within any grid cell, and as such were not used in any assessments. Their row numbers are in the `missing_indices` column."
-        missing <- list(missing)
-      } else {
-        missing <- list()
-      }
+      notes_tibble <- make_notes_tibble(data, grid_matches)
 
-      notes_tibble <- tibble::tibble(
-        note = note,
-        missing_indices = missing
-      )
-
-      matched_data <- dplyr::left_join(
+      matched_data <- match_data(
         data,
         grid_matches,
-        by = dplyr::join_by(.grid_idx)
-      )
-      matched_data <- sf::st_drop_geometry(matched_data)
-      matched_data <- matched_data[!is.na(matched_data[["grid_cell_idx"]]), ]
-      matched_data <- dplyr::group_by(
         matched_data,
-        dplyr::across(dplyr::all_of(c(dplyr::group_vars(data), "grid_cell_idx")))
+        truth_var,
+        estimate_var,
+        aggregation_function
       )
-
-      matched_data <- dplyr::summarise(
-        matched_data,
-        .truth = rlang::exec(.env[["aggregation_function"]], .data[[names(truth_var)]]),
-        .truth_count = sum(!is.na(.data[[names(truth_var)]])),
-        .estimate = rlang::exec(.env[["aggregation_function"]], .data[[names(estimate_var)]]),
-        .estimate_count = sum(!is.na(.data[[names(estimate_var)]])),
-        .groups = "drop"
-      )
-
-      if (dplyr::is_grouped_df(data)) {
-        matched_data <- dplyr::group_by(matched_data, !!!dplyr::groups(data))
-      }
 
       out <- metrics(matched_data, .truth, .estimate, na_rm = na_rm)
       out["grid_cell_idx"] <- NULL
@@ -500,7 +446,7 @@ handle_metrics <- function(metrics) {
   metrics
 }
 
-handle_grids <- function(data, grids, autoexpand_grid, ...) {
+handle_grids <- function(data, grids, autoexpand_grid, data_crs, ...) {
   if (is.null(grids)) {
     grid_args <- rlang::list2(...)
     grid_arg_idx <- max(vapply(grid_args, length, integer(1)))
@@ -536,17 +482,16 @@ handle_grids <- function(data, grids, autoexpand_grid, ...) {
         names(arg) <- names(grid_args)
         do.call(
           sf::st_make_grid,
-          c(x = list(grid_box), arg)
+          c(x = list(grid_box), crs = list(data_crs), arg)
         )
       }
     )
   } else {
     grid_args <- tibble::tibble()
     grid_arg_idx <- 0
-  }
-
-  if (!is.na(sf::st_crs(data))) {
-    grids <- purrr::map(grids, sf::st_transform, sf::st_crs(data))
+    if (!is.na(data_crs)) {
+      grids <- purrr::map(grids, sf::st_transform, sf::st_crs(data))
+    }
   }
 
   list(
@@ -554,6 +499,93 @@ handle_grids <- function(data, grids, autoexpand_grid, ...) {
     grid_args = grid_args,
     grid_arg_idx = grid_arg_idx
   )
+}
+
+match_data <- function(data,
+                       grid_matches,
+                       matched_data,
+                       truth_var,
+                       estimate_var,
+                       aggregation_function) {
+  matched_data <- dplyr::left_join(
+    data,
+    grid_matches,
+    by = dplyr::join_by(.grid_idx)
+  )
+  matched_data <- sf::st_drop_geometry(matched_data)
+  matched_data <- matched_data[!is.na(matched_data[["grid_cell_idx"]]), ]
+  matched_data <- dplyr::group_by(
+    matched_data,
+    dplyr::across(dplyr::all_of(c(dplyr::group_vars(data), "grid_cell_idx")))
+  )
+
+  matched_data <- dplyr::summarise(
+    matched_data,
+    .truth = rlang::exec(.env[["aggregation_function"]], .data[[names(truth_var)]]),
+    .truth_count = sum(!is.na(.data[[names(truth_var)]])),
+    .estimate = rlang::exec(.env[["aggregation_function"]], .data[[names(estimate_var)]]),
+    .estimate_count = sum(!is.na(.data[[names(estimate_var)]])),
+    .groups = "drop"
+  )
+
+  if (dplyr::is_grouped_df(data)) {
+    matched_data <- dplyr::group_by(matched_data, !!!dplyr::groups(data))
+  }
+  matched_data
+}
+
+prep_grid <- function(data, grid, data_crs) {
+  grid <- sf::st_as_sf(grid)
+  grid_crs <- sf::st_crs(grid)
+  # If both have a CRS, reproject
+  if (!is.na(data_crs) && !is.na(grid_crs) && (grid_crs != data_crs)) {
+    grid <- sf::st_transform(grid, data_crs)
+    # if only data has CRS, assume grid in same
+  } else if (!is.na(data_crs)) {
+    grid <- sf::st_set_crs(grid, data_crs)
+  }
+  # if neither has a CRS, ignore (so, implicitly assume grid is in same)
+  grid
+}
+
+make_notes_tibble <- function(data, grid_matches) {
+  missing <- setdiff(data[[".grid_idx"]], grid_matches[[".grid_idx"]])
+  note <- character(0)
+  if (length(missing) > 0) {
+    note <- "Some observations were not within any grid cell, and as such were not used in any assessments. Their row numbers are in the `missing_indices` column."
+    missing <- list(missing)
+  } else {
+    missing <- list()
+  }
+
+  tibble::tibble(
+    note = note,
+    missing_indices = missing
+  )
+}
+
+check_multi_scale_data <- function(data) {
+  if (any(names(data) %in% c(".truth", ".estimate", ".truth_count", ".estimate_count"))) {
+    rlang::abort(
+      c(
+        "This function cannot work with data whose columns are named `.truth`, `.estimate`, `.truth_count`, or `estimate_count`.",
+        i = "Rename the relevant columns and try again."
+      ),
+      call = rlang::caller_env()
+    )
+  }
+
+  geom_type <- unique(sf::st_geometry_type(data))
+  if (!(length(geom_type) == 1 && geom_type == "POINT")) {
+    rlang::abort(
+      c(
+        "ww_multi_scale is currently only implemented for point geometries.",
+        i = "Consider casting your data to points."
+      ),
+      call = rlang::caller_env()
+    )
+  }
+
 }
 
 #' Expand geographic bounding boxes slightly

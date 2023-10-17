@@ -1,5 +1,7 @@
 # waywiser (development version)
 
+* `ww_multi_scale()` is now faster when `data` is an sf object, particularly when grids are created by passing arguments to `sf::st_make_grid()` (rather than passing grids via `grids`). For relatively dense grids this is an almost 25% speed-up.
+
 # waywiser 0.5.0
 
 * `ww_multi_scale()` did not correctly handle grid cellsizes with units. Units (set using the `units` package) are now respected.
