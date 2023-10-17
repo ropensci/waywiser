@@ -191,6 +191,24 @@ ww_multi_scale.SpatRaster <- function(
   raster_method_summary(grid_list, .notes, metrics, na_rm)
 }
 
+prep_multi_scale_raster <- function(data, truth, estimate) {
+  data <- tryCatch(
+    terra::subset(data, c(truth, estimate)),
+    error = function(e) {
+      rlang::abort("Couldn't select either `truth` or `estimate`. Are your indices correct?")
+    }
+  )
+
+  if (terra::nlyr(data) != 2) {
+    rlang::abort(c(
+      "`terra::subset(data, c(truth, estimate))` didn't return 2 layers as expected.",
+      i = "Make sure `truth` and `estimate` both select exactly one layer."
+    ))
+  }
+  names(data) <- c("truth", "estimate")
+  data
+}
+
 spatraster_extract <- function(grid, data, aggregation_function, progress) {
   grid <- sf::st_as_sf(grid)
   sf::st_geometry(grid) <- "geometry"
@@ -212,24 +230,6 @@ spatraster_extract <- function(grid, data, aggregation_function, progress) {
   }
 
   cbind(grid, grid_df)[c(exactextract_names, "geometry")]
-}
-
-prep_multi_scale_raster <- function(data, truth, estimate) {
-  data <- tryCatch(
-    terra::subset(data, c(truth, estimate)),
-    error = function(e) {
-      rlang::abort("Couldn't select either `truth` or `estimate`. Are your indices correct?")
-    }
-  )
-
-  if (terra::nlyr(data) != 2) {
-    rlang::abort(c(
-      "`terra::subset(data, c(truth, estimate))` didn't return 2 layers as expected.",
-      i = "Make sure `truth` and `estimate` both select exactly one layer."
-    ))
-  }
-  names(data) <- c("truth", "estimate")
-  data
 }
 
 ww_multi_scale_raster_args <- function(
@@ -447,6 +447,16 @@ handle_metrics <- function(metrics) {
 handle_grids <- function(data, grids, autoexpand_grid, data_crs, ...) {
   if (is.null(grids)) {
     grid_args <- rlang::list2(...)
+    if ("crs" %in% ...names()) {
+      rlang::warn(
+        c(
+          "The `crs` argument (passed via `...`) will be ignored.",
+          i = "Grids will be created using the same crs as `data`."
+        ),
+        call = rlang::caller_env()
+      )
+      grid_args["crs"] <- NULL
+    }
     grid_arg_idx <- max(vapply(grid_args, length, integer(1)))
     grid_args <- stats::setNames(
       lapply(
@@ -485,6 +495,7 @@ handle_grids <- function(data, grids, autoexpand_grid, data_crs, ...) {
       }
     )
   } else {
+    rlang::check_dots_empty(call = rlang::caller_env())
     grid_args <- tibble::tibble()
     grid_arg_idx <- 0
     if (!is.na(data_crs)) {
