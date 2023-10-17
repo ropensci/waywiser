@@ -447,7 +447,7 @@ handle_metrics <- function(metrics) {
 handle_grids <- function(data, grids, autoexpand_grid, data_crs, ...) {
   if (is.null(grids)) {
     grid_args <- rlang::list2(...)
-    if ("crs" %in% ...names()) {
+    if ("crs" %in% names(grid_args)) {
       rlang::warn(
         c(
           "The `crs` argument (passed via `...`) will be ignored.",
