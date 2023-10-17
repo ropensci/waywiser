@@ -1,6 +1,6 @@
 # waywiser (development version)
 
-* `ww_multi_scale()` is now faster when `data` is an sf object, particularly when grids are created by passing arguments to `sf::st_make_grid()` (rather than passing grids via `grids`). For relatively dense grids this is an almost 25% speed-up.
+* `ww_multi_scale()` is now faster when `data` is an sf object, particularly when grids are created by passing arguments to `sf::st_make_grid()` (rather than passing grids via `grids`).
 
 # waywiser 0.5.0
 
