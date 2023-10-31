@@ -1,3 +1,5 @@
+# waywiser (development version)
+
 # waywiser 0.5.1
 
 * `ww_multi_scale()` now warns if you provide `crs` as an argument to `sf::st_make_grid()` via `...`. Grids created by this function will always take their CRS from `data`.
