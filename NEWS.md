@@ -1,5 +1,10 @@
 # waywiser (development version)
 
+* `ww_multi_scale()`, when called with raster arguments (either to `data` or to `truth`
+   and `estimate`) and a classification metric set, will now convert `truth` and 
+   `estimate`to factors before passing them to the metric set. Thanks to @nowosad
+   for the report in #60 (#61).
+
 # waywiser 0.5.1
 
 * `ww_multi_scale()` now warns if you provide `crs` as an argument to `sf::st_make_grid()` via `...`. Grids created by this function will always take their CRS from `data`.
