@@ -777,3 +777,39 @@ test_that("Passing arguments via `...` errors when using grids", {
     class = "rlib_error_dots_nonempty"
   )
 })
+
+test_that("ww_multi_scale with raster args can handle classification metrics", {
+  l1 <- terra::rast(matrix(sample(1:10, 100, TRUE), nrow = 10))
+  l2 <- l1
+
+  expect_equal(
+    ww_multi_scale(
+      truth = l1, 
+      estimate = l2,
+      metrics = list(yardstick::precision),
+      grid = list(sf::st_make_grid(l1))
+    )$.estimate,
+    1
+  )
+
+})
+
+test_that("ww_multi_scale with raster data can handle classification metrics", {
+  l1 <- terra::rast(matrix(sample(1:10, 100, TRUE), nrow = 10))
+  l2 <- l1
+  
+  r <- c(l1, l2)
+  names(r) <- c("l1", "l2")
+
+  expect_equal(
+    ww_multi_scale(
+      r,
+      truth = "l1", 
+      estimate = "l2",
+      metrics = list(yardstick::precision),
+      grid = list(sf::st_make_grid(l1))
+    )$.estimate,
+    1
+  )
+
+})
