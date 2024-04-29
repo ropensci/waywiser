@@ -779,6 +779,7 @@ test_that("Passing arguments via `...` errors when using grids", {
 })
 
 test_that("ww_multi_scale with raster args can handle classification metrics (#60)", {
+  skip_if_not_installed("terra")
   l1 <- terra::rast(matrix(sample(1:10, 100, TRUE), nrow = 10))
   l2 <- l1
 
@@ -795,6 +796,7 @@ test_that("ww_multi_scale with raster args can handle classification metrics (#6
 })
 
 test_that("ww_multi_scale with raster data can handle classification metrics (#60)", {
+  skip_if_not_installed("terra")
   l1 <- terra::rast(matrix(sample(1:10, 100, TRUE), nrow = 10))
   l2 <- l1
   
