@@ -25,7 +25,7 @@ arguments; or \code{NULL} if \code{truth} and \code{estimate} are \code{SpatRast
 
 \item{truth, estimate}{If \code{data} is an \code{sf} object, the names (optionally
 unquoted) for the columns in \code{data} containing the true and predicted values,
-respectively. If \code{data} is a \code{SpatRaster} object, either layer names or
+respectively. If \code{data} is a \code{SpatRaster} object, either (quoted) layer names or
 indices which will select the true and predicted layers, respectively, via
 \code{\link[terra:subset]{terra::subset()}} If \code{data} is \code{NULL}, \code{SpatRaster} objects with a single
 layer containing the true and predicted values, respectively.}

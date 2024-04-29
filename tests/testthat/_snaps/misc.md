@@ -8,6 +8,7 @@
       Number of nonzero links: 85 
       Percentage nonzero weights: 1.176471 
       Average number of links: 1 
+      25 disjoint connected subgraphs
       Non-symmetric neighbours list
 
 ---
@@ -65,6 +66,7 @@
       Number of nonzero links: 85 
       Percentage nonzero weights: 1.176471 
       Average number of links: 1 
+      25 disjoint connected subgraphs
       Non-symmetric neighbours list
 
 ---
@@ -113,6 +115,7 @@
       Number of nonzero links: 85 
       Percentage nonzero weights: 1.176471 
       Average number of links: 1 
+      25 disjoint connected subgraphs
       Non-symmetric neighbours list
       
       Weights style: W 
