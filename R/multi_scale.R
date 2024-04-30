@@ -326,16 +326,41 @@ raster_method_notes <- function(grid_list) {
 }
 
 raster_method_summary <- function(grid_list, .notes, metrics, na_rm) {
+  class_metrics <- FALSE
+  prob_metrics <- FALSE
   if (inherits(metrics, "class_prob_metric_set")) {
+    is_class_metric <- vapply(
+      attr(metrics, "metrics"),
+      inherits,
+      logical(1),
+      "class_metric"
+    )
+
+    if (any(is_class_metric) && !all(is_class_metric)) {
+      rlang::abort(
+        c(
+          "`ww_multi_scale` can't handle mixed classification and class probability metric sets.",
+        i = "Call `ww_multi_scale()` twice: once for classification metrics, and once for class probability metrics."
+        ),
+        class = "waywiser_mixed_metrics"
+      )
+    }
+
+    class_metrics <- all(is_class_metric)
+    prob_metrics <- !class_metrics
+  }
+
+  if (class_metrics || prob_metrics) {
     lvls <- unique(
       unlist(
         lapply(
           grid_list$grids,
           function(grid) {
-            c(
-              levels(factor(grid$.truth)),
-              levels(factor(grid$.estimate))
-            )
+            out <- levels(factor(grid$.truth))
+            if (class_metrics) {
+              out <- c(out, levels(factor(grid$.estimate)))
+            }
+            out
           }
         )
       )
@@ -345,15 +370,21 @@ raster_method_summary <- function(grid_list, .notes, metrics, na_rm) {
       grid_list$grids,
       function(grid) {
         grid$.truth <- factor(grid$.truth, levels = lvls)
-        grid$.estimate <- factor(grid$.estimate, levels = lvls)
+        if (class_metrics) {
+          grid$.estimate <- factor(grid$.estimate, levels = lvls)
+        }
         grid
       }
-  )
+    )
   }
 
   out <- mapply(
     function(grid, grid_arg, .notes) {
-      out <- metrics(grid, truth = .truth, estimate = .estimate, na_rm = na_rm)
+      if (prob_metrics) {
+        out <- metrics(as.data.frame(grid), truth = .truth, .estimate, na_rm = na_rm)
+      } else {
+        out <- metrics(grid, truth = .truth, estimate = .estimate, na_rm = na_rm)
+      }
       out[attr(out, "sf_column")] <- NULL
       out$.grid_args <- list(grid_list$grid_args[grid_arg, ])
       out$.grid <- list(grid)
