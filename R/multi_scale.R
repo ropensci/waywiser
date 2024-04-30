@@ -329,12 +329,7 @@ raster_method_summary <- function(grid_list, .notes, metrics, na_rm) {
   class_metrics <- FALSE
   prob_metrics <- FALSE
   if (inherits(metrics, "class_prob_metric_set")) {
-    is_class_metric <- vapply(
-      attr(metrics, "metrics"),
-      inherits,
-      logical(1),
-      "class_metric"
-    )
+    is_class_metric <- tibble::as_tibble(metrics)$class == "class_metric"
 
     if (any(is_class_metric) && !all(is_class_metric)) {
       rlang::abort(
