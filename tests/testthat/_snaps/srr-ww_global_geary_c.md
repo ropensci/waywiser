@@ -164,7 +164,7 @@
       ww_global_geary_c_vec(worldclim_simulation$response, worldclim_simulation$
         response, worldclim_weights)
     Output
-      [1] NaN
+      [1] NA
 
 ---
 
@@ -174,7 +174,7 @@
       # A tibble: 1 x 3
         .metric        .estimator .estimate
         <chr>          <chr>          <dbl>
-      1 global_geary_c standard         NaN
+      1 global_geary_c standard          NA
 
 # other generic srr standards
 

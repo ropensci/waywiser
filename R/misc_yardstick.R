@@ -35,6 +35,8 @@ yardstick_df <- function(data, truth, estimate, na_rm, name, metric_fun, ..., ca
     sf::st_geometry(out) <- NULL
   }
 
+  out[[".estimate"]][is.nan(out[[".estimate"]])] <- NA
+
   out
 }
 
@@ -198,7 +200,9 @@ yardstick_vec <- function(truth, estimate, na_rm, impl, wt = NULL, ..., case_wei
   if (length(truth) == 0) rlang::abort("0 non-missing values were passed to `truth`.")
   if (length(estimate) == 0) rlang::abort("0 non-missing values were passed to `estimate`.")
 
-  impl(truth = truth, estimate = estimate, ...)
+  out <- impl(truth = truth, estimate = estimate, ...)
+  out[is.nan(out)] <- NA
+  out
 }
 
 #' Workhorse function powering spatial yardstick metrics

@@ -1,5 +1,9 @@
 # waywiser (development version)
 
+* Metric functions now return `NA` in all cases where they previously returned `NaN`.
+  This improves cross-platform consistency; in particular, MacOS often returned 
+  `NA` when every other platform would return `NaN`. (#63)
+
 * `ww_multi_scale()` now handles classification and class probability metrics better 
   when called with raster arguments (either to `data` or to `truth` and `estimate`):
   * When called with classification metrics, `ww_multi_scale()` will now convert 
