@@ -788,7 +788,7 @@ test_that("ww_multi_scale with raster args can handle classification metrics (#6
       truth = l1, 
       estimate = l2,
       metrics = list(yardstick::precision),
-      grid = list(sf::st_make_grid(l1))
+      grids = list(sf::st_make_grid(l1))
     )$.estimate,
     1
   )
@@ -809,9 +809,93 @@ test_that("ww_multi_scale with raster data can handle classification metrics (#6
       truth = "l1", 
       estimate = "l2",
       metrics = list(yardstick::precision),
-      grid = list(sf::st_make_grid(l1))
+      grids = list(sf::st_make_grid(l1))
     )$.estimate,
     1
   )
 
+})
+
+test_that("ww_multi_scale with raster args can handle class prob metrics", {
+  skip_if_not_installed("terra")
+  skip_if_not_installed("withr")
+  l1 <- withr::with_seed(
+    1107,
+    matrix(sample(1:2, 100, TRUE), nrow = 10)
+  )
+  l1 <- terra::rast(l1)
+  l2 <- withr::with_seed(
+    1107,
+    matrix(runif(100, 0, 1), nrow = 10)
+  )
+  l2 <- terra::rast(l2)
+
+  expect_equal(
+    ww_multi_scale(
+      truth = l1, 
+      estimate = l2,
+      metrics = list(yardstick::pr_auc),
+      grids = list(sf::st_make_grid(l1))
+    )$.estimate,
+    0.47208959
+  )
+})
+
+test_that("ww_multi_scale with raster data can handle class prob metrics", {
+  skip_if_not_installed("terra")
+  skip_if_not_installed("withr")
+  l1 <- withr::with_seed(
+    1107,
+    matrix(sample(1:2, 100, TRUE), nrow = 10)
+  )
+  l1 <- terra::rast(l1)
+  l2 <- withr::with_seed(
+    1107,
+    matrix(runif(100, 0, 1), nrow = 10)
+  )
+  l2 <- terra::rast(l2)
+  
+  r <- c(l1, l2)
+  names(r) <- c("l1", "l2")
+
+  expect_equal(
+    ww_multi_scale(
+      r,
+      truth = "l1", 
+      estimate = "l2",
+      metrics = list(yardstick::pr_auc),
+      grids = list(sf::st_make_grid(l1))
+    )$.estimate,
+    0.47208959
+  )
+})
+
+test_that("ww_multi_scale with rasters fails if metrics are mixed", {
+  skip_if_not_installed("terra")
+  l1 <- terra::rast(matrix(sample(1:10, 100, TRUE), nrow = 10))
+  l2 <- l1
+  
+  r <- c(l1, l2)
+  names(r) <- c("l1", "l2")
+
+  expect_error(
+    ww_multi_scale(
+      truth = l1, 
+      estimate = l2,
+      metrics = list(yardstick::precision, yardstick::pr_auc),
+      grids = list(sf::st_make_grid(l1))
+    )$.estimate,
+    class = "waywiser_mixed_metrics"
+  )
+
+  expect_error(
+    ww_multi_scale(
+      r,
+      truth = "l1", 
+      estimate = "l2",
+      metrics = list(yardstick::precision, yardstick::pr_auc),
+      grids = list(sf::st_make_grid(l1))
+    )$.estimate,
+    class = "waywiser_mixed_metrics"
+  )
 })

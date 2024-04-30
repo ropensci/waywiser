@@ -1,9 +1,14 @@
 # waywiser (development version)
 
-* `ww_multi_scale()`, when called with raster arguments (either to `data` or to `truth`
-   and `estimate`) and a classification metric set, will now convert `truth` and 
-   `estimate`to factors before passing them to the metric set. Thanks to @nowosad
-   for the report in #60 (#61).
+* `ww_multi_scale()` now handles classification and class probability metrics better 
+  when called with raster arguments (either to `data` or to `truth` and `estimate`):
+  * When called with classification metrics, `ww_multi_scale()` will now convert 
+    `truth` and `estimate` to factors before passing them to the metric set. 
+    Thanks to @nowosad for the report in #60 (#61).
+  * When called with class probability metrics, `ww_multi_scale()` will convert
+    `truth` to a factor and will pass `estimate` as an unnamed argument. (#62)
+  * When called with a mix of class and probability metrics, `ww_multi_scale()`
+    will error. (#62)
 
 # waywiser 0.5.1
 
