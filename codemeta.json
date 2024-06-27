@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/ropensci/waywiser",
   "issueTracker": "https://github.com/ropensci/waywiser/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.5.0.9000",
+  "version": "0.5.1.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.3.0 (2023-04-21)",
+  "runtimePlatform": "R version 4.4.0 (2024-04-24)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -502,7 +502,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "8408.133KB",
+  "fileSize": "6952.73KB",
   "citation": [
     {
       "@type": "CreativeWork",

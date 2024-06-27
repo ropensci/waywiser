@@ -785,35 +785,33 @@ test_that("ww_multi_scale with raster args can handle classification metrics (#6
 
   expect_equal(
     ww_multi_scale(
-      truth = l1, 
+      truth = l1,
       estimate = l2,
       metrics = list(yardstick::precision),
       grids = list(sf::st_make_grid(l1))
     )$.estimate,
     1
   )
-
 })
 
 test_that("ww_multi_scale with raster data can handle classification metrics (#60)", {
   skip_if_not_installed("terra")
   l1 <- terra::rast(matrix(sample(1:10, 100, TRUE), nrow = 10))
   l2 <- l1
-  
+
   r <- c(l1, l2)
   names(r) <- c("l1", "l2")
 
   expect_equal(
     ww_multi_scale(
       r,
-      truth = "l1", 
+      truth = "l1",
       estimate = "l2",
       metrics = list(yardstick::precision),
       grids = list(sf::st_make_grid(l1))
     )$.estimate,
     1
   )
-
 })
 
 test_that("ww_multi_scale with raster args can handle class prob metrics", {
@@ -832,7 +830,7 @@ test_that("ww_multi_scale with raster args can handle class prob metrics", {
 
   expect_equal(
     ww_multi_scale(
-      truth = l1, 
+      truth = l1,
       estimate = l2,
       metrics = list(yardstick::pr_auc),
       grids = list(sf::st_make_grid(l1))
@@ -854,14 +852,14 @@ test_that("ww_multi_scale with raster data can handle class prob metrics", {
     matrix(runif(100, 0, 1), nrow = 10)
   )
   l2 <- terra::rast(l2)
-  
+
   r <- c(l1, l2)
   names(r) <- c("l1", "l2")
 
   expect_equal(
     ww_multi_scale(
       r,
-      truth = "l1", 
+      truth = "l1",
       estimate = "l2",
       metrics = list(yardstick::pr_auc),
       grids = list(sf::st_make_grid(l1))
@@ -874,13 +872,13 @@ test_that("ww_multi_scale with rasters fails if metrics are mixed", {
   skip_if_not_installed("terra")
   l1 <- terra::rast(matrix(sample(1:10, 100, TRUE), nrow = 10))
   l2 <- l1
-  
+
   r <- c(l1, l2)
   names(r) <- c("l1", "l2")
 
   expect_error(
     ww_multi_scale(
-      truth = l1, 
+      truth = l1,
       estimate = l2,
       metrics = list(yardstick::precision, yardstick::pr_auc),
       grids = list(sf::st_make_grid(l1))
@@ -891,7 +889,7 @@ test_that("ww_multi_scale with rasters fails if metrics are mixed", {
   expect_error(
     ww_multi_scale(
       r,
-      truth = "l1", 
+      truth = "l1",
       estimate = "l2",
       metrics = list(yardstick::precision, yardstick::pr_auc),
       grids = list(sf::st_make_grid(l1))

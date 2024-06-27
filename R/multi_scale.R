@@ -335,7 +335,7 @@ raster_method_summary <- function(grid_list, .notes, metrics, na_rm) {
       rlang::abort(
         c(
           "`ww_multi_scale` can't handle mixed classification and class probability metric sets.",
-        i = "Call `ww_multi_scale()` twice: once for classification metrics, and once for class probability metrics."
+          i = "Call `ww_multi_scale()` twice: once for classification metrics, and once for class probability metrics."
         ),
         class = "waywiser_mixed_metrics"
       )
@@ -645,7 +645,6 @@ check_multi_scale_data <- function(data) {
       call = rlang::caller_env()
     )
   }
-
 }
 
 #' Expand geographic bounding boxes slightly

@@ -1,32 +1,32 @@
-# -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.5.0
+# --------------------------------------------
+# CITATION file created with {cffr} R package
 # See also: https://docs.ropensci.org/cffr/
-# -----------------------------------------------------------
+# --------------------------------------------
  
 cff-version: 1.2.0
 message: 'To cite package "waywiser" in publications use:'
 type: software
 license: MIT
 title: 'waywiser: Ergonomic Methods for Assessing Spatial Models'
-version: 0.5.0.9000
+version: 0.5.1.9000
 doi: 10.48550/arXiv.2303.11312
-abstract: 'Assessing predictive models of spatial data can be challenging, both because
+abstract: Assessing predictive models of spatial data can be challenging, both because
   these models are typically built for extrapolating outside the original region represented
   by training data and due to potential spatially structured errors, with "hot spots"
   of higher than expected error clustered geographically due to spatial structure
   in the underlying data. Methods are provided for assessing models fit to spatial
   data, including approaches for measuring the spatial structure of model errors,
   assessing model predictions at multiple spatial scales, and evaluating where predictions
-  can be made safely. Methods are particularly useful for models fit using the ''tidymodels''
-  framework. Methods include Moran''s I (''Moran'' (1950) <doi:10.2307/2332142>),
-  Geary''s C (''Geary'' (1954) <doi:10.2307/2986645>), Getis-Ord''s G (''Ord'' and
-  ''Getis'' (1995) <doi:10.1111/j.1538-4632.1995.tb00912.x>), agreement coefficients
-  from ''Ji'' and Gallo (2006) (<doi: 10.14358/PERS.72.7.823>), agreement metrics
-  from ''Willmott'' (1981) (<doi: 10.1080/02723646.1981.10642213>) and ''Willmott''
-  ''et'' ''al''. (2012) (<doi: 10.1002/joc.2419>), an implementation of the area of
-  applicability methodology from ''Meyer'' and ''Pebesma'' (2021) (<doi:10.1111/2041-210X.13650>),
-  and an implementation of multi-scale assessment as described in ''Riemann'' ''et''
-  ''al''. (2010) (<doi:10.1016/j.rse.2010.05.010>).'
+  can be made safely. Methods are particularly useful for models fit using the 'tidymodels'
+  framework. Methods include Moran's I ('Moran' (1950) <https://doi.org/10.2307/2332142>),
+  Geary's C ('Geary' (1954) <https://doi.org/10.2307/2986645>), Getis-Ord's G ('Ord'
+  and 'Getis' (1995) <https://doi.org/10.1111/j.1538-4632.1995.tb00912.x>), agreement
+  coefficients from 'Ji' and Gallo (2006) (<https://doi.org/ 10.14358/PERS.72.7.823>),
+  agreement metrics from 'Willmott' (1981) (<https://doi.org/ 10.1080/02723646.1981.10642213>)
+  and 'Willmott' 'et' 'al'. (2012) (<https://doi.org/ 10.1002/joc.2419>), an implementation
+  of the area of applicability methodology from 'Meyer' and 'Pebesma' (2021) (<https://doi.org/10.1111/2041-210X.13650>),
+  and an implementation of multi-scale assessment as described in 'Riemann' 'et' 'al'.
+  (2010) (<https://doi.org/10.1016/j.rse.2010.05.010>).
 authors:
 - family-names: Mahoney
   given-names: Michael
@@ -64,11 +64,10 @@ references:
   url: https://www.R-project.org/
   authors:
   - name: R Core Team
-  location:
-    name: Vienna, Austria
-  year: '2023'
   institution:
     name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2024'
   version: '>= 4.0'
 - type: software
   title: dplyr
@@ -93,7 +92,7 @@ references:
     given-names: Davis
     email: davis@posit.co
     orcid: https://orcid.org/0000-0003-4777-038X
-  year: '2023'
+  year: '2024'
   version: '>= 1.1.0'
 - type: software
   title: fields
@@ -120,7 +119,7 @@ references:
   - family-names: Iverson
     given-names: Matthew
     email: miverson@mymail.mines.edu
-  year: '2023'
+  year: '2024'
 - type: software
   title: FNN
   abstract: 'FNN: Fast Nearest Neighbor Search Algorithms and Applications'
@@ -139,7 +138,7 @@ references:
     given-names: David
   - family-names: Li
     given-names: Shengqiao
-  year: '2023'
+  year: '2024'
 - type: software
   title: glue
   abstract: 'glue: Interpreted String Literals'
@@ -152,9 +151,9 @@ references:
     orcid: https://orcid.org/0000-0002-2739-7082
   - family-names: Bryan
     given-names: Jennifer
-    email: jenny@rstudio.com
+    email: jenny@posit.co
     orcid: https://orcid.org/0000-0002-6983-2759
-  year: '2023'
+  year: '2024'
 - type: software
   title: hardhat
   abstract: 'hardhat: Construct Modeling Packages'
@@ -162,13 +161,17 @@ references:
   url: https://hardhat.tidymodels.org
   repository: https://CRAN.R-project.org/package=hardhat
   authors:
+  - family-names: Frick
+    given-names: Hannah
+    email: hannah@posit.co
+    orcid: https://orcid.org/0000-0002-6049-5258
   - family-names: Vaughan
     given-names: Davis
     email: davis@posit.co
   - family-names: Kuhn
     given-names: Max
     email: max@posit.co
-  year: '2023'
+  year: '2024'
 - type: software
   title: Matrix
   abstract: 'Matrix: Sparse and Dense Matrix Classes and Methods'
@@ -186,7 +189,7 @@ references:
   - family-names: Jagan
     given-names: Mikael
     orcid: https://orcid.org/0000-0002-3542-2938
-  year: '2023'
+  year: '2024'
 - type: software
   title: purrr
   abstract: 'purrr: Functional Programming Tools'
@@ -201,7 +204,7 @@ references:
   - family-names: Henry
     given-names: Lionel
     email: lionel@rstudio.com
-  year: '2023'
+  year: '2024'
 - type: software
   title: rlang
   abstract: 'rlang: Functions for Base Types and Core R and ''Tidyverse'' Features'
@@ -215,7 +218,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2023'
+  year: '2024'
   version: '>= 1.1.0'
 - type: software
   title: sf
@@ -228,7 +231,7 @@ references:
     given-names: Edzer
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
-  year: '2023'
+  year: '2024'
   version: '>= 1.0-0'
 - type: software
   title: spdep
@@ -241,7 +244,7 @@ references:
     given-names: Roger
     email: Roger.Bivand@nhh.no
     orcid: https://orcid.org/0000-0003-2392-6140
-  year: '2023'
+  year: '2024'
   version: '>= 1.1-9'
 - type: software
   title: stats
@@ -249,11 +252,10 @@ references:
   notes: Imports
   authors:
   - name: R Core Team
-  location:
-    name: Vienna, Austria
-  year: '2023'
   institution:
     name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2024'
 - type: software
   title: tibble
   abstract: 'tibble: Simple Data Frames'
@@ -268,7 +270,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
-  year: '2023'
+  year: '2024'
 - type: software
   title: tidyselect
   abstract: 'tidyselect: Select from a Set of Strings'
@@ -278,11 +280,11 @@ references:
   authors:
   - family-names: Henry
     given-names: Lionel
-    email: lionel@rstudio.com
+    email: lionel@posit.co
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
-  year: '2023'
+    email: hadley@posit.co
+  year: '2024'
 - type: software
   title: vctrs
   abstract: 'vctrs: Vector Helpers'
@@ -299,7 +301,7 @@ references:
   - family-names: Vaughan
     given-names: Davis
     email: davis@posit.co
-  year: '2023'
+  year: '2024'
 - type: software
   title: yardstick
   abstract: 'yardstick: Tidy Characterizations of Model Performance'
@@ -317,7 +319,7 @@ references:
     given-names: Emil
     email: emil.hvitfeldt@posit.co
     orcid: https://orcid.org/0000-0002-0679-1945
-  year: '2023'
+  year: '2024'
   version: '>= 1.2.0'
 - type: software
   title: applicable
@@ -331,8 +333,8 @@ references:
     email: marlygotti@gmail.com
   - family-names: Kuhn
     given-names: Max
-    email: max@rstudio.com
-  year: '2023'
+    email: max@posit.co
+  year: '2024'
 - type: software
   title: caret
   abstract: 'caret: Classification and Regression Training'
@@ -344,7 +346,7 @@ references:
     given-names: Max
     email: mxkuhn@gmail.com
     orcid: https://orcid.org/0000-0003-2402-136X
-  year: '2023'
+  year: '2024'
 - type: software
   title: CAST
   abstract: 'CAST: ''caret'' Applications for Spatial-Temporal Models'
@@ -361,7 +363,9 @@ references:
     given-names: Marvin
   - family-names: Linnenbrink
     given-names: Jan
-  year: '2023'
+  - family-names: Schumacher
+    given-names: Fabian
+  year: '2024'
 - type: software
   title: covr
   abstract: 'covr: Test Coverage for Packages'
@@ -372,7 +376,7 @@ references:
   - family-names: Hester
     given-names: Jim
     email: james.f.hester@gmail.com
-  year: '2023'
+  year: '2024'
 - type: software
   title: exactextractr
   abstract: 'exactextractr: Fast Extraction from Raster Datasets using Polygons'
@@ -382,7 +386,7 @@ references:
   authors:
   - name: Daniel Baston
     email: dbaston@isciences.com
-  year: '2023'
+  year: '2024'
 - type: software
   title: ggplot2
   abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
@@ -417,7 +421,11 @@ references:
   - family-names: Dunnington
     given-names: Dewey
     orcid: https://orcid.org/0000-0002-9415-4582
-  year: '2023'
+  - family-names: Brand
+    given-names: Teun
+    name-particle: van den
+    orcid: https://orcid.org/0000-0002-9335-7468
+  year: '2024'
 - type: software
   title: knitr
   abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
@@ -429,7 +437,7 @@ references:
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2023'
+  year: '2024'
 - type: software
   title: modeldata
   abstract: 'modeldata: Data Sets Useful for Modeling Examples'
@@ -440,7 +448,7 @@ references:
   - family-names: Kuhn
     given-names: Max
     email: max@posit.co
-  year: '2023'
+  year: '2024'
 - type: software
   title: recipes
   abstract: 'recipes: Preprocessing and Feature Engineering Steps for Modeling'
@@ -457,7 +465,7 @@ references:
   - family-names: Hvitfeldt
     given-names: Emil
     email: emil.hvitfeldt@posit.co
-  year: '2023'
+  year: '2024'
 - type: software
   title: rmarkdown
   abstract: 'rmarkdown: Dynamic Documents for R'
@@ -500,7 +508,7 @@ references:
     given-names: Richard
     email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
-  year: '2023'
+  year: '2024'
 - type: software
   title: rsample
   abstract: 'rsample: General Resampling Infrastructure'
@@ -529,7 +537,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2023'
+  year: '2024'
 - type: software
   title: spatialsample
   abstract: 'spatialsample: Spatial Resampling Infrastructure'
@@ -545,7 +553,7 @@ references:
     given-names: Julia
     email: julia.silge@posit.co
     orcid: https://orcid.org/0000-0002-3671-836X
-  year: '2023'
+  year: '2024'
 - type: software
   title: terra
   abstract: 'terra: Spatial Data Analysis'
@@ -557,7 +565,7 @@ references:
     given-names: Robert J.
     email: r.hijmans@gmail.com
     orcid: https://orcid.org/0000-0001-5872-2872
-  year: '2023'
+  year: '2024'
 - type: software
   title: testthat
   abstract: 'testthat: Unit Testing for R'
@@ -568,7 +576,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2023'
+  year: '2024'
   version: '>= 3.0.0'
 - type: software
   title: tidymodels
@@ -584,7 +592,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2023'
+  year: '2024'
 - type: software
   title: tidyr
   abstract: 'tidyr: Tidy Messy Data'
@@ -600,7 +608,7 @@ references:
     email: davis@posit.co
   - family-names: Girlich
     given-names: Maximilian
-  year: '2023'
+  year: '2024'
 - type: software
   title: tigris
   abstract: 'tigris: Load Census TIGER/Line Shapefiles'
@@ -611,7 +619,7 @@ references:
   - family-names: Walker
     given-names: Kyle
     email: kyle@walker-data.com
-  year: '2023'
+  year: '2024'
 - type: software
   title: units
   abstract: 'units: Measurement Units for R Vectors'
@@ -632,7 +640,7 @@ references:
     given-names: Iñaki
     email: iucar@fedoraproject.org
     orcid: https://orcid.org/0000-0001-6403-5550
-  year: '2023'
+  year: '2024'
 - type: software
   title: vip
   abstract: 'vip: Variable Importance Plots'
@@ -648,11 +656,7 @@ references:
     given-names: Brad
     email: bradleyboehmke@gmail.com
     orcid: https://orcid.org/0000-0002-3611-8516
-  - family-names: Gray
-    given-names: Bernie
-    email: bfgray3@gmail.com
-    orcid: https://orcid.org/0000-0001-9190-6032
-  year: '2023'
+  year: '2024'
 - type: software
   title: whisker
   abstract: 'whisker: mustache for R, Logicless Templating'
@@ -660,9 +664,10 @@ references:
   url: https://github.com/edwindj/whisker
   repository: https://CRAN.R-project.org/package=whisker
   authors:
-  - family-names: de Jonge
+  - family-names: Jonge
     given-names: Edwin
-  year: '2023'
+    name-particle: de
+  year: '2024'
 - type: software
   title: withr
   abstract: 'withr: Run Code ''With'' Temporarily Modified Global State'
@@ -674,7 +679,7 @@ references:
     given-names: Jim
   - family-names: Henry
     given-names: Lionel
-    email: lionel@rstudio.com
+    email: lionel@posit.co
   - family-names: Müller
     given-names: Kirill
     email: krlmlr+r@mailbox.org
@@ -683,7 +688,8 @@ references:
     email: kevinushey@gmail.com
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   - family-names: Chang
     given-names: Winston
-  year: '2023'
+  year: '2024'
+
