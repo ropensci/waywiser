@@ -1,6 +1,6 @@
-This is the eighth CRAN release of waywiser. This patch release improves how
-`ww_multi_scale()` handles arguments passed via `...`, and improves the speed of
-this function.
+This is the ninth CRAN release of waywiser. This minor release improves the
+consistency of metric function outputs and adds support for multi-scale
+calculations of non-regression metrics.
 
 ## R CMD check results
 
