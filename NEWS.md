@@ -1,3 +1,5 @@
+# waywiser (development version)
+
 # waywiser 0.6.0
 
 * Metric functions now return `NA` in all cases where they previously returned `NaN`.
