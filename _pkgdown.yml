@@ -7,6 +7,9 @@ authors:
     href: https://www.rstudio.com
     html: <img src='https://www.tidyverse.org/rstudio-logo.svg' alt='RStudio' width='72' />
 
+template:
+  math-rendering: mathjax
+
 development:
   mode: auto
 
