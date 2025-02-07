@@ -2,6 +2,9 @@
 
     Code
       ww_make_point_neighbors(guerry_pt)
+    Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 25 sub-graphs
     Output
       Neighbour list object:
       Number of regions: 85 
@@ -60,6 +63,9 @@
 
     Code
       ww_build_neighbors(guerry_pt)
+    Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 25 sub-graphs
     Output
       Neighbour list object:
       Number of regions: 85 
@@ -108,6 +114,9 @@
 
     Code
       ww_build_weights(guerry_pt)
+    Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 25 sub-graphs
     Output
       Characteristics of weights list object:
       Neighbour list object:

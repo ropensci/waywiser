@@ -7,7 +7,9 @@ test_that("srr: expected failures for ww_local_getis_ord_g_pvalue", {
     lm(response ~ bio2 * bio10 * bio13 * bio19, data = worldclim_simulation),
     worldclim_simulation
   )
-  worldclim_weights <- ww_build_weights(worldclim_simulation)
+  worldclim_weights <- suppressWarnings(
+    ww_build_weights(worldclim_simulation)
+  )
   # Note that this test isn't applicable to data-frame input, which enforces
   # constant column lengths
   #' @srrstats {G5.2} Testing errors
@@ -204,8 +206,12 @@ test_that("other generic srr standards", {
     noised_worldclim,
     crs = sf::st_crs(worldclim_predicted)
   )
-  worldclim_weights <- ww_build_weights(worldclim_simulation)
-  noised_weights <- ww_build_weights(noised_worldclim)
+  worldclim_weights <- suppressWarnings(
+    ww_build_weights(worldclim_simulation)
+  )
+  noised_weights <- suppressWarnings(
+    ww_build_weights(noised_worldclim)
+  )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {G5.9} Noise susceptibility tests
@@ -214,11 +220,15 @@ test_that("other generic srr standards", {
   expect_equal(
     withr::with_seed(
       123,
-      ww_local_getis_ord_g_pvalue(worldclim_predicted, response, predicted)
+      suppressWarnings(
+        ww_local_getis_ord_g_pvalue(worldclim_predicted, response, predicted)
+      )
     ),
     withr::with_seed(
       123,
-      ww_local_getis_ord_g_pvalue(noised_worldclim, response, predicted)
+      suppressWarnings(
+        ww_local_getis_ord_g_pvalue(noised_worldclim, response, predicted)
+      )
     )
   )
 
@@ -229,11 +239,15 @@ test_that("other generic srr standards", {
   expect_equal(
     withr::with_seed(
       123,
-      ww_local_getis_ord_g_pvalue(worldclim_predicted, predicted, response)
+      suppressWarnings(
+        ww_local_getis_ord_g_pvalue(worldclim_predicted, predicted, response)
+      )
     ),
     withr::with_seed(
       123,
-      ww_local_getis_ord_g_pvalue(noised_worldclim, predicted, response)
+      suppressWarnings(
+        ww_local_getis_ord_g_pvalue(noised_worldclim, predicted, response)
+      )
     )
   )
 
@@ -276,11 +290,15 @@ test_that("other generic srr standards", {
   expect_equal(
     withr::with_seed(
       123,
-      ww_local_getis_ord_g_pvalue(worldclim_predicted, predicted, response, nsim = 10000)
+      suppressWarnings(
+        ww_local_getis_ord_g_pvalue(worldclim_predicted, predicted, response, nsim = 10000)
+      )
     ),
     withr::with_seed(
       1107,
-      ww_local_getis_ord_g_pvalue(worldclim_predicted, predicted, response, nsim = 10000)
+      suppressWarnings(
+        ww_local_getis_ord_g_pvalue(worldclim_predicted, predicted, response, nsim = 10000)
+      )
     ),
     tolerance = 0.03
   )
@@ -292,11 +310,15 @@ test_that("other generic srr standards", {
   expect_equal(
     withr::with_seed(
       123,
-      ww_local_getis_ord_g_pvalue(worldclim_predicted, response, predicted, nsim = 10000)
+      suppressWarnings(
+        ww_local_getis_ord_g_pvalue(worldclim_predicted, response, predicted, nsim = 10000)
+      )
     ),
     withr::with_seed(
       1107,
-      ww_local_getis_ord_g_pvalue(worldclim_predicted, response, predicted, nsim = 10000)
+      suppressWarnings(
+        ww_local_getis_ord_g_pvalue(worldclim_predicted, response, predicted, nsim = 10000)
+      )
     ),
     tolerance = 0.03
   )
@@ -339,8 +361,12 @@ test_that("other generic srr standards", {
     guerry
   )
   guerry_modeled_geo <- sf::st_transform(guerry_modeled, 4326)
-  guerry_weights <- ww_build_weights(guerry)
-  guerry_weights_geo <- ww_build_weights(guerry_modeled_geo)
+  guerry_weights <- suppressWarnings(
+    ww_build_weights(guerry)
+  )
+  guerry_weights_geo <- suppressWarnings(
+    ww_build_weights(guerry_modeled_geo)
+  )
 
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {SP6.1} Testing with both projected and geographic CRS
@@ -437,13 +463,17 @@ test_that("other generic srr standards", {
     )
   )
 
-  other_weights <- ww_build_weights(ww_make_point_neighbors(worldclim_loaded, k = 5))
+  other_weights <- suppressWarnings(
+    ww_build_weights(ww_make_point_neighbors(worldclim_loaded, k = 5))
+  )
   #' @srrstats {G3.0} Testing with appropriate tolerances.
   #' @srrstats {SP6.3} Testing alternative weights:
-  expect_snapshot(
-    withr::with_seed(
-      123,
-      ww_local_getis_ord_g_pvalue(worldclim_loaded, bio13, bio19, function(data) ww_build_weights(ww_make_point_neighbors(data, k = 5)))
+  suppressWarnings(
+    expect_snapshot(
+      withr::with_seed(
+        123,
+        ww_local_getis_ord_g_pvalue(worldclim_loaded, bio13, bio19, function(data) ww_build_weights(ww_make_point_neighbors(data, k = 5)))
+      )
     )
   )
 

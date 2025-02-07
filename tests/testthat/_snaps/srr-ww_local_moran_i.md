@@ -21,6 +21,8 @@
     Code
       ww_local_moran_i(worldclim_predicted, predicted, response)
     Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
       Error in `ww_local_moran_i()`:
       ! `truth` must be numeric.
 
@@ -29,6 +31,8 @@
     Code
       ww_local_moran_i(worldclim_predicted, response, predicted)
     Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
       Error in `ww_local_moran_i()`:
       ! `estimate` must be numeric.
 
@@ -55,6 +59,8 @@
     Code
       ww_local_moran_i(worldclim_predicted, response, predicted)
     Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
       Error in `ww_local_moran_i()`:
       ! `estimate` must be numeric.
 
@@ -63,6 +69,8 @@
     Code
       ww_local_moran_i(worldclim_predicted, predicted, response)
     Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
       Error in `ww_local_moran_i()`:
       ! `truth` must be numeric.
 
@@ -71,6 +79,8 @@
     Code
       ww_local_moran_i(worldclim_predicted, predicted, response)$.estimate
     Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
       Error in `spatial_yardstick_df()`:
       ! Missing values in data.
       i waywiser can't handle missing data for functions that use spatial weights.
@@ -80,6 +90,8 @@
     Code
       ww_local_moran_i(worldclim_predicted, response, predicted)$.estimate
     Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
       Error in `spatial_yardstick_df()`:
       ! Missing values in data.
       i waywiser can't handle missing data for functions that use spatial weights.
@@ -144,6 +156,8 @@
     Code
       ww_local_moran_i(worldclim_predicted, response, predicted)$.estimate
     Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
       Error in `spatial_yardstick_df()`:
       ! Missing values in data.
       i waywiser can't handle missing data for functions that use spatial weights.
@@ -153,6 +167,8 @@
     Code
       ww_local_moran_i(worldclim_predicted, predicted, response)$.estimate
     Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
       Error in `spatial_yardstick_df()`:
       ! Missing values in data.
       i waywiser can't handle missing data for functions that use spatial weights.
@@ -585,6 +601,9 @@
 
     Code
       ww_local_moran_i(worldclim_simulation, response, response)
+    Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
     Output
       # A tibble: 10,000 x 3
          .metric       .estimator .estimate
@@ -605,6 +624,9 @@
 
     Code
       withr::with_seed(123, ww_local_moran_i(worldclim_loaded, bio13, bio19))
+    Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
     Output
       # A tibble: 10,000 x 3
          .metric       .estimator .estimate
@@ -625,6 +647,9 @@
 
     Code
       withr::with_seed(123, ww_local_moran_i(worldclim_loaded, bio13, bio19))
+    Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
     Output
       # A tibble: 10,000 x 3
          .metric       .estimator .estimate
@@ -4659,6 +4684,9 @@
 
     Code
       withr::with_seed(123, ww_local_moran_i(worldclim_loaded, bio13, bio19))
+    Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 3092 sub-graphs
     Output
       # A tibble: 10,000 x 3
          .metric       .estimator .estimate
@@ -4680,6 +4708,9 @@
     Code
       withr::with_seed(123, ww_local_moran_i(worldclim_loaded, bio13, bio19, function(
         data) ww_build_weights(ww_make_point_neighbors(data, k = 5))))
+    Condition
+      Warning in `spdep::knn2nb()`:
+      neighbour object has 7 sub-graphs
     Output
       # A tibble: 10,000 x 3
          .metric       .estimator  .estimate
