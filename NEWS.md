@@ -1,5 +1,7 @@
 # waywiser (development version)
 
+* Avoid using `\()` in order to keep R version needed below 4.1
+
 # waywiser 0.6.0
 
 * Metric functions now return `NA` in all cases where they previously returned `NaN`.
