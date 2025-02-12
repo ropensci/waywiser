@@ -1,6 +1,8 @@
-# waywiser (development version)
+# waywiser 0.6.1
 
 * Avoid using `\()` in order to keep R version needed below 4.1
+
+* Update tests for new versions of dependencies
 
 # waywiser 0.6.0
 

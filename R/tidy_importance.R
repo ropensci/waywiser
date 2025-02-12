@@ -11,6 +11,7 @@ tidy_importance <- function(importance, ...) {
   UseMethod("tidy_importance")
 }
 
+#' @noRd
 tidy_importance.vi <- function(importance, ...) {
   rlang::check_dots_empty()
   data.frame(
@@ -19,6 +20,7 @@ tidy_importance.vi <- function(importance, ...) {
   )
 }
 
+#' @noRd
 tidy_importance.data.frame <- function(importance, ...) {
   rlang::check_dots_empty()
   if (!all(c("term", "estimate") %in% names(importance))) {
@@ -30,6 +32,7 @@ tidy_importance.data.frame <- function(importance, ...) {
   importance
 }
 
+#' @noRd
 tidy_importance.default <- function(importance, ...) {
   cls <- class(importance)[1]
   rlang::abort(

@@ -1,6 +1,4 @@
-This is the ninth CRAN release of waywiser. This minor release improves the
-consistency of metric function outputs and adds support for multi-scale
-calculations of non-regression metrics.
+This is the tenth CRAN release of waywiser. This patch release addresses NOTEs and warnings from CRAN.
 
 ## R CMD check results
 

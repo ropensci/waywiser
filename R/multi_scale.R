@@ -512,7 +512,7 @@ handle_grids <- function(data, grids, autoexpand_grid, data_crs, ...) {
     grid_args <- stats::setNames(
       lapply(
         grid_args,
-        function (x) rep(x, length.out = grid_arg_idx)
+        function(x) rep(x, length.out = grid_arg_idx)
       ),
       names(grid_args)
     )
