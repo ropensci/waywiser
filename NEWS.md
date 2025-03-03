@@ -1,3 +1,5 @@
+# waywiser (development version)
+
 # waywiser 0.6.1
 
 * Avoid using `\()` in order to keep R version needed below 4.1
