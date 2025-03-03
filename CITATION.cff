@@ -8,7 +8,7 @@ message: 'To cite package "waywiser" in publications use:'
 type: software
 license: MIT
 title: 'waywiser: Ergonomic Methods for Assessing Spatial Models'
-version: 0.6.1
+version: 0.6.1.9000
 doi: 10.48550/arXiv.2303.11312
 identifiers:
 - type: doi

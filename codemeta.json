@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci/waywiser",
   "issueTracker": "https://github.com/ropensci/waywiser/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.6.1",
+  "version": "0.6.1.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -502,7 +502,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "6969.078KB",
+  "fileSize": "6959.472KB",
   "citation": [
     {
       "@type": "CreativeWork",

@@ -32,7 +32,11 @@ library(sf)
 library(tidyr)
 library(dplyr)
 library(waywiser)
-
+invisible(
+  sf_proj_search_paths(
+    file.path(tools::R_user_dir("waywiser", "data"))
+  )
+)
 invisible(sf_proj_network(TRUE))
 ```
 

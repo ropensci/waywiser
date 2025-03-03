@@ -1,4 +1,4 @@
-This is the tenth CRAN release of waywiser. This patch release addresses NOTEs and warnings from CRAN.
+This is the eleventh CRAN release of waywiser. This patch release sets `sf_proj_search_paths()` to avoid writing persistent files to disk during checks.
 
 ## R CMD check results
 
