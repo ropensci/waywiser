@@ -1,4 +1,4 @@
-# waywiser (development version)
+# waywiser 0.6.2
 
 * Set `sf_proj_search_paths()` in vignettes to not write to directories on CRAN.
 
