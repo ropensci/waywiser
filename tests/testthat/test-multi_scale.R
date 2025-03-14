@@ -24,7 +24,12 @@ test_that("ww_multi_scale", {
     sf::st_make_grid(embiggened_bbox, n = c(10, 10), square = FALSE),
     sf::st_make_grid(embiggened_bbox, n = c(1, 1), square = FALSE)
   )
-  made_w_grids <- ww_multi_scale(ames_sf, Sale_Price, predictions, grids = grids)
+  made_w_grids <- ww_multi_scale(
+    ames_sf,
+    Sale_Price,
+    predictions,
+    grids = grids
+  )
 
   expect_identical(
     made_w_grid_args[1:3],
@@ -195,25 +200,47 @@ test_that("srr: expected failures for ww_multi_scale", {
 
   # Or return NA:
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, predicted, response, n = 2, na_rm = FALSE)
+    ww_multi_scale(
+      worldclim_predicted,
+      predicted,
+      response,
+      n = 2,
+      na_rm = FALSE
+    )
   )
 
   # Or return NA:
   expect_snapshot(
-    ww_multi_scale(worldclim_predicted, response, predicted, n = 2, na_rm = FALSE),
+    ww_multi_scale(
+      worldclim_predicted,
+      response,
+      predicted,
+      n = 2,
+      na_rm = FALSE
+    ),
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
   expect_snapshot(
-    ww_multi_scale(head(worldclim_predicted, 0), response, predicted, n = c(2, 4)),
+    ww_multi_scale(
+      head(worldclim_predicted, 0),
+      response,
+      predicted,
+      n = c(2, 4)
+    ),
     error = TRUE
   )
 
   #' @srrstats {G5.8} Edge condition tests
   #' @srrstats {G5.8a} Zero-length data:
   expect_snapshot(
-    ww_multi_scale(head(worldclim_predicted, 0), predicted, response, n = c(2, 4)),
+    ww_multi_scale(
+      head(worldclim_predicted, 0),
+      predicted,
+      response,
+      n = c(2, 4)
+    ),
     error = TRUE
   )
 
@@ -244,11 +271,12 @@ test_that("other generic srr standards", {
     lm(response ~ bio2 * bio10 * bio13 * bio19, data = worldclim_simulation),
     worldclim_simulation
   )
-  noised_worldclim <- worldclim_predicted + rnorm(
-    nrow(worldclim_predicted) * ncol(worldclim_predicted),
-    .Machine$double.eps,
-    .Machine$double.eps
-  )
+  noised_worldclim <- worldclim_predicted +
+    rnorm(
+      nrow(worldclim_predicted) * ncol(worldclim_predicted),
+      .Machine$double.eps,
+      .Machine$double.eps
+    )
   noised_worldclim <- sf::st_as_sf(
     noised_worldclim,
     crs = sf::st_crs(worldclim_predicted)
@@ -379,22 +407,44 @@ test_that("raster method works", {
   r3 <- c(r1, r2)
 
   expect_identical(
-    ww_multi_scale(truth = r1, estimate = r2, metrics = yardstick::rmse, n = 1)$.estimate,
+    ww_multi_scale(
+      truth = r1,
+      estimate = r2,
+      metrics = yardstick::rmse,
+      n = 1
+    )$.estimate,
     1
   )
 
   expect_identical(
-    ww_multi_scale(truth = r1, estimate = r1, metrics = yardstick::rmse, n = 1)$.estimate,
+    ww_multi_scale(
+      truth = r1,
+      estimate = r1,
+      metrics = yardstick::rmse,
+      n = 1
+    )$.estimate,
     0
   )
 
   expect_identical(
-    ww_multi_scale(r3, truth = 1, estimate = 2, metrics = yardstick::rmse, n = 1)$.estimate,
+    ww_multi_scale(
+      r3,
+      truth = 1,
+      estimate = 2,
+      metrics = yardstick::rmse,
+      n = 1
+    )$.estimate,
     1
   )
 
   expect_identical(
-    ww_multi_scale(r3, truth = 1, estimate = 1, metrics = yardstick::rmse, n = 1)$.estimate,
+    ww_multi_scale(
+      r3,
+      truth = 1,
+      estimate = 1,
+      metrics = yardstick::rmse,
+      n = 1
+    )$.estimate,
     0
   )
 
@@ -486,7 +536,10 @@ test_that("raster method errors as expected", {
     error = TRUE
   )
   expect_snapshot(
-    ww_multi_scale(truth = terra::rast(r1), estimate = c(terra::rast(r1), terra::rast(r1))),
+    ww_multi_scale(
+      truth = terra::rast(r1),
+      estimate = c(terra::rast(r1), terra::rast(r1))
+    ),
     error = TRUE
   )
 })
@@ -566,7 +619,12 @@ test_that("units are handled properly", {
 
   expect_identical(
     vapply(ww_output$.grid, nrow, integer(1)),
-    vapply(cellsizes, function(cellsize) length(sf::st_make_grid(pts, cellsize, square = FALSE)), integer(1))
+    vapply(
+      cellsizes,
+      function(cellsize)
+        length(sf::st_make_grid(pts, cellsize, square = FALSE)),
+      integer(1)
+    )
   )
 })
 
@@ -599,7 +657,8 @@ test_that("counts of non-NA values are correct", {
   actual <- ww_output$.grid[[1]]$.truth_count
   expected <- vapply(
     seq_len(nrow(ww_output$.grid[[1]])),
-    function(idx) nrow(sf::st_intersection((ww_output$.grid[[1]][idx, ]["x"]), pts["x"])),
+    function(idx)
+      nrow(sf::st_intersection((ww_output$.grid[[1]][idx, ]["x"]), pts["x"])),
     integer(1)
   )
   expected[expected == 0] <- NA_integer_
