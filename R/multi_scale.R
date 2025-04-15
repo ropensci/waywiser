@@ -127,16 +127,17 @@
 #'
 #' @export
 ww_multi_scale <- function(
-    data = NULL,
-    truth,
-    estimate,
-    metrics = list(yardstick::rmse, yardstick::mae),
-    grids = NULL,
-    ...,
-    na_rm = TRUE,
-    aggregation_function = "mean",
-    autoexpand_grid = TRUE,
-    progress = TRUE) {
+  data = NULL,
+  truth,
+  estimate,
+  metrics = list(yardstick::rmse, yardstick::mae),
+  grids = NULL,
+  ...,
+  na_rm = TRUE,
+  aggregation_function = "mean",
+  autoexpand_grid = TRUE,
+  progress = TRUE
+) {
   if (length(na_rm) != 1 || !is.logical(na_rm)) {
     rlang::abort("Only one logical value can be passed to `na_rm`.")
   }
@@ -161,16 +162,17 @@ ww_multi_scale <- function(
 
 #' @exportS3Method
 ww_multi_scale.SpatRaster <- function(
-    data = NULL,
-    truth,
-    estimate,
-    metrics = list(yardstick::rmse, yardstick::mae),
-    grids = NULL,
-    ...,
-    na_rm = TRUE,
-    aggregation_function = "mean",
-    autoexpand_grid = TRUE,
-    progress = TRUE) {
+  data = NULL,
+  truth,
+  estimate,
+  metrics = list(yardstick::rmse, yardstick::mae),
+  grids = NULL,
+  ...,
+  na_rm = TRUE,
+  aggregation_function = "mean",
+  autoexpand_grid = TRUE,
+  progress = TRUE
+) {
   rlang::check_installed("terra")
   rlang::check_installed("exactextractr")
 
@@ -195,7 +197,9 @@ prep_multi_scale_raster <- function(data, truth, estimate) {
   data <- tryCatch(
     terra::subset(data, c(truth, estimate)),
     error = function(e) {
-      rlang::abort("Couldn't select either `truth` or `estimate`. Are your indices correct?")
+      rlang::abort(
+        "Couldn't select either `truth` or `estimate`. Are your indices correct?"
+      )
     }
   )
 
@@ -213,8 +217,14 @@ spatraster_extract <- function(grid, data, aggregation_function, progress) {
   grid <- sf::st_as_sf(grid)
   sf::st_geometry(grid) <- "geometry"
   exactextract_names <- c(".truth", ".estimate")
-  if (!rlang::is_function(aggregation_function) && aggregation_function != "count") {
-    exactextract_names <- c(exactextract_names, ".truth_count", ".estimate_count")
+  if (
+    !rlang::is_function(aggregation_function) && aggregation_function != "count"
+  ) {
+    exactextract_names <- c(
+      exactextract_names,
+      ".truth_count",
+      ".estimate_count"
+    )
     aggregation_function <- c(aggregation_function, "count")
   }
   grid_df <- exactextractr::exact_extract(
@@ -233,16 +243,17 @@ spatraster_extract <- function(grid, data, aggregation_function, progress) {
 }
 
 ww_multi_scale_raster_args <- function(
-    data = NULL,
-    truth,
-    estimate,
-    metrics = list(yardstick::rmse, yardstick::mae),
-    grids = NULL,
-    ...,
-    na_rm = TRUE,
-    aggregation_function = "mean",
-    autoexpand_grid = TRUE,
-    progress = TRUE) {
+  data = NULL,
+  truth,
+  estimate,
+  metrics = list(yardstick::rmse, yardstick::mae),
+  grids = NULL,
+  ...,
+  na_rm = TRUE,
+  aggregation_function = "mean",
+  autoexpand_grid = TRUE,
+  progress = TRUE
+) {
   rlang::check_installed("terra")
   rlang::check_installed("exactextractr")
 
@@ -259,14 +270,23 @@ ww_multi_scale_raster_args <- function(
   }
 
   metrics <- handle_metrics(metrics)
-  grid_list <- handle_grids(truth, grids, autoexpand_grid, sf::st_crs(data), ...)
+  grid_list <- handle_grids(
+    truth,
+    grids,
+    autoexpand_grid,
+    sf::st_crs(data),
+    ...
+  )
 
   grid_list$grids <- lapply(
     grid_list$grids,
     function(grid) {
       grid <- sf::st_as_sf(grid)
       sf::st_geometry(grid) <- "geometry"
-      if (rlang::is_function(aggregation_function) || aggregation_function == "count") {
+      if (
+        rlang::is_function(aggregation_function) ||
+          aggregation_function == "count"
+      ) {
         grid$.truth <- exactextractr::exact_extract(
           truth,
           grid,
@@ -376,9 +396,19 @@ raster_method_summary <- function(grid_list, .notes, metrics, na_rm) {
   out <- mapply(
     function(grid, grid_arg, .notes) {
       if (prob_metrics) {
-        out <- metrics(as.data.frame(grid), truth = .truth, .estimate, na_rm = na_rm)
+        out <- metrics(
+          as.data.frame(grid),
+          truth = .truth,
+          .estimate,
+          na_rm = na_rm
+        )
       } else {
-        out <- metrics(grid, truth = .truth, estimate = .estimate, na_rm = na_rm)
+        out <- metrics(
+          grid,
+          truth = .truth,
+          estimate = .estimate,
+          na_rm = na_rm
+        )
       }
       out[attr(out, "sf_column")] <- NULL
       out$.grid_args <- list(grid_list$grid_args[grid_arg, ])
@@ -396,16 +426,17 @@ raster_method_summary <- function(grid_list, .notes, metrics, na_rm) {
 
 #' @exportS3Method
 ww_multi_scale.sf <- function(
-    data,
-    truth,
-    estimate,
-    metrics = list(yardstick::rmse, yardstick::mae),
-    grids = NULL,
-    ...,
-    na_rm = TRUE,
-    aggregation_function = "mean",
-    autoexpand_grid = TRUE,
-    progress = TRUE) {
+  data,
+  truth,
+  estimate,
+  metrics = list(yardstick::rmse, yardstick::mae),
+  grids = NULL,
+  ...,
+  na_rm = TRUE,
+  aggregation_function = "mean",
+  autoexpand_grid = TRUE,
+  progress = TRUE
+) {
   if (nrow(data) == 0) {
     rlang::abort(
       "0 rows were passed to `data`."
@@ -455,7 +486,12 @@ ww_multi_scale.sf <- function(
         aggregation_function
       )
 
-      out <- metrics(matched_data, truth = .truth, estimate = .estimate, na_rm = na_rm)
+      out <- metrics(
+        matched_data,
+        truth = .truth,
+        estimate = .estimate,
+        na_rm = na_rm
+      )
       out["grid_cell_idx"] <- NULL
       out[attr(out, "sf_column")] <- NULL
       out$.grid_args <- list(grid_args)
@@ -561,12 +597,14 @@ handle_grids <- function(data, grids, autoexpand_grid, data_crs, ...) {
   )
 }
 
-match_data <- function(data,
-                       grid_matches,
-                       matched_data,
-                       truth_var,
-                       estimate_var,
-                       aggregation_function) {
+match_data <- function(
+  data,
+  grid_matches,
+  matched_data,
+  truth_var,
+  estimate_var,
+  aggregation_function
+) {
   matched_data <- dplyr::left_join(
     data,
     grid_matches,
@@ -581,9 +619,15 @@ match_data <- function(data,
 
   matched_data <- dplyr::summarise(
     matched_data,
-    .truth = rlang::exec(.env[["aggregation_function"]], .data[[names(truth_var)]]),
+    .truth = rlang::exec(
+      .env[["aggregation_function"]],
+      .data[[names(truth_var)]]
+    ),
     .truth_count = sum(!is.na(.data[[names(truth_var)]])),
-    .estimate = rlang::exec(.env[["aggregation_function"]], .data[[names(estimate_var)]]),
+    .estimate = rlang::exec(
+      .env[["aggregation_function"]],
+      .data[[names(estimate_var)]]
+    ),
     .estimate_count = sum(!is.na(.data[[names(estimate_var)]])),
     .groups = "drop"
   )
@@ -625,7 +669,12 @@ make_notes_tibble <- function(data, grid_matches) {
 }
 
 check_multi_scale_data <- function(data) {
-  if (any(names(data) %in% c(".truth", ".estimate", ".truth_count", ".estimate_count"))) {
+  if (
+    any(
+      names(data) %in%
+        c(".truth", ".estimate", ".truth_count", ".estimate_count")
+    )
+  ) {
     rlang::abort(
       c(
         "This function cannot work with data whose columns are named `.truth`, `.estimate`, `.truth_count`, or `estimate_count`.",
