@@ -1,4 +1,4 @@
-# waywiser (development version)
+# waywiser 0.6.3
 
 * Avoid downloading data over the internet on CRAN.
 
