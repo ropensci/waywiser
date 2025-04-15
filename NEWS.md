@@ -1,5 +1,7 @@
 # waywiser (development version)
 
+* Avoid downloading data over the internet on CRAN.
+
 # waywiser 0.6.2
 
 * Set `sf_proj_search_paths()` in vignettes to not write to directories on CRAN.
