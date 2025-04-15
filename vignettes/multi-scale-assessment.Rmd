@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = rlang::is_installed("ggplot2") && rlang::is_installed("tigris")
+  eval = rlang::is_installed("ggplot2") && rlang::is_installed("tigris") && !(!interactive() && !isTRUE(as.logical(Sys.getenv("NOT_CRAN", "false"))))
 )
 ```
 
@@ -119,19 +119,15 @@ In addition to specifying systematic grids via `sf::st_make_grid()`,
 `ww_multi_scale()` also allows you to provide your own aggregation units. For 
 instance, we can use the `tigris` package to download census block group 
 boundaries, as well as county and county subdivision boundaries, for the state 
-of New York:
+of New York. We can then provide those `sf` objects straight to `ww_multi_scale`.
 
-```{r message=FALSE, results='hide'}
+```{r message=FALSE, results='hide', warning=FALSE, eval=FALSE}
 suppressPackageStartupMessages(library(tigris))
 
 ny_block_groups <- block_groups("NY")
 ny_county_subdivisions <- county_subdivisions("NY")
 ny_counties <- counties("NY")
-```
 
-We can then provide those `sf` objects straight to `ww_multi_scale`:
-
-```{r warning=FALSE}
 ny_division_assessment <- ww_multi_scale(
   ny_trees,
   agb,
